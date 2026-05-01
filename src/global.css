@@ -1,21 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital@1&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 :root {
   --bg: #0e0e0e;
-  --fg: #f0f0f0;
-  --accent: #d4af37;
-  --muted: #8a8a8a;
-  --surface: #1a1a1a;
-  --border: #2a2a2a;
+  --paper: #f5f0e8;
+  --ink: #1a1a1a;
+  --red: #c0392b;
+  --amber: #d4a017;
+  --muted: #6b6560;
+  --rule: #2a2a2a;
 
-  --font-display: 'Bebas Neue', sans-serif;
-  --font-mono: 'IBM Plex Mono', monospace;
-  --font-prose: 'Playfair Display', serif;
+  --string1: #c0392b;
+  --string2: #e67e22;
+  --string3: #f1c40f;
+  --string4: #27ae60;
+  --string5: #2980b9;
+  --string6: #8e44ad;
 
-  --space-xs: 4px;
-  --space-sm: 8px;
-  --space-md: 16px;
-  --space-lg: 24px;
-  --space-xl: 32px;
+  --caged-C: #c0392b;
+  --caged-A: #8e44ad;
+  --caged-G: #2980b9;
+  --caged-E: #f1c40f;
+  --caged-D: #e67e22;
+
+  --fret-bg: #110e06;
+  --fret-wire: #3a2e18;
+  --fret-nut: #e0d0a0;
+  --fret-dot: #5c4a2a;
+  --string-bright: #d4c090;
+  --string-dark: #b8a060;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html, body, #root { background: var(--bg); color: var(--fg); font-family: var(--font-mono); min-height: 100vh; }
+[data-theme="light"] {
+  --bg: #f5f0e8;
+  --paper: #1a1a1a;
+  --ink: #f5f0e8;
+  --muted: #8a8580;
+  --rule: #d0c8c0;
+  --fret-bg: #e8e0d0;
+  --fret-wire: #c0b8a0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--paper);
+  font-family: 'IBM Plex Mono', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+p, li {
+  font-size: 13px;
+  line-height: 1.8;
+  color: #b8b0a5;
+}
+
+[data-theme="light"] p,
+[data-theme="light"] li {
+  color: #5a5550;
+}
+
+h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  letter-spacing: 1px;
+  color: var(--paper);
+  margin-bottom: 24px;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

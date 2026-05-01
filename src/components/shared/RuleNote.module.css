@@ -1,0 +1,13 @@
+.note {
+  background: #111;
+  border-left: 3px solid var(--red);
+  padding: 16px 20px;
+  margin-top: 24px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.note strong {
+  color: var(--paper);
+}

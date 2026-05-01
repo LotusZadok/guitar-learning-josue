@@ -1,0 +1,45 @@
+.section {
+  padding: 48px 60px;
+  border-bottom: 1px solid var(--rule);
+  animation: fadeUp 0.6s ease both;
+  overflow: hidden;
+}
+
+.wrap {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+}
+
+.svg {
+  max-width: 380px;
+  width: 100%;
+}
+
+.svg text {
+  font-family: 'Bebas Neue', sans-serif;
+  pointer-events: none;
+}
+
+.node {
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.node:hover {
+  transform: scale(1.15);
+}
+
+.node > * {
+  pointer-events: none;
+}
+
+.hit {
+  pointer-events: all !important;
+}
+
+@media (max-width: 900px) {
+  .section {
+    padding: 36px 24px;
+  }
+}
