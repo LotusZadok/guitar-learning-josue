@@ -10,7 +10,7 @@ export default function App() {
       <section className="landing__center">
         <p className="landing__eyebrow">MMXXVI</p>
         <h1 className="landing__title">
-          Josué <em>Barquero</em>
+          Lecciones de <em>guitarra</em>
         </h1>
         <span className="landing__rule" aria-hidden="true" />
         <p className="landing__status">
