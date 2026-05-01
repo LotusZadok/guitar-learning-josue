@@ -1,0 +1,39 @@
+.panel {
+  flex: 1;
+  min-width: 280px;
+}
+
+.titulo {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--paper);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.step {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+  padding: 10px 14px;
+  border-left: 3px solid transparent;
+  border-radius: 0 4px 4px 0;
+  transition: all 0.3s;
+}
+
+.stepActive {
+  background: rgba(192, 57, 43, 0.08);
+  border-left-color: var(--red);
+  color: var(--paper);
+}
+
+.stepPast {
+  color: #8a8580;
+}

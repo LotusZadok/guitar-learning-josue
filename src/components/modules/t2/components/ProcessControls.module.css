@@ -1,0 +1,55 @@
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.btn {
+  font-size: 14px;
+  padding: 6px 14px;
+  border: 1px solid var(--rule);
+  background: none;
+  color: var(--paper);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.btn:hover:not(:disabled) {
+  border-color: var(--amber);
+}
+
+.btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.speed {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.speedLabel {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.select {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  padding: 4px 8px;
+  border: 1px solid var(--rule);
+  background: #111;
+  color: var(--paper);
+  border-radius: 4px;
+  cursor: pointer;
+}

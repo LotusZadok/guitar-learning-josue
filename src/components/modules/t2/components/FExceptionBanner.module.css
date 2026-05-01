@@ -1,0 +1,22 @@
+.banner {
+  border-left: 3px solid var(--amber);
+  background: rgba(212, 160, 23, 0.06);
+  padding: 16px 20px;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--amber);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.text {
+  font-size: 12px;
+  line-height: 1.8;
+  color: #b8b0a5;
+}
