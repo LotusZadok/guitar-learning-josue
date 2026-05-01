@@ -1,0 +1,12 @@
+{
+  "site": { "title": "Guitarra didáctica — Prof. Josué Barquero" },
+  "nav": {
+    "t1": "T1 — Fundamentos musicales",
+    "t2": "T2 — Tonalidades y armonía diatónica"
+  },
+  "lock": {
+    "prompt": "Ingrese la contraseña",
+    "submit": "Entrar",
+    "error": "Contraseña incorrecta"
+  }
+}
