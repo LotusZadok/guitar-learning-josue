@@ -13,9 +13,9 @@ export default function ChromaticCircleSection() {
       <p style={{ marginBottom: 20 }}>12 notas en orden ascendente por semitonos.</p>
       <div className={styles.wrap}>
         <svg className={styles.svg} viewBox="0 0 400 400">
-          <circle cx={CX} cy={CY} r={R + 16} fill="none" stroke="#2a2a2a" strokeWidth={0.5} />
+          <circle cx={CX} cy={CY} r={R + 16} fill="none" style={{ stroke: 'var(--rule)' }} strokeWidth={0.5} />
           {['Círculo', 'Cromático'].map((t, i) => (
-            <text key={t} x={CX} y={CY - 8 + i * 18} textAnchor="middle" fill="#6b6560" fontSize={11}>
+            <text key={t} x={CX} y={CY - 8 + i * 18} textAnchor="middle" style={{ fill: 'var(--muted)' }} fontSize={11}>
               {t}
             </text>
           ))}

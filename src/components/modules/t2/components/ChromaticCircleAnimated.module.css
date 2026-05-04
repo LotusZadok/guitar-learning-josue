@@ -45,7 +45,7 @@
   padding: 8px 16px;
   border: 1px solid var(--rule);
   border-radius: 14px;
-  background: rgba(14, 14, 14, 0.9);
+  background: var(--surface-translucent);
   color: var(--paper);
   cursor: pointer;
   transition: border-color 0.15s, background 0.15s, opacity 0.25s;
@@ -73,7 +73,7 @@
   padding: 8px 16px;
   border: 1px solid var(--rule);
   border-radius: 14px;
-  background: rgba(14, 14, 14, 0.9);
+  background: var(--surface-translucent);
   color: var(--paper);
   cursor: pointer;
   transition: border-color 0.15s, background 0.15s;

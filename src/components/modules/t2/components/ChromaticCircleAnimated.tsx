@@ -111,7 +111,7 @@ export default function ChromaticCircleAnimated({ notes, arrow, compact, playOnC
         className={styles.svg}
       >
         {/* center circle */}
-        <circle cx={CENTER} cy={CENTER} r={RADIUS - 35} fill="none" stroke="#2a2a2a" strokeWidth={1} />
+        <circle cx={CENTER} cy={CENTER} r={RADIUS - 35} fill="none" style={{ stroke: 'var(--rule)' }} strokeWidth={1} />
 
         {/* arrow arc */}
         {arrowPath && (

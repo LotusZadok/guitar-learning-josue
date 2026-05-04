@@ -1,5 +1,5 @@
 .note {
-  background: #111;
+  background: var(--surface);
   border-left: 3px solid var(--red);
   padding: 16px 20px;
   margin-top: 24px;

@@ -1,6 +1,6 @@
 .sidebar {
   width: 220px;
-  background: #0a0a0a;
+  background: var(--surface);
   border-right: 1px solid var(--rule);
   padding: 24px 0;
   display: flex;

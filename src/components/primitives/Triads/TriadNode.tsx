@@ -72,7 +72,7 @@ export default function TriadNode({ note, index, cx, cy, r, onHover }: Props) {
         x={cx + labelR * Math.cos(angle)}
         y={cy + labelR * Math.sin(angle)}
         textAnchor="middle" dominantBaseline="middle"
-        fill="#6b6560" fontSize={10}
+        style={{ fill: 'var(--muted)' }} fontSize={10}
       >
         {NOTE_ES[note]}
       </text>

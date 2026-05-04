@@ -44,7 +44,7 @@ export default function TriadsSection() {
       <div className={styles.circleWrap}>
         <svg className={styles.svg} viewBox="0 0 350 350">
           {['Notas', 'Naturales'].map((t, i) => (
-            <text key={t} x={CX} y={CY - 6 + i * 16} textAnchor="middle" fill="#6b6560" fontSize={11}>
+            <text key={t} x={CX} y={CY - 6 + i * 16} textAnchor="middle" style={{ fill: 'var(--muted)' }} fontSize={11}>
               {t}
             </text>
           ))}

@@ -1,11 +1,11 @@
 .screen {
   min-height: 100vh;
   background: var(--bg);
-  color: var(--fg);
+  color: var(--paper);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-lg);
+  padding: 24px;
 }
 
 .card {
@@ -13,14 +13,14 @@
   max-width: 360px;
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
+  gap: 16px;
   background: var(--surface);
-  border: 1px solid var(--border);
-  padding: var(--space-xl);
+  border: 1px solid var(--rule);
+  padding: 32px;
 }
 
 .label {
-  font-family: var(--font-mono);
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 0.85rem;
   letter-spacing: 0.04em;
   color: var(--muted);
@@ -29,25 +29,25 @@
 
 .input {
   width: 100%;
-  padding: var(--space-sm) var(--space-md);
+  padding: 8px 16px;
   background: var(--bg);
-  color: var(--fg);
-  border: 1px solid var(--border);
-  font-family: var(--font-mono);
+  color: var(--paper);
+  border: 1px solid var(--rule);
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 1rem;
   outline: none;
 }
 
 .input:focus {
-  border-color: var(--accent);
+  border-color: var(--amber);
 }
 
 .button {
-  padding: var(--space-sm) var(--space-md);
-  background: var(--accent);
+  padding: 8px 16px;
+  background: var(--amber);
   color: var(--bg);
   border: none;
-  font-family: var(--font-display);
+  font-family: 'Bebas Neue', sans-serif;
   font-size: 1rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -61,6 +61,6 @@
 
 .error {
   color: #e25555;
-  font-family: var(--font-mono);
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 0.85rem;
 }

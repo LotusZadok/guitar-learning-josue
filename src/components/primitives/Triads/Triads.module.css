@@ -37,7 +37,7 @@
 }
 
 .infoPanel {
-  background: #111;
+  background: var(--surface);
   border: 1px solid var(--rule);
   padding: 20px;
   min-width: 200px;
@@ -83,7 +83,7 @@
 .masterWrap {
   margin-top: 24px;
   padding: 20px;
-  background: #0a0a0a;
+  background: var(--surface);
   border: 1px solid var(--rule);
 }
 

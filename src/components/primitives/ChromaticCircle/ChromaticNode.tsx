@@ -66,7 +66,7 @@ export default function ChromaticNode({ note, index, cx, cy, r }: ChromaticNodeP
         x={cx + labelR * Math.cos(angle)}
         y={cy + labelR * Math.sin(angle)}
         textAnchor="middle" dominantBaseline="middle"
-        fill="#6b6560" fontSize={9}
+        style={{ fill: 'var(--muted)' }} fontSize={9}
       >
         {NOTE_ES[note]}
       </text>

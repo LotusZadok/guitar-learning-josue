@@ -10,6 +10,9 @@
   --amber: #d4a017;
   --muted: #6b6560;
   --rule: #2a2a2a;
+  --surface: #0a0a0a;
+  --surface-2: #222;
+  --surface-translucent: rgba(14, 14, 14, 0.9);
 
   --string1: #c0392b;
   --string2: #e67e22;
@@ -38,6 +41,9 @@
   --ink: #f5f0e8;
   --muted: #8a8580;
   --rule: #d0c8c0;
+  --surface: #ede6da;
+  --surface-2: #c8bfae;
+  --surface-translucent: rgba(245, 240, 232, 0.9);
   --fret-bg: #e8e0d0;
   --fret-wire: #c0b8a0;
 }
