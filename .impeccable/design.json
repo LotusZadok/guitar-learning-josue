@@ -1,0 +1,271 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-05-04T19:48:09-06:00",
+  "title": "Design System: Apuntes de Guitarra — Prof. Josué Barquero",
+  "extensions": {
+    "colorMeta": {
+      "rojo-cardenal": {
+        "role": "primary",
+        "displayName": "Rojo Cardenal",
+        "canonical": "#c0392b",
+        "tonalRamp": ["#2a0c08", "#4d1812", "#722319", "#962d1f", "#b03323", "#c0392b", "#d4554a", "#e88578"]
+      },
+      "ambar-pergamino": {
+        "role": "secondary",
+        "displayName": "Ámbar Pergamino",
+        "canonical": "#d4a017",
+        "tonalRamp": ["#2c2104", "#4f3a08", "#73550c", "#977010", "#b58814", "#d4a017", "#e2bc4d", "#efd58d"]
+      },
+      "ink-deep": {
+        "role": "neutral",
+        "displayName": "Ink Deep",
+        "canonical": "#0e0e0e",
+        "tonalRamp": ["#000000", "#0e0e0e", "#1a1a1a", "#2a2a2a", "#3d3d3d", "#5a5a5a", "#8a8a8a", "#c0c0c0"]
+      },
+      "paper-cream": {
+        "role": "neutral",
+        "displayName": "Paper Cream",
+        "canonical": "#f5f0e8",
+        "tonalRamp": ["#1a1a1a", "#3d3a35", "#5a5650", "#8a8580", "#b8b0a5", "#d0c8c0", "#ede6da", "#f5f0e8"]
+      },
+      "surface-near": {
+        "role": "neutral",
+        "displayName": "Surface Near",
+        "canonical": "#0a0a0a",
+        "tonalRamp": ["#000000", "#0a0a0a", "#1a1a1a", "#262626", "#383838", "#5a5a5a", "#878787", "#bababa"]
+      },
+      "rule-graphite": {
+        "role": "neutral",
+        "displayName": "Rule Graphite",
+        "canonical": "#2a2a2a",
+        "tonalRamp": ["#000000", "#0e0e0e", "#1a1a1a", "#2a2a2a", "#3d3d3d", "#5a5a5a", "#8a8a8a", "#c0c0c0"]
+      },
+      "muted-stone": {
+        "role": "neutral",
+        "displayName": "Muted Stone",
+        "canonical": "#6b6560",
+        "tonalRamp": ["#1a1815", "#2e2a26", "#444038", "#5a5450", "#6b6560", "#8a8580", "#a8a39c", "#cfcac1"]
+      },
+      "note-c": {
+        "role": "tertiary",
+        "displayName": "Nota C",
+        "canonical": "#c0392b",
+        "purpose": "Identidad de color de la nota Do. Solo usar en nodos cromáticos, anillos conectores y chips de tríada. Nunca decorativo."
+      },
+      "note-d": {
+        "role": "tertiary",
+        "displayName": "Nota D",
+        "canonical": "#e67e22"
+      },
+      "note-e": {
+        "role": "tertiary",
+        "displayName": "Nota E",
+        "canonical": "#f1c40f"
+      },
+      "note-f": {
+        "role": "tertiary",
+        "displayName": "Nota F",
+        "canonical": "#27ae60"
+      },
+      "note-g": {
+        "role": "tertiary",
+        "displayName": "Nota G",
+        "canonical": "#2980b9"
+      },
+      "note-a": {
+        "role": "tertiary",
+        "displayName": "Nota A",
+        "canonical": "#8e44ad"
+      },
+      "note-b": {
+        "role": "tertiary",
+        "displayName": "Nota B",
+        "canonical": "#1abc9c"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display (Bebas Neue)",
+        "purpose": "Título global del header. Una vez por pantalla, nunca dos."
+      },
+      "headline": {
+        "displayName": "Headline (Bebas Neue 32px)",
+        "purpose": "Títulos de sección (h2) dentro de un módulo."
+      },
+      "title": {
+        "displayName": "Title (Bebas Neue 24px)",
+        "purpose": "Subsections, panel headers, master triad title."
+      },
+      "body": {
+        "displayName": "Body (IBM Plex Mono 13px)",
+        "purpose": "Párrafos del método, descripciones, listas. Line-height 1.8 alto a propósito; max-width 65-75ch obligatorio."
+      },
+      "label": {
+        "displayName": "Label (IBM Plex Mono 11px uppercase)",
+        "purpose": "SectionLabel, nav links, captions, role chips, footer copy."
+      },
+      "quote": {
+        "displayName": "Quote (Playfair Display italic)",
+        "purpose": "Citas literales únicamente. Nunca decorativo."
+      }
+    },
+    "shadows": [
+      {
+        "name": "fretboard-dot",
+        "value": "0 0 8px rgba(0, 0, 0, 0.6)",
+        "purpose": "Sombra interior simulada del dot que marca un intervalo en el mástil mini. La única sombra usada en componente de reposo."
+      },
+      {
+        "name": "triad-hover-glow",
+        "value": "0 0 16px rgba(255, 255, 255, 0.2)",
+        "purpose": "Glow blanco sutil en hover sobre el círculo de la cadena maestra de tríadas. La única sombra hover del sistema."
+      }
+    ],
+    "motion": [
+      {
+        "name": "swift",
+        "value": "0.15s ease",
+        "purpose": "Default de state changes (hover, active, focus). La mayoría de transitions del sistema."
+      },
+      {
+        "name": "deliberate",
+        "value": "0.25s ease",
+        "purpose": "Toggles, drawer mobile slide, transiciones de tema."
+      },
+      {
+        "name": "patient",
+        "value": "0.3s ease",
+        "purpose": "Cambios de estado en chromatic note nodes (fill/stroke transitions cuando se muestra una nueva armadura)."
+      },
+      {
+        "name": "fadeUp-keyframe",
+        "value": "fadeUp 0.6s ease both",
+        "purpose": "Entrada de secciones al montar (translateY 20px → 0, opacity 0 → 1)."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "mobile",
+        "value": "900px",
+        "purpose": "Único breakpoint del sistema. Por debajo: sidebar se vuelve drawer, padding de secciones se reduce, Display font scaling clamp se ajusta."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "CTA principal. Lock screen submit, futuros CTA del método. El shift Ámbar→Rojo en hover confirma la acción.",
+      "html": "<button class=\"ds-btn-primary\">Entrar</button>",
+      "css": ".ds-btn-primary { background: #d4a017; color: #0e0e0e; border: none; padding: 8px 16px; font-family: 'Bebas Neue', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: background 0.15s ease, color 0.15s ease; } .ds-btn-primary:hover { background: #c0392b; color: #f5f0e8; } .ds-btn-primary:focus-visible { outline: 2px solid #c0392b; outline-offset: 2px; } .ds-btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }"
+    },
+    {
+      "name": "Ghost Nav Link",
+      "kind": "nav",
+      "refersTo": "button-ghost",
+      "description": "Sidebar nav button. Los tres estados (default, hover, active) son tres apariciones de Rojo de menor a mayor compromiso.",
+      "html": "<button class=\"ds-nav-link\">T1 — Fundamentos musicales</button>",
+      "css": ".ds-nav-link { display: block; width: 100%; padding: 8px 20px; background: none; color: #6b6560; border: none; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 1px; text-align: left; cursor: pointer; transition: color 0.15s ease, background 0.15s ease; } .ds-nav-link:hover { color: #f5f0e8; background: rgba(255, 255, 255, 0.03); } .ds-nav-link.is-active { color: #c0392b; background: rgba(192, 57, 43, 0.08); } .ds-nav-link:focus-visible { outline: 2px solid #d4a017; outline-offset: -2px; }"
+    },
+    {
+      "name": "Pill Action Button",
+      "kind": "button",
+      "refersTo": "button-pill",
+      "description": "Acción flotante 'Limpiar selección' en el POC. La única instancia donde glassmorphism (backdrop-blur) está justificado: vive sobre un SVG que necesita verse parcialmente.",
+      "html": "<button class=\"ds-btn-pill\">Limpiar selección</button>",
+      "css": ".ds-btn-pill { padding: 8px 16px; background: rgba(14, 14, 14, 0.9); color: #f5f0e8; border: 1px solid #2a2a2a; border-radius: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; backdrop-filter: blur(6px); transition: border-color 0.15s ease, background 0.15s ease; } .ds-btn-pill:hover { border-color: #c0392b; background: rgba(192, 57, 43, 0.15); } .ds-btn-pill:focus-visible { outline: 2px solid #d4a017; outline-offset: 2px; }"
+    },
+    {
+      "name": "Note Chip",
+      "kind": "chip",
+      "refersTo": "button-chip",
+      "description": "Chip del NoteSelector ('C D E F G A B'). Bebas Neue 24px le da peso de cartelera; estado activo es Rojo Cardenal sólido.",
+      "html": "<button class=\"ds-note-chip is-active\">G</button>",
+      "css": ".ds-note-chip { background: none; color: #f5f0e8; border: 1px solid #2a2a2a; padding: 4px 10px; font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 1px; cursor: pointer; transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease; } .ds-note-chip:hover { border-color: #d4a017; } .ds-note-chip.is-active { background: #c0392b; border-color: #c0392b; color: #f5f0e8; } .ds-note-chip:focus-visible { outline: 2px solid #d4a017; outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input-text",
+      "description": "Input de contraseña del LockScreen. Caja literal del cuaderno: una línea, sin esquinas redondeadas, sin sombra. Foco vive en el border, no fuera.",
+      "html": "<input class=\"ds-input-text\" type=\"password\" placeholder=\"Contraseña\" />",
+      "css": ".ds-input-text { width: 100%; padding: 8px 16px; background: #0e0e0e; color: #f5f0e8; border: 1px solid #2a2a2a; font-family: 'IBM Plex Mono', monospace; font-size: 13px; line-height: 1.8; outline: none; transition: border-color 0.15s ease; } .ds-input-text:focus { border-color: #d4a017; } .ds-input-text::placeholder { color: #6b6560; }"
+    },
+    {
+      "name": "Card Surface",
+      "kind": "card",
+      "refersTo": "card-surface",
+      "description": "Panel informativo de tríadas. Fondo surface-near, border 1px rule, padding 20px, sin radio, sin sombra. La depth viene del tonal layering, no de elevación.",
+      "html": "<aside class=\"ds-card\"><h3 class=\"ds-card__title\">Sol · G</h3><p class=\"ds-card__type\">Mayor</p><div class=\"ds-card__body\">Tónica + Tercera Mayor + Quinta Justa</div></aside>",
+      "css": ".ds-card { background: #0a0a0a; border: 1px solid #2a2a2a; padding: 20px; min-width: 200px; color: #f5f0e8; } .ds-card__title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; font-weight: 400; letter-spacing: 1px; margin: 0 0 4px; color: #f5f0e8; } .ds-card__type { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #d4a017; margin: 0 0 12px; text-transform: uppercase; letter-spacing: 1px; } .ds-card__body { font-family: 'IBM Plex Mono', monospace; font-size: 12px; line-height: 1.6; color: #6b6560; }"
+    },
+    {
+      "name": "Theme Toggle",
+      "kind": "custom",
+      "refersTo": "toggle-track",
+      "description": "Switch de tema oscuro/claro. La única instancia con border-radius 10px en el sistema, justificada porque representa visualmente un switch físico.",
+      "html": "<button class=\"ds-toggle\" aria-pressed=\"false\"><span class=\"ds-toggle__label\">Oscuro</span><span class=\"ds-toggle__track\"><span class=\"ds-toggle__thumb\"></span></span></button>",
+      "css": ".ds-toggle { display: inline-flex; align-items: center; gap: 8px; background: none; border: none; cursor: pointer; padding: 0; user-select: none; } .ds-toggle__label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; color: #6b6560; letter-spacing: 1px; text-transform: uppercase; } .ds-toggle__track { position: relative; width: 40px; height: 20px; background: #222222; border: 1px solid #2a2a2a; border-radius: 10px; transition: background 0.25s ease, border-color 0.25s ease; } .ds-toggle__thumb { position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; background: #f5f0e8; border-radius: 50%; transition: transform 0.25s ease; } .ds-toggle[aria-pressed=\"true\"] .ds-toggle__track { background: #c0392b; border-color: #c0392b; } .ds-toggle[aria-pressed=\"true\"] .ds-toggle__thumb { transform: translateX(20px); }"
+    },
+    {
+      "name": "Section Label",
+      "kind": "custom",
+      "refersTo": "label",
+      "description": "Etiqueta de sección numerada con regla horizontal corta a la derecha. La firma editorial del sistema: cada sección abre con un '03 — Notas' que ancla la jerarquía.",
+      "html": "<div class=\"ds-section-label\">03 — Notas</div>",
+      "css": ".ds-section-label { display: flex; align-items: center; gap: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #c0392b; margin-bottom: 24px; } .ds-section-label::after { content: ''; flex: 1; height: 1px; background: #2a2a2a; max-width: 80px; }"
+    },
+    {
+      "name": "Chromatic Note Node (signature)",
+      "kind": "custom",
+      "refersTo": "note-node-svg",
+      "description": "El componente firma del sistema. Cada nota cromática es un círculo con su color semántico fijo, letra blanca centrada, etiqueta español exterior, anillo conector desde el centro. Hover escala + sonido.",
+      "html": "<svg viewBox=\"0 0 200 200\" class=\"ds-note-node\" width=\"200\" height=\"200\"><circle cx=\"100\" cy=\"100\" r=\"66\" fill=\"none\" stroke=\"#2a2a2a\" stroke-width=\"0.5\" /><line x1=\"100\" y1=\"100\" x2=\"160\" y2=\"100\" stroke=\"#2980b9\" stroke-width=\"0.5\" opacity=\"0.15\" /><circle cx=\"160\" cy=\"100\" r=\"22\" fill=\"#2980b9\" /><text x=\"160\" y=\"101\" text-anchor=\"middle\" dominant-baseline=\"middle\" fill=\"#ffffff\" font-size=\"15\" font-weight=\"700\" font-family=\"'Bebas Neue', sans-serif\">G</text><text x=\"185\" y=\"101\" text-anchor=\"middle\" dominant-baseline=\"middle\" fill=\"#6b6560\" font-size=\"9\" font-family=\"'Bebas Neue', sans-serif\">Sol</text></svg>",
+      "css": ".ds-note-node { display: block; max-width: 100%; height: auto; } .ds-note-node text { pointer-events: none; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "El Cuaderno de Estudio del Profesor",
+    "overview": "El sistema visual replica la sensación de un cuaderno de estudio cuidado: la tipografía hace el trabajo de jerarquizar, los neutros tintados sostienen el aire, los colores aparecen solo donde tienen un significado pedagógico. La pantalla se siente como un texto que respeta al lector. No grita. No celebra cada interacción. No interrumpe.\n\nLa densidad es académica, no flashcard. Hay párrafos del método de Josué Barquero, citas en cursiva tipográfica, secciones con etiquetas numeradas, círculos cromáticos donde cada nota tiene una identidad de color fija. El usuario no está jugando, está estudiando — y la interfaz lo respeta como tal. La doctrina visual viene del modernismo Suizo / Internacional (Müller-Brockmann, Vignelli) aplicado a contenido didáctico: grilla rigurosa, oposición fuerte entre Bebas Neue display y IBM Plex Mono cuerpo, ausencia casi total de sombras, color como decisión semántica.\n\nLo que este sistema explícitamente rechaza: la mascot-driven gamification de Duolingo / Yousician / Simply Piano; el SaaS-cream / SaaS-noir de Linear / Notion / Vercel con sus cards apiladas idénticas y heros de gradiente; la trampa de categoría que convierte cualquier app de música en púrpura/neón/glassmorphism o cualquier app de aprendizaje en verde/checkmarks/progress bars. El primer instinto del dataset queda fuera por principio.",
+    "keyCharacteristics": [
+      "Tipografía editorial (Bebas Neue + IBM Plex Mono + Playfair Display) hace toda la jerarquía.",
+      "Neutros tintados con flip explícito entre tema oscuro (default) y claro.",
+      "12 colores cromáticos (uno por nota) con identidad fija; la paleta semántica nunca decora UI no-nota.",
+      "Casi cero sombras: depth por borders + tonal layering, nunca por elevación.",
+      "Radios pequeños (0–6px) por defecto; pills (14px) para acciones flotantes; círculos (50%) solo para nodos de nota.",
+      "Motion mínimo (0.15–0.3s, ease default), respetando prefers-reduced-motion por contrato."
+    ],
+    "rules": [
+      { "name": "The One Voice Rule", "body": "Rojo Cardenal y Ámbar Pergamino combinados ocupan ≤10% de cualquier pantalla. Su escasez es el punto.", "section": "colors" },
+      { "name": "The Note-Color Quarantine Rule", "body": "Los 12 hues de nota están prohibidos en cualquier elemento que no represente una nota o un acorde. Si un botón usa Rojo Cardenal #c0392b, está usando el color del acento de marca — no el de la nota C.", "section": "colors" },
+      { "name": "The No Pure Black/White Rule", "body": "#000 y #fff están prohibidos como fondos o textos. Todos los neutros están tintados hacia el cálido del cuaderno.", "section": "colors" },
+      { "name": "The Editorial Trio Rule", "body": "Bebas Neue solo en mayúsculas, Plex Mono solo en cuerpo y labels, Playfair solo en italic para citas. Ninguna combinación cruzada.", "section": "typography" },
+      { "name": "The 65ch Rule", "body": "Cualquier párrafo de cuerpo respeta max-width 65–75ch. La tipografía mono es legible solo cuando la línea no es un viaje horizontal.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "Ningún card, panel, sidebar o botón tiene sombra en estado de reposo. La depth se gana con tonal layering.", "section": "elevation" },
+      { "name": "The Shadow Justifies Itself Rule", "body": "Las dos sombras existentes representan algo físico (cuerda, hover glow). Cualquier sombra nueva debe poder justificarse en una frase con un sustantivo concreto, no 'para dar profundidad'.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do usar Bebas Neue solo en uppercase, IBM Plex Mono solo en cuerpo/labels, Playfair Display solo italic para citas literales.",
+      "Do mantener acentos de marca (Rojo Cardenal + Ámbar Pergamino combinados) en ≤10% de cualquier pantalla.",
+      "Do construir profundidad con borders 1px y tonal layering (surface-near sobre bg), nunca con sombras.",
+      "Do usar radius 0 por defecto. Excepciones: tracks de toggle (10px), pills de acción flotante (14px), círculos puros (50%), radios sutiles 4-6px solo dentro del POC para controles.",
+      "Do respetar prefers-reduced-motion: todas las animaciones de armadura deben saltar a estado final cuando el usuario lo tiene activado.",
+      "Do mantener max-width 65-75ch en cualquier párrafo de cuerpo.",
+      "Do tintar #000 y #fff siempre hacia los neutros del sistema (Ink Deep / Paper Cream)."
+    ],
+    "donts": [
+      "Don't usar los 12 hues de nota cromática para decorar nada que no represente una nota o un acorde.",
+      "Don't parecerse a Duolingo / Yousician / Simply Piano / Flowkey. Sin mascots, sin racha diaria, sin recompensa positiva por click, sin paleta saturada.",
+      "Don't caer en SaaS-cream / SaaS-noir genérico. Nada de sidebar acrílico con cards apiladas idénticas, hero con gradiente sutil, layouts tipo Linear/Notion/Vercel.",
+      "Don't usar reflejos de categoría: ni púrpura/neón/glassy 'música', ni verde/checkmark/progress-bar 'aprendizaje', ni mástil de madera literal 'guitarra' como textura de fondo.",
+      "Don't poner border-left o border-right >1px como acento de color en cards o callouts. Excepción legacy conocida: RuleNote actualmente lo usa, está marcado como deuda para reescritura.",
+      "Don't usar gradient text (background-clip: text). Énfasis se hace por peso, tamaño, o color sólido — nunca degradado.",
+      "Don't introducir glassmorphism como default. La única instancia justificada es el botón pill flotante 'Limpiar selección' sobre SVG.",
+      "Don't usar #000 o #fff puros. Todo neutro está tintado hacia el cálido del cuaderno.",
+      "Don't animar propiedades de layout (width, height, top, left). Solo opacity, transform, color, background, border-color, stroke, fill.",
+      "Don't usar em dashes (—) en UI copy generada por agente. Coma, dos puntos, paréntesis o punto. (Las erratas intencionales del método de Josué quedan literales — esa es excepción de contenido, no de UI.)",
+      "Don't documentar nada con la voz 'consider', 'might', 'prefer'. Cualquier regla aquí es 'prohibido', 'siempre', 'nunca' — la voz de un director de diseño."
+    ]
+  }
+}
