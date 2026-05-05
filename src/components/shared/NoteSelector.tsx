@@ -1,3 +1,4 @@
+import { noteShort } from '../../utils/noteCalculations';
 import styles from './NoteSelector.module.css';
 
 interface NoteSelectorProps {
@@ -14,8 +15,9 @@ export default function NoteSelector({ notes, selected, onSelect }: NoteSelector
           key={n}
           className={n === selected ? styles.btnActive : styles.btn}
           onClick={() => onSelect(n)}
+          aria-pressed={n === selected}
         >
-          {n}
+          {noteShort(n)}
         </button>
       ))}
     </div>

@@ -1,0 +1,102 @@
+.wrap {
+  margin-top: 24px;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  max-width: 640px;
+  margin: 16px auto 0;
+  height: auto;
+}
+
+.svg text {
+  pointer-events: none;
+}
+
+.baseline {
+  stroke: var(--rule);
+  stroke-width: 0.5;
+  opacity: 0.5;
+}
+
+.node {
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.node:hover,
+.node:focus-visible {
+  outline: none;
+}
+
+.node:hover circle:not([fill="transparent"]),
+.node:focus-visible circle:not([fill="transparent"]) {
+  filter: brightness(1.1);
+}
+
+.node:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+.patternLabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  fill: var(--muted);
+  text-transform: uppercase;
+}
+
+.noteName {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  fill: var(--text-body);
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.innerLetter {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  /* Signature Component: letra blanca sobre nota saturada, no tokenizar */
+  fill: #fff;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.innerLetterLarge {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  /* Signature Component: letra blanca sobre nota saturada, no tokenizar */
+  fill: #fff;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.gradeLabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  fill: var(--muted);
+  text-transform: uppercase;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+@media (max-width: 900px) {
+  .patternLabel {
+    font-size: 12px;
+  }
+  .gradeLabel {
+    font-size: 11px;
+  }
+}
