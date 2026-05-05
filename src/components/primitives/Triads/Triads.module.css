@@ -1,0 +1,156 @@
+.section {
+  padding: 48px 60px;
+  border-bottom: 1px solid var(--rule);
+  animation: fadeUp 0.6s ease both;
+  overflow: hidden;
+}
+
+.circleWrap {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.svg {
+  max-width: 320px;
+  width: 100%;
+}
+
+.svg text {
+  font-family: 'Bebas Neue', sans-serif;
+  pointer-events: none;
+}
+
+.node {
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.node > * {
+  pointer-events: none;
+}
+
+.hit {
+  pointer-events: all !important;
+}
+
+.infoPanel {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  padding: 20px;
+  min-width: 200px;
+}
+
+.infoTitle {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  color: var(--paper);
+  margin-bottom: 4px;
+}
+
+.infoType {
+  font-size: 11px;
+  color: var(--amber);
+  margin-bottom: 12px;
+}
+
+.infoNotes {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.infoNote {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  color: #fff;
+}
+
+.infoLabels {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.masterWrap {
+  margin-top: 24px;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+}
+
+.chain {
+  display: flex;
+  gap: 0;
+  align-items: center;
+  overflow-x: auto;
+  padding: 16px 0;
+}
+
+.chainNote {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: transform 0.15s;
+  padding: 0 2px;
+}
+
+.chainNote:hover {
+  transform: scale(1.15);
+}
+
+.chainCircle {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  color: #fff;
+  transition: box-shadow 0.2s;
+}
+
+.chainNote:hover .chainCircle {
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.2);
+}
+
+.chainLabel {
+  font-size: 9px;
+  color: var(--muted);
+}
+
+.chainRole {
+  font-size: 8px;
+  font-weight: 600;
+  padding: 1px 5px;
+  border-radius: 2px;
+  color: #fff;
+}
+
+.chainArrow {
+  font-size: 14px;
+  color: var(--muted);
+  opacity: 0.3;
+  flex-shrink: 0;
+  margin: 0 2px;
+  align-self: center;
+}
+
+@media (max-width: 900px) {
+  .section {
+    padding: 36px 24px;
+  }
+}

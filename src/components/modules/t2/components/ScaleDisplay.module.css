@@ -1,0 +1,56 @@
+.wrap {
+  margin-top: 16px;
+}
+
+.label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.row {
+  display: flex;
+  gap: 4px;
+}
+
+.slot {
+  position: relative;
+  width: 42px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.note {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  color: var(--paper);
+}
+
+.fadeOut {
+  composes: note;
+  position: absolute;
+  animation: fadeOutAnim 0.3s forwards;
+}
+
+.fadeIn {
+  composes: note;
+  animation: fadeInAnim 0.3s forwards;
+}
+
+@keyframes fadeOutAnim {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes fadeInAnim {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
