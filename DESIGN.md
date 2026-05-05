@@ -351,7 +351,7 @@ Este componente es el que identifica la marca. Aparece en T1 (primitiva Chromati
 
 Esta sección lista deudas que las auditorías y pasadas de resolución identificaron pero **no** han sido resueltas. Son trabajo futuro explícito, no aprobaciones tácitas. Cada vez que una pasada resuelve una deuda, se remueve de esta lista; cada nueva deuda descubierta se añade.
 
-**Última actualización:** 2026-05-04 (después de la 2ª ola — motion/a11y/visual/tokens).
+**Última actualización:** 2026-05-05 (después de la 6ª ola — Bloque B de T1: secciones 04, 07, 08).
 
 ### Doctrina activa (decisiones pendientes de diseño)
 
@@ -364,6 +364,8 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
   - `--text-faded` para `.stepPast` y similares ("este paso ya pasó / atenuado"). Hoy usa `var(--muted)` que es fuente de luminancia distinta. Si la diferencia visual es importante, vale la pena el token nuevo.
   - `--fret-num` para `.fretNum` en mástil. Hoy usa `var(--muted)` que puede competir con los dots en oscuro. Si el fretNum se siente prominente, token dedicado.
   - Comentario inline en `Intervals.module.css .dot { color: #fff }` señalando "Signature: letra blanca sobre nota saturada, no tokenizar" para que un agente futuro no lo "corrija".
+- **Doble sostenido / doble bemol en spelling de acordes para tónicas extremas.** Las funciones `majorScaleSpelled`/`chordSpelled` aplican la regla "una letra por grado". Para D♯, G♯, A♯ mayores eso produce F♯♯, B♯, C♯♯ (correcto teóricamente, inusual visualmente). Pedagogía musical estándar resuelve esto eligiendo la enarmonía bemol equivalente (E♭, A♭, B♭). Decisión pendiente: dejar la teoría estricta como está, o auto-redirigir tonics extremas a spelling con bemoles. Hoy la primitiva acepta toda tónica del tipo `ChromaticNote` (con sostenidos) y muestra el resultado como sale. Si emerge fricción de uso (estudiantes pidiendo "Eb mayor"), pasada futura puede añadir un input flat-aware sin romper la actual.
+- **AudioButtons highlight progresivo se hereda en Bloque B.** AcordesBuilder (Bloque/Arpegiado) y ReglaQuinta (botones por fila) replican el patrón estático de `AudioButtons.tsx`. Cuando se aborde la deuda original de highlight progresivo, los nuevos consumidores también se actualizan en la misma pasada — son 3 sitios paralelos que comparten la misma deuda.
 
 ### Histórico (resueltas, conservar para contexto)
 
@@ -404,3 +406,13 @@ Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabr
 - ✓ **Mute toggle global de audio:** nuevo state `audioMuted` en `useUIStore` (Zustand) con default `true` (audio off al cargar). `useAudioEngine` (`playNote`/`playClick`/`playRhythm`) respeta el mute via `getState()` para evitar stale closures. Nuevo componente `MuteToggle.tsx`/`MuteToggle.module.css` en sidebar (espejo estructural de `ThemeToggle`, label "AUDIO · OFF / ON" Plex Mono uppercase, track rojo cuando ON). `aria-label`/`aria-pressed` correctos. Sidebar themeArea ahora flex column con gap. Implementa el principio de PRODUCT.md "audio nunca obligatorio" como switch real en lugar de promesa.
 - ✓ **ProcessPanel.titulo en Playfair italic** marcado como excepción doctrinal (las preguntas pedagógicas del método cuentan como citas literales).
 - ✓ **One Voice Rule** revisada — densidad >10% en TablaMaestra/ModoClase aceptada como cost de las 2 secciones más interactivas; mantener resto de pantallas ≤10%.
+
+**5ª ola — Bloque A de T1 (2026-05-05):**
+- ✓ Construcción de T1 secciones 01, 02, 03, 06 (`NotasNaturalesSection`, `CirculoCromaticoSection`, `IntervalosSection`, `TriadasSection`). 4 wrappers + 4 CSS modules + `T1Module.tsx` reescrito + `data/literalContent.ts` con contenido verbatim del source. Refactor de las 3 primitivas migradas (`ChromaticCircleSection`, `IntervalsSection`, `TriadsSection`) para extraer `<SectionLabel>` + `<h2>` + section wrapper al consumer. Las primitivas pasan a renderizar solo la visualización interactiva.
+
+**6ª ola — Bloque B de T1 (2026-05-05):**
+- ✓ Tres secciones nuevas implementadas: 04 (Escala mayor + estables/tensas, §1.4), 07 (Acordes mayores y menores, §1.7), 08 (Regla de la 5J + excepciones, §1.8). T1 ahora muestra 01-02-03-04-06-07-08 en orden; 05 (Tensión y resolución) queda ausente para bloque posterior, sin renumeración.
+- ✓ Tres primitivas net-new en `src/components/primitives/`: `EscalaMayor` (strip lineal de 13 nodos con T-T-S-T-T-T-S explícito, discriminación de roles por opacity/size/ring sin segundo color de palette), `AcordesBuilder` (3 nodos Signature horizontales, toggle local Mayor/Menor, audio Bloque + Arpegiado), `ReglaQuinta` (12 filas tónica → 5J, fila B → F# con tratamiento de banner ámbar full-border 1px + bg 6%).
+- ✓ Utilidades de spelling musical en `utils/noteCalculations.ts`: `majorScaleSpelled`, `chordSpelled`, `perfectFifth`. Implementan la regla "una letra por grado, accidental ajustado". Disponibles para futuro consumo de T2 si lo requiere.
+- ✓ Polish colateral en `NoteSelector`: ahora aplica `noteShort()` internamente y emite `aria-pressed` por chip. Side-effect en T2: las chips de `ProcesoSostenidosSection` muestran F♯/C♯ en lugar de F#/C# (cambio universalmente positivo, mejor tipografía).
+- ✓ Build limpio. Lint limpio. Anti-checklist 14/14 pasada (énfasis verificado en Note-Color Quarantine para sección 04).

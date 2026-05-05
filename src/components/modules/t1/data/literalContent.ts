@@ -1,5 +1,5 @@
 // Contenido literal del método de Josué Barquero — NO parafrasear, NO corregir erratas.
-// Fuente: docs/source_of_truth_T1_T2.md (T1 §1.1, §1.2, §1.3, §1.6).
+// Fuente: docs/source_of_truth_T1_T2.md (T1 §1.1, §1.2, §1.3, §1.4, §1.6, §1.7, §1.8).
 
 // === 01 · Notas naturales y cifrado anglosajón (§1.1) ===
 
@@ -108,3 +108,93 @@ export const TRIADAS_MAESTRA =
 
 export const CONSEJO_TRIADAS =
   "Consejo del método: memorizar las 7 tríadas. Son la estructura de todo acorde y el fundamento de la armonía. También son herramienta para leer partitura.";
+
+// === 04 · Escala mayor: notas estables y tensas (§1.4) ===
+
+export const ESCALA_DEF =
+  "La escala mayor tiene 7 notas. Cada nota tiene un carácter individual que se mantiene independiente de la tonalidad. Por eso se les da el nombre genérico de \"grados\" (1 al 7).";
+
+export const ESCALA_EJEMPLO_INTRO =
+  "Ejemplo en C mayor (única tonalidad sin alteraciones):";
+
+export const ESCALA_TABLA_HEAD = ['Grado', 'T', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'T'] as const;
+export const ESCALA_TABLA_NOTAS = ['Nota', 'C', 'D', 'E', 'F', 'G', 'A', 'B', 'C'] as const;
+export const ESCALA_TABLA_DIST = ['Distancia (s.t.)', '2', '2', '1', '2', '2', '2', '1', ''] as const;
+
+export const ESCALA_DIVISION_INTRO = "La escala se divide en:";
+export const ESCALA_ESTABLES = "Notas estables: 1, 3, 5.";
+export const ESCALA_TENSAS = "Notas tensas: 2, 4, 6, 7.";
+
+export const ESCALA_PRIMITIVA_TITULO = "Visualizador de la escala mayor";
+export const ESCALA_PRIMITIVA_INSTRUCCION =
+  "Elegí una tónica para ver su escala mayor sobre los 12 semitonos del círculo cromático. Las 7 notas de la escala se muestran encendidas; las 5 cromáticas restantes quedan atenuadas. Pasá el cursor o el foco sobre cada nota para escucharla.";
+
+// === 07 · Acordes mayores y menores (§1.7) ===
+
+export const ACORDES_INTRO =
+  "Recapitulando lo de tríadas e intervalos.";
+
+export const ACORDES_DEFINICIONES = [
+  { tipo: 'Acorde mayor', formula: 'T + 3M + 5J', desc: 'tónica + tercera mayor + quinta justa.' },
+  { tipo: 'Acorde menor', formula: 'T + 3m + 5J', desc: 'tónica + tercera menor + quinta justa.' },
+] as const;
+
+export const ACORDES_DIFF =
+  "Solo cambia la tercera. Dos de tres notas son iguales son casi el mismo acorde.";
+
+export const ACORDES_NOMENCLATURA_INTRO = "Nomenclatura:";
+export const ACORDES_NOMENCLATURA = [
+  { regla: 'Acorde mayor', desc: 'solo la letra. F = Fa mayor.' },
+  { regla: 'Acorde menor', desc: 'letra + "m" minúscula. Fm = Fa menor.' },
+] as const;
+
+export const ACORDES_PROCEDIMIENTO_TITULO =
+  "Procedimiento para encontrar la tríada mayor o menor de cualquier nota";
+
+export const ACORDES_PROCEDIMIENTO_PASOS = [
+  "Escribir la tríada partiendo de la tónica (solo notas naturales).",
+  "Contar cromáticamente a partir de la tónica, los semitonos hasta tercera (3M = 4 s.t. o 3m = 3 s.t.).",
+  "Contar cromáticamente a partir de la tónica, los semitonos hasta la quinta justa (5J = 7 s.t.).",
+] as const;
+
+export const ACORDES_EJEMPLO_TITULO = "Ejemplo A mayor";
+export const ACORDES_EJEMPLO_PASOS = [
+  "Letras de la tríada: A C E.",
+  "Semitonos hasta la 3M: A → A#/Bb (1) → B (2) → C (3) → C#/Db (4). Por la regla del paso 1, la letra es C, entonces es C# (no Db).",
+  "Semitonos hasta la 5J: A → A#/Bb (1) → B (2) → C (3) → C#/Db (4) → D (5) → D#/Eb (6) → E (7).",
+] as const;
+
+export const ACORDES_RESULTADO_MAYOR = "A mayor = A C# E.";
+export const ACORDES_RESULTADO_MENOR =
+  "Para A menor, la única diferencia es bajar la tercera un semitono: A menor = A C E.";
+
+export const ACORDES_PRIMITIVA_TITULO = "Constructor de acordes";
+export const ACORDES_PRIMITIVA_INSTRUCCION =
+  "Elegí una tónica y una calidad (mayor o menor) para construir el acorde. Escuchalo bloque (tres notas a la vez) o arpegiado (T → 3 → 5).";
+
+// === 08 · Regla de la quinta justa con sus excepciones (§1.8) ===
+
+export const REGLA_INTRO =
+  "La quinta justa siempre copia la alteración de la tónica.";
+
+export const REGLA_BULLETS = [
+  { regla: 'T natural', desc: 'la 5J también es natural.', ejemplo: 'D → A.' },
+  { regla: 'T con #', desc: 'la 5J también lleva #.', ejemplo: 'F# → C#.' },
+  { regla: 'T con b', desc: 'la 5J también lleva b.', ejemplo: 'Eb → Bb.' },
+] as const;
+
+export const REGLA_EXCEPCIONES_TITULO = "Excepciones";
+export const REGLA_EXCEPCION_B =
+  "Cuando B es la tónica, su 5J es F# (no F).";
+export const REGLA_EXCEPCION_BB =
+  "Cuando Bb es la tónica, su 5J es F (no Fb).";
+
+export const CONSEJO_REGLA_5J =
+  "Consejo del método: poner a prueba esta regla con las 12 notas, encontrando la tríada mayor y menor de cada una.";
+
+export const REGLA_PRIMITIVA_TITULO = "Las 12 quintas justas";
+export const REGLA_PRIMITIVA_INSTRUCCION =
+  "Cada fila reproduce su tónica y su 5J en secuencia. La excepción de B → F# queda enmarcada para destacarla del patrón.";
+
+export const REGLA_NOTA_BEMOLES =
+  "Si nombrás las notas alteradas con bemoles, surge una segunda excepción: Bb → F (no Fb). En el sistema con sostenidos, esa misma 5J aparece como A# → E# (enarmónica de F).";

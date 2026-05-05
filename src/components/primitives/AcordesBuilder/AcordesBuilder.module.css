@@ -1,0 +1,139 @@
+.wrap {
+  margin-top: 24px;
+}
+
+.qualityRow {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 28px;
+}
+
+.quality {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  letter-spacing: 1px;
+  padding: 4px 14px;
+  border: 1px solid var(--rule);
+  background: none;
+  color: var(--paper);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+
+.quality:hover {
+  border-color: var(--amber);
+}
+
+.quality:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+.qualityActive {
+  composes: quality;
+  background: var(--red);
+  border-color: var(--red);
+  color: var(--paper);
+}
+
+.chordRow {
+  display: flex;
+  gap: 28px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 24px 0 28px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  outline: none;
+  padding: 8px;
+  border: 1px solid transparent;
+  transition: border-color 0.15s, transform 0.15s ease;
+}
+
+.card:hover,
+.card:focus-visible {
+  transform: translateY(-2px);
+}
+
+.card:focus-visible {
+  border-color: var(--amber);
+}
+
+.nodeSvg {
+  width: 80px;
+  height: 80px;
+  display: block;
+}
+
+.nodeLetter {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  /* Signature Component: letra blanca sobre nota saturada, no tokenizar */
+  fill: #fff;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+
+.cardLabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  color: var(--paper);
+  text-transform: uppercase;
+}
+
+.cardName {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+
+.audioRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.audioBtn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  padding: 8px 16px;
+  border: 1px solid var(--rule);
+  background: none;
+  color: var(--paper);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.audioBtn:hover:not(:disabled) {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.audioBtn:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+.audioBtn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+@media (max-width: 900px) {
+  .chordRow {
+    gap: 16px;
+  }
+}

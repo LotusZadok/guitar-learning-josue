@@ -1,0 +1,70 @@
+.section {
+  padding: 48px 60px;
+  border-bottom: 1px solid var(--rule);
+  animation: fadeUp 0.6s ease both;
+}
+
+.text {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--text-body);
+  margin-bottom: 16px;
+}
+
+.bullets {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bullets li {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--text-body);
+  padding-left: 16px;
+  position: relative;
+}
+
+.bullets li::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  color: var(--muted);
+}
+
+.bullets strong {
+  color: var(--paper);
+  font-weight: 600;
+}
+
+.ejemplo {
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+.subheading {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  color: var(--paper);
+  margin: 32px 0 12px;
+  letter-spacing: 1px;
+}
+
+.footnote {
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--muted);
+  margin: 24px 0 16px;
+  font-style: normal;
+}
+
+@media (max-width: 900px) {
+  .section {
+    padding: 36px 24px;
+  }
+}
