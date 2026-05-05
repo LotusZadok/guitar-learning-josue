@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import SectionLabel from '../../shared/SectionLabel';
 import NoteSelector from '../../shared/NoteSelector';
 import IntervalRow from './IntervalRow';
 import IntervalMiniFretboard from './IntervalMiniFretboard';
@@ -24,9 +23,7 @@ export default function IntervalsSection() {
   ];
 
   return (
-    <div className={styles.section}>
-      <SectionLabel text="05 · Intervalos" />
-      <h2>Patrón Interválico</h2>
+    <div className={styles.wrap}>
       <NoteSelector
         notes={[...NATURALS]}
         selected={root}

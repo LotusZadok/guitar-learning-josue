@@ -1,8 +1,5 @@
-.section {
-  padding: 48px 60px;
-  border-bottom: 1px solid var(--rule);
-  animation: fadeUp 0.6s ease both;
-  overflow: hidden;
+.wrap {
+  margin-top: 24px;
 }
 
 .list {
@@ -115,8 +112,3 @@
   cursor: pointer;
 }
 
-@media (max-width: 900px) {
-  .section {
-    padding: 36px 24px;
-  }
-}
