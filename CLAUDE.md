@@ -94,3 +94,43 @@ Cuando una pasada UI implica >2 tareas independientes con archivos sin solape, p
 ### Auditorías guiadas
 
 Para auditorías de proyectos completos (multi-página), usar `.impeccable/audit-template.md` como prompt base.
+
+### Comandos del skill `impeccable`
+
+23 comandos en 6 categorías. Llamar por nombre exacto (ej: `/impeccable critique`, `/impeccable polish`).
+
+**Create — construir algo nuevo**
+- `/impeccable craft` — Shape + build una feature end-to-end.
+- `/impeccable shape` — Brief de diseño antes de tocar código (descubrimiento, no adivinanza).
+- `/impeccable impeccable` — La inteligencia de diseño detrás de cada comando.
+
+**Evaluate — revisar lo existente**
+- `/impeccable critique` — Design review con scoring, persona tests y detección automatizada.
+- `/impeccable audit` — Chequeo técnico de calidad en 5 dimensiones, severidad P0–P3.
+
+**Refine — mejorar una dimensión a la vez**
+- `/impeccable typeset` — Arregla tipografía genérica, inconsistente o accidental.
+- `/impeccable layout` — Corrige espaciado, ritmo y jerarquía visual.
+- `/impeccable colorize` — Color estratégico a UI monocromas sin caer en saturado.
+- `/impeccable animate` — Movimiento con propósito (estado, no decoración).
+- `/impeccable bolder` — Empuja diseños seguros hacia impacto sin caos.
+- `/impeccable quieter` — Bajar volumen de diseños que gritan, sin perder intención.
+- `/impeccable delight` — Pequeños momentos de personalidad que vuelven funcional → memorable.
+- `/impeccable overdrive` — Empuja una UI más allá de límites convencionales (shaders, físicas, 60fps).
+
+**Simplify — quitar lo que no se gana su lugar**
+- `/impeccable distill` — Sustracción ruthless. Reduce diseños a su esencia.
+- `/impeccable clarify` — Reescribe UX copy confuso para que la interfaz se explique sola.
+- `/impeccable adapt` — Diseños que funcionan en pantallas/dispositivos/contextos sin amputar.
+
+**Harden — listo para producción**
+- `/impeccable harden` — Edge cases, i18n, error states, overflow.
+- `/impeccable optimize` — Diagnostica y corrige perf de UI (LCP a bundle size).
+- `/impeccable polish` — La pasada meticulosa final entre "bueno" y "excelente".
+- `/impeccable onboard` — Primeras experiencias, empty states, paths to value.
+
+**System — setup y tooling**
+- `/impeccable teach` — Enseña a Impeccable quién es tu producto (una vez por proyecto).
+- `/impeccable document` — Genera DESIGN.md spec-compliant capturando el sistema visual.
+- `/impeccable extract` — Extrae componentes/tokens/patrones reusables al sistema de diseño.
+- `/impeccable live` — Itera en el browser. Pickear elemento, comentar, recibir 3 variantes.
