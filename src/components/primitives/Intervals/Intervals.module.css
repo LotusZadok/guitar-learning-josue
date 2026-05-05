@@ -53,7 +53,7 @@
   display: flex;
   align-items: center;
   height: 44px;
-  background: #110e06;
+  background: var(--fret-bg);
   border-radius: 6px;
   padding: 0 8px;
   min-width: 500px;
@@ -63,7 +63,7 @@
 .nut {
   width: 4px;
   height: 36px;
-  background: #e0d0a0;
+  background: var(--fret-nut);
   flex-shrink: 0;
   margin-right: 2px;
   border-radius: 1px;
@@ -75,7 +75,7 @@
   align-items: center;
   justify-content: center;
   height: 44px;
-  border-right: 2px solid #5c4a2a;
+  border-right: 1px solid var(--fret-wire);
   position: relative;
 }
 
@@ -86,7 +86,7 @@
   right: 0;
   top: 50%;
   height: 2px;
-  background: #b8a060;
+  background: var(--string-dark);
   opacity: 0.4;
 }
 
@@ -96,7 +96,7 @@
   left: 50%;
   transform: translateX(-50%);
   font-size: 8px;
-  color: #706040;
+  color: var(--muted);
 }
 
 .dot {

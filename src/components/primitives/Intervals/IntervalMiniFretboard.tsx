@@ -28,6 +28,15 @@ export default function IntervalMiniFretboard({ root }: Props) {
                   className={styles.dot}
                   style={{ background: point.color }}
                   onClick={() => playNote(info.note, 2, 2)}
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`Intervalo ${point.label} (${info.note})`}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      playNote(info.note, 2, 2);
+                    }
+                  }}
                 >
                   {point.label}
                 </div>

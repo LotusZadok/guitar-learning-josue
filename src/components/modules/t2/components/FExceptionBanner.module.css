@@ -1,5 +1,5 @@
 .banner {
-  border-left: 3px solid var(--amber);
+  border: 1px solid var(--amber);
   background: rgba(212, 160, 23, 0.06);
   padding: 16px 20px;
   margin-bottom: 24px;
@@ -18,5 +18,5 @@
 .text {
   font-size: 12px;
   line-height: 1.8;
-  color: #b8b0a5;
+  color: var(--text-body);
 }

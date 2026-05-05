@@ -54,13 +54,18 @@
   cursor: pointer;
 }
 
+.button:hover, .button:focus-visible {
+  background: var(--red);
+  color: var(--paper);
+}
+
 .button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
 .error {
-  color: #e25555;
+  color: var(--red);
   font-family: 'IBM Plex Mono', monospace;
   font-size: 0.85rem;
 }

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, type KeyboardEvent } from 'react';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { NOTE_COLORS, NOTE_ES } from '../../../data/notes';
 import { noteShort } from '../../../utils/noteCalculations';
@@ -32,8 +32,24 @@ export default function ChromaticNode({ note, index, cx, cy, r }: ChromaticNodeP
     setHovered(false);
   }, []);
 
+  const handleKeyDown = useCallback((e: KeyboardEvent<SVGGElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      playNote(note, 4, 2);
+    }
+  }, [note, playNote]);
+
   return (
-    <g className={styles.node} style={{ transformOrigin: `${x}px ${y}px` }}>
+    <g
+      className={styles.node}
+      style={{ transformOrigin: `${x}px ${y}px` }}
+      tabIndex={0}
+      role="button"
+      aria-label={`Nota ${NOTE_ES[note]}`}
+      onFocus={handleEnter}
+      onBlur={handleLeave}
+      onKeyDown={handleKeyDown}
+    >
       <circle
         className={styles.hit}
         cx={x} cy={y} r={30}

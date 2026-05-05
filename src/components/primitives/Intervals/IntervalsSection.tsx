@@ -16,16 +16,16 @@ export default function IntervalsSection() {
   const quinta = ALL[(ri + 7) % 12];
 
   const intervals = [
-    { name: 'Tónica', st: '0 st', desc: `Nota base. Punto de partida → ${root}`, color: 'var(--red)' },
-    { name: '3ra Menor', st: '3 st', desc: `${noteShort(t3m)} (${NOTE_ES[t3m]}) — Define acorde menor`, color: '#2980b9' },
-    { name: '3ra Mayor', st: '4 st', desc: `${noteShort(t3M)} (${NOTE_ES[t3M]}) — Define acorde mayor`, color: '#27ae60' },
-    { name: 'Quinta', st: '7 st', desc: `Quinta justa → ${quinta} (${NOTE_ES[quinta]})`, color: 'var(--amber)' },
-    { name: 'Octava', st: '12 st', desc: `Repetición de la tónica, una octava arriba → ${root}`, color: 'var(--string6)' },
+    { name: 'Tónica', st: '0 st', desc: `Nota base. Punto de partida → ${root}` },
+    { name: '3ra Menor', st: '3 st', desc: `${noteShort(t3m)} (${NOTE_ES[t3m]}) · Define acorde menor` },
+    { name: '3ra Mayor', st: '4 st', desc: `${noteShort(t3M)} (${NOTE_ES[t3M]}) · Define acorde mayor` },
+    { name: 'Quinta', st: '7 st', desc: `Quinta justa → ${quinta} (${NOTE_ES[quinta]})` },
+    { name: 'Octava', st: '12 st', desc: `Repetición de la tónica, una octava arriba → ${root}` },
   ];
 
   return (
     <div className={styles.section}>
-      <SectionLabel text="05 — Intervalos" />
+      <SectionLabel text="05 · Intervalos" />
       <h2>Patrón Interválico</h2>
       <NoteSelector
         notes={[...NATURALS]}

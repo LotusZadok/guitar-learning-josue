@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback, useEffect } from 'react';
+import { useMemo, useState, useCallback, useEffect, type KeyboardEvent } from 'react';
 import type { CircleNoteData } from '../data/processSteps';
 import { NOTE_TO_POS } from '../data/processSteps';
 import { useAudioEngine } from '../../../../hooks/useAudioEngine';
@@ -37,11 +37,11 @@ function posToXY(pos: number) {
 }
 
 const STATE_COLORS: Record<string, { fill: string; text: string }> = {
-  neutral:     { fill: '#1a1a1a', text: '#6b6560' },
-  tonica:      { fill: '#c0392b', text: '#f5f0e8' },
-  highlighted: { fill: '#d4a017', text: '#1a1a1a' },
-  natural:     { fill: 'rgba(245,240,232,0.12)', text: '#f5f0e8' },
-  userPicked:  { fill: '#2980b9', text: '#f5f0e8' },
+  neutral:     { fill: 'var(--ink)', text: 'var(--muted)' },
+  tonica:      { fill: 'var(--red)', text: 'var(--paper)' },
+  highlighted: { fill: 'var(--amber)', text: 'var(--ink)' },
+  natural:     { fill: 'color-mix(in srgb, var(--paper) 12%, transparent)', text: 'var(--paper)' },
+  userPicked:  { fill: 'var(--surface-2)', text: 'var(--paper)' },
 };
 
 function arcPath(fromPos: number, toPos: number): string {
@@ -144,11 +144,21 @@ export default function ChromaticCircleAnimated({ notes, arrow, compact, playOnC
           const isPicked = picked.has(i);
           const effectiveState = isPicked ? 'userPicked' : note.state;
           const colors = STATE_COLORS[effectiveState] || STATE_COLORS.neutral;
+          const handleKeyDown = (e: KeyboardEvent<SVGGElement>) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              toggleNote(i);
+            }
+          };
           return (
             <g
               key={i}
               className={styles.node}
               onClick={() => toggleNote(i)}
+              tabIndex={0}
+              role="button"
+              aria-label={`Nota ${note.label}`}
+              onKeyDown={handleKeyDown}
             >
               {/* hover/picked ring */}
               <circle
@@ -156,7 +166,7 @@ export default function ChromaticCircleAnimated({ notes, arrow, compact, playOnC
                 cy={y}
                 r={NODE_R + 4}
                 fill="none"
-                stroke={isPicked ? '#2980b9' : 'transparent'}
+                stroke={isPicked ? 'var(--paper)' : 'transparent'}
                 strokeWidth={2}
                 className={styles.ring}
               />
@@ -165,7 +175,7 @@ export default function ChromaticCircleAnimated({ notes, arrow, compact, playOnC
                 cy={y}
                 r={NODE_R}
                 fill={colors.fill}
-                stroke={note.state === 'natural' && !isPicked ? '#f5f0e8' : 'none'}
+                stroke={note.state === 'natural' && !isPicked ? 'var(--paper)' : 'none'}
                 strokeWidth={note.state === 'natural' && !isPicked ? 1 : 0}
                 className={styles.nodeCircle}
               />

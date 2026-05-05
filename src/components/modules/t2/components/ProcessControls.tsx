@@ -27,6 +27,7 @@ export default function ProcessControls({
           onClick={onPrev}
           disabled={atStart}
           title="Anterior"
+          aria-label="Anterior"
         >
           ◀
         </button>
@@ -34,6 +35,7 @@ export default function ProcessControls({
           className={styles.btn}
           onClick={mode === 'playing' ? onPause : onPlay}
           title={mode === 'playing' ? 'Pausar' : 'Reproducir'}
+          aria-label={mode === 'playing' ? 'Pausar' : 'Reproducir'}
         >
           {mode === 'playing' ? '⏸' : '▶'}
         </button>
@@ -42,17 +44,20 @@ export default function ProcessControls({
           onClick={onNext}
           disabled={atEnd}
           title="Siguiente"
+          aria-label="Siguiente"
         >
           ▶▶
         </button>
       </div>
 
       <div className={styles.speed}>
-        <span className={styles.speedLabel}>velocidad:</span>
+        <span className={styles.speedLabel} id="process-speed-label">velocidad:</span>
         <select
           className={styles.select}
           value={speed}
           onChange={e => onSpeedChange(e.target.value as 'normal' | 'slow')}
+          aria-label="Velocidad"
+          aria-labelledby="process-speed-label"
         >
           <option value="normal">normal</option>
           <option value="slow">lento</option>

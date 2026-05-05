@@ -137,7 +137,28 @@
   font-weight: 600;
   padding: 1px 5px;
   border-radius: 2px;
-  color: #fff;
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--muted);
+}
+
+.chainRoleTonic {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.masterTitle {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: 0.5px;
+  color: var(--paper);
+  margin-bottom: 8px;
+}
+
+.masterIntro {
+  margin-bottom: 16px;
+  font-size: 12px;
+  color: var(--muted);
 }
 
 .chainArrow {

@@ -53,7 +53,7 @@ export default function LockScreen({ onUnlock }: Props) {
           }}
           autoFocus
         />
-        {error && <p className={styles.error}>{t('lock.error')}</p>}
+        {error && <p className={styles.error} role="alert">{t('lock.error')}</p>}
         <button
           className={styles.button}
           type="submit"

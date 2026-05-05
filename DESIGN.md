@@ -188,13 +188,32 @@ Doce hues, uno por nota cromática. **No es paleta decorativa: es un sistema sem
 - **E** `#f1c40f` · **F** `#27ae60` · **F♯** `#1e8449` · **G** `#2980b9`
 - **G♯** `#2471a3` · **A** `#8e44ad` · **A♯** `#7d3c98` · **B** `#1abc9c`
 
+### Light-theme overrides (decisión 2026-05-04)
+
+Aunque la doctrina inicial declaraba "note hues fijas a través de temas", auditoría de contraste reveló que 8 de las 12 hues fallan WCAG AA texto-pequeño sobre cream `#f5f0e8`. Decisión aprobada: definir variantes oscuras para `[data-theme="light"]` que preservan identidad de hue (C sigue siendo rojo, G sigue siendo azul, etc.) pero alcanzan contraste ≥ 4.5:1.
+
+Implementación: las hues son CSS vars (`--note-c`, `--note-c-sharp`, ..., `--note-b`) en `global.css` con overrides para `[data-theme="light"]`. `data/notes.ts NOTE_COLORS` lee los vars vía `var(--note-X)` strings.
+
+Hues light-theme (ratios sobre cream entre paréntesis):
+- **C** `#c0392b` (4.79:1) · **C♯** `#a93226` (5.84:1) · **D** `#a04600` (5.49:1) · **D♯** `#923c00` (6.45:1)
+- **E** `#7d6500` (4.96:1) · **F** `#1a7340` (5.19:1) · **F♯** `#16623a` (6.51:1) · **G** `#1f5f8a` (6.05:1)
+- **G♯** `#1c5577` (7.08:1) · **A** `#8e44ad` (5.17:1) · **A♯** `#7d3c98` (6.23:1) · **B** `#0e7560` (4.96:1)
+
+**Trade-off de E (yellow-on-cream).** El amarillo `#f1c40f` es físicamente imposible de pasar AA sobre cream sin volverse ochre/ámbar oscuro. La variante elegida (`#7d6500`) lee como "amarillo-cálido tirando a mostaza" — la familia *yellow-warm* se conserva, pero un usuario que asocie E con "amarillo brillante" en tema oscuro verá un tono notoriamente más oscuro en tema claro. Se acepta como costo del salto AA.
+
+**Excepción doctrinal:** El usuario aprende la asociación "rojo = C" en cualquier tema, pero el rojo *exacto* puede variar entre dark y light. La identidad pedagógica se mantiene; el matiz se ajusta para legibilidad.
+
 ### Named Rules
 
 **The One Voice Rule.** Rojo Cardenal y Ámbar Pergamino combinados ocupan ≤10% de cualquier pantalla. Su escasez es el punto.
 
 **The Note-Color Quarantine Rule.** Los 12 hues de nota están **prohibidos** en cualquier elemento que no represente una nota o un acorde. Si un botón, un divisor, un fondo o un icono usa Rojo Cardenal `#c0392b`, está usando el color del acento de marca — no el de la nota C. La línea es invisible para el dataset, pero crítica para la pedagogía.
 
-**The No Pure Black/White Rule.** `#000` y `#fff` están prohibidos como fondos o textos. Todos los neutros están tintados hacia el cálido del cuaderno (`#0e0e0e`, `#f5f0e8`).
+**Corolario (Roles y estados).** Cuando un componente necesita discriminar N elementos que **no** son notas (roles tipo T/3ra/5ta, estados tipo userPicked/highlighted/neutral, categorías tipo sostenido/bemol), los colores se eligen de los **neutros de marca** (`--paper`, `--muted`, `--surface-2`, `--rule`, `--surface`) o de los **dos acentos de marca** (`--red`, `--amber`), nunca de los 12 hues cromáticos. Cualquier array de colores indexado por algo que no sea nombre-de-nota es un olor a violación. Tipografía, peso, posición, número o forma son discriminadores válidos antes que el color.
+
+**Corolario (Tokens vinculados a notas).** Los CSS vars `--string1..6` y `--caged-C/A/G/E/D` **son** hues cromáticos disfrazados (cada cuerda al aire ES una nota; cada forma CAGED ES una nota raíz). No pueden reusarse como acentos genéricos. Si un componente no-nota usa `var(--string6)`, viola la cuarentena igual que si usara `#8e44ad` directo.
+
+**The No Pure Black/White Rule.** `#000` y `#fff` están prohibidos como fondos o textos. Todos los neutros están tintados hacia el cálido del cuaderno (`#0e0e0e`, `#f5f0e8`). **Excepción única, narrowly defined:** la letra de nota dentro del Signature Component (texto Bebas blanco sobre el fill saturado del nodo cromático en `ChromaticNode`, `TriadNode`, `chainCircle`, `dot` del fretboard). Bordes decorativos, anillos de selección, indicadores de raíz, separadores y stroke de hover **no** califican — usan `var(--paper)`.
 
 ## 3. Typography
 
@@ -210,14 +229,18 @@ Doce hues, uno por nota cromática. **No es paleta decorativa: es un sistema sem
 - **Headline** (Bebas Neue 400, 32px, line-height 1.1, letter-spacing 1px): títulos de sección dentro de un módulo (`<h2>`). Ej: "Tríadas", "Círculo Cromático".
 - **Title** (Bebas Neue 400, 24px, line-height 1.2, letter-spacing 1px): subsections, panel headers, MasterTriad title.
 - **Body** (IBM Plex Mono 400, 13px, line-height 1.8): párrafos del método, descripciones de intervalos, listas. **El line-height 1.8 es alto a propósito** — el método tiene párrafos densos y necesita aire entre líneas para no parecer compilado. Cap line length 65–75ch.
-- **Label** (IBM Plex Mono 500, 11px, letter-spacing 1px, uppercase): SectionLabel ("03 — Notas"), nav links, captions, role chips, footer copy.
+- **Label** (IBM Plex Mono 500, 11px, letter-spacing 1px, uppercase): SectionLabel ("03 · Notas"), nav links, captions, role chips, footer copy. El separador estándar es `·` (U+00B7, middle dot), nunca em/en dash.
 - **Quote** (Playfair Display 400 italic, 12px, line-height 1.6): la cita del header global. Reservada exclusivamente para citas literales (eslogan, frases de Josué). Nunca decorativa.
 
 ### Named Rules
 
-**The Editorial Trio Rule.** Bebas Neue solo en mayúsculas, Plex Mono solo en cuerpo y labels, Playfair solo en italic para citas. Ninguna combinación cruzada (ej: Bebas en lowercase, Playfair como título). Las tres fuentes mantienen su rol o no aparecen.
+**The Editorial Trio Rule.** Bebas Neue solo en mayúsculas, Plex Mono solo en cuerpo y labels, Playfair solo en italic para citas literales de Josué. Ninguna combinación cruzada (ej: Bebas en lowercase, Playfair como título o subtítulo). Las tres fuentes mantienen su rol o no aparecen. Si una fuente tiene una Named Rule fijando su único caso de uso, **cualquier otro uso es una falla del diseño** — no una "interpretación creativa".
 
 **The 65ch Rule.** Cualquier párrafo de cuerpo respeta `max-width: 65–75ch`. La tipografía mono es legible solo cuando la línea no es un viaje horizontal. En el módulo T2 esto significa que las explicaciones del método viven dentro de un container con max-width acotado, no llenando viewport.
+
+**The Middle-Dot Separator Rule.** El separador estándar para SectionLabel, nav labels, metadatos en línea ("EADGBE · 12 Notas · Sistema CAGED") y cualquier label con prefijo numerado ("01 · Introducción") es `·` (U+00B7, middle dot). Em dashes (`—`) están prohibidos en UI generada por agente; quedan reservados exclusivamente para citas literales del método de Josué (contenido). En/En dashes (`–`) no aparecen.
+
+**The One H1 Rule.** Una sola etiqueta `<h1>` por página: la del header global de AppShell. Las pantallas de módulo (T1, T2, futuras) **no** crean su propia `<h1>`. Su título de módulo, si lo necesitan, vive como `<h2>` editorial dentro del flujo de contenido — nunca como hero centrado replicando la voz del header global.
 
 ## 4. Elevation
 
@@ -255,7 +278,7 @@ Este sistema es **flat por defecto**. La profundidad se construye con borders 1p
 - **Corner Style:** sin radio (radius 0). Las superficies cuadradas refuerzan la disciplina Suizo-Internacional.
 - **Background:** `surface-near` (un escalón más oscuro que `bg` en oscuro, un escalón más cálido que `bg` en claro). Para superficies que necesitan sentirse más palpables (info-panels de tríadas, master wrap), `surface-near` con border 1px `rule-graphite`.
 - **Shadow Strategy:** ninguna por defecto (ver The Flat-By-Default Rule).
-- **Border:** 1px `rule-graphite` para cards informativos. La excepción legacy es **RuleNote** (componente migrado del repo personal), que usa border-left 3px Rojo Cardenal — esto es un anti-patrón Impeccable que está pendiente de reescritura (ver Don'ts).
+- **Border:** 1px `rule-graphite` para cards informativos. **Callouts** (RuleNote rojo, FExceptionBanner ámbar): full border 1px del acento de marca correspondiente + fondo tinteado al 6% (`rgba(192,57,43,0.06)` o `rgba(212,160,23,0.06)`) + padding 16×20px. Patrón único para callouts; sin side-stripes.
 - **Internal Padding:** 20px estándar. 16×20px para callouts/notes. 32px para tarjetas hero (LockScreen card).
 
 ### Navigation
@@ -269,6 +292,18 @@ Este sistema es **flat por defecto**. La profundidad se construye con borders 1p
 - **Track** 40×20px, `surface-hi` background, border 1px `rule-graphite`, radius 10px (las únicas esquinas redondeadas grandes del sistema, justificadas porque visualmente representan un switch físico).
 - **Thumb** 14×14px circle (`rounded.full`), Paper Cream, animación `transform 0.25s` a la derecha cuando está ON.
 - **Active state:** track a Rojo Cardenal, border Rojo Cardenal. Reservado para theme toggle y switches de modo en el POC.
+
+### Module Shells
+
+Las pantallas de módulo (T1, T2, futuros) **no** renderizan su propio `<header>` con título y subtítulo. AppShell ya provee el header global (con la `<h1>` de marca, eyebrow Ámbar, watermark, lang switcher y cita Playfair de Josué) y el footer global. El módulo aporta **solo contenido**: su `<main>` con las secciones, donde la primera sección actúa como entrada (eyebrow numerado + `<h2>` + cuerpo).
+
+Anti-patrones cubiertos por esta regla:
+- Hero centrado tipo "module landing" (centered title + Playfair italic tagline + 60-80px padding) — patrón SaaS-cream del dataset.
+- Doble `<h1>` por página (AppShell global + module local).
+- Footer secundario con copyright/branding repetido del global.
+- Subtítulos decorativos en Playfair italic que no son citas literales de Josué.
+
+La pregunta antes de añadir cualquier shell de módulo: **¿esta superficie necesita un header, o estoy heredando uno porque todo producto tiene uno?** En esta app, la respuesta por defecto es no.
 
 ### Signature: Chromatic Note Node (SVG)
 
@@ -302,7 +337,70 @@ Este componente es el que identifica la marca. Aparece en T1 (primitiva Chromati
 - **Don't** poner `border-left` o `border-right` >1px como acento de color en cards o callouts. Es un anti-patrón Impeccable. **Excepción legacy conocida:** el componente `RuleNote` actualmente usa `border-left: 3px solid var(--red)` heredado del repo personal. Está marcado como deuda; cualquier nueva creación de notas/callouts debe usar full borders, leading numbers, o un fondo tinteado en su lugar.
 - **Don't** usar gradient text (`background-clip: text`). Énfasis se hace por peso, tamaño, o color sólido — nunca degradado.
 - **Don't** introducir glassmorphism como default. La única instancia justificada es el botón pill flotante "Limpiar selección" sobre SVG en el POC, donde el blur sirve para dejar ver parcialmente lo que hay debajo. En cualquier otro contexto, está prohibido.
-- **Don't** usar `#000` o `#fff` puros. Todo neutro está tintado hacia el cálido del cuaderno.
+- **Don't** usar `#000` o `#fff` puros. Todo neutro está tintado hacia el cálido del cuaderno. **Única excepción:** la letra Bebas blanca dentro del Signature Component note circle. Bordes, anillos de selección e indicadores decorativos usan `var(--paper)`.
+- **Don't** reusar `var(--string1..6)` ni `var(--caged-*)` como acentos decorativos en componentes no-nota. Esos tokens son hues cromáticos disfrazados; violan la cuarentena tan literalmente como `#8e44ad` directo.
+- **Don't** crear arrays de colores indexados por rol/estado/categoría (ROLE_COLORS, STATE_COLORS estilo `[7 hex saturados]`). Si necesitás N variantes visuales no-nota, discriminá por tipografía, peso, posición, número, forma o un único acento de marca — no por una paleta pintoresca.
 - **Don't** animar propiedades de layout (width, height, top, left). Solo opacity, transform, color, background, border-color, stroke, fill.
-- **Don't** usar em dashes (`—`) en UI copy generada por agente. Coma, dos puntos, paréntesis o punto. *(Las erratas intencionales del método de Josué quedan literales — esa es excepción de contenido, no de UI.)*
+- **Don't** usar em dashes (`—`) ni en dashes (`–`) en UI copy generada por agente. El separador estándar es `·` (U+00B7, middle dot) para labels y metadatos. Coma, dos puntos, punto o paréntesis para prosa. *(Las erratas y guiones intencionales del método de Josué quedan literales — esa es excepción de contenido, no de UI.)*
+- **Don't** renderizar headers locales en módulos (T1, T2, futuros). AppShell + Header global poseen la identidad de página. Ver "Module Shells" en §5.
+- **Don't** crear un segundo `<h1>` debajo del global. Un solo h1 por página, módulos contribuyen `<h2>` o menor.
+- **Don't** aplicar Playfair Display a copy de UI generada (subtítulos, preguntas-de-panel, captions). Playfair es exclusivo para citas literales del método de Josué.
 - **Don't** documentar nada con la voz "consider", "might", "prefer". Cualquier regla aquí es "prohibido", "siempre", "nunca" — la voz de un director de diseño, no de una sugerencia.
+
+## 7. Pending Debts (Conocidas, no resueltas)
+
+Esta sección lista deudas que las auditorías y pasadas de resolución identificaron pero **no** han sido resueltas. Son trabajo futuro explícito, no aprobaciones tácitas. Cada vez que una pasada resuelve una deuda, se remueve de esta lista; cada nueva deuda descubierta se añade.
+
+**Última actualización:** 2026-05-04 (después de la 2ª ola — motion/a11y/visual/tokens).
+
+### Doctrina activa (decisiones pendientes de diseño)
+
+- **AudioButtons sin feedback visual de qué nota suena durante reproducción.** Un usuario sordo "puede usar la app" pero pierde la pedagogía de la escala/tónica reproducidas. Decisión 2026-05-04: documentar como pendiente, abordar en pasada futura. Implementación esperada: highlight progresivo de la nota actual sincronizado con `useAudioEngine`. Afecta `AudioButtons.tsx` y `ModoClase` `playScale`.
+- **`ProcessPanel.titulo` en Playfair italic.** Las preguntas pedagógicas ("¿Cómo saber la armadura partiendo de la tonalidad?") **se tratan como citas del método** de Josué (decisión 2026-05-04). Excepción al Editorial Trio Rule documentada aquí: las preguntas-pregunta del método cuentan como citas literales. NO mover a Plex Mono. Cualquier auditoría futura que la flagee debe consultar esta entrada antes.
+- **One Voice Rule en concentración alta** (≥10% combinado de rojo + ámbar en TablaMaestra/ModoClase con SectionLabels rojos + chipActive + ToggleSwitch ON + spans de marca). Decisión 2026-05-04: **aceptable**. La densidad de las dos secciones más interactivas justifica el peso visual del acento. No requiere acción mientras el resto de pantallas se mantenga ≤10%.
+- **`--string1..6` y `--caged-*` están definidos solo en `:root`.** Per DESIGN.md §2 doctrina, los hues de nota base son **fijos** (la identidad de la cuerda E al aire es la nota E). Esta entrada existe para documentar la decisión: dejarlos en `:root` es correcto. Si una pasada futura los redefine para light, está rompiendo doctrina. Nota: las **note hues principales** (`--note-c..--note-b`) sí tienen overrides para light desde la 4ª ola — son cosa distinta.
+- **`FExceptionBanner` con `border` 1px completo** es el patrón actual tras el fix de side-stripe. Una alternativa más editorial-académica sería el patrón **eyebrow chip "F"** + paragraph (sin border completo, solo leading badge). Requiere edición de JSX (fuera del alcance de la pasada de visual). Pendiente como decisión estilística.
+- **Tokens semánticos sugeridos por agentes pero no creados:**
+  - `--text-faded` para `.stepPast` y similares ("este paso ya pasó / atenuado"). Hoy usa `var(--muted)` que es fuente de luminancia distinta. Si la diferencia visual es importante, vale la pena el token nuevo.
+  - `--fret-num` para `.fretNum` en mástil. Hoy usa `var(--muted)` que puede competir con los dots en oscuro. Si el fretNum se siente prominente, token dedicado.
+  - Comentario inline en `Intervals.module.css .dot { color: #fff }` señalando "Signature: letra blanca sobre nota saturada, no tokenizar" para que un agente futuro no lo "corrija".
+
+### Histórico (resueltas, conservar para contexto)
+
+Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
+
+**1ª ola — Rule 2 / Craft / Polish (2026-05-04):**
+- ✓ Rule 2 (Note-Color Quarantine): `ROLE_COLORS` eliminado, `userPicked` migrado, `IntervalsSection.color` eliminado, `MasterTriad` `#fff` border → `var(--paper)`.
+- ✓ T2Module header eliminado completamente; T1Module reescrito con voz editorial.
+- ✓ Em dashes en 9 SectionLabel sites + IntervalsSection desc → `·`.
+- ✓ MasterTriad `<h2>` anidado → `<h3>`.
+
+**2ª ola — Motion / A11y / Visual / Tokens (2026-05-04):**
+- ✓ `prefers-reduced-motion`: `useProcessAnimation` salta a estado final; `global.css` añade `@media (prefers-reduced-motion: reduce)` global override; Sidebar drawer migrado a `transform: translateX`.
+- ✓ Side-stripe borders nuevos: ProcessPanel.stepActive, TablaMaestra.rowActive (eliminados, reemplazados por bg tint + bold weight); FExceptionBanner (full border 1px).
+- ✓ SVG/DOM nodes con `tabIndex`/`role="button"`/`aria-label`/`onKeyDown`/`onFocus` (audio en focus para paridad keyboard).
+- ✓ ProcessControls aria-labels en ◀ ⏸ ▶ y `<select>` velocidad.
+- ✓ LockScreen error con `role="alert"`.
+- ✓ Em dashes en `es.json`/`de.json` → `·`.
+- ✓ `#b8b0a5` y `#5a5550` migrados a nuevo token `--text-body` en `:root` y `[data-theme="light"]`. 6 `.module.css` consumidores actualizados.
+- ✓ `STATE_COLORS.natural.fill` → `color-mix(in srgb, var(--paper) 12%, transparent)`.
+- ✓ Mástil de intervalos (`Intervals.module.css`) migrado a `--fret-bg`/`--fret-nut`/`--fret-wire`/`--string-dark`/`--muted`. `border-right: 2px brown` reducido a 1px paper.
+- ✓ `LockScreen` error color `#e25555` → `var(--red)`. Botón `:hover` ámbar→rojo añadido.
+- ✓ `AppShell.main` 65ch: añadido `max-width: 70ch` en `p, li` global.
+- ✓ ModoClase `.intro` CSS muerto eliminado; `.actionBtn` pill 14px → 0.
+- ✓ ProcessPanel `.stepPast` `#8a8580` → `var(--muted)`.
+- ✓ rgba(255,255,255,*) evitable en HerramientaSection toolBox, TablaMaestra hover/expanded, ModoClase controls → tinted paper-cream.
+
+**3ª ola — Polish trivial (2026-05-04):**
+- ✓ LockScreen `.button:focus-visible` espejo de `:hover` (ámbar→rojo, paridad keyboard).
+- ✓ Sidebar mobile overlay `rgba(0, 0, 0, 0.6)` → `rgba(14, 14, 14, 0.7)` (ink-deep tinted).
+- ✓ HerramientaSection `.toolBox` y `.card` `border-radius: 6px` → `0` (no eran controles del POC).
+- ✓ Header watermark `rgba(255, 255, 255, 0.03)` → `rgba(245, 240, 232, 0.04)` (paper-cream tinted).
+- ✓ `Footer.tsx` migrado de `React.CSSProperties` inline a `Footer.module.css`.
+
+**4ª ola — Doctrinales aprobadas (2026-05-04):**
+- ✓ Contraste WCAG AA de las 12 nota-hues sobre cream `#f5f0e8` resuelto vía opción (a): overrides oscuros para `[data-theme="light"]` que preservan identidad de hue. Las 12 hues son ahora CSS vars (`--note-c..--note-b`) en `:root` (valores originales) y `[data-theme="light"]` (variantes 4.79–7.08:1 contra cream). `data/notes.ts NOTE_COLORS` migrado a `var(--note-X)` strings (transparente para consumidores SVG/inline). Excepción doctrinal documentada en §2 "Light-theme overrides". Trade-off explícito: E pasa a deep ochre `#7d6500` — yellow-on-cream-AA es físicamente imposible sin desaturar a ámbar/mostaza.
+- ✓ **RuleNote rediseño:** `border-left: 3px solid var(--red)` → `border: 1px solid var(--red)` + `background: rgba(192, 57, 43, 0.06)`. Padding-left ajustado de 20px a 18px para compensar shift de 2px (3px stripe → 1px border). Patrón ahora paralelo a FExceptionBanner (full border 1px + tinted bg al 6%). Resuelve la última deuda legacy del repo personal documentada en DESIGN.md.
+- ✓ **Mute toggle global de audio:** nuevo state `audioMuted` en `useUIStore` (Zustand) con default `true` (audio off al cargar). `useAudioEngine` (`playNote`/`playClick`/`playRhythm`) respeta el mute via `getState()` para evitar stale closures. Nuevo componente `MuteToggle.tsx`/`MuteToggle.module.css` en sidebar (espejo estructural de `ThemeToggle`, label "AUDIO · OFF / ON" Plex Mono uppercase, track rojo cuando ON). `aria-label`/`aria-pressed` correctos. Sidebar themeArea ahora flex column con gap. Implementa el principio de PRODUCT.md "audio nunca obligatorio" como switch real en lugar de promesa.
+- ✓ **ProcessPanel.titulo en Playfair italic** marcado como excepción doctrinal (las preguntas pedagógicas del método cuentan como citas literales).
+- ✓ **One Voice Rule** revisada — densidad >10% en TablaMaestra/ModoClase aceptada como cost de las 2 secciones más interactivas; mantener resto de pantallas ≤10%.

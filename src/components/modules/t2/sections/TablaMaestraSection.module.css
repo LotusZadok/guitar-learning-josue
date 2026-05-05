@@ -7,7 +7,7 @@
 .intro {
   font-size: 13px;
   line-height: 1.8;
-  color: #b8b0a5;
+  color: var(--text-body);
   margin-bottom: 24px;
 }
 
@@ -29,7 +29,7 @@
 .header {
   display: flex;
   padding: 10px 16px;
-  background: rgba(255,255,255,0.03);
+  background: rgba(245,240,232,0.03);
   border-bottom: 1px solid var(--rule);
   font-size: 10px;
   letter-spacing: 2px;
@@ -53,12 +53,12 @@
 }
 
 .row:hover {
-  background: rgba(255,255,255,0.03);
+  background: rgba(245,240,232,0.03);
 }
 
 .rowActive {
   background: rgba(192,57,43,0.06);
-  border-left: 3px solid var(--red);
+  font-weight: 600;
 }
 
 .colNum {
@@ -90,7 +90,7 @@
 .expanded {
   padding: 20px 24px;
   border-bottom: 1px solid var(--rule);
-  background: rgba(255,255,255,0.015);
+  background: rgba(245,240,232,0.015);
 }
 
 @media (max-width: 900px) {

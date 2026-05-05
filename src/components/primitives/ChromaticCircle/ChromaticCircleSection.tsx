@@ -8,7 +8,7 @@ const CX = 200, CY = 200, R = 140;
 export default function ChromaticCircleSection() {
   return (
     <div className={styles.section}>
-      <SectionLabel text="03 — Notas" />
+      <SectionLabel text="03 · Notas" />
       <h2>Círculo Cromático</h2>
       <p style={{ marginBottom: 20 }}>12 notas en orden ascendente por semitonos.</p>
       <div className={styles.wrap}>

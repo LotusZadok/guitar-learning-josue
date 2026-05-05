@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, type KeyboardEvent } from 'react';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { NOTE_COLORS, NOTE_ES } from '../../../data/notes';
 import type { NaturalNote } from '../../../types/music';
@@ -33,6 +33,13 @@ export default function TriadNode({ note, index, cx, cy, r, onHover }: Props) {
     onHover(null);
   }, [onHover]);
 
+  const handleKeyDown = useCallback((e: KeyboardEvent<SVGGElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      playNote(note, 4, 2);
+    }
+  }, [note, playNote]);
+
   return (
     <g
       className={styles.node}
@@ -40,6 +47,12 @@ export default function TriadNode({ note, index, cx, cy, r, onHover }: Props) {
         transformOrigin: `${x}px ${y}px`,
         transform: hovered ? 'scale(1.15)' : undefined,
       }}
+      tabIndex={0}
+      role="button"
+      aria-label={`Tríada de ${NOTE_ES[note]}`}
+      onFocus={handleEnter}
+      onBlur={handleLeave}
+      onKeyDown={handleKeyDown}
     >
       <circle
         className={styles.hit}

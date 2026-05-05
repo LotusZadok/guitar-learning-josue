@@ -38,7 +38,7 @@ export default function TriadsSection() {
 
   return (
     <div className={styles.section}>
-      <SectionLabel text="06 — Acordes" />
+      <SectionLabel text="06 · Acordes" />
       <h2>Tríadas (Tónica · Tercera · Quinta)</h2>
       <p style={{ marginBottom: 20 }}>Pasa el mouse sobre las notas naturales para ver su tríada.</p>
       <div className={styles.circleWrap}>

@@ -2,6 +2,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useUIStore } from '../../stores/useUIStore';
 import ThemeToggle from './ThemeToggle';
+import MuteToggle from './MuteToggle';
 import styles from './Sidebar.module.css';
 
 const SECTIONS = [
@@ -51,6 +52,7 @@ export default function Sidebar() {
           </button>
         ))}
         <div className={styles.themeArea}>
+          <MuteToggle />
           <ThemeToggle />
         </div>
       </nav>

@@ -23,7 +23,7 @@ export default function TablaMaestraSection() {
 
   return (
     <section className={styles.section}>
-      <SectionLabel text="05 — Tabla maestra" />
+      <SectionLabel text="05 · Tabla maestra" />
       <h2>Todas las tonalidades mayores</h2>
 
       <p className={styles.intro}>{TABLA_MAESTRA_INTRO}</p>

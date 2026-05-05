@@ -63,3 +63,34 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 ---
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
+
+---
+
+## 5. UI/Frontend Doctrine
+
+Cualquier solicitud que toque frontend — componentes React, CSS, copy de UI, layout, color, tipografía, animación, accesibilidad, theming, módulos, secciones, primitivas visuales — **debe** seguir este protocolo antes de tocar código.
+
+### Protocolo
+
+1. **Invocar el skill `impeccable`** (si está instalado) antes de cualquier acción de código UI. Si la solicitud es ambigua sobre si toca frontend, asumir que sí cuando hay `*.tsx`, `*.module.css`, archivos de `i18n/locales/`, o componentes de `src/components/`, `src/auth/`, `src/layout/` involucrados.
+2. **Cargar la doctrina del proyecto** antes de proponer cambios:
+   - `PRODUCT.md` — norte estratégico, marca, anti-references.
+   - `DESIGN.md` — sistema visual, Named Rules, Don'ts, Pending Debts (§7).
+   - `.impeccable/lessons-learned.md` — patrones de error documentados.
+   - `.impeccable/design.json` — sidecar de tokens (si existe).
+3. **Pasar la anti-checklist de 14 items** de `lessons-learned.md` antes de hacer commit. Si algún item falla, el cambio no está listo.
+4. **Al terminar**, actualizar `DESIGN.md §7 Pending Debts` (remover lo resuelto, añadir lo nuevo descubierto) y `.impeccable/lessons-learned.md` (si emergió un patrón de error nuevo).
+
+### Excepciones
+
+- Tareas explícitamente no-UI (backend, scripts de build, CI/CD, edits a `package.json` no-frontend, fixes de tipos sin impacto visual) saltan este paso.
+- Renombres triviales de variables, fixes de typos en strings que no son UI copy, y cambios puramente lógicos saltan este paso.
+- Si el usuario pide explícitamente "no apliques impeccable", saltar — pero registrar la decisión en el resumen final.
+
+### Multi-agente
+
+Cuando una pasada UI implica >2 tareas independientes con archivos sin solape, particionar en agentes paralelos con scope explícito. La documentación es responsabilidad del orquestador, no de los agentes — cada agente reporta decisiones, el orquestador sintetiza en DESIGN.md y lessons-learned.md.
+
+### Auditorías guiadas
+
+Para auditorías de proyectos completos (multi-página), usar `.impeccable/audit-template.md` como prompt base.

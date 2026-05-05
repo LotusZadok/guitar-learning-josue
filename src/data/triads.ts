@@ -11,4 +11,3 @@ export const TRIADS: Record<NaturalNote, Triad> = {
 };
 
 export const ROLE_LABELS = ['T', '3ra', '5ta', '7ma', '9na', '11na', '13na'];
-export const ROLE_COLORS = ['#c0392b', '#27ae60', '#d4a017', '#2980b9', '#8e44ad', '#1abc9c', '#e67e22'];

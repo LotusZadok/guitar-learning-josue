@@ -1,8 +1,8 @@
 {
-  "site": { "title": "Didaktische Gitarre — Prof. Josué Barquero" },
+  "site": { "title": "Didaktische Gitarre · Prof. Josué Barquero" },
   "nav": {
-    "t1": "T1 — Musikalische Grundlagen",
-    "t2": "T2 — Tonarten und diatonische Harmonik"
+    "t1": "T1 · Musikalische Grundlagen",
+    "t2": "T2 · Tonarten und diatonische Harmonik"
   },
   "lock": {
     "prompt": "Passwort eingeben",

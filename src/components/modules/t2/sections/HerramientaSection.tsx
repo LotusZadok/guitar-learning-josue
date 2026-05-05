@@ -17,7 +17,7 @@ import styles from './HerramientaSection.module.css';
 export default function HerramientaSection() {
   return (
     <section className={styles.section}>
-      <SectionLabel text="02 — La herramienta" />
+      <SectionLabel text="02 · La herramienta" />
       <h2>F C G D A E B</h2>
 
       <p className={styles.text}>{HERRAMIENTA_INTRO}</p>
