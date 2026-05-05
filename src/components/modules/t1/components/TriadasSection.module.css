@@ -1,0 +1,134 @@
+.section {
+  padding: 48px 60px;
+  border-bottom: 1px solid var(--rule);
+  animation: fadeUp 0.6s ease both;
+}
+
+.text {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--text-body);
+  margin-bottom: 16px;
+}
+
+.notas {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.notas li {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--text-body);
+  padding-left: 16px;
+  position: relative;
+}
+
+.notas li::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  color: var(--muted);
+}
+
+.notas strong {
+  color: var(--paper);
+  font-weight: 600;
+}
+
+.subheading {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  color: var(--paper);
+  margin: 28px 0 12px;
+  letter-spacing: 1px;
+}
+
+.steps {
+  margin: 0 0 16px 24px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.steps li {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--text-body);
+}
+
+.ejemplo {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: var(--paper);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  padding: 14px 18px;
+  margin: 16px 0 24px;
+  line-height: 1.8;
+}
+
+.tableWrap {
+  overflow-x: auto;
+  margin: 20px 0 24px;
+}
+
+.table {
+  border-collapse: collapse;
+  border: 1px solid var(--rule);
+  font-family: 'IBM Plex Mono', monospace;
+  min-width: max-content;
+}
+
+.table th,
+.table td {
+  border: 1px solid var(--rule);
+  padding: 12px 18px;
+  text-align: center;
+  min-width: 72px;
+}
+
+.table th {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 1px;
+  color: var(--paper);
+  font-weight: 400;
+  background: var(--surface);
+}
+
+.table td {
+  font-size: 13px;
+  color: var(--text-body);
+}
+
+.maestra {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--paper);
+  font-weight: 600;
+  margin: 16px 0;
+}
+
+@media (max-width: 900px) {
+  .section {
+    padding: 36px 24px;
+  }
+  .table th,
+  .table td {
+    min-width: 56px;
+    padding: 10px 12px;
+  }
+  .table th {
+    font-size: 16px;
+  }
+  .table td {
+    font-size: 12px;
+  }
+}

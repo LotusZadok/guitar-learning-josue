@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import SectionLabel from '../../shared/SectionLabel';
 import TriadNode from './TriadNode';
 import MasterTriad from './MasterTriad';
 import { NATURALS, NOTE_COLORS, NOTE_ES } from '../../../data/notes';
@@ -37,10 +36,7 @@ export default function TriadsSection() {
   const triad = TRIADS[displayNote];
 
   return (
-    <div className={styles.section}>
-      <SectionLabel text="06 · Acordes" />
-      <h2>Tríadas (Tónica · Tercera · Quinta)</h2>
-      <p style={{ marginBottom: 20 }}>Pasa el mouse sobre las notas naturales para ver su tríada.</p>
+    <div className={styles.wrap}>
       <div className={styles.circleWrap}>
         <svg className={styles.svg} viewBox="0 0 350 350">
           {['Notas', 'Naturales'].map((t, i) => (

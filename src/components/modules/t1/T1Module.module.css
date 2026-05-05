@@ -4,26 +4,3 @@
   width: 100%;
   margin: 0 auto;
 }
-
-.section {
-  padding: 48px 60px;
-  border-bottom: 1px solid var(--rule);
-}
-
-.text {
-  max-width: 65ch;
-  margin-bottom: 32px;
-}
-
-.meta {
-  font-size: 11px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-@media (max-width: 900px) {
-  .section {
-    padding: 36px 24px;
-  }
-}
