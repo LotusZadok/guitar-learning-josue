@@ -6,6 +6,10 @@ interface ProcessAnimationState {
   speed: 'normal' | 'slow';
 }
 
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
 export function useProcessAnimation(maxSteps: number) {
   const [state, setState] = useState<ProcessAnimationState>({
     currentStep: 0,
@@ -15,6 +19,10 @@ export function useProcessAnimation(maxSteps: number) {
 
   useEffect(() => {
     if (state.mode !== 'playing') return;
+    if (prefersReducedMotion()) {
+      setState(prev => ({ ...prev, currentStep: maxSteps, mode: 'paused' }));
+      return;
+    }
     if (state.currentStep >= maxSteps) {
       setState(prev => ({ ...prev, mode: 'paused' }));
       return;
@@ -27,6 +35,10 @@ export function useProcessAnimation(maxSteps: number) {
   }, [state.mode, state.currentStep, state.speed, maxSteps]);
 
   const play = useCallback(() => {
+    if (prefersReducedMotion()) {
+      setState(prev => ({ ...prev, currentStep: maxSteps, mode: 'paused' }));
+      return;
+    }
     setState(prev => {
       if (prev.currentStep === 0 || prev.currentStep >= maxSteps) {
         return { ...prev, currentStep: 1, mode: 'playing' };

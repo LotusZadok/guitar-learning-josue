@@ -64,7 +64,7 @@ export default function ModoClaseSection() {
 
   return (
     <section className={styles.section}>
-      <SectionLabel text="06 — Modo clase" />
+      <SectionLabel text="06 · Modo clase" />
 
       <div className={styles.controls}>
         <div className={styles.row}>

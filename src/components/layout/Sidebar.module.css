@@ -58,6 +58,9 @@
   margin-top: auto;
   padding: 16px 20px;
   border-top: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .hamburger {
@@ -83,15 +86,16 @@
   .sidebar {
     position: fixed;
     top: 0;
-    left: -100%;
+    left: 0;
     width: 260px;
     height: 100vh;
     z-index: 999;
-    transition: left 0.25s ease;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
   }
 
   .sidebarOpen {
-    left: 0;
+    transform: translateX(0);
   }
 
   .hamburger {
@@ -102,7 +106,7 @@
     display: block;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(14, 14, 14, 0.7);
     z-index: 998;
   }
 }

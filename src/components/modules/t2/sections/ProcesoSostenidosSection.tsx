@@ -14,7 +14,7 @@ export default function ProcesoSostenidosSection() {
 
   return (
     <section className={styles.section}>
-      <SectionLabel text="03 — Proceso con sostenidos" />
+      <SectionLabel text="03 · Proceso con sostenidos" />
       <h2 className={styles.titulo}>{TITULO_SOSTENIDOS}</h2>
 
       <NoteSelector notes={NOTAS} selected={selected} onSelect={setSelected} />

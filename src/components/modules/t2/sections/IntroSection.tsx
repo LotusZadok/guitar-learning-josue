@@ -10,7 +10,7 @@ import styles from './IntroSection.module.css';
 export default function IntroSection() {
   return (
     <section className={styles.section}>
-      <SectionLabel text="01 — Introducción" />
+      <SectionLabel text="01 · Introducción" />
       <h2>Tonalidades y Armaduras</h2>
 
       <p className={styles.text}>{INTRO_LENGUAS}</p>

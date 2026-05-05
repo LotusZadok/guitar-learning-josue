@@ -9,11 +9,6 @@ import styles from './T2Module.module.css';
 export default function T2Module() {
   return (
     <div className={styles.app}>
-      <header className={styles.header}>
-        <h1 className={styles.title}>Tonalidades y Armaduras</h1>
-        <p className={styles.subtitle}>Un recorrido por el método de Josué Barquero</p>
-      </header>
-
       <main className={styles.main}>
         <IntroSection />
         <HerramientaSection />
@@ -22,10 +17,6 @@ export default function T2Module() {
         <TablaMaestraSection />
         <ModoClaseSection />
       </main>
-
-      <footer className={styles.footer}>
-        <span>Apuntes de Guitarra</span>
-      </footer>
     </div>
   );
 }

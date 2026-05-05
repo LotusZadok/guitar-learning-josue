@@ -1,5 +1,6 @@
 import { useCallback, useRef } from 'react';
 import { NOTE_FREQS } from '../data/notes';
+import { useUIStore } from '../stores/useUIStore';
 
 let audioCtx: AudioContext | null = null;
 const getCtx = (): AudioContext => {
@@ -12,6 +13,7 @@ export const useAudioEngine = () => {
   const lastPlayedRef = useRef<string | null>(null);
 
   const playNote = useCallback((noteName: string, octave: number, duration = 2.0) => {
+    if (useUIStore.getState().audioMuted) return;
     const ctx = getCtx();
     let key = noteName.replace('♯', '#').replace('♭', 'b');
     const flatMap: Record<string, string> = { 'Db': 'C#', 'Eb': 'D#', 'Gb': 'F#', 'Ab': 'G#', 'Bb': 'A#' };
@@ -77,6 +79,7 @@ export const useAudioEngine = () => {
   }, []);
 
   const playClick = useCallback((freq: number, time: number) => {
+    if (useUIStore.getState().audioMuted) return;
     const ctx = getCtx();
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
@@ -91,6 +94,7 @@ export const useAudioEngine = () => {
   }, []);
 
   const playRhythm = useCallback((count: number, totalBeats: number, bpm = 100) => {
+    if (useUIStore.getState().audioMuted) return;
     const ctx = getCtx();
     const beatDur = 60 / bpm;
     const totalDur = beatDur * totalBeats;

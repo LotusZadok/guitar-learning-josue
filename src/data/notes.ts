@@ -4,9 +4,9 @@ export const ALL: ChromaticNote[] = ['C','C#','D','D#','E','F','F#','G','G#','A'
 export const NATURALS: NaturalNote[] = ['C','D','E','F','G','A','B'];
 
 export const NOTE_COLORS: Record<ChromaticNote, string> = {
-  'C':'#c0392b','C#':'#a93226','D':'#e67e22','D#':'#d35400',
-  'E':'#f1c40f','F':'#27ae60','F#':'#1e8449','G':'#2980b9',
-  'G#':'#2471a3','A':'#8e44ad','A#':'#7d3c98','B':'#1abc9c',
+  'C':'var(--note-c)','C#':'var(--note-c-sharp)','D':'var(--note-d)','D#':'var(--note-d-sharp)',
+  'E':'var(--note-e)','F':'var(--note-f)','F#':'var(--note-f-sharp)','G':'var(--note-g)',
+  'G#':'var(--note-g-sharp)','A':'var(--note-a)','A#':'var(--note-a-sharp)','B':'var(--note-b)',
 };
 
 export const NOTE_ES: Record<ChromaticNote, NoteNameES> = {

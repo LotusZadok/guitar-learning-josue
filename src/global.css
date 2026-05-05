@@ -27,12 +27,27 @@
   --caged-E: #f1c40f;
   --caged-D: #e67e22;
 
+  --note-c:        #c0392b;
+  --note-c-sharp:  #a93226;
+  --note-d:        #e67e22;
+  --note-d-sharp:  #d35400;
+  --note-e:        #f1c40f;
+  --note-f:        #27ae60;
+  --note-f-sharp:  #1e8449;
+  --note-g:        #2980b9;
+  --note-g-sharp:  #2471a3;
+  --note-a:        #8e44ad;
+  --note-a-sharp:  #7d3c98;
+  --note-b:        #1abc9c;
+
   --fret-bg: #110e06;
   --fret-wire: #3a2e18;
   --fret-nut: #e0d0a0;
   --fret-dot: #5c4a2a;
   --string-bright: #d4c090;
   --string-dark: #b8a060;
+
+  --text-body: #b8b0a5;
 }
 
 [data-theme="light"] {
@@ -46,6 +61,23 @@
   --surface-translucent: rgba(245, 240, 232, 0.9);
   --fret-bg: #e8e0d0;
   --fret-wire: #c0b8a0;
+
+  --text-body: #5a5550;
+
+  /* Note hues — light-theme overrides for WCAG AA on cream #f5f0e8 (≥ 4.5:1).
+     Hue identity preserved per nota; ratios annotated inline. See DESIGN.md §2. */
+  --note-c:        #c0392b; /* 4.79:1 — original passes, kept */
+  --note-c-sharp:  #a93226; /* 5.84:1 — original passes, kept */
+  --note-d:        #a04600; /* 5.49:1 — dark orange */
+  --note-d-sharp:  #923c00; /* 6.45:1 — burnt sienna */
+  --note-e:        #7d6500; /* 4.96:1 — deep ochre; yellow-on-cream AA forces ochre/amber */
+  --note-f:        #1a7340; /* 5.19:1 — deep forest green */
+  --note-f-sharp:  #16623a; /* 6.51:1 — deeper forest */
+  --note-g:        #1f5f8a; /* 6.05:1 — deep blue */
+  --note-g-sharp:  #1c5577; /* 7.08:1 — deeper blue */
+  --note-a:        #8e44ad; /* 5.17:1 — original passes, kept */
+  --note-a-sharp:  #7d3c98; /* 6.23:1 — original passes, kept */
+  --note-b:        #0e7560; /* 4.96:1 — deep teal */
 }
 
 html { scroll-behavior: smooth; }
@@ -67,12 +99,8 @@ body {
 p, li {
   font-size: 13px;
   line-height: 1.8;
-  color: #b8b0a5;
-}
-
-[data-theme="light"] p,
-[data-theme="light"] li {
-  color: #5a5550;
+  color: var(--text-body);
+  max-width: 70ch;
 }
 
 h2 {
@@ -86,4 +114,16 @@ h2 {
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
 }
