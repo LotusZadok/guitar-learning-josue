@@ -1,5 +1,6 @@
 import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
+import Prose from '../../../shared/Prose/Prose';
 import ReglaQuinta from '../../../primitives/ReglaQuinta/ReglaQuinta';
 import {
   REGLA_INTRO,
@@ -25,22 +26,23 @@ export default function ReglaQuintaSection() {
       <ul className={styles.bullets}>
         {REGLA_BULLETS.map((b, i) => (
           <li key={i}>
-            <strong>{b.regla}</strong> · {b.desc} <span className={styles.ejemplo}>Ejemplo: {b.ejemplo}</span>
+            <strong>{b.regla}</strong> · {b.desc}{' '}
+            <span className={styles.ejemplo}>Ejemplo: <Prose segment={b.ejemplo} /></span>
           </li>
         ))}
       </ul>
 
       <h3 className={styles.subheading}>{REGLA_EXCEPCIONES_TITULO}</h3>
       <ul className={styles.bullets}>
-        <li>{REGLA_EXCEPCION_B}</li>
-        <li>{REGLA_EXCEPCION_BB}</li>
+        <li><Prose segment={REGLA_EXCEPCION_B} /></li>
+        <li><Prose segment={REGLA_EXCEPCION_BB} /></li>
       </ul>
 
       <h3 className={styles.subheading}>{REGLA_PRIMITIVA_TITULO}</h3>
-      <p className={styles.text}>{REGLA_PRIMITIVA_INSTRUCCION}</p>
+      <p className={styles.text}><Prose segment={REGLA_PRIMITIVA_INSTRUCCION} /></p>
       <ReglaQuinta />
 
-      <p className={styles.footnote}>{REGLA_NOTA_BEMOLES}</p>
+      <p className={styles.footnote}><Prose segment={REGLA_NOTA_BEMOLES} /></p>
 
       <RuleNote>{CONSEJO_REGLA_5J}</RuleNote>
     </section>

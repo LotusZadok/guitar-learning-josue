@@ -1,6 +1,10 @@
+import { Fragment } from 'react';
 import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
+import NoteToken from '../../../shared/NoteToken/NoteToken';
+import Prose from '../../../shared/Prose/Prose';
 import ChromaticCircleSection from '../../../primitives/ChromaticCircle/ChromaticCircleSection';
+import type { NoteSpelling } from '../../../../types/music';
 import {
   ALTERADAS_INTRO,
   ALTERADAS_DEFS,
@@ -9,6 +13,17 @@ import {
   CC_NO_ALTERADA,
 } from '../data/literalContent';
 import styles from './CirculoCromaticoSection.module.css';
+
+function renderCcCell(cell: string) {
+  // Cada celda es una nota natural ("A", "B", "C", ...) o un par enarmónico ("A#/Bb").
+  const parts = cell.split('/') as NoteSpelling[];
+  return parts.map((p, i) => (
+    <Fragment key={i}>
+      {i > 0 && '/'}
+      <NoteToken note={p} />
+    </Fragment>
+  ));
+}
 
 export default function CirculoCromaticoSection() {
   return (
@@ -31,12 +46,12 @@ export default function CirculoCromaticoSection() {
       <div className={styles.ccStripWrap}>
         <ol className={styles.ccStrip} aria-label="Las 12 notas del círculo cromático">
           {CC_TABLA.map((n) => (
-            <li key={n}>{n}</li>
+            <li key={n}>{renderCcCell(n)}</li>
           ))}
         </ol>
       </div>
 
-      <RuleNote>{CC_NO_ALTERADA}</RuleNote>
+      <RuleNote><Prose segment={CC_NO_ALTERADA} /></RuleNote>
 
       <ChromaticCircleSection />
     </section>

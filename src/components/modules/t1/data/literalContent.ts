@@ -1,6 +1,8 @@
 // Contenido literal del método de Josué Barquero — NO parafrasear, NO corregir erratas.
 // Fuente: docs/source_of_truth_T1_T2.md (T1 §1.1, §1.2, §1.3, §1.4, §1.6, §1.7, §1.8).
 
+import type { ProseSegment } from '../../../../types/prose';
+
 // === 01 · Notas naturales y cifrado anglosajón (§1.1) ===
 
 export const NATURALES_INTRO =
@@ -35,8 +37,24 @@ export const CC_TABLA = [
   'A', 'A#/Bb', 'B', 'C', 'C#/Db', 'D', 'D#/Eb', 'E', 'F', 'F#/Gb', 'G', 'G#/Ab',
 ] as const;
 
-export const CC_NO_ALTERADA =
-  "Importante: entre B–C y entre E–F no hay nota alterada (por el momento, se omiten B# y E# como alteraciones del círculo cromático; en este contexto son la misma nota que C y F respectivamente).";
+// "B#" y "E#" se mantienen como texto plano: no son spellings válidos en el sistema
+// (el método los menciona negativamente — "se omiten" — para indicar que NO existen
+// en este círculo cromático).
+export const CC_NO_ALTERADA: ProseSegment = [
+  { type: 'text', value: 'Importante: entre ' },
+  { type: 'note', value: 'B' },
+  { type: 'text', value: '–' },
+  { type: 'note', value: 'C' },
+  { type: 'text', value: ' y entre ' },
+  { type: 'note', value: 'E' },
+  { type: 'text', value: '–' },
+  { type: 'note', value: 'F' },
+  { type: 'text', value: ' no hay nota alterada (por el momento, se omiten B# y E# como alteraciones del círculo cromático; en este contexto son la misma nota que ' },
+  { type: 'note', value: 'C' },
+  { type: 'text', value: ' y ' },
+  { type: 'note', value: 'F' },
+  { type: 'text', value: ' respectivamente).' },
+];
 
 // === 03 · Los 13 intervalos posibles dentro de una octava (§1.3) ===
 
@@ -56,21 +74,83 @@ export const INTERVALOS_13_ROW = [
   'Semitono', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
 ] as const;
 
-export const INTERVALOS_PROCEDIMIENTO_TITULO =
-  "Procedimiento para encontrar los intervalos partiendo de una tónica G";
+export const INTERVALOS_PROCEDIMIENTO_TITULO: ProseSegment = [
+  { type: 'text', value: 'Procedimiento para encontrar los intervalos partiendo de una tónica ' },
+  { type: 'note', value: 'G' },
+];
 
-export const INTERVALOS_PROCEDIMIENTO_PASOS = [
-  "Escribir las letras según el número del intervalo (ignorando alteraciones): G A A B B C C-D D E E F F G.",
-  "Escribir el círculo cromático desde la tónica: G G#/Ab A A#/Bb B C C#/Db D D#/Eb E F F#/Gb G.",
-  "Cuando hay dos notas alteradas, elegir según la letra del paso 1. Si en el paso 1 está \"B\", entonces se elige A# antes que Bb.",
+export const INTERVALOS_PROCEDIMIENTO_PASOS: readonly (string | ProseSegment)[] = [
+  [
+    { type: 'text', value: 'Escribir las letras según el número del intervalo (ignorando alteraciones): ' },
+    { type: 'note', value: 'G' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'A' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'A' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'B' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'B' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'C' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'C' }, { type: 'text', value: '-' },
+    { type: 'note', value: 'D' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'D' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'E' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'E' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'F' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'F' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'G' }, { type: 'text', value: '.' },
+  ],
+  [
+    { type: 'text', value: 'Escribir el círculo cromático desde la tónica: ' },
+    { type: 'note', value: 'G' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'G#' }, { type: 'text', value: '/' }, { type: 'note', value: 'Ab' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'A' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'A#' }, { type: 'text', value: '/' }, { type: 'note', value: 'Bb' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'B' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'C' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'C#' }, { type: 'text', value: '/' }, { type: 'note', value: 'Db' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'D' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'D#' }, { type: 'text', value: '/' }, { type: 'note', value: 'Eb' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'E' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'F' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'F#' }, { type: 'text', value: '/' }, { type: 'note', value: 'Gb' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'G' }, { type: 'text', value: '.' },
+  ],
+  [
+    { type: 'text', value: 'Cuando hay dos notas alteradas, elegir según la letra del paso 1. Si en el paso 1 está "' },
+    { type: 'note', value: 'B' },
+    { type: 'text', value: '", entonces se elige ' },
+    { type: 'note', value: 'A#' },
+    { type: 'text', value: ' antes que ' },
+    { type: 'note', value: 'Bb' },
+    { type: 'text', value: '.' },
+  ],
   "Actualizar la escala con los intervalos correctos.",
-] as const;
+];
 
-export const INTERVALOS_RESULTADO_G =
-  "Resultado para G: G Ab A Bb B C C#/Db D Eb E F F# G.";
+export const INTERVALOS_RESULTADO_G: ProseSegment = [
+  { type: 'text', value: 'Resultado para ' },
+  { type: 'note', value: 'G' },
+  { type: 'text', value: ': ' },
+  { type: 'note', value: 'G' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'Ab' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'A' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'Bb' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'B' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'C' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'C#' }, { type: 'text', value: '/' }, { type: 'note', value: 'Db' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'D' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'Eb' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'E' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'F' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'F#' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'G' }, { type: 'text', value: '.' },
+];
 
-export const INTERVALOS_OCTAVA =
-  "La 8J (octava justa) es la misma nota más aguda o más grave. La 8J de G es G.";
+export const INTERVALOS_OCTAVA: ProseSegment = [
+  { type: 'text', value: 'La 8J (octava justa) es la misma nota más aguda o más grave. La 8J de ' },
+  { type: 'note', value: 'G' },
+  { type: 'text', value: ' es ' },
+  { type: 'note', value: 'G' },
+  { type: 'text', value: '.' },
+];
 
 // === 06 · Construcción de las 7 tríadas y la tríada maestra (§1.6) ===
 
@@ -94,8 +174,24 @@ export const TRIADAS_PROCEDIMIENTO_PASOS = [
   "Escribimos la siguiente.",
 ] as const;
 
-export const TRIADAS_EJEMPLO =
-  "Ejemplo: F → omito G → A → omito B → C. La tríada de F es F A C.";
+export const TRIADAS_EJEMPLO: ProseSegment = [
+  { type: 'text', value: 'Ejemplo: ' },
+  { type: 'note', value: 'F' },
+  { type: 'text', value: ' → omito ' },
+  { type: 'note', value: 'G' },
+  { type: 'text', value: ' → ' },
+  { type: 'note', value: 'A' },
+  { type: 'text', value: ' → omito ' },
+  { type: 'note', value: 'B' },
+  { type: 'text', value: ' → ' },
+  { type: 'note', value: 'C' },
+  { type: 'text', value: '. La tríada de ' },
+  { type: 'note', value: 'F' },
+  { type: 'text', value: ' es ' },
+  { type: 'note', value: 'F' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'A' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'C' }, { type: 'text', value: '.' },
+];
 
 export const TRIADAS_INTRO_TABLA =
   "Aplicando esto a las 7 notas naturales se obtienen las 7 tríadas.";
@@ -103,8 +199,17 @@ export const TRIADAS_INTRO_TABLA =
 export const TRIADAS_TABLA_HEAD = ['F', 'G', 'A', 'B', 'C', 'D', 'E'] as const;
 export const TRIADAS_TABLA_ROW = ['F A C', 'G B D', 'A C E', 'B D F', 'C E G', 'D F A', 'E G B'] as const;
 
-export const TRIADAS_MAESTRA =
-  "Si seguimos el patrón sin pausa, hasta llegar a la misma nota, conseguimos la tríada maestra: F A C E G B D F.";
+export const TRIADAS_MAESTRA: ProseSegment = [
+  { type: 'text', value: 'Si seguimos el patrón sin pausa, hasta llegar a la misma nota, conseguimos la tríada maestra: ' },
+  { type: 'note', value: 'F' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'A' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'C' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'E' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'G' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'B' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'D' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'F' }, { type: 'text', value: '.' },
+];
 
 export const CONSEJO_TRIADAS =
   "Consejo del método: memorizar las 7 tríadas. Son la estructura de todo acorde y el fundamento de la armonía. También son herramienta para leer partitura.";
@@ -114,8 +219,11 @@ export const CONSEJO_TRIADAS =
 export const ESCALA_DEF =
   "La escala mayor tiene 7 notas. Cada nota tiene un carácter individual que se mantiene independiente de la tonalidad. Por eso se les da el nombre genérico de \"grados\" (1 al 7).";
 
-export const ESCALA_EJEMPLO_INTRO =
-  "Ejemplo en C mayor (única tonalidad sin alteraciones):";
+export const ESCALA_EJEMPLO_INTRO: ProseSegment = [
+  { type: 'text', value: 'Ejemplo en ' },
+  { type: 'note', value: 'C' },
+  { type: 'text', value: ' mayor (única tonalidad sin alteraciones):' },
+];
 
 export const ESCALA_TABLA_HEAD = ['Grado', 'T', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'T'] as const;
 export const ESCALA_TABLA_NOTAS = ['Nota', 'C', 'D', 'E', 'F', 'G', 'A', 'B', 'C'] as const;
@@ -143,10 +251,23 @@ export const ACORDES_DIFF =
   "Solo cambia la tercera. Dos de tres notas son iguales son casi el mismo acorde.";
 
 export const ACORDES_NOMENCLATURA_INTRO = "Nomenclatura:";
-export const ACORDES_NOMENCLATURA = [
-  { regla: 'Acorde mayor', desc: 'solo la letra. F = Fa mayor.' },
-  { regla: 'Acorde menor', desc: 'letra + "m" minúscula. Fm = Fa menor.' },
-] as const;
+
+// La regla "Acorde menor: Fm = Fa menor" no aisla un nombre de nota
+// (Fm/Fa son nombres de acorde compuestos), así que su `desc` queda como string.
+export const ACORDES_NOMENCLATURA: readonly { regla: string; desc: string | ProseSegment }[] = [
+  {
+    regla: 'Acorde mayor',
+    desc: [
+      { type: 'text', value: 'solo la letra. ' },
+      { type: 'note', value: 'F' },
+      { type: 'text', value: ' = Fa mayor.' },
+    ],
+  },
+  {
+    regla: 'Acorde menor',
+    desc: 'letra + "m" minúscula. Fm = Fa menor.',
+  },
+];
 
 export const ACORDES_PROCEDIMIENTO_TITULO =
   "Procedimiento para encontrar la tríada mayor o menor de cualquier nota";
@@ -157,16 +278,77 @@ export const ACORDES_PROCEDIMIENTO_PASOS = [
   "Contar cromáticamente a partir de la tónica, los semitonos hasta la quinta justa (5J = 7 s.t.).",
 ] as const;
 
-export const ACORDES_EJEMPLO_TITULO = "Ejemplo A mayor";
-export const ACORDES_EJEMPLO_PASOS = [
-  "Letras de la tríada: A C E.",
-  "Semitonos hasta la 3M: A → A#/Bb (1) → B (2) → C (3) → C#/Db (4). Por la regla del paso 1, la letra es C, entonces es C# (no Db).",
-  "Semitonos hasta la 5J: A → A#/Bb (1) → B (2) → C (3) → C#/Db (4) → D (5) → D#/Eb (6) → E (7).",
-] as const;
+export const ACORDES_EJEMPLO_TITULO: ProseSegment = [
+  { type: 'text', value: 'Ejemplo ' },
+  { type: 'note', value: 'A' },
+  { type: 'text', value: ' mayor' },
+];
 
-export const ACORDES_RESULTADO_MAYOR = "A mayor = A C# E.";
-export const ACORDES_RESULTADO_MENOR =
-  "Para A menor, la única diferencia es bajar la tercera un semitono: A menor = A C E.";
+export const ACORDES_EJEMPLO_PASOS: readonly ProseSegment[] = [
+  [
+    { type: 'text', value: 'Letras de la tríada: ' },
+    { type: 'note', value: 'A' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'C' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'E' }, { type: 'text', value: '.' },
+  ],
+  [
+    { type: 'text', value: 'Semitonos hasta la 3M: ' },
+    { type: 'note', value: 'A' },
+    { type: 'text', value: ' → ' },
+    { type: 'note', value: 'A#' }, { type: 'text', value: '/' }, { type: 'note', value: 'Bb' },
+    { type: 'text', value: ' (1) → ' },
+    { type: 'note', value: 'B' },
+    { type: 'text', value: ' (2) → ' },
+    { type: 'note', value: 'C' },
+    { type: 'text', value: ' (3) → ' },
+    { type: 'note', value: 'C#' }, { type: 'text', value: '/' }, { type: 'note', value: 'Db' },
+    { type: 'text', value: ' (4). Por la regla del paso 1, la letra es ' },
+    { type: 'note', value: 'C' },
+    { type: 'text', value: ', entonces es ' },
+    { type: 'note', value: 'C#' },
+    { type: 'text', value: ' (no ' },
+    { type: 'note', value: 'Db' },
+    { type: 'text', value: ').' },
+  ],
+  [
+    { type: 'text', value: 'Semitonos hasta la 5J: ' },
+    { type: 'note', value: 'A' },
+    { type: 'text', value: ' → ' },
+    { type: 'note', value: 'A#' }, { type: 'text', value: '/' }, { type: 'note', value: 'Bb' },
+    { type: 'text', value: ' (1) → ' },
+    { type: 'note', value: 'B' },
+    { type: 'text', value: ' (2) → ' },
+    { type: 'note', value: 'C' },
+    { type: 'text', value: ' (3) → ' },
+    { type: 'note', value: 'C#' }, { type: 'text', value: '/' }, { type: 'note', value: 'Db' },
+    { type: 'text', value: ' (4) → ' },
+    { type: 'note', value: 'D' },
+    { type: 'text', value: ' (5) → ' },
+    { type: 'note', value: 'D#' }, { type: 'text', value: '/' }, { type: 'note', value: 'Eb' },
+    { type: 'text', value: ' (6) → ' },
+    { type: 'note', value: 'E' },
+    { type: 'text', value: ' (7).' },
+  ],
+];
+
+export const ACORDES_RESULTADO_MAYOR: ProseSegment = [
+  { type: 'note', value: 'A' },
+  { type: 'text', value: ' mayor = ' },
+  { type: 'note', value: 'A' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'C#' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'E' }, { type: 'text', value: '.' },
+];
+
+export const ACORDES_RESULTADO_MENOR: ProseSegment = [
+  { type: 'text', value: 'Para ' },
+  { type: 'note', value: 'A' },
+  { type: 'text', value: ' menor, la única diferencia es bajar la tercera un semitono: ' },
+  { type: 'note', value: 'A' },
+  { type: 'text', value: ' menor = ' },
+  { type: 'note', value: 'A' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'C' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'E' }, { type: 'text', value: '.' },
+];
 
 export const ACORDES_PRIMITIVA_TITULO = "Constructor de acordes";
 export const ACORDES_PRIMITIVA_INSTRUCCION =
@@ -177,24 +359,84 @@ export const ACORDES_PRIMITIVA_INSTRUCCION =
 export const REGLA_INTRO =
   "La quinta justa siempre copia la alteración de la tónica.";
 
-export const REGLA_BULLETS = [
-  { regla: 'T natural', desc: 'la 5J también es natural.', ejemplo: 'D → A.' },
-  { regla: 'T con #', desc: 'la 5J también lleva #.', ejemplo: 'F# → C#.' },
-  { regla: 'T con b', desc: 'la 5J también lleva b.', ejemplo: 'Eb → Bb.' },
-] as const;
+export const REGLA_BULLETS: readonly { regla: string; desc: string; ejemplo: ProseSegment }[] = [
+  {
+    regla: 'T natural',
+    desc: 'la 5J también es natural.',
+    ejemplo: [
+      { type: 'note', value: 'D' },
+      { type: 'text', value: ' → ' },
+      { type: 'note', value: 'A' },
+      { type: 'text', value: '.' },
+    ],
+  },
+  {
+    regla: 'T con #',
+    desc: 'la 5J también lleva #.',
+    ejemplo: [
+      { type: 'note', value: 'F#' },
+      { type: 'text', value: ' → ' },
+      { type: 'note', value: 'C#' },
+      { type: 'text', value: '.' },
+    ],
+  },
+  {
+    regla: 'T con b',
+    desc: 'la 5J también lleva b.',
+    ejemplo: [
+      { type: 'note', value: 'Eb' },
+      { type: 'text', value: ' → ' },
+      { type: 'note', value: 'Bb' },
+      { type: 'text', value: '.' },
+    ],
+  },
+];
 
 export const REGLA_EXCEPCIONES_TITULO = "Excepciones";
-export const REGLA_EXCEPCION_B =
-  "Cuando B es la tónica, su 5J es F# (no F).";
-export const REGLA_EXCEPCION_BB =
-  "Cuando Bb es la tónica, su 5J es F (no Fb).";
+
+export const REGLA_EXCEPCION_B: ProseSegment = [
+  { type: 'text', value: 'Cuando ' },
+  { type: 'note', value: 'B' },
+  { type: 'text', value: ' es la tónica, su 5J es ' },
+  { type: 'note', value: 'F#' },
+  { type: 'text', value: ' (no ' },
+  { type: 'note', value: 'F' },
+  { type: 'text', value: ').' },
+];
+
+// "Fb" no tiene `--note-X` propio (Fb = E enarmónicamente, pero el método lo
+// nombra explícitamente como spelling incorrecto). Queda como texto plano.
+export const REGLA_EXCEPCION_BB: ProseSegment = [
+  { type: 'text', value: 'Cuando ' },
+  { type: 'note', value: 'Bb' },
+  { type: 'text', value: ' es la tónica, su 5J es ' },
+  { type: 'note', value: 'F' },
+  { type: 'text', value: ' (no Fb).' },
+];
 
 export const CONSEJO_REGLA_5J =
   "Consejo del método: poner a prueba esta regla con las 12 notas, encontrando la tríada mayor y menor de cada una.";
 
 export const REGLA_PRIMITIVA_TITULO = "Las 12 quintas justas";
-export const REGLA_PRIMITIVA_INSTRUCCION =
-  "Cada fila reproduce su tónica y su 5J en secuencia. La excepción de B → F# queda enmarcada para destacarla del patrón.";
+export const REGLA_PRIMITIVA_INSTRUCCION: ProseSegment = [
+  { type: 'text', value: 'Cada fila reproduce su tónica y su 5J en secuencia. La excepción de ' },
+  { type: 'note', value: 'B' },
+  { type: 'text', value: ' → ' },
+  { type: 'note', value: 'F#' },
+  { type: 'text', value: ' queda enmarcada para destacarla del patrón.' },
+];
 
-export const REGLA_NOTA_BEMOLES =
-  "Si nombrás las notas alteradas con bemoles, surge una segunda excepción: Bb → F (no Fb). En el sistema con sostenidos, esa misma 5J aparece como A# → E# (enarmónica de F).";
+// "Fb" y "E#" son spellings inválidos en el sistema (mencionados negativamente
+// en el método). Quedan como texto plano para preservar el contraste pedagógico
+// "lo correcto vs. lo incorrecto" sin disfrazarlo de token.
+export const REGLA_NOTA_BEMOLES: ProseSegment = [
+  { type: 'text', value: 'Si nombrás las notas alteradas con bemoles, surge una segunda excepción: ' },
+  { type: 'note', value: 'Bb' },
+  { type: 'text', value: ' → ' },
+  { type: 'note', value: 'F' },
+  { type: 'text', value: ' (no Fb). En el sistema con sostenidos, esa misma 5J aparece como ' },
+  { type: 'note', value: 'A#' },
+  { type: 'text', value: ' → E# (enarmónica de ' },
+  { type: 'note', value: 'F' },
+  { type: 'text', value: ').' },
+];
