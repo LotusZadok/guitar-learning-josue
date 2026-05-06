@@ -4,6 +4,13 @@ export type ChromaticNote =
 
 export type NaturalNote = 'C' | 'D' | 'E' | 'F' | 'G' | 'A' | 'B';
 
+// Spelling permisivo: incluye los 12 cromáticos con sostenidos (ChromaticNote)
+// más las 5 enarmonías bemoles que el método de Josué utiliza en prosa.
+// Audio y color resuelven enarmónicamente al sharp equivalente.
+export type NoteSpelling =
+  | ChromaticNote
+  | 'Db' | 'Eb' | 'Gb' | 'Ab' | 'Bb';
+
 export type NoteNameES =
   | 'Do' | 'Do♯' | 'Re' | 'Re♯' | 'Mi' | 'Fa'
   | 'Fa♯' | 'Sol' | 'Sol♯' | 'La' | 'La♯' | 'Si';

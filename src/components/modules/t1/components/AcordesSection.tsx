@@ -1,4 +1,5 @@
 import SectionLabel from '../../../shared/SectionLabel';
+import Prose from '../../../shared/Prose/Prose';
 import AcordesBuilder from '../../../primitives/AcordesBuilder/AcordesBuilder';
 import {
   ACORDES_INTRO,
@@ -39,7 +40,8 @@ export default function AcordesSection() {
       <ul className={styles.nomList}>
         {ACORDES_NOMENCLATURA.map((n) => (
           <li key={n.regla}>
-            <strong>{n.regla}:</strong> {n.desc}
+            <strong>{n.regla}:</strong>{' '}
+            {typeof n.desc === 'string' ? n.desc : <Prose segment={n.desc} />}
           </li>
         ))}
       </ul>
@@ -51,15 +53,15 @@ export default function AcordesSection() {
         ))}
       </ol>
 
-      <h3 className={styles.subheading}>{ACORDES_EJEMPLO_TITULO}</h3>
+      <h3 className={styles.subheading}><Prose segment={ACORDES_EJEMPLO_TITULO} /></h3>
       <ol className={styles.steps}>
         {ACORDES_EJEMPLO_PASOS.map((p, i) => (
-          <li key={i}>{p}</li>
+          <li key={i}><Prose segment={p} /></li>
         ))}
       </ol>
 
-      <p className={styles.resultado}>{ACORDES_RESULTADO_MAYOR}</p>
-      <p className={styles.text}>{ACORDES_RESULTADO_MENOR}</p>
+      <p className={styles.resultado}><Prose segment={ACORDES_RESULTADO_MAYOR} /></p>
+      <p className={styles.text}><Prose segment={ACORDES_RESULTADO_MENOR} /></p>
 
       <h3 className={styles.subheading}>{ACORDES_PRIMITIVA_TITULO}</h3>
       <p className={styles.text}>{ACORDES_PRIMITIVA_INSTRUCCION}</p>

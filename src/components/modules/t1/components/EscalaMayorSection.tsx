@@ -1,5 +1,8 @@
 import SectionLabel from '../../../shared/SectionLabel';
+import NoteToken from '../../../shared/NoteToken/NoteToken';
+import Prose from '../../../shared/Prose/Prose';
 import EscalaMayor from '../../../primitives/EscalaMayor/EscalaMayor';
+import type { NoteSpelling } from '../../../../types/music';
 import {
   ESCALA_DEF,
   ESCALA_EJEMPLO_INTRO,
@@ -22,7 +25,7 @@ export default function EscalaMayorSection() {
 
       <p className={styles.text}>{ESCALA_DEF}</p>
 
-      <p className={styles.text}>{ESCALA_EJEMPLO_INTRO}</p>
+      <p className={styles.text}><Prose segment={ESCALA_EJEMPLO_INTRO} /></p>
 
       <div className={styles.tableWrap}>
         <table className={styles.table}>
@@ -39,7 +42,7 @@ export default function EscalaMayorSection() {
                 i === 0 ? (
                   <th key={i} scope="row">{c}</th>
                 ) : (
-                  <td key={i}>{c}</td>
+                  <td key={i}><NoteToken note={c as NoteSpelling} /></td>
                 ),
               )}
             </tr>

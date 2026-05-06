@@ -9,7 +9,7 @@ export function noteAtFret(openNote: ChromaticNote, openOct: number, fret: numbe
 }
 
 export function noteShort(n: string): string {
-  return n.replace('#', '♯');
+  return n.replace('#', '♯').replace(/^([A-G])b$/, '$1♭');
 }
 
 export function noteDisplay(n: ChromaticNote): string {

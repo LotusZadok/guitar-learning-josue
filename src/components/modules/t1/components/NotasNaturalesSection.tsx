@@ -1,5 +1,6 @@
 import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
+import NoteToken from '../../../shared/NoteToken/NoteToken';
 import {
   NATURALES_INTRO,
   NATURALES_TABLA_ES,
@@ -30,7 +31,7 @@ export default function NotasNaturalesSection() {
           <tbody>
             <tr>
               {NATURALES_TABLA_EN.map((n) => (
-                <td key={n}>{n}</td>
+                <td key={n}><NoteToken note={n} /></td>
               ))}
             </tr>
           </tbody>
