@@ -5,7 +5,7 @@
   cursor: pointer;
   font-weight: inherit;
   font-family: inherit;
-  transition: color 0.15s ease, background-color 0.15s ease;
+  transition: color 0.15s ease;
 }
 
 .token:focus-visible {
@@ -13,51 +13,15 @@
   outline-offset: 1px;
 }
 
-.token[data-note="c"] {
-  color: var(--note-c);
-  background: color-mix(in srgb, var(--note-c) 12%, transparent);
-}
-.token[data-note="c-sharp"] {
-  color: var(--note-c-sharp);
-  background: color-mix(in srgb, var(--note-c-sharp) 12%, transparent);
-}
-.token[data-note="d"] {
-  color: var(--note-d);
-  background: color-mix(in srgb, var(--note-d) 12%, transparent);
-}
-.token[data-note="d-sharp"] {
-  color: var(--note-d-sharp);
-  background: color-mix(in srgb, var(--note-d-sharp) 12%, transparent);
-}
-.token[data-note="e"] {
-  color: var(--note-e);
-  background: color-mix(in srgb, var(--note-e) 12%, transparent);
-}
-.token[data-note="f"] {
-  color: var(--note-f);
-  background: color-mix(in srgb, var(--note-f) 12%, transparent);
-}
-.token[data-note="f-sharp"] {
-  color: var(--note-f-sharp);
-  background: color-mix(in srgb, var(--note-f-sharp) 12%, transparent);
-}
-.token[data-note="g"] {
-  color: var(--note-g);
-  background: color-mix(in srgb, var(--note-g) 12%, transparent);
-}
-.token[data-note="g-sharp"] {
-  color: var(--note-g-sharp);
-  background: color-mix(in srgb, var(--note-g-sharp) 12%, transparent);
-}
-.token[data-note="a"] {
-  color: var(--note-a);
-  background: color-mix(in srgb, var(--note-a) 12%, transparent);
-}
-.token[data-note="a-sharp"] {
-  color: var(--note-a-sharp);
-  background: color-mix(in srgb, var(--note-a-sharp) 12%, transparent);
-}
-.token[data-note="b"] {
-  color: var(--note-b);
-  background: color-mix(in srgb, var(--note-b) 12%, transparent);
-}
+.token[data-note="c"] { color: var(--note-c); }
+.token[data-note="c-sharp"] { color: var(--note-c-sharp); }
+.token[data-note="d"] { color: var(--note-d); }
+.token[data-note="d-sharp"] { color: var(--note-d-sharp); }
+.token[data-note="e"] { color: var(--note-e); }
+.token[data-note="f"] { color: var(--note-f); }
+.token[data-note="f-sharp"] { color: var(--note-f-sharp); }
+.token[data-note="g"] { color: var(--note-g); }
+.token[data-note="g-sharp"] { color: var(--note-g-sharp); }
+.token[data-note="a"] { color: var(--note-a); }
+.token[data-note="a-sharp"] { color: var(--note-a-sharp); }
+.token[data-note="b"] { color: var(--note-b); }
