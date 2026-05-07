@@ -1,5 +1,5 @@
 // Contenido literal del método de Josué Barquero — NO parafrasear, NO corregir erratas.
-// Fuente: docs/source_of_truth_T1_T2.md (T1 §1.1, §1.2, §1.3, §1.4, §1.6, §1.7, §1.8).
+// Fuente: docs/source_of_truth_T1_T2.md (T1 §1.1, §1.2, §1.3, §1.4, §1.5, §1.6, §1.7, §1.8).
 
 import type { ProseSegment } from '../../../../types/prose';
 
@@ -151,6 +151,80 @@ export const INTERVALOS_OCTAVA: ProseSegment = [
   { type: 'note', value: 'G' },
   { type: 'text', value: '.' },
 ];
+
+// === 05 · Tensión y resolución (§1.5) ===
+
+export const TENSION_INTRO =
+  "Las notas tensas buscan resolver hacia las estables, hacia abajo o hacia arriba.";
+
+// Cuatro reglas del método. Tipo unión (string | ProseSegment) por entrada:
+// los strings sin nombres concretos de nota quedan como string puro;
+// las que mencionan grados como notas usan ProseSegment con NoteToken.
+export const TENSION_REGLAS: readonly { titulo: string; cuerpo: ProseSegment }[] = [
+  {
+    titulo: '2do grado',
+    cuerpo: [
+      { type: 'text', value: 'resuelve a la tónica o al 3er grado. En ' },
+      { type: 'note', value: 'C' },
+      { type: 'text', value: ' mayor: ' },
+      { type: 'note', value: 'D' },
+      { type: 'text', value: ' → ' },
+      { type: 'note', value: 'C' },
+      { type: 'text', value: ' o ' },
+      { type: 'note', value: 'D' },
+      { type: 'text', value: ' → ' },
+      { type: 'note', value: 'E' },
+      { type: 'text', value: '.' },
+    ],
+  },
+  {
+    titulo: '4to grado',
+    cuerpo: [
+      { type: 'text', value: 'resuelve al 3er o al 5to grado. Tiene más tensión hacia el 3er grado porque está a 1 s.t. (mayor tensión que 2 s.t.). El 4to también se llama "sensible modal". En ' },
+      { type: 'note', value: 'C' },
+      { type: 'text', value: ' mayor: ' },
+      { type: 'note', value: 'F' },
+      { type: 'text', value: ' → ' },
+      { type: 'note', value: 'E' },
+      { type: 'text', value: ' o ' },
+      { type: 'note', value: 'F' },
+      { type: 'text', value: ' → ' },
+      { type: 'note', value: 'G' },
+      { type: 'text', value: '.' },
+    ],
+  },
+  {
+    titulo: '6to grado',
+    cuerpo: [
+      { type: 'text', value: 'resuelve al 5to grado. En ' },
+      { type: 'note', value: 'C' },
+      { type: 'text', value: ' mayor: ' },
+      { type: 'note', value: 'A' },
+      { type: 'text', value: ' → ' },
+      { type: 'note', value: 'G' },
+      { type: 'text', value: '.' },
+    ],
+  },
+  {
+    titulo: '7mo grado',
+    cuerpo: [
+      { type: 'text', value: 'resuelve a la tónica. Es la resolución más importante de la música tonal está a 1 s.t. de la tónica, por eso es la más tensa. El 7mo se llama "sensible tonal". En ' },
+      { type: 'note', value: 'C' },
+      { type: 'text', value: ' mayor: ' },
+      { type: 'note', value: 'B' },
+      { type: 'text', value: ' → ' },
+      { type: 'note', value: 'C' },
+      { type: 'text', value: '.' },
+    ],
+  },
+];
+
+export const CONSEJO_TENSION =
+  "Consejo del método: tocar las notas tensas un poco más fuertes que las estables. A esto se le llama resolver.";
+
+export const TENSION_PRIMITIVA_TITULO = "Mapa de resoluciones en C mayor";
+export const TENSION_PRIMITIVA_INSTRUCCION =
+  "El strip muestra los 7 grados más la octava. Las flechas conectan cada nota tensa con su(s) destino(s). Pasá el foco o hacé clic sobre una flecha para escuchar la resolución (origen → destino). El grosor de la flecha refleja la tensión: el 7mo grado hacia la tónica es la más fuerte.";
 
 // === 06 · Construcción de las 7 tríadas y la tríada maestra (§1.6) ===
 

@@ -1,0 +1,124 @@
+.wrap {
+  margin-top: 24px;
+  overflow-x: auto;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  min-width: 560px;
+  max-width: 640px;
+  margin: 0 auto;
+  height: auto;
+}
+
+.svg text {
+  pointer-events: none;
+}
+
+.baseline {
+  stroke: var(--rule);
+  stroke-width: 0.5;
+  opacity: 0.5;
+}
+
+.node {
+  cursor: default;
+}
+
+.gradeLabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  fill: var(--muted);
+  text-transform: uppercase;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.innerLetter {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  /* Signature Component: letra blanca sobre nota saturada, no tokenizar */
+  fill: #fff;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.innerLetterLarge {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  /* Signature Component: letra blanca sobre nota saturada, no tokenizar */
+  fill: #fff;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.arrow {
+  fill: none;
+  stroke: var(--muted);
+  cursor: pointer;
+  transition: stroke-width 0.15s ease, stroke 0.15s ease;
+}
+
+.arrow:hover {
+  stroke: var(--paper);
+}
+
+.arrow:focus {
+  outline: none;
+}
+
+.arrow:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+.arrowHead {
+  fill: var(--muted);
+}
+
+.legend {
+  margin: 12px auto 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 20px;
+  justify-content: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--muted);
+  max-width: 640px;
+}
+
+.legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.swatch {
+  display: inline-block;
+  width: 18px;
+  border-top-style: solid;
+  border-top-color: var(--muted);
+}
+
+.swatchStandard { border-top-width: 2px; }
+.swatchStrong { border-top-width: 2.5px; }
+.swatchLight { border-top-width: 1.5px; }
+.swatchPrimary { border-top-width: 3px; }
+
+@media (max-width: 900px) {
+  .gradeLabel {
+    font-size: 11px;
+  }
+}
