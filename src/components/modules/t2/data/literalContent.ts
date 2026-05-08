@@ -79,3 +79,43 @@ export const OBSERVACION_TONICAS_BEMOL = "Al contrario, en las tonalidades con b
 export const OBSERVACION_UTILIDAD = "Esto nos ayuda a saber con qué alteración y proceso trabajamos en dicha tonalidad.";
 
 export const TABLA_MAESTRA_INTRO = "Para ayudar a comprobar si el proceso es correcto, acá una tabla con todas las tonalidades mayores existentes.";
+
+// === §4.7 Grados armónicos según la escala mayor ===
+
+export const GRADOS_INTRO_SIMETRIA = "La música funciona con fórmulas: 12 semitonos, 12 intervalos, escalas de 7 notas, tríadas de 3 notas. Estos procesos son simétricos en todas las tonalidades; por eso conviene memorizar el procedimiento, no el resultado.";
+
+export const GRADOS_INTRO_FRACTAL = "También funciona en fractal: lo que sirve en lo micro sirve en lo macro. Si la escala tiene 7 notas, la armonía tiene 7 acordes (uno por cada nota). Cada nota se convierte en un acorde construyendo la tríada sobre ella.";
+
+export const GRADOS_PROCEDIMIENTO_TITULO = "Procedimiento para encontrar los grados armónicos";
+
+export const GRADOS_PROCEDIMIENTO_PASOS = [
+  "Pensar cada nota de la escala como tríada. Por ahora solo escribimos las letras (sin armadura).",
+  "Actualizar las tríadas con la armadura de la tonalidad.",
+  "Tocar cada acorde y oír su carácter: brillante (mayor) u oscuro (menor).",
+] as const;
+
+export const GRADOS_PRIMITIVA_INSTRUCCION = "Cambiá de paso para ver cómo se transforma la tabla. En el último paso, hacé clic sobre cada acorde para escucharlo.";
+
+export const GRADOS_PATRON = "El resultado es siempre el mismo patrón de calidades: M m m M M m dim. Tres mayores (I, IV, V), tres menores (ii, iii, vi), uno disminuido (vii°). Este patrón se memoriza porque se repite idéntico en todas las tonalidades mayores.";
+
+export const GRADOS_NOMBRE_CARACTER_TITULO = "Nombre y carácter de cada grado";
+
+export const GRADOS_NOMBRE_CARACTER = [
+  { roman: 'I',    nombre: 'Tónica',         caracter: 'Estable' },
+  { roman: 'ii',   nombre: 'Supertónica',    caracter: 'Medio' },
+  { roman: 'iii',  nombre: 'Mediante',       caracter: 'Estable-Medio' },
+  { roman: 'IV',   nombre: 'Subdominante',   caracter: 'Medio-tenso' },
+  { roman: 'V',    nombre: 'Dominante',      caracter: 'Tenso' },
+  { roman: 'vi',   nombre: 'Superdominante', caracter: 'Estable' },
+  { roman: 'vii°', nombre: 'Sensible',       caracter: 'Tenso' },
+] as const;
+
+export const GRADOS_ANALISIS_ESTABLES = "Los grados estables (I, vi) tienen la T y la 3ra de la tonalidad como notas constituyentes. El iii también tiene dos estables, pero al contener la sensible tonal queda con color medio.";
+
+export const GRADOS_ANALISIS_TENSOS = "Los tensos (V, vii°) contienen la 7ma y la 4ta de la escala (sensible tonal y modal).";
+
+export const GRADOS_ANALISIS_MEDIOS = "Los medios (ii, IV) no tienen la sensible tonal pero sí la 4ta (sensible modal).";
+
+export const GRADOS_ANALISIS_IV = "Sobre el IV grado: es ambivalente. Tiene la T (la nota más estable) y la 4ta (sensible modal). Como la 4ta tiende hacia la 3ra por estar a 1 s.t., el IV grado tiene carácter medio y tenso al mismo tiempo, y puede resolver directamente a un acorde estable.";
+
+export const GRADOS_CONSEJO = "Memorizar el patrón M m m M M m dim. Se repite idéntico en cualquier tonalidad mayor: la simetría que justifica aprenderlo una sola vez.";

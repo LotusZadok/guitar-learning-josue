@@ -1,0 +1,131 @@
+.section {
+  padding: 48px 60px;
+  border-bottom: 1px solid var(--rule);
+  animation: fadeUp 0.6s ease both;
+}
+
+.text {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--text-body);
+  margin-bottom: 16px;
+}
+
+.subheading {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  color: var(--paper);
+  margin: 28px 0 12px;
+  letter-spacing: 1px;
+}
+
+.pasos {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  counter-reset: paso;
+}
+
+.pasos li {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--text-body);
+  padding-left: 36px;
+  position: relative;
+  counter-increment: paso;
+}
+
+.pasos li::before {
+  content: counter(paso, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+
+.selectorRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 16px 0 8px;
+  flex-wrap: wrap;
+}
+
+.selectorLabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.patron {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--paper);
+  margin: 24px 0 8px;
+  padding: 14px 18px;
+  background: var(--surface);
+}
+
+/* === Nombre + carácter table === */
+
+.tableWrap {
+  overflow-x: auto;
+  margin: 0 0 24px;
+}
+
+.caracterTable {
+  border-collapse: collapse;
+  border: 1px solid var(--rule);
+  font-family: 'IBM Plex Mono', monospace;
+  width: 100%;
+}
+
+.caracterTable th,
+.caracterTable td {
+  border: 1px solid var(--rule);
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 13px;
+}
+
+.caracterTable th {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--surface);
+}
+
+.romanCell {
+  font-weight: 500;
+  color: var(--paper);
+  width: 80px;
+}
+
+.caracterCell {
+  color: var(--text-body);
+  width: 30%;
+}
+
+@media (max-width: 900px) {
+  .section {
+    padding: 36px 24px;
+  }
+  .caracterTable th,
+  .caracterTable td {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+}

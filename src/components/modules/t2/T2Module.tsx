@@ -3,6 +3,7 @@ import HerramientaSection from './sections/HerramientaSection';
 import ProcesoSostenidosSection from './sections/ProcesoSostenidosSection';
 import ProcesoBemolesSection from './sections/ProcesoBemolesSection';
 import TablaMaestraSection from './sections/TablaMaestraSection';
+import GradosArmonicosSection from './components/GradosArmonicosSection';
 import ModoClaseSection from './sections/ModoClaseSection';
 import styles from './T2Module.module.css';
 
@@ -15,6 +16,7 @@ export default function T2Module() {
         <ProcesoSostenidosSection />
         <ProcesoBemolesSection />
         <TablaMaestraSection />
+        <GradosArmonicosSection />
         <ModoClaseSection />
       </main>
     </div>
