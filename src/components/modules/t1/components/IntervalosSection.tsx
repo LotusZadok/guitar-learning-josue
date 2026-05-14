@@ -1,13 +1,15 @@
+import { useMemo } from 'react';
 import SectionLabel from '../../../shared/SectionLabel';
-import NoteToken from '../../../shared/NoteToken/NoteToken';
+import NoteSelector from '../../../shared/NoteSelector';
 import Prose from '../../../shared/Prose/Prose';
 import IntervalsSection from '../../../primitives/Intervals/IntervalsSection';
-import type { NoteSpelling } from '../../../../types/music';
+import { useUIStore } from '../../../../stores/useUIStore';
+import { ALL } from '../../../../data/notes';
+import { majorScaleSpelled } from '../../../../utils/noteCalculations';
+import type { ChromaticNote } from '../../../../types/music';
 import type { ProseSegment } from '../../../../types/prose';
 import {
   INTERVALOS_DEF,
-  INTERVALOS_GRADOS_HEAD,
-  INTERVALOS_GRADOS_ROW,
   INTERVALOS_CALIDAD,
   INTERVALOS_13_HEAD,
   INTERVALOS_13_ROW,
@@ -18,11 +20,18 @@ import {
 } from '../data/literalContent';
 import styles from './IntervalosSection.module.css';
 
+// Grade labels for the dynamic scale example (T = tónica; grados romanos invariantes).
+const GRADE_LABELS = ['T', 'II', 'III', 'IV', 'V', 'VI', 'VII'] as const;
+
 function renderStep(step: string | ProseSegment) {
   return typeof step === 'string' ? step : <Prose segment={step} />;
 }
 
 export default function IntervalosSection() {
+  const tonic = useUIStore((s) => s.tonic);
+  const setTonic = useUIStore((s) => s.setTonic);
+  const spelledScale = useMemo(() => majorScaleSpelled(tonic), [tonic]);
+
   return (
     <section className={styles.section}>
       <SectionLabel text="03 · Intervalos" />
@@ -30,24 +39,28 @@ export default function IntervalosSection() {
 
       <p className={styles.text}>{INTERVALOS_DEF}</p>
 
+      {/* Selector global de tónica — reemplaza la tabla estática T/2/.../8 */}
+      <NoteSelector
+        notes={[...ALL]}
+        selected={tonic}
+        onSelect={(n) => setTonic(n as ChromaticNote)}
+      />
+
+      {/* Fila de ejemplo dinámica: notas de la escala mayor para la tónica activa */}
       <div className={styles.tableWrap}>
         <table className={styles.table}>
           <thead>
             <tr>
-              {INTERVALOS_GRADOS_HEAD.map((h, i) => (
-                <th key={i} scope="col">{h}</th>
+              {GRADE_LABELS.map((g) => (
+                <th key={g} scope="col">{g}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             <tr>
-              {INTERVALOS_GRADOS_ROW.map((c, i) =>
-                i === 0 ? (
-                  <th key={i} scope="row">{c}</th>
-                ) : (
-                  <td key={i}><NoteToken note={c as NoteSpelling} /></td>
-                ),
-              )}
+              {spelledScale.map((n, i) => (
+                <td key={i}>{n}</td>
+              ))}
             </tr>
           </tbody>
         </table>

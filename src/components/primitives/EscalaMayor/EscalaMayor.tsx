@@ -1,6 +1,6 @@
-import { useCallback, useMemo, useState, type KeyboardEvent } from 'react';
-import NoteSelector from '../../shared/NoteSelector';
+import { useCallback, useMemo, type KeyboardEvent } from 'react';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
+import { useUIStore } from '../../../stores/useUIStore';
 import { ALL, NOTE_COLORS, NOTE_ES } from '../../../data/notes';
 import { majorScaleSpelled } from '../../../utils/noteCalculations';
 import type { ChromaticNote } from '../../../types/music';
@@ -36,7 +36,7 @@ interface NodeData {
 }
 
 export default function EscalaMayor() {
-  const [tonic, setTonic] = useState<ChromaticNote>('C');
+  const tonic = useUIStore((s) => s.tonic);
   const { playNote } = useAudioEngine();
 
   const nodes = useMemo<NodeData[]>(() => {
@@ -72,12 +72,6 @@ export default function EscalaMayor() {
 
   return (
     <div className={styles.wrap}>
-      <NoteSelector
-        notes={[...ALL]}
-        selected={tonic}
-        onSelect={(n) => setTonic(n as ChromaticNote)}
-      />
-
       <svg
         className={styles.svg}
         viewBox={`0 0 ${SVG_W} ${SVG_H}`}

@@ -1,22 +1,39 @@
-import { useCallback, useRef, type KeyboardEvent } from 'react';
+import { useCallback, useMemo, useRef, type KeyboardEvent } from 'react';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
-import { NOTE_COLORS, NOTE_ES } from '../../../data/notes';
+import { useUIStore } from '../../../stores/useUIStore';
+import { ALL, NOTE_COLORS, NOTE_ES } from '../../../data/notes';
 import type { ChromaticNote } from '../../../types/music';
 import styles from './TensionResolucion.module.css';
 
-// Sección 05 fija en C mayor: el eje Y de la pedagogía es la *función* de cada
-// grado, no la transposición. La configurabilidad de tonalidad ya vive en §1.4.
+// buildNodes: los 8 nodos del strip (7 grados + octava de T) para cualquier tónica.
+// Posiciones (semitonos desde T), grados y roles son invariantes; solo cambia la nota.
+// `majorScaleSpelled` devuelve string[] con glifos ♯/♭ — no tiene campo `.chromatic`,
+// por lo que usamos ALL[(tonicIdx + pos) % 12] para obtener el ChromaticNote del audio.
 
-const NODES = [
-  { pos: 0,  note: 'C' as ChromaticNote, octaveAdj: 0, grade: 'T',   role: 'tonic'  as const },
-  { pos: 2,  note: 'D' as ChromaticNote, octaveAdj: 0, grade: 'II',  role: 'tense'  as const },
-  { pos: 4,  note: 'E' as ChromaticNote, octaveAdj: 0, grade: 'III', role: 'stable' as const },
-  { pos: 5,  note: 'F' as ChromaticNote, octaveAdj: 0, grade: 'IV',  role: 'tense'  as const },
-  { pos: 7,  note: 'G' as ChromaticNote, octaveAdj: 0, grade: 'V',   role: 'stable' as const },
-  { pos: 9,  note: 'A' as ChromaticNote, octaveAdj: 0, grade: 'VI',  role: 'tense'  as const },
-  { pos: 11, note: 'B' as ChromaticNote, octaveAdj: 0, grade: 'VII', role: 'tense'  as const },
-  { pos: 12, note: 'C' as ChromaticNote, octaveAdj: 1, grade: 'T',   role: 'tonic'  as const },
-] as const;
+interface TensionNode {
+  pos: number;
+  note: ChromaticNote;
+  octaveAdj: number;
+  grade: string;
+  role: 'tonic' | 'stable' | 'tense';
+}
+
+const SCALE_POS   = [0, 2, 4, 5, 7, 9, 11, 12] as const;
+const GRADE_NAMES = ['T', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'T'] as const;
+const NODE_ROLES: TensionNode['role'][] = [
+  'tonic', 'tense', 'stable', 'tense', 'stable', 'tense', 'tense', 'tonic',
+];
+
+function buildNodes(tonic: ChromaticNote): TensionNode[] {
+  const tonicIdx = ALL.indexOf(tonic);
+  return SCALE_POS.map((pos, i) => ({
+    pos,
+    note: ALL[(tonicIdx + pos) % 12],
+    octaveAdj: pos === 12 ? 1 : 0,
+    grade: GRADE_NAMES[i],
+    role: NODE_ROLES[i],
+  }));
+}
 
 // Las flechas de resolución del método. `kind` codifica la distancia interválica:
 // 'straight' = 1 s.t. (resolución directa), 'curve' = 2 s.t. (salto).
@@ -61,6 +78,8 @@ function arrowPath(originX: number, destX: number, kind: 'straight' | 'curve'): 
 }
 
 export default function TensionResolucion() {
+  const tonic = useUIStore((s) => s.tonic);
+  const nodes = useMemo(() => buildNodes(tonic), [tonic]);
   const { playNote } = useAudioEngine();
   const lastFireRef = useRef<number>(0);
 
@@ -70,15 +89,15 @@ export default function TensionResolucion() {
       if (now - lastFireRef.current < FIRE_DEBOUNCE_MS) return;
       lastFireRef.current = now;
 
-      const from = NODES[fromIdx];
-      const to = NODES[toIdx];
+      const from = nodes[fromIdx];
+      const to = nodes[toIdx];
       playNote(from.note, 4 + from.octaveAdj, NOTE_DURATION);
       setTimeout(
         () => playNote(to.note, 4 + to.octaveAdj, NOTE_DURATION),
         ARPEGGIO_GAP_MS,
       );
     },
-    [playNote],
+    [playNote, nodes],
   );
 
   return (
@@ -87,7 +106,7 @@ export default function TensionResolucion() {
         className={styles.svg}
         viewBox={`0 0 ${SVG_W} ${SVG_H}`}
         role="img"
-        aria-label="Mapa de resoluciones de tensión en C mayor"
+        aria-label={`Mapa de resoluciones de tensión en ${NOTE_ES[tonic]} mayor`}
       >
         <defs>
           <marker
@@ -114,8 +133,8 @@ export default function TensionResolucion() {
 
         {/* Resolution arrows above the strip */}
         {ARROWS.map((a) => {
-          const from = NODES[a.fromIdx];
-          const to = NODES[a.toIdx];
+          const from = nodes[a.fromIdx];
+          const to = nodes[a.toIdx];
           return (
             <ArrowPath
               key={a.id}
@@ -128,7 +147,7 @@ export default function TensionResolucion() {
         })}
 
         {/* Nodes */}
-        {NODES.map((n, i) => (
+        {nodes.map((n, i) => (
           <ScaleNode key={`${n.pos}-${i}`} data={n} />
         ))}
       </svg>
@@ -182,7 +201,7 @@ function ArrowPath({ d, width, ariaLabel, onPlay }: ArrowPathProps) {
 }
 
 interface ScaleNodeProps {
-  data: typeof NODES[number];
+  data: TensionNode;
 }
 
 function ScaleNode({ data }: ScaleNodeProps) {

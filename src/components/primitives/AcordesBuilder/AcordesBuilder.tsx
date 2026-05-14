@@ -1,16 +1,15 @@
 import { useCallback, useMemo, useState, type KeyboardEvent } from 'react';
-import NoteSelector from '../../shared/NoteSelector';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
-import { ALL, NOTE_COLORS, NOTE_ES } from '../../../data/notes';
+import { useUIStore } from '../../../stores/useUIStore';
+import { NOTE_COLORS, NOTE_ES } from '../../../data/notes';
 import { chordSpelled, ensureAscending, type ChordType, type ChordMember } from '../../../utils/noteCalculations';
-import type { ChromaticNote } from '../../../types/music';
 import styles from './AcordesBuilder.module.css';
 
 const ARPEGGIO_GAP_MS = 250;
 const NOTE_DURATION = 1.4;
 
 export default function AcordesBuilder() {
-  const [tonic, setTonic] = useState<ChromaticNote>('A');
+  const tonic = useUIStore((s) => s.tonic);
   const [type, setType] = useState<ChordType>('M');
   const [playing, setPlaying] = useState(false);
   const { playNote } = useAudioEngine();
@@ -41,12 +40,6 @@ export default function AcordesBuilder() {
 
   return (
     <div className={styles.wrap}>
-      <NoteSelector
-        notes={[...ALL]}
-        selected={tonic}
-        onSelect={(n) => setTonic(n as ChromaticNote)}
-      />
-
       <div className={styles.qualityRow} role="group" aria-label="Calidad del acorde">
         <button
           className={type === 'M' ? styles.qualityActive : styles.quality}

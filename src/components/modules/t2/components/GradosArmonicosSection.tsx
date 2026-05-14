@@ -1,9 +1,7 @@
-import { useState } from 'react';
 import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
-import NoteSelector from '../../../shared/NoteSelector';
 import GradosArmonicos from '../../../primitives/GradosArmonicos/GradosArmonicos';
-import { ALL } from '../../../../data/notes';
+import { useUIStore } from '../../../../stores/useUIStore';
 import {
   GRADOS_INTRO_SIMETRIA,
   GRADOS_INTRO_FRACTAL,
@@ -19,11 +17,10 @@ import {
   GRADOS_ANALISIS_IV,
   GRADOS_CONSEJO,
 } from '../data/literalContent';
-import type { ChromaticNote } from '../../../../types/music';
 import styles from './GradosArmonicosSection.module.css';
 
 export default function GradosArmonicosSection() {
-  const [tonalidad, setTonalidad] = useState<ChromaticNote>('A');
+  const tonalidad = useUIStore((s) => s.tonic);
 
   return (
     <section className={styles.section}>
@@ -41,15 +38,6 @@ export default function GradosArmonicosSection() {
       </ol>
 
       <p className={styles.text}>{GRADOS_PRIMITIVA_INSTRUCCION}</p>
-
-      <div className={styles.selectorRow}>
-        <span className={styles.selectorLabel}>Tonalidad</span>
-        <NoteSelector
-          notes={[...ALL]}
-          selected={tonalidad}
-          onSelect={(n) => setTonalidad(n as ChromaticNote)}
-        />
-      </div>
 
       <GradosArmonicos tonalidad={tonalidad} />
 

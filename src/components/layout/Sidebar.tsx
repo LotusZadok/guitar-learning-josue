@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useUIStore } from '../../stores/useUIStore';
 import ThemeToggle from './ThemeToggle';
 import MuteToggle from './MuteToggle';
+import TonicSelector from './TonicSelector';
 import styles from './Sidebar.module.css';
 
 const SECTIONS = [
@@ -52,8 +53,9 @@ export default function Sidebar() {
           </button>
         ))}
         <div className={styles.themeArea}>
-          <MuteToggle />
           <ThemeToggle />
+          <MuteToggle />
+          <TonicSelector />
         </div>
       </nav>
     </>
