@@ -56,7 +56,7 @@ export default function IntervalosSection() {
       <p className={styles.text}>{INTERVALOS_CALIDAD}</p>
 
       <div className={styles.tableWrap}>
-        <table className={styles.table}>
+        <table className={`${styles.table} ${styles.tableIntervals}`}>
           <thead>
             <tr>
               {INTERVALOS_13_HEAD.map((h, i) => (

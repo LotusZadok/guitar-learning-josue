@@ -15,7 +15,7 @@ export default function ProcesoBemolesSection() {
   return (
     <section className={styles.section}>
       <SectionLabel text="04 · Proceso con bemoles" />
-      <h2 className={styles.titulo}>{TITULO_BEMOLES}</h2>
+      <h2 className={`${styles.titulo} ${styles.tituloMono}`}>{TITULO_BEMOLES}</h2>
 
       <NoteSelector notes={NOTAS} selected={selected} onSelect={setSelected} />
 

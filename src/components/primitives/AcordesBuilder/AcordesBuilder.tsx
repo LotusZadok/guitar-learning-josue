@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState, type KeyboardEvent } from 'react';
 import NoteSelector from '../../shared/NoteSelector';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { ALL, NOTE_COLORS, NOTE_ES } from '../../../data/notes';
-import { chordSpelled, type ChordType, type ChordMember } from '../../../utils/noteCalculations';
+import { chordSpelled, ensureAscending, type ChordType, type ChordMember } from '../../../utils/noteCalculations';
 import type { ChromaticNote } from '../../../types/music';
 import styles from './AcordesBuilder.module.css';
 
@@ -32,7 +32,7 @@ export default function AcordesBuilder() {
   const handlePlayArpeggio = useCallback(() => {
     if (playing) return;
     setPlaying(true);
-    chord.forEach((m, i) => setTimeout(() => playMember(m), i * ARPEGGIO_GAP_MS));
+    ensureAscending(chord).forEach((m, i) => setTimeout(() => playMember(m), i * ARPEGGIO_GAP_MS));
     setTimeout(
       () => setPlaying(false),
       chord.length * ARPEGGIO_GAP_MS + NOTE_DURATION * 1000,

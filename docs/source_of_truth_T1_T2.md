@@ -75,7 +75,7 @@ Los intervalos tienen además **calidad**: menores (m), mayores (M), justos (J),
 
 1. Escribir las **letras** según el número del intervalo (ignorando alteraciones): G A A B B C C-D D E E F F G.
 2. Escribir el **círculo cromático** desde la tónica: G G#/Ab A A#/Bb B C C#/Db D D#/Eb E F F#/Gb G.
-3. Cuando hay dos notas alteradas, elegir según la **letra** del paso 1. Si en el paso 1 está "B", entonces se elige A# antes que Bb.
+3. Cuando hay dos notas alteradas, elegir según la **letra** del paso 1. Si en el paso 1 está "B", entonces se elige B♭ antes que A♯.
 4. Actualizar la escala con los intervalos correctos.
 
 Resultado para G: **G Ab A Bb B C C#/Db D Eb E F F# G**.

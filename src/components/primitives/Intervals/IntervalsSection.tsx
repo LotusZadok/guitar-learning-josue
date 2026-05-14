@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import NoteSelector from '../../shared/NoteSelector';
 import IntervalRow from './IntervalRow';
-import IntervalMiniFretboard from './IntervalMiniFretboard';
 import { NATURALS, ALL, NOTE_ES } from '../../../data/notes';
 import { noteShort } from '../../../utils/noteCalculations';
 import type { NaturalNote } from '../../../types/music';
@@ -34,7 +33,6 @@ export default function IntervalsSection() {
           <IntervalRow key={iv.name} {...iv} />
         ))}
       </div>
-      <IntervalMiniFretboard root={root} />
     </div>
   );
 }

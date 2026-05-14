@@ -117,9 +117,9 @@ export const INTERVALOS_PROCEDIMIENTO_PASOS: readonly (string | ProseSegment)[] 
     { type: 'text', value: 'Cuando hay dos notas alteradas, elegir según la letra del paso 1. Si en el paso 1 está "' },
     { type: 'note', value: 'B' },
     { type: 'text', value: '", entonces se elige ' },
-    { type: 'note', value: 'A#' },
-    { type: 'text', value: ' antes que ' },
     { type: 'note', value: 'Bb' },
+    { type: 'text', value: ' antes que ' },
+    { type: 'note', value: 'A#' },
     { type: 'text', value: '.' },
   ],
   "Actualizar la escala con los intervalos correctos.",
@@ -224,7 +224,7 @@ export const CONSEJO_TENSION =
 
 export const TENSION_PRIMITIVA_TITULO = "Mapa de resoluciones en C mayor";
 export const TENSION_PRIMITIVA_INSTRUCCION =
-  "El strip muestra los 7 grados más la octava. Las flechas conectan cada nota tensa con su(s) destino(s). Pasá el foco o hacé clic sobre una flecha para escuchar la resolución (origen → destino). El grosor de la flecha refleja la tensión: el 7mo grado hacia la tónica es la más fuerte.";
+  "El strip muestra los 7 grados más la octava. Las flechas conectan cada nota tensa con su(s) reposo(s). Pasá el foco o hacé clic sobre una flecha para escuchar la resolución (tensión → reposo). La forma de la flecha indica la distancia: línea recta = 1 s.t., arco = 2 s.t.";
 
 // === 06 · Construcción de las 7 tríadas y la tríada maestra (§1.6) ===
 

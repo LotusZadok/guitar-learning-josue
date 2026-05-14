@@ -18,16 +18,16 @@ const NODES = [
   { pos: 12, note: 'C' as ChromaticNote, octaveAdj: 1, grade: 'T',   role: 'tonic'  as const },
 ] as const;
 
-// Las flechas de resolución del método. `width` codifica la jerarquía de
-// tensión (1 s.t. > 2 s.t. ; sensible tonal > resto). Sólo neutros — la
-// cuarentena prohíbe colorear las flechas con note hues.
+// Las flechas de resolución del método. `kind` codifica la distancia interválica:
+// 'straight' = 1 s.t. (resolución directa), 'curve' = 2 s.t. (salto).
+// Grosor uniforme — el mensaje semántico está en la forma, no en el peso.
 const ARROWS = [
-  { id: 'd-c',   fromIdx: 1, toIdx: 0, width: 2,   tier: 'long' },
-  { id: 'd-e',   fromIdx: 1, toIdx: 2, width: 2,   tier: 'long' },
-  { id: 'f-e',   fromIdx: 3, toIdx: 2, width: 2.5, tier: 'short' },
-  { id: 'f-g',   fromIdx: 3, toIdx: 4, width: 1.5, tier: 'long' },
-  { id: 'a-g',   fromIdx: 5, toIdx: 4, width: 2,   tier: 'long' },
-  { id: 'b-c8',  fromIdx: 6, toIdx: 7, width: 3,   tier: 'short' },
+  { id: 'd-c',   fromIdx: 1, toIdx: 0, width: 1.5, kind: 'curve'    },
+  { id: 'd-e',   fromIdx: 1, toIdx: 2, width: 1.5, kind: 'curve'    },
+  { id: 'f-e',   fromIdx: 3, toIdx: 2, width: 1.5, kind: 'straight' },
+  { id: 'f-g',   fromIdx: 3, toIdx: 4, width: 1.5, kind: 'curve'    },
+  { id: 'a-g',   fromIdx: 5, toIdx: 4, width: 1.5, kind: 'curve'    },
+  { id: 'b-c8',  fromIdx: 6, toIdx: 7, width: 1.5, kind: 'straight' },
 ] as const;
 
 const SVG_W = 560;
@@ -40,8 +40,7 @@ const RADIUS_TONIC = 22;
 const RADIUS_STABLE = 18;
 const RADIUS_TENSE = 18;
 const ARC_BASELINE = NODE_Y - RADIUS_TONIC - 6; // top of node circle
-const ARC_PEAK_LONG = 28;   // higher arc for 2-step jumps
-const ARC_PEAK_SHORT = 78;  // lower arc for 1-step jumps (and the importants)
+const ARC_PEAK_LONG = 28;   // arc peak for 2-step jumps
 const ARPEGGIO_GAP_MS = 260;
 const NOTE_DURATION = 1.4;
 const FIRE_DEBOUNCE_MS = 150;
@@ -50,10 +49,14 @@ function nodeX(pos: number): number {
   return PAD_X + pos * STEP_X;
 }
 
-function arrowPath(originX: number, destX: number, peakY: number): string {
-  // Cubic Bezier with vertical tangents at both endpoints — la flecha entra
-  // perpendicular al nodo, así el marker apunta limpiamente hacia abajo.
+function arrowPath(originX: number, destX: number, kind: 'straight' | 'curve'): string {
   const startY = ARC_BASELINE;
+  if (kind === 'straight') {
+    // 1 s.t.: línea recta horizontal entre los dos nodos adyacentes.
+    return `M ${originX} ${startY} L ${destX} ${startY}`;
+  }
+  // 2 s.t.: arco cúbico con tangentes verticales en ambos extremos.
+  const peakY = ARC_PEAK_LONG;
   return `M ${originX} ${startY} C ${originX} ${peakY} ${destX} ${peakY} ${destX} ${startY}`;
 }
 
@@ -113,11 +116,10 @@ export default function TensionResolucion() {
         {ARROWS.map((a) => {
           const from = NODES[a.fromIdx];
           const to = NODES[a.toIdx];
-          const peakY = a.tier === 'short' ? ARC_PEAK_SHORT : ARC_PEAK_LONG;
           return (
             <ArrowPath
               key={a.id}
-              d={arrowPath(nodeX(from.pos), nodeX(to.pos), peakY)}
+              d={arrowPath(nodeX(from.pos), nodeX(to.pos), a.kind)}
               width={a.width}
               ariaLabel={`Reproducir resolución de ${NOTE_ES[from.note]} a ${NOTE_ES[to.note]}`}
               onPlay={() => playSequence(a.fromIdx, a.toIdx)}
@@ -133,20 +135,12 @@ export default function TensionResolucion() {
 
       <ul className={styles.legend} aria-label="Convenciones del mapa">
         <li>
-          <span className={`${styles.swatch} ${styles.swatchStrong}`} />
-          1 s.t. de tensión
+          <span className={`${styles.swatch} ${styles.swatchStraight}`} />
+          1 s.t. — resolución directa
         </li>
         <li>
-          <span className={`${styles.swatch} ${styles.swatchStandard}`} />
-          2 s.t. de tensión
-        </li>
-        <li>
-          <span className={`${styles.swatch} ${styles.swatchLight}`} />
-          alternativa más débil
-        </li>
-        <li>
-          <span className={`${styles.swatch} ${styles.swatchPrimary}`} />
-          sensible tonal (7mo → T)
+          <span className={`${styles.swatch} ${styles.swatchCurve}`} />
+          2 s.t. — salto
         </li>
       </ul>
     </div>

@@ -12,6 +12,16 @@
   letter-spacing: 1px;
 }
 
+/* Bemol overrides: Bebas Neue lacks distinct lowercase glyphs, so `b` (bemol)
+   reads as `B`. This modifier restores legibility for flat-key section titles. */
+.tituloMono {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
 @media (max-width: 900px) {
   .section {
     padding: 36px 24px;

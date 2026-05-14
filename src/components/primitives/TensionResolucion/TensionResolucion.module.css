@@ -112,10 +112,8 @@
   border-top-color: var(--muted);
 }
 
-.swatchStandard { border-top-width: 2px; }
-.swatchStrong { border-top-width: 2.5px; }
-.swatchLight { border-top-width: 1.5px; }
-.swatchPrimary { border-top-width: 3px; }
+.swatchStraight { border-top-width: 1.5px; }
+.swatchCurve { border-top-width: 1.5px; border-top-style: dashed; }
 
 @media (max-width: 900px) {
   .gradeLabel {

@@ -1,4 +1,4 @@
-import { ALL, NOTE_ES } from '../data/notes';
+import { ALL, NOTE_ES, NOTE_FREQS } from '../data/notes';
 import type { ChromaticNote, NoteInfo } from '../types/music';
 
 export function noteAtFret(openNote: ChromaticNote, openOct: number, fret: number): NoteInfo {
@@ -25,16 +25,26 @@ export function noteNameES(n: ChromaticNote): string {
 
 // === Major scale spelling (T1 §1.4 / §1.7) ===
 
+// Tónicas problemáticas: D#, G#, A# producen dobles sostenidos en la escala mayor.
+// El método de Josué siempre usa la ortografía bemol para estas tres.
+// C# y F# se mantienen — tienen ortografías estándar sin dobles alteraciones.
+// SpelledTonic extiende ChromaticNote para aceptar nombres con bemol en redirect.
+type SpelledTonic = ChromaticNote | 'Eb' | 'Ab' | 'Bb';
+const ENHARMONIC_REDIRECT: Partial<Record<ChromaticNote, SpelledTonic>> = {
+  'D#': 'Eb', 'G#': 'Ab', 'A#': 'Bb',
+};
+
 const LETTERS = ['C', 'D', 'E', 'F', 'G', 'A', 'B'] as const;
 const NATURAL_SEMITONE: Record<string, number> = {
   C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11,
 };
 const MAJOR_INTERVALS = [0, 2, 4, 5, 7, 9, 11] as const;
 
-function tonicSemitone(tonic: ChromaticNote): number {
+function tonicSemitone(tonic: SpelledTonic): number {
   const letter = tonic[0];
-  const sharp = tonic.length > 1;
-  return (NATURAL_SEMITONE[letter] + (sharp ? 1 : 0)) % 12;
+  const acc = tonic[1];
+  const delta = acc === '#' ? 1 : acc === 'b' ? -1 : 0;
+  return (NATURAL_SEMITONE[letter] + delta + 12) % 12;
 }
 
 function spelledFromLetterAndSemi(letter: string, targetSemi: number): string {
@@ -55,8 +65,9 @@ function spelledFromLetterAndSemi(letter: string, targetSemi: number): string {
 // preserving the rule of one letter per grade (with proper #/b accidentals).
 // Output uses ♯ / ♭ glyphs ready for display.
 export function majorScaleSpelled(tonic: ChromaticNote): string[] {
-  const startLetterIdx = LETTERS.indexOf(tonic[0] as typeof LETTERS[number]);
-  const tonicSemi = tonicSemitone(tonic);
+  const resolvedTonic: SpelledTonic = ENHARMONIC_REDIRECT[tonic] ?? tonic;
+  const startLetterIdx = LETTERS.indexOf(resolvedTonic[0] as typeof LETTERS[number]);
+  const tonicSemi = tonicSemitone(resolvedTonic);
   const result: string[] = [];
 
   for (let i = 0; i < 7; i++) {
@@ -80,9 +91,10 @@ export interface ChordMember {
 // Major = T + 3M (4 s.t.) + 5J (7 s.t.). Minor = T + 3m (3 s.t.) + 5J (7 s.t.).
 // Octave numbering wraps when chromatic index exceeds 11 — so D + 7 s.t. = A4, but G + 7 s.t. = D5.
 export function chordSpelled(tonic: ChromaticNote, type: ChordType): ChordMember[] {
-  const startLetterIdx = LETTERS.indexOf(tonic[0] as typeof LETTERS[number]);
-  const tonicSemi = tonicSemitone(tonic);
-  const tonicIdx = ALL.indexOf(tonic);
+  const resolvedTonic: SpelledTonic = ENHARMONIC_REDIRECT[tonic] ?? tonic;
+  const startLetterIdx = LETTERS.indexOf(resolvedTonic[0] as typeof LETTERS[number]);
+  const tonicSemi = tonicSemitone(resolvedTonic);
+  const tonicIdx = ALL.indexOf(tonic); // original sharp tonic for chromatic index
   const thirdSt = type === 'M' ? 4 : 3;
   const offsets = [0, thirdSt, 7] as const;
   const roles: ChordMember['role'][] = ['T', type === 'M' ? '3M' : '3m', '5J'];
@@ -99,6 +111,16 @@ export function chordSpelled(tonic: ChromaticNote, type: ChordType): ChordMember
       octave,
       role: roles[i],
     };
+  });
+}
+
+// Reorders chord members so each successive note is higher than the previous.
+// Prevents arpeggio from playing a descending leap when octave wraps backward.
+export function ensureAscending(members: ChordMember[]): ChordMember[] {
+  return [...members].sort((a, b) => {
+    const fa = NOTE_FREQS[`${a.chromatic}${a.octave}`] ?? 0;
+    const fb = NOTE_FREQS[`${b.chromatic}${b.octave}`] ?? 0;
+    return fa - fb;
   });
 }
 
