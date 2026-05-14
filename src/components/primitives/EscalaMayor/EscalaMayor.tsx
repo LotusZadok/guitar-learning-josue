@@ -7,14 +7,22 @@ import type { ChromaticNote } from '../../../types/music';
 import styles from './EscalaMayor.module.css';
 
 // Major scale: positions 0, 2, 4, 5, 7, 9, 11, plus closing octave at 12.
-// Stables (T, III, V) live at 0, 4, 7 (and 12 for the octave T).
-// Tenses (II, IV, VI, VII) live at 2, 5, 9, 11.
+// Tonic (T): 0, 12. Stable (III, V): 4, 7. Intermediate (II, VI): 2, 9. Tense (IV, VII): 5, 11.
 // Chromatic off-scale degrees: 1, 3, 6, 8, 10.
 
 const SCALE_POSITIONS = [0, 2, 4, 5, 7, 9, 11, 12] as const;
 const GRADE_LABELS = ['T', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'T'] as const;
-const STABLE_POSITIONS = new Set<number>([0, 4, 7, 12]);
-const TENSE_POSITIONS = new Set<number>([2, 5, 9, 11]);
+const STABLE_POSITIONS = new Set<number>([4, 7]);
+const INTERMEDIATE_POSITIONS = new Set<number>([2, 9]);
+const TENSE_POSITIONS = new Set<number>([5, 11]);
+
+// Direction arrows for non-stable degrees: 'up' = resolves toward higher pitch, 'down' = lower.
+const ARROW_DIRS: Partial<Record<string, ReadonlyArray<'up' | 'down'>>> = {
+  II:  ['up', 'down'],
+  IV:  ['down'],
+  VI:  ['up', 'down'],
+  VII: ['up', 'down'],
+};
 const PATTERN: ReadonlyArray<'T' | 'S'> = ['T', 'T', 'S', 'T', 'T', 'T', 'S'];
 
 const NODE_COUNT = 13;
@@ -32,7 +40,7 @@ interface NodeData {
   scaleIdx: number | null;
   spelled: string | null;
   grade: string | null;
-  role: 'tonic' | 'stable' | 'tense' | 'chromatic';
+  role: 'tonic' | 'stable' | 'intermediate' | 'tense' | 'chromatic';
 }
 
 export default function EscalaMayor() {
@@ -57,6 +65,7 @@ export default function EscalaMayor() {
       let role: NodeData['role'] = 'chromatic';
       if (p === 0 || p === 12) role = 'tonic';
       else if (STABLE_POSITIONS.has(p)) role = 'stable';
+      else if (INTERMEDIATE_POSITIONS.has(p)) role = 'intermediate';
       else if (TENSE_POSITIONS.has(p)) role = 'tense';
 
       return { position: p, cx, chromatic, octaveAdj, scaleIdx, spelled, grade, role };
@@ -78,6 +87,20 @@ export default function EscalaMayor() {
         role="img"
         aria-label={`Escala mayor de ${NOTE_ES[tonic]}`}
       >
+        <defs>
+          <marker
+            id="scale-dir-arrow"
+            markerWidth="5"
+            markerHeight="5"
+            refX="5"
+            refY="2.5"
+            orient="auto"
+            markerUnits="userSpaceOnUse"
+          >
+            <path d="M 0 0 L 5 2.5 L 0 5 Z" fill="var(--muted)" />
+          </marker>
+        </defs>
+
         {/* Pattern T/S labels between consecutive scale notes */}
         {PATTERN.map((step, i) => {
           const fromPos = SCALE_POSITIONS[i];
@@ -125,10 +148,12 @@ function ScaleNode({ data, onPlay }: ScaleNodeProps) {
     role === 'tonic' ? 22 :
     role === 'chromatic' ? 11 :
     18;
-  const opacity =
-    role === 'tense' ? 0.55 :
-    role === 'chromatic' ? 0.2 :
-    1;
+  const opacity = role === 'chromatic' ? 0.2 : 1;
+  const fill =
+    role === 'chromatic' ? NOTE_COLORS[chromatic] :
+    role === 'intermediate' ? 'var(--diatonic-medium)' :
+    role === 'tense' ? 'var(--diatonic-tense)' :
+    'var(--diatonic-stable)'; // tonic + stable
   const isOnScale = role !== 'chromatic';
 
   const handleEnter = useCallback(() => onPlay(chromatic, octaveAdj), [chromatic, octaveAdj, onPlay]);
@@ -167,12 +192,29 @@ function ScaleNode({ data, onPlay }: ScaleNodeProps) {
         </text>
       )}
 
+      {/* Direction arrows for tense/intermediate nodes */}
+      {grade && ARROW_DIRS[grade]?.map((dir, i) => {
+        const y1 = dir === 'up' ? NODE_Y - radius - 4 : NODE_Y + radius + 4;
+        const y2 = dir === 'up' ? NODE_Y - radius - 16 : NODE_Y + radius + 16;
+        return (
+          <path
+            key={`arrow-${dir}-${i}`}
+            d={`M ${cx} ${y1} L ${cx} ${y2}`}
+            stroke="var(--muted)"
+            strokeWidth={1}
+            fill="none"
+            markerEnd="url(#scale-dir-arrow)"
+            aria-hidden="true"
+          />
+        );
+      })}
+
       {/* Visible node */}
       <circle
         cx={cx}
         cy={NODE_Y}
         r={radius}
-        fill={NOTE_COLORS[chromatic]}
+        fill={fill}
         opacity={opacity}
         stroke={role === 'tonic' ? 'var(--paper)' : 'none'}
         strokeWidth={role === 'tonic' ? 2 : 0}

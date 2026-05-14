@@ -115,6 +115,30 @@
 .swatchStraight { border-top-width: 1.5px; }
 .swatchCurve { border-top-width: 1.5px; border-top-style: dashed; }
 
+.swatchStable {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--diatonic-stable);
+}
+
+.swatchIntermediate {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--diatonic-medium);
+}
+
+.swatchTense {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--diatonic-tense);
+}
+
 @media (max-width: 900px) {
   .gradeLabel {
     font-size: 11px;

@@ -155,7 +155,7 @@ export const INTERVALOS_OCTAVA: ProseSegment = [
 // === 05 · Tensión y resolución (§1.5) ===
 
 export const TENSION_INTRO =
-  "Las notas tensas buscan resolver hacia las estables, hacia abajo o hacia arriba.";
+  "Las notas tensas e intermedias buscan resolver hacia las estables, hacia abajo o hacia arriba.";
 
 // Cuatro reglas del método. Tipo unión (string | ProseSegment) por entrada:
 // los strings sin nombres concretos de nota quedan como string puro;
@@ -305,11 +305,12 @@ export const ESCALA_TABLA_DIST = ['Distancia (s.t.)', '2', '2', '1', '2', '2', '
 
 export const ESCALA_DIVISION_INTRO = "La escala se divide en:";
 export const ESCALA_ESTABLES = "Notas estables: 1, 3, 5.";
-export const ESCALA_TENSAS = "Notas tensas: 2, 4, 6, 7.";
+export const ESCALA_INTERMEDIAS = "Notas intermedias: 2, 6.";
+export const ESCALA_TENSAS = "Notas tensas: 4, 7.";
 
 export const ESCALA_PRIMITIVA_TITULO = "Visualizador de la escala mayor";
 export const ESCALA_PRIMITIVA_INSTRUCCION =
-  "Elegí una tónica para ver su escala mayor sobre los 12 semitonos del círculo cromático. Las 7 notas de la escala se muestran encendidas; las 5 cromáticas restantes quedan atenuadas. Pasá el cursor o el foco sobre cada nota para escucharla.";
+  "Las notas en verde son estables. Las notas en naranja son intermedias. Las notas en rojo son tensas.";
 
 // === 07 · Acordes mayores y menores (§1.7) ===
 

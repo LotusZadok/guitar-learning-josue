@@ -96,7 +96,8 @@ Ejemplo en C mayor (única tonalidad sin alteraciones):
 La escala se divide en:
 
 - **Notas estables:** 1, 3, 5.
-- **Notas tensas:** 2, 4, 6, 7.
+- **Notas intermedias:** 2, 6.
+- **Notas tensas:** 4, 7.
 
 ## 1.5 Tensión y resolución
 

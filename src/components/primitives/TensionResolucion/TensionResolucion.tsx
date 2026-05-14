@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useRef, type KeyboardEvent } from 'react';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { useUIStore } from '../../../stores/useUIStore';
-import { ALL, NOTE_COLORS, NOTE_ES } from '../../../data/notes';
+import { ALL, NOTE_ES } from '../../../data/notes';
 import type { ChromaticNote } from '../../../types/music';
 import styles from './TensionResolucion.module.css';
 
@@ -15,13 +15,13 @@ interface TensionNode {
   note: ChromaticNote;
   octaveAdj: number;
   grade: string;
-  role: 'tonic' | 'stable' | 'tense';
+  role: 'tonic' | 'stable' | 'intermediate' | 'tense';
 }
 
 const SCALE_POS   = [0, 2, 4, 5, 7, 9, 11, 12] as const;
 const GRADE_NAMES = ['T', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'T'] as const;
 const NODE_ROLES: TensionNode['role'][] = [
-  'tonic', 'tense', 'stable', 'tense', 'stable', 'tense', 'tense', 'tonic',
+  'tonic', 'intermediate', 'stable', 'tense', 'stable', 'intermediate', 'tense', 'tonic',
 ];
 
 function buildNodes(tonic: ChromaticNote): TensionNode[] {
@@ -161,6 +161,18 @@ export default function TensionResolucion() {
           <span className={`${styles.swatch} ${styles.swatchCurve}`} />
           2 s.t.: salto
         </li>
+        <li>
+          <span className={styles.swatchStable} />
+          Estable
+        </li>
+        <li>
+          <span className={styles.swatchIntermediate} />
+          Intermedia
+        </li>
+        <li>
+          <span className={styles.swatchTense} />
+          Tensa
+        </li>
       </ul>
     </div>
   );
@@ -211,7 +223,10 @@ function ScaleNode({ data }: ScaleNodeProps) {
     role === 'tonic' ? RADIUS_TONIC :
     role === 'tense' ? RADIUS_TENSE :
     RADIUS_STABLE;
-  const opacity = role === 'tense' ? 0.55 : 1;
+  const fill =
+    role === 'tonic' || role === 'stable' ? 'var(--diatonic-stable)' :
+    role === 'intermediate' ? 'var(--diatonic-medium)' :
+    'var(--diatonic-tense)';
   const isLargeLetter = role === 'tonic';
 
   return (
@@ -220,8 +235,7 @@ function ScaleNode({ data }: ScaleNodeProps) {
         cx={cx}
         cy={NODE_Y}
         r={radius}
-        fill={NOTE_COLORS[note]}
-        opacity={opacity}
+        fill={fill}
         stroke={role === 'tonic' ? 'var(--paper)' : 'none'}
         strokeWidth={role === 'tonic' ? 2 : 0}
       />

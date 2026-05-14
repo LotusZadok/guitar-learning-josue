@@ -8,9 +8,9 @@ import {
   ESCALA_EJEMPLO_INTRO,
   ESCALA_TABLA_HEAD,
   ESCALA_TABLA_NOTAS,
-  ESCALA_TABLA_DIST,
   ESCALA_DIVISION_INTRO,
   ESCALA_ESTABLES,
+  ESCALA_INTERMEDIAS,
   ESCALA_TENSAS,
   ESCALA_PRIMITIVA_TITULO,
   ESCALA_PRIMITIVA_INSTRUCCION,
@@ -46,15 +46,6 @@ export default function EscalaMayorSection() {
                 ),
               )}
             </tr>
-            <tr>
-              {ESCALA_TABLA_DIST.map((c, i) =>
-                i === 0 ? (
-                  <th key={i} scope="row">{c}</th>
-                ) : (
-                  <td key={i}>{c}</td>
-                ),
-              )}
-            </tr>
           </tbody>
         </table>
       </div>
@@ -62,6 +53,7 @@ export default function EscalaMayorSection() {
       <p className={styles.text}>{ESCALA_DIVISION_INTRO}</p>
       <ul className={styles.divList}>
         <li>{ESCALA_ESTABLES}</li>
+        <li>{ESCALA_INTERMEDIAS}</li>
         <li>{ESCALA_TENSAS}</li>
       </ul>
 
