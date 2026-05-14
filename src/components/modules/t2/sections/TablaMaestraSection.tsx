@@ -84,10 +84,14 @@ export default function TablaMaestraSection() {
         ))}
       </div>
 
-      {/* Observations */}
-      <RuleNote>{OBSERVACION_TONICAS_NATURALES}</RuleNote>
-      <RuleNote>{OBSERVACION_TONICAS_BEMOL}</RuleNote>
-      <RuleNote>{OBSERVACION_UTILIDAD}</RuleNote>
+      {/* Observations — unified callout */}
+      <RuleNote>
+        <ul className={styles.observacionList}>
+          <li>{OBSERVACION_TONICAS_NATURALES}</li>
+          <li>{OBSERVACION_TONICAS_BEMOL}</li>
+          <li>{OBSERVACION_UTILIDAD}</li>
+        </ul>
+      </RuleNote>
     </section>
   );
 }

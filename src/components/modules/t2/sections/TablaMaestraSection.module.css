@@ -6,9 +6,10 @@
 
 .intro {
   font-size: 13px;
-  line-height: 1.8;
+  line-height: 1.7;
   color: var(--text-body);
   margin-bottom: 24px;
+  max-width: 65ch;
 }
 
 .subheading {
@@ -91,6 +92,15 @@
   padding: 20px 24px;
   border-bottom: 1px solid var(--rule);
   background: rgba(245,240,232,0.015);
+}
+
+.observacionList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 @media (max-width: 900px) {

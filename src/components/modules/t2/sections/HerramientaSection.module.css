@@ -6,9 +6,10 @@
 
 .text {
   font-size: 13px;
-  line-height: 1.8;
+  line-height: 1.7;
   color: var(--text-body);
   margin-bottom: 16px;
+  max-width: 65ch;
 }
 
 .toolBox {
@@ -64,7 +65,7 @@
 
 .cards {
   display: flex;
-  gap: 16px;
+  gap: 1.2rem;
   margin: 24px 0;
 }
 
