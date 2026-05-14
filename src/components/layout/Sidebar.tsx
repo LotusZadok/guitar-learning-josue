@@ -1,6 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useUIStore } from '../../stores/useUIStore';
+import { setMasterVolume } from '../../hooks/useAudioEngine';
 import ThemeToggle from './ThemeToggle';
 import MuteToggle from './MuteToggle';
 import TonicSelector from './TonicSelector';
@@ -15,7 +16,13 @@ export default function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
-  const { sidebarOpen, setSidebarOpen } = useUIStore();
+  const { sidebarOpen, setSidebarOpen, volume, setVolume } = useUIStore();
+
+  const handleVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const v = Number(e.target.value);
+    setVolume(v);
+    setMasterVolume(v);
+  };
 
   const handleNav = (path: string) => {
     navigate(path);
@@ -55,6 +62,19 @@ export default function Sidebar() {
         <div className={styles.themeArea}>
           <ThemeToggle />
           <MuteToggle />
+          <div className={styles.volumeWrap}>
+            <span className={styles.volumeLabel}>VOLUMEN</span>
+            <input
+              type="range"
+              className={styles.volumeSlider}
+              min={0.05}
+              max={1}
+              step={0.05}
+              value={volume}
+              onChange={handleVolume}
+              aria-label="Volumen de audio"
+            />
+          </div>
           <TonicSelector />
         </div>
       </nav>

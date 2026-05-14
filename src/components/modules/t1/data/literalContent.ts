@@ -65,7 +65,7 @@ export const INTERVALOS_GRADOS_HEAD = ['Nombre', 'T', '2', '3', '4', '5', '6', '
 export const INTERVALOS_GRADOS_ROW = ['Ejemplo', 'G', 'A', 'B', 'C', 'D', 'E', 'F', 'G'] as const;
 
 export const INTERVALOS_CALIDAD =
-  "Los intervalos tienen además calidad: menores (m), mayores (M), justos (J), aumentados (a), disminuidos (d). Combinando número y calidad se obtienen 13 intervalos dentro de una octava.";
+  "Los intervalos tienen además calidad: menores (m), mayores (M), justos (J), aumentados (a), disminuidos (d). Combinando número y calidad se obtienen 12 intervalos dentro de una octava.";
 
 export const INTERVALOS_13_HEAD = [
   'Nombre', 'T', '2m', '2M', '3m', '3M', '4J', '4a/5d', '5J', '6m', '6M', '7m', '7M', '8J',

@@ -11,9 +11,10 @@ interface Props {
   cy: number;
   r: number;
   onHover: (note: NaturalNote | null) => void;
+  onPlay?: () => void;
 }
 
-export default function TriadNode({ note, index, cx, cy, r, onHover }: Props) {
+export default function TriadNode({ note, index, cx, cy, r, onHover, onPlay }: Props) {
   const [hovered, setHovered] = useState(false);
   const { playNote } = useAudioEngine();
 
@@ -25,8 +26,9 @@ export default function TriadNode({ note, index, cx, cy, r, onHover }: Props) {
   const handleEnter = useCallback(() => {
     setHovered(true);
     onHover(note);
-    playNote(note, 4, 2);
-  }, [note, onHover, playNote]);
+    if (onPlay) onPlay();
+    else playNote(note, 4, 2);
+  }, [note, onHover, onPlay, playNote]);
 
   const handleLeave = useCallback(() => {
     setHovered(false);
@@ -36,9 +38,10 @@ export default function TriadNode({ note, index, cx, cy, r, onHover }: Props) {
   const handleKeyDown = useCallback((e: KeyboardEvent<SVGGElement>) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      playNote(note, 4, 2);
+      if (onPlay) onPlay();
+      else playNote(note, 4, 2);
     }
-  }, [note, playNote]);
+  }, [note, onPlay, playNote]);
 
   return (
     <g

@@ -1,7 +1,7 @@
 import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
 import Prose from '../../../shared/Prose/Prose';
-import ReglaQuinta from '../../../primitives/ReglaQuinta/ReglaQuinta';
+import CirculoDeQuintas from '../../../primitives/CirculoDeQuintas/CirculoDeQuintas';
 import {
   REGLA_INTRO,
   REGLA_BULLETS,
@@ -40,7 +40,7 @@ export default function ReglaQuintaSection() {
 
       <h3 className={styles.subheading}>{REGLA_PRIMITIVA_TITULO}</h3>
       <p className={styles.text}><Prose segment={REGLA_PRIMITIVA_INSTRUCCION} /></p>
-      <ReglaQuinta />
+      <CirculoDeQuintas />
 
       <p className={styles.footnote}><Prose segment={REGLA_NOTA_BEMOLES} /></p>
 

@@ -1,0 +1,88 @@
+.wrap {
+  margin: 16px 0;
+}
+
+.svg {
+  max-width: 400px;
+  width: 100%;
+  display: block;
+  margin: 0 auto;
+}
+
+.node {
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.node:hover,
+.node:focus-visible {
+  transform: scale(1.12);
+  outline: none;
+}
+
+.node > circle {
+  transition: r 0.15s, opacity 0.2s;
+}
+
+.noteText {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 14px;
+  fill: #fff;
+  font-weight: 700;
+  pointer-events: none;
+  letter-spacing: 0.5px;
+}
+
+.exceptionDot {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  fill: var(--amber);
+  pointer-events: none;
+}
+
+.centerNote {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  fill: var(--paper);
+}
+
+.centerArrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  fill: var(--muted);
+}
+
+.centerLabel {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  letter-spacing: 2px;
+  fill: var(--muted);
+}
+
+.centerSub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  fill: var(--muted);
+  opacity: 0.5;
+}
+
+.footnote {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-top: 8px;
+  text-align: center;
+}
+
+.footnote strong {
+  color: var(--amber);
+}
+
+@media (max-width: 600px) {
+  .svg {
+    max-width: 320px;
+  }
+}

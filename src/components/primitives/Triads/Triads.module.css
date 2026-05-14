@@ -167,3 +167,44 @@
   align-self: center;
 }
 
+/* === Play mode toggle === */
+
+.playToggleRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.toggleLabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.playToggle {
+  padding: 5px 12px;
+  border: 1px solid var(--rule);
+  background: none;
+  color: var(--muted);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.playToggle:hover {
+  border-color: var(--amber);
+  color: var(--paper);
+}
+
+.playToggleActive {
+  composes: playToggle;
+  border-color: var(--red);
+  color: var(--paper);
+  background: rgba(192, 57, 43, 0.08);
+}
+

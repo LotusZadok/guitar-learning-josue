@@ -6,7 +6,7 @@ import { ROLE_LABELS } from '../../../data/triads';
 import type { NaturalNote } from '../../../types/music';
 import styles from './Triads.module.css';
 
-const CYCLES = 3;
+const CYCLES = 1;
 
 export default function MasterTriad() {
   const [root, setRoot] = useState<NaturalNote>('A');

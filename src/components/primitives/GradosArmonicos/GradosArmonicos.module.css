@@ -144,6 +144,20 @@
   color: var(--text-body);
 }
 
+/* === Tríada comprimida (step 3) === */
+
+.triadaCell {
+  vertical-align: middle;
+  padding: 8px 6px;
+}
+
+.triadStack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
 /* === Chord cell (interactive en estado 3) === */
 
 .chordCell {

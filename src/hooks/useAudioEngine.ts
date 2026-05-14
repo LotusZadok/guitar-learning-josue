@@ -3,10 +3,22 @@ import { NOTE_FREQS } from '../data/notes';
 import { useUIStore } from '../stores/useUIStore';
 
 let audioCtx: AudioContext | null = null;
+let masterVolumeNode: GainNode | null = null;
+
 const getCtx = (): AudioContext => {
-  if (!audioCtx) audioCtx = new AudioContext();
+  if (!audioCtx) {
+    audioCtx = new AudioContext();
+    masterVolumeNode = audioCtx.createGain();
+    masterVolumeNode.gain.value = useUIStore.getState().volume;
+    masterVolumeNode.connect(audioCtx.destination);
+  }
   audioCtx.resume();
   return audioCtx;
+};
+
+// Update master volume in real time. Called from Sidebar volume slider.
+export const setMasterVolume = (v: number) => {
+  if (masterVolumeNode) masterVolumeNode.gain.value = v;
 };
 
 export const useAudioEngine = () => {
@@ -26,7 +38,7 @@ export const useAudioEngine = () => {
 
     const now = ctx.currentTime;
     const masterGain = ctx.createGain();
-    masterGain.connect(ctx.destination);
+    masterGain.connect(masterVolumeNode ?? ctx.destination);
 
     masterGain.gain.setValueAtTime(0, now);
     masterGain.gain.linearRampToValueAtTime(0.20, now + 0.006);
@@ -88,7 +100,7 @@ export const useAudioEngine = () => {
     gain.gain.setValueAtTime(0.18, time);
     gain.gain.exponentialRampToValueAtTime(0.001, time + 0.08);
     osc.connect(gain);
-    gain.connect(ctx.destination);
+    gain.connect(masterVolumeNode ?? ctx.destination);
     osc.start(time);
     osc.stop(time + 0.12);
   }, []);

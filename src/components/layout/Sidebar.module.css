@@ -82,6 +82,27 @@
   display: none;
 }
 
+.volumeWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.volumeLabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  user-select: none;
+}
+
+.volumeSlider {
+  width: 100%;
+  accent-color: var(--red);
+  cursor: pointer;
+}
+
 @media (max-width: 900px) {
   .sidebar {
     position: fixed;

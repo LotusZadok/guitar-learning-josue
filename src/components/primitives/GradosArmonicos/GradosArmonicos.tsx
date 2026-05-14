@@ -143,9 +143,19 @@ export default function GradosArmonicos({ tonalidad }: Props) {
         <table className={styles.table}>
           <tbody>
             <Row label="Escala" cells={escalaRow} ascii={escalaAscii} />
-            <Row label="Tónica" cells={tonicaRow} ascii={tonicaAscii} />
-            <Row label="Tercera" cells={terceraRow} ascii={terceraAscii} />
-            <Row label="Quinta" cells={quintaRow} ascii={quintaAscii} />
+            {step < 3 ? (
+              <>
+                <Row label="Tónica" cells={tonicaRow} ascii={tonicaAscii} />
+                <Row label="Tercera" cells={terceraRow} ascii={terceraAscii} />
+                <Row label="Quinta" cells={quintaRow} ascii={quintaAscii} />
+              </>
+            ) : (
+              <TriadaRow
+                tonicaRow={tonicaRow} tonicaAscii={tonicaAscii}
+                terceraRow={terceraRow} terceraAscii={terceraAscii}
+                quintaRow={quintaRow} quintaAscii={quintaAscii}
+              />
+            )}
 
             <tr className={`${styles.revealRow} ${step >= 3 ? styles.revealOn : ''}`}>
               <th scope="row" className={styles.rowLabel}>Grado</th>
@@ -215,6 +225,43 @@ function RomanGlyph({ roman }: { roman: typeof ROMANS[number] }) {
   const isMajor = roman === roman.toUpperCase();
   return (
     <span className={isMajor ? styles.romanMajor : styles.romanMinor}>{roman}</span>
+  );
+}
+
+interface TriadaRowProps {
+  tonicaRow: string[];
+  tonicaAscii: string[];
+  terceraRow: string[];
+  terceraAscii: string[];
+  quintaRow: string[];
+  quintaAscii: string[];
+}
+
+function TriadaRow({ tonicaRow, tonicaAscii, terceraRow, terceraAscii, quintaRow, quintaAscii }: TriadaRowProps) {
+  return (
+    <tr>
+      <th scope="row" className={styles.rowLabel}>Tríada</th>
+      {tonicaRow.map((_, i) => {
+        const members = [
+          { display: tonicaRow[i], ascii: tonicaAscii[i] },
+          { display: terceraRow[i], ascii: terceraAscii[i] },
+          { display: quintaRow[i], ascii: quintaAscii[i] },
+        ];
+        return (
+          <td key={i} className={styles.triadaCell}>
+            <div className={styles.triadStack}>
+              {members.map((m, j) =>
+                VALID_SPELLINGS.has(m.ascii) ? (
+                  <NoteToken key={j} note={m.ascii as NoteSpelling} />
+                ) : (
+                  <span key={j} className={styles.rawNote}>{m.display}</span>
+                )
+              )}
+            </div>
+          </td>
+        );
+      })}
+    </tr>
   );
 }
 

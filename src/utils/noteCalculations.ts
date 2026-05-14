@@ -55,7 +55,7 @@ function spelledFromLetterAndSemi(letter: string, targetSemi: number): string {
   let acc = '';
   if (diff === 1) acc = '♯';
   else if (diff === -1) acc = '♭';
-  else if (diff === 2) acc = '♯♯';
+  else if (diff === 2) acc = 'x';
   else if (diff === -2) acc = '♭♭';
 
   return letter + acc;

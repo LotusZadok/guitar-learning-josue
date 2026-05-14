@@ -1,10 +1,15 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import TriadNode from './TriadNode';
 import MasterTriad from './MasterTriad';
 import { NATURALS, NOTE_COLORS, NOTE_ES } from '../../../data/notes';
 import { TRIADS } from '../../../data/triads';
+import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import type { NaturalNote } from '../../../types/music';
 import styles from './Triads.module.css';
+
+const ARPEGGIO_GAP_MS = 200;
+const PLAY_DURATION = 2.0;
+type PlayMode = 'arpegio' | 'bloque';
 
 const CX = 175, CY = 175, R = 110;
 const LABELS = ['Tónica', 'Tercera', 'Quinta'];
@@ -12,6 +17,8 @@ const LABELS = ['Tónica', 'Tercera', 'Quinta'];
 export default function TriadsSection() {
   const [activeTriad, setActiveTriad] = useState<NaturalNote | null>(null);
   const [triadLines, setTriadLines] = useState<{ x1: number; y1: number; x2: number; y2: number; color: string }[]>([]);
+  const [playMode, setPlayMode] = useState<PlayMode>('arpegio');
+  const { playNote } = useAudioEngine();
 
   const handleHover = (note: NaturalNote | null) => {
     setActiveTriad(note);
@@ -32,11 +39,36 @@ export default function TriadsSection() {
     setTriadLines(lines);
   };
 
+  const makePlayTriad = useCallback(
+    (note: NaturalNote) => () => {
+      const { notes } = TRIADS[note];
+      if (playMode === 'bloque') {
+        notes.forEach((n) => playNote(n, 4, PLAY_DURATION));
+      } else {
+        notes.forEach((n, i) => setTimeout(() => playNote(n, 4, PLAY_DURATION), i * ARPEGGIO_GAP_MS));
+      }
+    },
+    [playMode, playNote],
+  );
+
   const displayNote = activeTriad ?? NATURALS[0];
   const triad = TRIADS[displayNote];
 
   return (
     <div className={styles.wrap}>
+      <div className={styles.playToggleRow}>
+        <span className={styles.toggleLabel}>Reproducción:</span>
+        {(['arpegio', 'bloque'] as PlayMode[]).map((m) => (
+          <button
+            key={m}
+            className={playMode === m ? styles.playToggleActive : styles.playToggle}
+            onClick={() => setPlayMode(m)}
+            aria-pressed={playMode === m}
+          >
+            {m.charAt(0).toUpperCase() + m.slice(1)}
+          </button>
+        ))}
+      </div>
       <div className={styles.circleWrap}>
         <svg className={styles.svg} viewBox="0 0 350 350">
           {['Notas', 'Naturales'].map((t, i) => (
@@ -50,7 +82,7 @@ export default function TriadsSection() {
           ))}
           {NATURALS.map((note, i) => (
             <TriadNode key={note} note={note} index={i} cx={CX} cy={CY} r={R}
-              onHover={handleHover} />
+              onHover={handleHover} onPlay={makePlayTriad(note)} />
           ))}
         </svg>
         <div

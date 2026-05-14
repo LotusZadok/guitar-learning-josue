@@ -7,6 +7,7 @@ interface UIState {
   sidebarOpen: boolean;
   activeSection: string;
   audioMuted: boolean;
+  volume: number;
   tonic: ChromaticNote;
 
   setTheme: (theme: ThemeMode) => void;
@@ -15,6 +16,7 @@ interface UIState {
   setActiveSection: (section: string) => void;
   toggleAudioMute: () => void;
   setAudioMuted: (muted: boolean) => void;
+  setVolume: (v: number) => void;
   setTonic: (t: ChromaticNote) => void;
 }
 
@@ -25,6 +27,7 @@ export const useUIStore = create<UIState>()(
       sidebarOpen: false,
       activeSection: 'cuerdas',
       audioMuted: true,
+      volume: 0.8,
       tonic: 'C',
 
       setTheme: (theme) => set({ theme }),
@@ -33,6 +36,7 @@ export const useUIStore = create<UIState>()(
       setActiveSection: (section) => set({ activeSection: section }),
       toggleAudioMute: () => set((s) => ({ audioMuted: !s.audioMuted })),
       setAudioMuted: (muted) => set({ audioMuted: muted }),
+      setVolume: (v) => set({ volume: v }),
       setTonic: (t) => set({ tonic: t }),
     }),
     { name: 'apuntes-ui', partialize: (state) => ({ theme: state.theme }) }
