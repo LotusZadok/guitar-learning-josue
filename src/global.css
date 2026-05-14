@@ -40,6 +40,12 @@
   --note-a-sharp:  #7d3c98;
   --note-b:        #1abc9c;
 
+  /* Sub-sistema diatónico — roles de grado en componentes de tonalidad activa.
+     Complementario a --note-X; los dos subsistemas no se mezclan (ver DESIGN.md §2). */
+  --diatonic-stable: #28c692;   /* verde esmeralda */
+  --diatonic-medium: #f5900a;   /* naranja ámbar    */
+  --diatonic-tense:  var(--red); /* alias del acento de marca */
+
   --fret-bg: #110e06;
   --fret-wire: #3a2e18;
   --fret-nut: #e0d0a0;
@@ -78,6 +84,8 @@
   --note-a:        #8e44ad; /* 5.17:1 — original passes, kept */
   --note-a-sharp:  #7d3c98; /* 6.23:1 — original passes, kept */
   --note-b:        #0e7560; /* 4.96:1 — deep teal */
+  --diatonic-stable: #167040;  /* verde oscuro bosque    */
+  --diatonic-medium: #8c4800;  /* naranja quemado oscuro */
 }
 
 html { scroll-behavior: smooth; }

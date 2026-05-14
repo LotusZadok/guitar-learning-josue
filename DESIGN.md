@@ -213,6 +213,12 @@ Hues light-theme (ratios sobre cream entre paréntesis):
 
 **Corolario (Tokens vinculados a notas).** Los CSS vars `--string1..6` y `--caged-C/A/G/E/D` **son** hues cromáticos disfrazados (cada cuerda al aire ES una nota; cada forma CAGED ES una nota raíz). No pueden reusarse como acentos genéricos. Si un componente no-nota usa `var(--string6)`, viola la cuarentena igual que si usara `#8e44ad` directo.
 
+**Sub-sistema diatónico (complementario, no sustituto).** Tres tokens `--diatonic-stable`, `--diatonic-medium`, `--diatonic-tense` codifican el rol de un grado dentro de una tonalidad activa. Solo se aplican en componentes que viven explícitamente dentro de una tonalidad: `EscalaMayor`, `TensionResolucion`, y futuros componentes tonales. Los componentes cromáticos (ChromaticCircle, círculo de quintas, NoteToken en prosa, mástil) preservan los 12 hues absolutos sin excepción. `GradosArmonicos` usa discriminación tipográfica y queda fuera de ambos subsistemas de color.
+
+Los dos sub-sistemas son **mutuamente excluyentes por componente**: un componente usa uno o el otro, nunca los dos en el mismo elemento visual. `--diatonic-tense` es un alias de `var(--red)` — intencional y documentado aquí para que un agente futuro no lo "corrija". La identidad rojo-marca y la función tensa son el mismo concepto semántico en este sistema.
+
+La **Note-Color Quarantine Rule se extiende** en ambas direcciones: (a) los 12 hues de nota no decoran UI que no represente una nota — regla preexistente; (b) los 3 tokens diatónicos no decoran UI que no sea un grado dentro de una tonalidad activa — extensión del Bloque E.
+
 **The No Pure Black/White Rule.** `#000` y `#fff` están prohibidos como fondos o textos. Todos los neutros están tintados hacia el cálido del cuaderno (`#0e0e0e`, `#f5f0e8`). **Excepción única, narrowly defined:** la letra de nota dentro del Signature Component (texto Bebas blanco sobre el fill saturado del nodo cromático en `ChromaticNode`, `TriadNode`, `chainCircle`, `dot` del fretboard). Bordes decorativos, anillos de selección, indicadores de raíz, separadores y stroke de hover **no** califican — usan `var(--paper)`.
 
 ## 3. Typography
