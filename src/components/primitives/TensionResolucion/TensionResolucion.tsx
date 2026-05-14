@@ -136,11 +136,11 @@ export default function TensionResolucion() {
       <ul className={styles.legend} aria-label="Convenciones del mapa">
         <li>
           <span className={`${styles.swatch} ${styles.swatchStraight}`} />
-          1 s.t. — resolución directa
+          1 s.t.: resolución directa
         </li>
         <li>
           <span className={`${styles.swatch} ${styles.swatchCurve}`} />
-          2 s.t. — salto
+          2 s.t.: salto
         </li>
       </ul>
     </div>
