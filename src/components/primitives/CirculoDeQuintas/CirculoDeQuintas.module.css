@@ -27,7 +27,7 @@
 .noteText {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 14px;
-  fill: #fff;
+  fill: #fff; /* Signature: glifo blanco sobre círculo de nota saturada, no tokenizar */
   font-weight: 700;
   pointer-events: none;
   letter-spacing: 0.5px;

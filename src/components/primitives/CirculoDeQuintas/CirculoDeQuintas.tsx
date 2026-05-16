@@ -179,7 +179,7 @@ export default function CirculoDeQuintas() {
       </svg>
 
       <p className={styles.footnote}>
-        * La quinta de <strong>B</strong> es <strong>F♯</strong> (no F natural) — excepción documentada en §1.8.
+        * La quinta de <strong>B</strong> es <strong>F♯</strong> (no F natural): excepción documentada en §1.8.
       </p>
     </div>
   );
