@@ -10,11 +10,12 @@ interface Props {
   tonalidad: ChromaticNote;
 }
 
-type Step = 1 | 2 | 3;
+type Step = 1 | 2 | 3 | 4;
 
 const NATURAL_LETTERS = ['C', 'D', 'E', 'F', 'G', 'A', 'B'] as const;
 const MAJOR_INTERVALS = [0, 2, 4, 5, 7, 9, 11] as const;
 const QUALITIES = ['M', 'm', 'm', 'M', 'M', 'm', 'dim'] as const;
+const SEVENTH_QUALITIES = ['maj7', 'm7', 'm7', 'maj7', '7', 'm7', 'm7b5'] as const;
 const ROMANS = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'] as const;
 
 // 17 spellings cubiertos por NoteToken (12 sostenidos + 5 enarmonías bemol).
@@ -84,8 +85,14 @@ export default function GradosArmonicos({ tonalidad }: Props) {
       playNote(root.chromatic, rootOct, NOTE_DURATION);
       setTimeout(() => playNote(third.chromatic, thirdOct, NOTE_DURATION), ARPEGGIO_GAP_MS);
       setTimeout(() => playNote(fifth.chromatic, fifthOct, NOTE_DURATION), ARPEGGIO_GAP_MS * 2);
+
+      if (step >= 4) {
+        const seventh = diatonic[(gradeIdx + 6) % 7];
+        const seventhOct = chordMemberOctave(diatonic, gradeIdx, 6);
+        setTimeout(() => playNote(seventh.chromatic, seventhOct, NOTE_DURATION), ARPEGGIO_GAP_MS * 3);
+      }
     },
-    [diatonic, playNote],
+    [diatonic, playNote, step],
   );
 
   // Filas Tónica/Tercera/Quinta dependen del estado: state 1 = letras naturales,
@@ -113,9 +120,16 @@ export default function GradosArmonicos({ tonalidad }: Props) {
     step === 1
       ? Array.from({ length: 7 }, (_, i) => naturals[(i + 4) % 7])
       : Array.from({ length: 7 }, (_, i) => diatonic[(i + 4) % 7].ascii);
+  const septRow = step === 1
+    ? Array.from({ length: 7 }, (_, i) => naturals[(i + 6) % 7])
+    : Array.from({ length: 7 }, (_, i) => diatonic[(i + 6) % 7].spelled);
+  const septAscii = step === 1
+    ? Array.from({ length: 7 }, (_, i) => naturals[(i + 6) % 7])
+    : Array.from({ length: 7 }, (_, i) => diatonic[(i + 6) % 7].ascii);
   const escalaAscii = diatonic.map((d) => d.ascii);
 
   const chordSymbols = diatonic.map((d, i) => {
+    if (step >= 4) return d.spelled + SEVENTH_QUALITIES[i];
     const q = QUALITIES[i];
     if (q === 'M') return d.spelled;
     if (q === 'm') return d.spelled + 'm';
@@ -125,16 +139,16 @@ export default function GradosArmonicos({ tonalidad }: Props) {
   return (
     <div className={styles.wrap}>
       <div className={styles.stepperRow} role="tablist" aria-label="Paso del procedimiento">
-        {[1, 2, 3].map((s) => (
+        {([1, 2, 3, 4] as Step[]).map((s) => (
           <button
             key={s}
             role="tab"
             aria-selected={step === s}
             className={step === s ? styles.stepActive : styles.step}
-            onClick={() => setStep(s as Step)}
+            onClick={() => setStep(s)}
           >
             <span className={styles.stepNum}>0{s}</span>
-            <span className={styles.stepLabel}>{stepLabel(s as Step)}</span>
+            <span className={styles.stepLabel}>{stepLabel(s)}</span>
           </button>
         ))}
       </div>
@@ -154,6 +168,8 @@ export default function GradosArmonicos({ tonalidad }: Props) {
                 tonicaRow={tonicaRow} tonicaAscii={tonicaAscii}
                 terceraRow={terceraRow} terceraAscii={terceraAscii}
                 quintaRow={quintaRow} quintaAscii={quintaAscii}
+                septRow={step >= 4 ? septRow : undefined}
+                septAscii={step >= 4 ? septAscii : undefined}
               />
             )}
 
@@ -187,7 +203,8 @@ export default function GradosArmonicos({ tonalidad }: Props) {
 function stepLabel(s: Step): string {
   if (s === 1) return 'Letras solas';
   if (s === 2) return 'Con armadura';
-  return 'Calidades';
+  if (s === 3) return 'Calidades';
+  return 'Séptimas';
 }
 
 interface RowProps {
@@ -235,18 +252,24 @@ interface TriadaRowProps {
   terceraAscii: string[];
   quintaRow: string[];
   quintaAscii: string[];
+  septRow?: string[];
+  septAscii?: string[];
 }
 
-function TriadaRow({ tonicaRow, tonicaAscii, terceraRow, terceraAscii, quintaRow, quintaAscii }: TriadaRowProps) {
+function TriadaRow({ tonicaRow, tonicaAscii, terceraRow, terceraAscii, quintaRow, quintaAscii, septRow, septAscii }: TriadaRowProps) {
+  const withSept = septRow !== undefined && septAscii !== undefined;
   return (
     <tr>
-      <th scope="row" className={styles.rowLabel}>Tríada</th>
+      <th scope="row" className={styles.rowLabel}>{withSept ? 'Acorde' : 'Tríada'}</th>
       {tonicaRow.map((_, i) => {
-        const members = [
+        const members: { display: string; ascii: string }[] = [
           { display: tonicaRow[i], ascii: tonicaAscii[i] },
           { display: terceraRow[i], ascii: terceraAscii[i] },
           { display: quintaRow[i], ascii: quintaAscii[i] },
         ];
+        if (withSept) {
+          members.push({ display: septRow[i], ascii: septAscii![i] });
+        }
         return (
           <td key={i} className={styles.triadaCell}>
             <div className={styles.triadStack}>
