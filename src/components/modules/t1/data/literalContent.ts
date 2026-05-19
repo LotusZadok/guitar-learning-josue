@@ -515,3 +515,323 @@ export const REGLA_NOTA_BEMOLES: ProseSegment = [
   { type: 'note', value: 'F' },
   { type: 'text', value: ').' },
 ];
+
+// ============================================================
+// Variantes _DE — contenido en alemán para bifurcación i18n
+// Las constantes españolas existentes NO se renombran ni modifican.
+// ============================================================
+
+export const CC_NO_ALTERADA_DE: ProseSegment = [
+  { type: 'text', value: 'Wichtig: zwischen ' },
+  { type: 'note', value: 'B' },
+  { type: 'text', value: '–' },
+  { type: 'note', value: 'C' },
+  { type: 'text', value: ' und zwischen ' },
+  { type: 'note', value: 'E' },
+  { type: 'text', value: '–' },
+  { type: 'note', value: 'F' },
+  { type: 'text', value: ' gibt es keinen alterierten Ton (B# und E# existieren als Alterierungen im chromatischen Kreis in diesem Kontext nicht — sie entsprechen denselben Tönen wie ' },
+  { type: 'note', value: 'C' },
+  { type: 'text', value: ' bzw. ' },
+  { type: 'note', value: 'F' },
+  { type: 'text', value: ').' },
+];
+
+export const INTERVALOS_PROCEDIMIENTO_TITULO_DE: ProseSegment = [
+  { type: 'text', value: 'Verfahren zum Finden der Intervalle ausgehend von der Tonika ' },
+  { type: 'note', value: 'G' },
+];
+
+export const INTERVALOS_PROCEDIMIENTO_PASOS_DE: readonly (string | ProseSegment)[] = [
+  [
+    { type: 'text', value: 'Die Buchstaben nach der Intervallnummer aufschreiben (Alterierungen ignorieren): ' },
+    { type: 'note', value: 'G' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'A' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'A' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'B' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'B' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'C' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'C' }, { type: 'text', value: '-' },
+    { type: 'note', value: 'D' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'D' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'E' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'E' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'F' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'F' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'G' }, { type: 'text', value: '.' },
+  ],
+  [
+    { type: 'text', value: 'Den chromatischen Kreis ab der Tonika aufschreiben: ' },
+    { type: 'note', value: 'G' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'G#' }, { type: 'text', value: '/' }, { type: 'note', value: 'Ab' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'A' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'A#' }, { type: 'text', value: '/' }, { type: 'note', value: 'Bb' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'B' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'C' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'C#' }, { type: 'text', value: '/' }, { type: 'note', value: 'Db' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'D' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'D#' }, { type: 'text', value: '/' }, { type: 'note', value: 'Eb' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'E' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'F' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'F#' }, { type: 'text', value: '/' }, { type: 'note', value: 'Gb' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'G' }, { type: 'text', value: '.' },
+  ],
+  [
+    { type: 'text', value: 'Wenn zwei alterierte Töne vorhanden sind, nach dem Buchstaben aus Schritt 1 wählen. Steht in Schritt 1 "' },
+    { type: 'note', value: 'B' },
+    { type: 'text', value: '", wählt man ' },
+    { type: 'note', value: 'Bb' },
+    { type: 'text', value: ' statt ' },
+    { type: 'note', value: 'A#' },
+    { type: 'text', value: '.' },
+  ],
+  'Die Tonleiter mit den richtigen Intervallen aktualisieren.',
+];
+
+export const INTERVALOS_RESULTADO_G_DE: ProseSegment = [
+  { type: 'text', value: 'Ergebnis für ' },
+  { type: 'note', value: 'G' },
+  { type: 'text', value: ': ' },
+  { type: 'note', value: 'G' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'Ab' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'A' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'Bb' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'B' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'C' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'C#' }, { type: 'text', value: '/' }, { type: 'note', value: 'Db' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'D' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'Eb' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'E' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'F' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'F#' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'G' }, { type: 'text', value: '.' },
+];
+
+export const INTERVALOS_OCTAVA_DE: ProseSegment = [
+  { type: 'text', value: 'Die reine Oktave (8r) ist derselbe Ton eine Oktave höher oder tiefer. Die 8r von ' },
+  { type: 'note', value: 'G' },
+  { type: 'text', value: ' ist ' },
+  { type: 'note', value: 'G' },
+  { type: 'text', value: '.' },
+];
+
+export const TENSION_REGLAS_DE: readonly { titulo: string; cuerpo: ProseSegment }[] = [
+  {
+    titulo: '2. Stufe',
+    cuerpo: [
+      { type: 'text', value: 'löst zur Tonika oder zur 3. Stufe auf. In ' },
+      { type: 'note', value: 'C' },
+      { type: 'text', value: ' Dur: ' },
+      { type: 'note', value: 'D' },
+      { type: 'text', value: ' → ' },
+      { type: 'note', value: 'C' },
+      { type: 'text', value: ' oder ' },
+      { type: 'note', value: 'D' },
+      { type: 'text', value: ' → ' },
+      { type: 'note', value: 'E' },
+      { type: 'text', value: '.' },
+    ],
+  },
+  {
+    titulo: '4. Stufe',
+    cuerpo: [
+      { type: 'text', value: 'löst zur 3. oder zur 5. Stufe auf. Stärkere Spannung zur 3. Stufe, weil sie nur 1 Halbton entfernt ist. Die 4. Stufe heißt auch „modaler Leitton". In ' },
+      { type: 'note', value: 'C' },
+      { type: 'text', value: ' Dur: ' },
+      { type: 'note', value: 'F' },
+      { type: 'text', value: ' → ' },
+      { type: 'note', value: 'E' },
+      { type: 'text', value: ' oder ' },
+      { type: 'note', value: 'F' },
+      { type: 'text', value: ' → ' },
+      { type: 'note', value: 'G' },
+      { type: 'text', value: '.' },
+    ],
+  },
+  {
+    titulo: '6. Stufe',
+    cuerpo: [
+      { type: 'text', value: 'löst zur 5. Stufe auf. In ' },
+      { type: 'note', value: 'C' },
+      { type: 'text', value: ' Dur: ' },
+      { type: 'note', value: 'A' },
+      { type: 'text', value: ' → ' },
+      { type: 'note', value: 'G' },
+      { type: 'text', value: '.' },
+    ],
+  },
+  {
+    titulo: '7. Stufe',
+    cuerpo: [
+      { type: 'text', value: 'löst zur Tonika auf. Das ist die wichtigste Auflösung der Tonalmusik — nur 1 Halbton entfernt, daher die stärkste Spannung. Die 7. Stufe heißt „Leitton". In ' },
+      { type: 'note', value: 'C' },
+      { type: 'text', value: ' Dur: ' },
+      { type: 'note', value: 'B' },
+      { type: 'text', value: ' → ' },
+      { type: 'note', value: 'C' },
+      { type: 'text', value: '.' },
+    ],
+  },
+];
+
+export const TRIADAS_EJEMPLO_DE: ProseSegment = [
+  { type: 'text', value: 'Beispiel: ' },
+  { type: 'note', value: 'F' },
+  { type: 'text', value: ' → ' },
+  { type: 'note', value: 'G' },
+  { type: 'text', value: ' auslassen → ' },
+  { type: 'note', value: 'A' },
+  { type: 'text', value: ' → ' },
+  { type: 'note', value: 'B' },
+  { type: 'text', value: ' auslassen → ' },
+  { type: 'note', value: 'C' },
+  { type: 'text', value: '. Der Dreiklang von ' },
+  { type: 'note', value: 'F' },
+  { type: 'text', value: ' ist ' },
+  { type: 'note', value: 'F' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'A' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'C' }, { type: 'text', value: '.' },
+];
+
+export const ACORDES_EJEMPLO_TITULO_DE: ProseSegment = [
+  { type: 'text', value: 'Beispiel ' },
+  { type: 'note', value: 'A' },
+  { type: 'text', value: ' Dur' },
+];
+
+export const ACORDES_EJEMPLO_PASOS_DE: readonly ProseSegment[] = [
+  [
+    { type: 'text', value: 'Buchstaben der Trias: ' },
+    { type: 'note', value: 'A' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'C' }, { type: 'text', value: ' ' },
+    { type: 'note', value: 'E' }, { type: 'text', value: '.' },
+  ],
+  [
+    { type: 'text', value: 'Halbtöne bis zur gr. Terz: ' },
+    { type: 'note', value: 'A' },
+    { type: 'text', value: ' → ' },
+    { type: 'note', value: 'A#' }, { type: 'text', value: '/' }, { type: 'note', value: 'Bb' },
+    { type: 'text', value: ' (1) → ' },
+    { type: 'note', value: 'B' },
+    { type: 'text', value: ' (2) → ' },
+    { type: 'note', value: 'C' },
+    { type: 'text', value: ' (3) → ' },
+    { type: 'note', value: 'C#' }, { type: 'text', value: '/' }, { type: 'note', value: 'Db' },
+    { type: 'text', value: ' (4). Nach der Regel aus Schritt 1 ist der Buchstabe ' },
+    { type: 'note', value: 'C' },
+    { type: 'text', value: ', also ist es ' },
+    { type: 'note', value: 'C#' },
+    { type: 'text', value: ' (nicht ' },
+    { type: 'note', value: 'Db' },
+    { type: 'text', value: ').' },
+  ],
+  [
+    { type: 'text', value: 'Halbtöne bis zur r. Quinte: ' },
+    { type: 'note', value: 'A' },
+    { type: 'text', value: ' → ' },
+    { type: 'note', value: 'A#' }, { type: 'text', value: '/' }, { type: 'note', value: 'Bb' },
+    { type: 'text', value: ' (1) → ' },
+    { type: 'note', value: 'B' },
+    { type: 'text', value: ' (2) → ' },
+    { type: 'note', value: 'C' },
+    { type: 'text', value: ' (3) → ' },
+    { type: 'note', value: 'C#' }, { type: 'text', value: '/' }, { type: 'note', value: 'Db' },
+    { type: 'text', value: ' (4) → ' },
+    { type: 'note', value: 'D' },
+    { type: 'text', value: ' (5) → ' },
+    { type: 'note', value: 'D#' }, { type: 'text', value: '/' }, { type: 'note', value: 'Eb' },
+    { type: 'text', value: ' (6) → ' },
+    { type: 'note', value: 'E' },
+    { type: 'text', value: ' (7).' },
+  ],
+];
+
+export const ACORDES_RESULTADO_MAYOR_DE: ProseSegment = [
+  { type: 'note', value: 'A' },
+  { type: 'text', value: ' Dur = ' },
+  { type: 'note', value: 'A' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'C#' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'E' }, { type: 'text', value: '.' },
+];
+
+export const ACORDES_RESULTADO_MENOR_DE: ProseSegment = [
+  { type: 'text', value: 'Für ' },
+  { type: 'note', value: 'A' },
+  { type: 'text', value: ' Moll ist der einzige Unterschied, die Terz um einen Halbton zu senken: ' },
+  { type: 'note', value: 'A' },
+  { type: 'text', value: ' Moll = ' },
+  { type: 'note', value: 'A' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'C' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'E' }, { type: 'text', value: '.' },
+];
+
+export const REGLA_BULLETS_DE: readonly { regla: string; desc: string; ejemplo: ProseSegment }[] = [
+  {
+    regla: 'T natürlich',
+    desc: 'die r. Quinte ist ebenfalls natürlich.',
+    ejemplo: [
+      { type: 'note', value: 'D' },
+      { type: 'text', value: ' → ' },
+      { type: 'note', value: 'A' },
+      { type: 'text', value: '.' },
+    ],
+  },
+  {
+    regla: 'T mit #',
+    desc: 'die r. Quinte hat ebenfalls #.',
+    ejemplo: [
+      { type: 'note', value: 'F#' },
+      { type: 'text', value: ' → ' },
+      { type: 'note', value: 'C#' },
+      { type: 'text', value: '.' },
+    ],
+  },
+  {
+    regla: 'T mit b',
+    desc: 'die r. Quinte hat ebenfalls b.',
+    ejemplo: [
+      { type: 'note', value: 'Eb' },
+      { type: 'text', value: ' → ' },
+      { type: 'note', value: 'Bb' },
+      { type: 'text', value: '.' },
+    ],
+  },
+];
+
+export const REGLA_EXCEPCION_B_DE: ProseSegment = [
+  { type: 'text', value: 'Wenn ' },
+  { type: 'note', value: 'B' },
+  { type: 'text', value: ' die Tonika ist, ist ihre r. Quinte ' },
+  { type: 'note', value: 'F#' },
+  { type: 'text', value: ' (nicht ' },
+  { type: 'note', value: 'F' },
+  { type: 'text', value: ').' },
+];
+
+export const REGLA_EXCEPCION_BB_DE: ProseSegment = [
+  { type: 'text', value: 'Wenn ' },
+  { type: 'note', value: 'Bb' },
+  { type: 'text', value: ' die Tonika ist, ist ihre r. Quinte ' },
+  { type: 'note', value: 'F' },
+  { type: 'text', value: ' (nicht Fb).' },
+];
+
+export const REGLA_PRIMITIVA_INSTRUCCION_DE: ProseSegment = [
+  { type: 'text', value: 'Jede Zeile spielt ihre Tonika und ihre r. Quinte nacheinander ab. Die Ausnahme von ' },
+  { type: 'note', value: 'B' },
+  { type: 'text', value: ' → ' },
+  { type: 'note', value: 'F#' },
+  { type: 'text', value: ' ist eingerahmt, um sie vom Muster abzuheben.' },
+];
+
+export const REGLA_NOTA_BEMOLES_DE: ProseSegment = [
+  { type: 'text', value: 'Wenn du die alterierten Töne mit Bs benennst, entsteht eine zweite Ausnahme: ' },
+  { type: 'note', value: 'Bb' },
+  { type: 'text', value: ' → ' },
+  { type: 'note', value: 'F' },
+  { type: 'text', value: ' (nicht Fb). Im System mit Kreuzen erscheint dieselbe r. Quinte als ' },
+  { type: 'note', value: 'A#' },
+  { type: 'text', value: ' → E# (enharmonisch zu ' },
+  { type: 'note', value: 'F' },
+  { type: 'text', value: ').' },
+];

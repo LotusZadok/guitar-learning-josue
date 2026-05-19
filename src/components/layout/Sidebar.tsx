@@ -15,7 +15,8 @@ const SECTIONS = [
 export default function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language.startsWith('de') ? 'de' : 'es';
   const { sidebarOpen, setSidebarOpen, volume, setVolume } = useUIStore();
 
   const handleVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,6 +77,23 @@ export default function Sidebar() {
             />
           </div>
           <TonicSelector />
+          <div className={styles.langWrap}>
+            <span className={styles.langLabel}>IDIOMA</span>
+            <div className={styles.langChips}>
+              <button
+                className={lang === 'es' ? styles.langChipActive : styles.langChip}
+                onClick={() => i18n.changeLanguage('es')}
+              >
+                ES
+              </button>
+              <button
+                className={lang === 'de' ? styles.langChipActive : styles.langChip}
+                onClick={() => i18n.changeLanguage('de')}
+              >
+                DE
+              </button>
+            </div>
+          </div>
         </div>
       </nav>
     </>

@@ -1,30 +1,42 @@
+import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
 import Prose from '../../../shared/Prose/Prose';
 import CirculoDeQuintas from '../../../primitives/CirculoDeQuintas/CirculoDeQuintas';
 import {
-  REGLA_INTRO,
   REGLA_BULLETS,
-  REGLA_EXCEPCIONES_TITULO,
+  REGLA_BULLETS_DE,
   REGLA_EXCEPCION_B,
+  REGLA_EXCEPCION_B_DE,
   REGLA_EXCEPCION_BB,
-  CONSEJO_REGLA_5J,
+  REGLA_EXCEPCION_BB_DE,
   REGLA_PRIMITIVA_TITULO,
   REGLA_PRIMITIVA_INSTRUCCION,
+  REGLA_PRIMITIVA_INSTRUCCION_DE,
   REGLA_NOTA_BEMOLES,
+  REGLA_NOTA_BEMOLES_DE,
 } from '../data/literalContent';
 import styles from './ReglaQuintaSection.module.css';
 
 export default function ReglaQuintaSection() {
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language;
+
+  const bullets = locale === 'de' ? REGLA_BULLETS_DE : REGLA_BULLETS;
+  const excepcionB = locale === 'de' ? REGLA_EXCEPCION_B_DE : REGLA_EXCEPCION_B;
+  const excepcionBb = locale === 'de' ? REGLA_EXCEPCION_BB_DE : REGLA_EXCEPCION_BB;
+  const primitiva = locale === 'de' ? REGLA_PRIMITIVA_INSTRUCCION_DE : REGLA_PRIMITIVA_INSTRUCCION;
+  const notaBemoles = locale === 'de' ? REGLA_NOTA_BEMOLES_DE : REGLA_NOTA_BEMOLES;
+
   return (
     <section className={styles.section}>
-      <SectionLabel text="08 · Regla de la 5J" />
-      <h2>Regla de la quinta justa con sus excepciones</h2>
+      <SectionLabel text={t('t1.s08.label')} />
+      <h2>{t('t1.s08.title')}</h2>
 
-      <p className={styles.text}>{REGLA_INTRO}</p>
+      <p className={styles.text}>{t('t1.s08.intro')}</p>
 
       <ul className={styles.bullets}>
-        {REGLA_BULLETS.map((b, i) => (
+        {bullets.map((b, i) => (
           <li key={i}>
             <strong>{b.regla}</strong> · {b.desc}{' '}
             <span className={styles.ejemplo}>Ejemplo: <Prose segment={b.ejemplo} /></span>
@@ -32,19 +44,21 @@ export default function ReglaQuintaSection() {
         ))}
       </ul>
 
-      <h3 className={styles.subheading}>{REGLA_EXCEPCIONES_TITULO}</h3>
+      {/* TODO i18n: sin clave — REGLA_EXCEPCIONES_TITULO */}
+      <h3 className={styles.subheading}>Excepciones</h3>
       <ul className={styles.bullets}>
-        <li><Prose segment={REGLA_EXCEPCION_B} /></li>
-        <li><Prose segment={REGLA_EXCEPCION_BB} /></li>
+        <li><Prose segment={excepcionB} /></li>
+        <li><Prose segment={excepcionBb} /></li>
       </ul>
 
+      {/* TODO i18n: sin clave — REGLA_PRIMITIVA_TITULO */}
       <h3 className={styles.subheading}>{REGLA_PRIMITIVA_TITULO}</h3>
-      <p className={styles.text}><Prose segment={REGLA_PRIMITIVA_INSTRUCCION} /></p>
+      <p className={styles.text}><Prose segment={primitiva} /></p>
       <CirculoDeQuintas />
 
-      <p className={styles.footnote}><Prose segment={REGLA_NOTA_BEMOLES} /></p>
+      <p className={styles.footnote}><Prose segment={notaBemoles} /></p>
 
-      <RuleNote>{CONSEJO_REGLA_5J}</RuleNote>
+      <RuleNote>{t('t1.s08.tip')}</RuleNote>
     </section>
   );
 }

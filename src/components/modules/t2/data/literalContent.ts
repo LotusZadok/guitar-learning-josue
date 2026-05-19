@@ -179,3 +179,20 @@ export const RELATIVAS_TABLA_HEADERS: readonly [string, string, string] = [
   'Relativa menor',
   'Armadura compartida',
 ] as const;
+
+// ============================================================
+// Variantes _DE — contenido en alemán para bifurcación i18n
+// ============================================================
+
+export const RELATIVAS_INTRO_DE: readonly ProseSegment[] = [
+  [
+    { type: 'text', value: 'Jede Durtonart hat eine Moll-Paralleltonart, die genau dieselben Vorzeichen teilt. Die Paralleltonart wird auf der 6. Stufe der Durtonart aufgebaut.' },
+  ],
+  [
+    { type: 'text', value: 'Die natürliche Molltonleiter wird mit denselben 7 Tönen der Durtonleiter gebildet, beginnt aber auf dem 6. Ton. Die sieben Akkorde sind in beiden Fällen dieselben — nur die Reihenfolge ändert sich: in ' },
+    { type: 'note', value: 'C' },
+    { type: 'text', value: ' Dur → C Dm Em F G Am B°; in ' },
+    { type: 'note', value: 'A' },
+    { type: 'text', value: ' Moll → Am B° C Dm Em F G.' },
+  ],
+] as const;

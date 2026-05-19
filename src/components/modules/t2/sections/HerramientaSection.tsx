@@ -17,12 +17,12 @@ import styles from './HerramientaSection.module.css';
 export default function HerramientaSection() {
   return (
     <section className={styles.section}>
+      {/* TODO i18n: sin clave — HerramientaSection no tiene equivalente en de.json */}
       <SectionLabel text="02 · La herramienta" />
       <h2>F C G D A E B</h2>
 
       <p className={styles.text}>{HERRAMIENTA_INTRO}</p>
 
-      {/* The Tool Box */}
       <div className={styles.toolBox}>
         <div className={styles.toolRow}>
           <span className={styles.rowLabel}>#</span>
@@ -47,7 +47,6 @@ export default function HerramientaSection() {
       <p className={styles.text}>{HERRAMIENTA_SOSTENIDOS_EXPLICACION}</p>
       <p className={styles.text}>{HERRAMIENTA_BEMOLES_EXPLICACION}</p>
 
-      {/* Three property cards */}
       <div className={styles.cards}>
         <div className={styles.card}>
           <h3 className={styles.cardTitle}>Específico</h3>

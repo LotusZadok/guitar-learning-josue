@@ -8,5 +8,321 @@
     "prompt": "Ingrese la contraseña",
     "submit": "Entrar",
     "error": "Contraseña incorrecta"
+  },
+
+  "t1": {
+    "module_title": "Fundamentos musicales",
+
+    "s01": {
+      "label": "1.1 · Notas naturales",
+      "title": "Notas naturales y cifrado anglosajón",
+      "intro": "Las 7 notas en español tienen una letra asociada en el cifrado anglosajón:",
+      "table": {
+        "spanish": "Español",
+        "english": "Anglosajón"
+      },
+      "body": "Todas las notas se manejan como iguales en jerarquía desde el inicio. Esto es deliberado: agiliza el aprendizaje porque permite empezar cualquier ejercicio desde cualquier nota, sin un \"Do central\" privilegiado.",
+      "rule": "Las 7 notas naturales conforman la base de todo lo que viene.",
+      "tip": "Consejo del método: decir las notas en voz alta, en orden horario y antihorario, comenzando en una nota al azar."
+    },
+
+    "s02": {
+      "label": "1.2 · Tríadas",
+      "title": "Las 7 tríadas",
+      "intro": "Una tríada son 3 notas específicas. También se le llama \"acorde\". Las tres notas tienen tres nombres:",
+      "roles": {
+        "tonic": "Tónica — la nota más importante del acorde.",
+        "third": "Tercera — la nota que define si la tríada es mayor (3M) o menor (3m).",
+        "fifth": "Quinta — funge de soporte al acorde (5J)."
+      },
+      "procedure_title": "Procedimiento para construir una tríada partiendo de una nota:",
+      "procedure": [
+        "Escogemos una nota natural.",
+        "Saltamos (omitimos) la siguiente nota natural.",
+        "Escribimos la siguiente.",
+        "Omitimos otra vez.",
+        "Escribimos la siguiente."
+      ],
+      "example": "Ejemplo: F → omito G → A → omito B → C. La tríada de F es F A C.",
+      "table_title": "Las 7 tríadas de las notas naturales:",
+      "master_triad_label": "Tríada maestra",
+      "master_triad_body": "Si seguimos el patrón sin pausa, hasta llegar a la misma nota, conseguimos la tríada maestra:",
+      "tip": "Consejo del método: memorizar las 7 tríadas. Son la estructura de todo acorde y el fundamento de la armonía. También son herramienta para leer partitura."
+    },
+
+    "s03": {
+      "label": "1.3 · Círculo cromático",
+      "title": "Notas alteradas y círculo cromático",
+      "intro": "Además de las 7 notas naturales existen 5 notas más, llamadas alteradas. Cada una tiene 2 nombres:",
+      "sharp_def": "Sostenido (#) — cuando una nota natural sube un semitono (un traste).",
+      "flat_def": "Bemol (b) — cuando una nota natural baja un semitono (un traste).",
+      "body": "Sumando las 7 naturales y las 5 alteradas resultan las 12 notas del círculo cromático (CC):",
+      "rule": "Importante: entre B–C y entre E–F no hay nota alterada (por el momento, se omiten B# y E# como alteraciones del círculo cromático; en este contexto son la misma nota que C y F respectivamente).",
+      "tip": "Las 12 notas del círculo cromático conforman el sistema de sonidos completo."
+    },
+
+    "s04": {
+      "label": "1.4 · Intervalos",
+      "title": "Intervalos",
+      "intro": "Un intervalo es la distancia entre dos notas. Se nombra primero por número (segunda, tercera, …, octava), donde la tónica es 0 y no se cuenta.",
+      "table_headers": {
+        "name": "Nombre",
+        "example": "Ejemplo",
+        "semitone": "Semitono"
+      },
+      "quality_intro": "Los intervalos tienen además calidad: menores (m), mayores (M), justos (J), aumentados (a), disminuidos (d). Combinando número y calidad se obtienen 13 intervalos dentro de una octava:",
+      "procedure_title": "Procedimiento para encontrar los intervalos partiendo de una tónica G:",
+      "procedure": [
+        "Escribir las letras según el número del intervalo (ignorando alteraciones): G A A B B C C-D D E E F F G.",
+        "Escribir el círculo cromático desde la tónica: G G#/Ab A A#/Bb B C C#/Db D D#/Eb E F F#/Gb G.",
+        "Cuando hay dos notas alteradas, elegir según la letra del paso 1. Si en el paso 1 está \"B\", entonces se elige Bb antes que A#.",
+        "Actualizar la escala con los intervalos correctos."
+      ],
+      "result": "Resultado para G: G Ab A Bb B C C#/Db D Eb E F F# G.",
+      "octave_rule": "La 8J (octava justa) es la misma nota más aguda o más grave. La 8J de G es G.",
+      "tip": "Los intervalos son la medida de la música: toda relación melódica y armónica se puede describir en términos de intervalos."
+    },
+
+    "s05": {
+      "label": "1.5 · Tensión y resolución",
+      "title": "Tensión y resolución",
+      "intro": "La escala mayor tiene 7 notas. Cada nota tiene un carácter individual que se mantiene independiente de la tonalidad. Por eso se les da el nombre genérico de \"grados\" (1 al 7).",
+      "scale_label": "Ejemplo en C mayor (única tonalidad sin alteraciones):",
+      "stable_label": "Notas estables:",
+      "stable_degrees": "1, 3, 5.",
+      "tense_label": "Notas tensas:",
+      "tense_degrees": "4, 7.",
+      "tension_title": "Las notas tensas e intermedias buscan resolver hacia las estables, hacia abajo o hacia arriba:",
+      "resolutions": [
+        "2do grado → resuelve a la tónica o al 3er grado.",
+        "4to grado → resuelve al 3er o al 5to grado. Tiene más tensión hacia el 3er grado porque está a 1 s.t. El 4to también se llama \"sensible modal\".",
+        "6to grado → resuelve al 5to grado.",
+        "7mo grado → resuelve a la tónica. Es la resolución más importante de la música tonal — está a 1 s.t. de la tónica, por eso es la más tensa. El 7mo se llama \"sensible tonal\"."
+      ],
+      "tip": "Consejo del método: tocar las notas tensas un poco más fuertes que las estables. A esto se le llama resolver."
+    },
+
+    "s06": {
+      "label": "1.6 · La escala mayor",
+      "title": "La escala mayor",
+      "intro": "La escala mayor tiene 7 notas. El patrón de distancias entre sus notas es siempre el mismo, independientemente de la tonalidad:",
+      "pattern_label": "Patrón (T = Tono, S = Semitono):",
+      "pattern": "T – T – S – T – T – T – S",
+      "table_headers": {
+        "degree": "Grado",
+        "note": "Nota",
+        "distance": "Distancia (s.t.)"
+      },
+      "tip": "El patrón T-T-S-T-T-T-S es el \"ADN\" de toda escala mayor. Se repite idéntico en las 12 tonalidades."
+    },
+
+    "s07": {
+      "label": "1.7 · Acordes mayores y menores",
+      "title": "Acordes mayores y menores",
+      "intro": "Recapitulando lo de tríadas e intervalos.",
+      "major_def": "Acorde mayor = T + 3M + 5J (tónica + tercera mayor + quinta justa)",
+      "minor_def": "Acorde menor = T + 3m + 5J (tónica + tercera menor + quinta justa)",
+      "comparison": "Solo cambia la tercera. Dos de tres notas son iguales — son casi el mismo acorde.",
+      "notation_title": "Nomenclatura:",
+      "notation_major": "Acorde mayor: solo la letra. F = Fa mayor.",
+      "notation_minor": "Acorde menor: letra + \"m\" minúscula. Fm = Fa menor.",
+      "procedure_title": "Procedimiento para encontrar la tríada mayor o menor de cualquier nota:",
+      "procedure": [
+        "Escribir la tríada partiendo de la tónica (solo notas naturales).",
+        "Contar cromáticamente a partir de la tónica, los semitonos hasta tercera (3M = 4 s.t. o 3m = 3 s.t.).",
+        "Contar cromáticamente a partir de la tónica, los semitonos hasta la quinta justa (5J = 7 s.t.)."
+      ],
+      "tip": "La diferencia entre mayor y menor está solo en la tercera: 4 semitonos = mayor, 3 semitonos = menor."
+    },
+
+    "s08": {
+      "label": "1.8 · Regla de la 5J",
+      "title": "Regla de la quinta justa con sus excepciones",
+      "intro": "La quinta justa siempre copia la alteración de la tónica.",
+      "sequence_label": "La secuencia de tonalidades con sostenidos:",
+      "sequence": "F C G D A E B",
+      "rule_sharps": "En tonalidades con sostenidos (#): los sostenidos se añaden de izquierda a derecha en el orden F C G D A E B.",
+      "rule_flats": "En tonalidades con bemoles (b): los bemoles se añaden de derecha a izquierda en el orden B E A D G C F.",
+      "exception_label": "Excepción:",
+      "exception": "Fa mayor tiene 1 bemol (Bb) — no sigue el patrón de las tonalidades con sostenidos.",
+      "tip": "Consejo del método: memorizar la secuencia F C G D A E B. Es la herramienta para derivar las armaduras de todas las tonalidades."
+    }
+  },
+
+  "t2": {
+    "module_title": "Tonalidades y armonía diatónica",
+
+    "s41": {
+      "label": "4.1 · Tonalidades",
+      "title": "Tonalidades y Armaduras"
+    },
+
+    "s42": {
+      "label": "4.2 · Proceso de sostenidos",
+      "title": "Proceso de sostenidos"
+    },
+
+    "s43": {
+      "label": "4.3 · Proceso de bemoles",
+      "title": "Proceso de bemoles"
+    },
+
+    "s44": {
+      "label": "4.4 · Escala mayor",
+      "title": "Escala mayor de la tonalidad"
+    },
+
+    "s45": {
+      "label": "4.5 · Tabla maestra",
+      "title": "Tabla maestra de las 14 tonalidades mayores",
+      "table_headers": {
+        "count": "Cantidad",
+        "key_signature": "Armadura",
+        "tonality": "Tonalidad"
+      },
+      "sharps_section": "Tonalidades con sostenidos (#)",
+      "flats_section": "Tonalidades con bemoles (b)",
+      "observations_title": "Observaciones del método:",
+      "observations": [
+        "En tonalidades con sostenidos, la tónica casi siempre es una nota natural: G, D, A, E, B.",
+        "En tonalidades con bemoles, casi todas las tónicas llevan el b en su nombre: Bb, Eb, Ab, Db, Gb, Cb (excepción: F).",
+        "Esto ayuda a identificar rápidamente con qué alteración trabaja una tonalidad."
+      ]
+    },
+
+    "s46": {
+      "label": "4.6 · Modo clase",
+      "title": "Modo clase",
+      "instruction": "Elegí una tonalidad y explorá las armaduras y las escalas."
+    },
+
+    "s47": {
+      "label": "4.7 · Grados armónicos",
+      "title": "Grados armónicos según la escala mayor",
+      "intro_symmetry": "Hablemos de simetría y fractalidad:",
+      "symmetry": "Simetría: la música funciona con fórmulas — 12 semitonos, 12 intervalos, escalas de 7 notas, tríadas de 3 notas. Los procesos son simétricos en todas las tonalidades. Por eso conviene memorizar el procedimiento, no el resultado.",
+      "fractality": "Fractalidad: lo que sirve en lo micro sirve en lo macro. Si la escala tiene 7 notas, la armonía tiene 7 acordes (uno por cada nota). Cada nota se convierte en un acorde construyendo la tríada sobre ella.",
+      "procedure_title": "Procedimiento para encontrar los grados armónicos en La mayor:",
+      "steps": {
+        "s1_label": "Paso 1 — Pensar cada nota como tríada (solo letras):",
+        "s2_label": "Paso 2 — Actualizar las tríadas con la armadura de la tonalidad (F# C# G#):",
+        "s3_label": "Paso 3 — Tocar cada acorde y oír su carácter (brillante = mayor, oscuro = menor):",
+        "s4_label": "Resultado — Patrón de calidades de los acordes:"
+      },
+      "pattern": "El resultado siempre es el mismo patrón de calidades: M m m M M m dim. Tres mayores (I, IV, V), tres menores (ii, iii, vi), uno disminuido (vii°). Este patrón se memoriza porque se repite idéntico en todas las tonalidades mayores.",
+      "table_title": "Nombre y carácter de cada grado:",
+      "table_headers": {
+        "degree": "Grado",
+        "chords": "Acordes",
+        "name": "Nombre",
+        "character": "Carácter"
+      },
+      "degree_names": {
+        "I": "Tónica",
+        "ii": "Supertónica",
+        "iii": "Mediante",
+        "IV": "Subdominante",
+        "V": "Dominante",
+        "vi": "Superdominante",
+        "vii": "Sensible"
+      },
+      "degree_characters": {
+        "I": "Estable",
+        "ii": "Medio",
+        "iii": "Estable-Medio",
+        "IV": "Medio-Tenso",
+        "V": "Tenso",
+        "vi": "Estable",
+        "vii": "Tenso"
+      },
+      "analysis_title": "Análisis de caracteres:",
+      "analysis_stable": "Los grados estables (I, vi) tienen la tónica y la tercera de la tonalidad. El iii también tiene dos estables, pero al contener la sensible tonal queda con color medio.",
+      "analysis_tense": "Los tensos (V, vii°) contienen la 7ma y la 4ta de la escala (sensible tonal y modal).",
+      "analysis_medium": "Los medios (ii, IV) no tienen la sensible tonal pero sí la 4ta (sensible modal).",
+      "analysis_iv": "Sobre el IV grado: es ambivalente. Tiene la tónica (la nota más estable) Y la 4ta (sensible modal). Como la 4ta tiende hacia la 3ra por estar a 1 s.t., el IV grado tiene carácter medio y tenso al mismo tiempo, y puede resolver directamente a un acorde estable.",
+      "tip": "Memorizar el patrón M m m M M m dim. Se repite idéntico en cualquier tonalidad mayor: la simetría que justifica aprenderlo una sola vez.",
+      "stepper": {
+        "s1": "Letras",
+        "s2": "Con armadura",
+        "s3": "Calidades",
+        "s4": "Resultado",
+        "instruction": "Hacer clic en los pasos para explorar el procedimiento."
+      }
+    },
+
+    "s48": {
+      "label": "4.8 · Progresiones armónicas",
+      "title": "Progresiones armónicas",
+      "intro": "La armonía diatónica no solo ofrece acordes individuales: también permite combinarlos en secuencias. A estas secuencias se les llama progresiones armónicas. Cada acorde cumple una función dentro de la tonalidad y contribuye a crear tensión o reposo.",
+      "procedure_title": "Práctica progresiva:",
+      "procedure": [
+        "Tocamos el I: ahí es donde el oído quiere reposar y resolver. Repetirlo hasta acostumbrarse.",
+        "Tocamos el V (segundo en importancia): su tensión crea movimiento. Conectarlo con el I.",
+        "Tocamos el IV, resolvemos al I, o lo seguimos de un V-I."
+      ],
+      "table_headers": {
+        "progression": "Progresión",
+        "degrees": "Grados",
+        "play": "Tocar"
+      },
+      "tip": "Consejo: intente experimentar y crear progresiones más largas, siempre teniendo en cuenta la resolución hacia un acorde estable.",
+      "play_button": "Tocar",
+      "stop_button": "Detener",
+      "mode_arpeggio": "Arpegiado",
+      "mode_block": "Bloque"
+    },
+
+    "s49": {
+      "label": "4.9 · Relativas menores",
+      "title": "Relativas menores",
+      "intro_p1": "Toda tonalidad mayor tiene una tonalidad menor relativa que comparte exactamente la misma armadura. La relativa menor se construye sobre el vi grado de la mayor.",
+      "intro_p2": "La escala menor natural usa las mismas 7 notas, pero comienza en la 6ta. Los acordes son los mismos en ambos casos, solo cambia el orden:",
+      "scale_example_major": "Do mayor:",
+      "scale_example_minor": "La menor:",
+      "process_title": "Proceso rápido:",
+      "process": [
+        "Mayor → menor relativa: bajar 3 semitonos desde la tónica mayor.",
+        "Menor relativa → mayor: subir 3 semitonos desde la tónica menor."
+      ],
+      "table_headers": {
+        "major": "Tonalidad mayor",
+        "minor": "Relativa menor",
+        "key_signature": "Armadura compartida"
+      },
+      "table_no_sharps_flats": "(ninguna)",
+      "tip": "Regla rápida: para encontrar la relativa menor — contar 3 semitonos hacia abajo desde la tónica mayor.",
+      "circle_label": "−3 s.t.",
+      "instruction": "Elegí una tónica para ver la tonalidad mayor y su relativa menor."
+    }
+  },
+
+  "common": {
+    "tonic_selector_label": "Tónica",
+    "mute_label": "Sonido",
+    "volume_label": "Volumen",
+    "theme_label": "Apariencia",
+    "language_label": "Idioma",
+    "play": "Tocar",
+    "stop": "Detener",
+    "next": "Siguiente",
+    "prev": "Anterior",
+    "reset": "Reiniciar",
+    "major": "mayor",
+    "minor": "menor",
+    "diminished": "dim.",
+    "semitone_abbr": "s.t.",
+    "sharp": "Sostenido",
+    "flat": "Bemol",
+    "natural": "Natural",
+    "degree_label": "Grado",
+    "chord_label": "Acorde",
+    "note_label": "Nota",
+    "interval_label": "Intervalo",
+    "scale_label": "Escala",
+    "key_signature_label": "Armadura",
+    "tonality_label": "Tonalidad",
+    "octave_label": "Octava",
+    "arpeggio_label": "Arpegiado",
+    "block_label": "Bloque"
   }
 }

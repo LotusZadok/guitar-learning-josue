@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
 import {
@@ -8,11 +9,14 @@ import {
 import styles from './IntroSection.module.css';
 
 export default function IntroSection() {
+  const { t } = useTranslation();
+
   return (
     <section className={styles.section}>
-      <SectionLabel text="01 · Introducción" />
-      <h2>Tonalidades y Armaduras</h2>
+      <SectionLabel text={t('t2.s41.label')} />
+      <h2>{t('t2.s41.title')}</h2>
 
+      {/* TODO i18n: sin clave — contenido de intro en de.json s41 no tiene body keys */}
       <p className={styles.text}>{INTRO_LENGUAS}</p>
       <p className={styles.text}>{INTRO_VARIEDAD}</p>
 

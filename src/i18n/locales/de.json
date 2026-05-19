@@ -1,5 +1,7 @@
 {
-  "site": { "title": "Didaktische Gitarre · Prof. Josué Barquero" },
+  "site": {
+    "title": "Didaktische Gitarre · Prof. Josué Barquero"
+  },
   "nav": {
     "t1": "T1 · Musikalische Grundlagen",
     "t2": "T2 · Tonarten und diatonische Harmonik"
@@ -8,5 +10,321 @@
     "prompt": "Passwort eingeben",
     "submit": "Eintreten",
     "error": "Falsches Passwort"
+  },
+
+  "t1": {
+    "module_title": "Musikalische Grundlagen",
+
+    "s01": {
+      "label": "1.1 · Natürliche Töne",
+      "title": "Natürliche Töne und angelsächsische Notation",
+      "intro": "Die 7 Töne auf Spanisch haben einen zugehörigen Buchstaben in der angelsächsischen Notation:",
+      "table": {
+        "spanish": "Spanisch",
+        "english": "Angelsächsisch"
+      },
+      "body": "Alle Töne werden von Anfang an als gleichrangig behandelt. Das ist bewusst so: Es beschleunigt das Lernen, weil man jede Übung auf jedem Ton beginnen kann — ohne ein privilegiertes „mittleres Do\".",
+      "rule": "Die 7 natürlichen Töne bilden die Grundlage von allem, was folgt.",
+      "tip": "Methodentipp: die Töne laut aussprechen, im Uhrzeigersinn und gegen den Uhrzeigersinn, beginnend auf einem beliebigen Ton."
+    },
+
+    "s02": {
+      "label": "1.2 · Dreiklänge",
+      "title": "Die 7 Dreiklänge",
+      "intro": "Ein Dreiklang besteht aus 3 bestimmten Tönen. Er wird auch „Akkord\" genannt. Die drei Töne haben drei Namen:",
+      "roles": {
+        "tonic": "Tonika — der wichtigste Ton des Akkords.",
+        "third": "Terz — der Ton, der bestimmt, ob der Dreiklang Dur oder Moll ist.",
+        "fifth": "Quinte — dient als Stütze des Akkords."
+      },
+      "procedure_title": "Verfahren zum Aufbau eines Dreiklangs ausgehend von einem Ton:",
+      "procedure": [
+        "Einen natürlichen Ton wählen.",
+        "Den nächsten natürlichen Ton überspringen (auslassen).",
+        "Den übernächsten aufschreiben.",
+        "Wieder auslassen.",
+        "Den nächsten aufschreiben."
+      ],
+      "example": "Beispiel: F → G auslassen → A → B auslassen → C. Der Dreiklang von F ist F A C.",
+      "table_title": "Die 7 Dreiklänge der natürlichen Töne:",
+      "master_triad_label": "Meisterdreiklang",
+      "master_triad_body": "Wenn man das Muster ohne Unterbrechung weiterführt, bis man wieder beim Ausgangston ankommt, erhält man den Meisterdreiklang:",
+      "tip": "Methodentipp: die 7 Dreiklänge auswendig lernen. Sie sind die Struktur jedes Akkords und das Fundament der Harmonik. Außerdem sind sie ein Werkzeug zum Lesen von Partituren."
+    },
+
+    "s03": {
+      "label": "1.3 · Chromatischer Kreis",
+      "title": "Alterierte Töne und chromatischer Kreis",
+      "intro": "Neben den 7 natürlichen Tönen gibt es 5 weitere Töne, die sogenannten alterierten Töne. Jeder hat 2 Namen:",
+      "sharp_def": "Kreuz (#) — wenn ein natürlicher Ton um einen Halbton (eine Bund) erhöht wird.",
+      "flat_def": "B (b) — wenn ein natürlicher Ton um einen Halbton (eine Bund) erniedrigt wird.",
+      "body": "Addiert man die 7 natürlichen und die 5 alterierten Töne, erhält man die 12 Töne des chromatischen Kreises (CK):",
+      "rule": "Wichtig: zwischen B–C und zwischen E–F gibt es keinen alterierten Ton (B# und E# existieren als Alterierungen im chromatischen Kreis in diesem Kontext nicht — sie entsprechen denselben Tönen wie C bzw. F).",
+      "tip": "Die 12 Töne des chromatischen Kreises bilden das vollständige Tonsystem."
+    },
+
+    "s04": {
+      "label": "1.4 · Intervalle",
+      "title": "Intervalle",
+      "intro": "Ein Intervall ist der Abstand zwischen zwei Tönen. Es wird zuerst nach Zahl benannt (Sekunde, Terz, … Oktave), wobei die Tonika 0 ist und nicht mitgezählt wird.",
+      "table_headers": {
+        "name": "Name",
+        "example": "Beispiel",
+        "semitone": "Halbton"
+      },
+      "quality_intro": "Intervalle haben außerdem eine Qualität: klein (m), groß (M), rein (r), übermäßig (ü), vermindert (v). Kombiniert man Zahl und Qualität, erhält man 13 Intervalle innerhalb einer Oktave:",
+      "procedure_title": "Verfahren zum Finden der Intervalle ausgehend von der Tonika G:",
+      "procedure": [
+        "Die Buchstaben nach der Intervallnummer aufschreiben (Alterierungen ignorieren): G A A B B C C-D D E E F F G.",
+        "Den chromatischen Kreis ab der Tonika aufschreiben: G G#/Ab A A#/Bb B C C#/Db D D#/Eb E F F#/Gb G.",
+        "Wenn zwei alterierte Töne vorhanden sind, nach dem Buchstaben aus Schritt 1 wählen. Steht in Schritt 1 „B\", wählt man Bb statt A#.",
+        "Die Tonleiter mit den richtigen Intervallen aktualisieren."
+      ],
+      "result": "Ergebnis für G: G Ab A Bb B C C#/Db D Eb E F F# G.",
+      "octave_rule": "Die reine Oktave (8r) ist derselbe Ton eine Oktave höher oder tiefer. Die 8r von G ist G.",
+      "tip": "Intervalle sind das Maß der Musik: jede melodische und harmonische Beziehung lässt sich in Intervallen beschreiben."
+    },
+
+    "s05": {
+      "label": "1.5 · Spannung und Auflösung",
+      "title": "Spannung und Auflösung",
+      "intro": "Die Durtonleiter hat 7 Töne. Jeder Ton hat einen individuellen Charakter, der unabhängig von der Tonart erhalten bleibt. Daher nennt man sie allgemein „Stufen\" (1 bis 7).",
+      "scale_label": "Beispiel in C-Dur (die einzige Tonart ohne Vorzeichen):",
+      "stable_label": "Stabile Töne:",
+      "stable_degrees": "Stufen 1, 3, 5.",
+      "tense_label": "Spannungstöne:",
+      "tense_degrees": "Stufen 2, 4, 6, 7.",
+      "tension_title": "Die Spannungstöne streben zu den stabilen Tönen hin, nach oben oder unten:",
+      "resolutions": [
+        "2. Stufe → löst zur Tonika oder zur 3. Stufe auf.",
+        "4. Stufe → löst zur 3. oder zur 5. Stufe auf. Stärkere Spannung zur 3. Stufe, weil sie nur 1 Halbton entfernt ist. Die 4. Stufe heißt auch „modaler Leitton\".",
+        "6. Stufe → löst zur 5. Stufe auf.",
+        "7. Stufe → löst zur Tonika auf. Das ist die wichtigste Auflösung der Tonalmusik — nur 1 Halbton entfernt, daher die stärkste Spannung. Die 7. Stufe heißt „Leitton\"."
+      ],
+      "tip": "Methodentipp: Spannungstöne etwas lauter spielen als stabile. Das nennt man Auflösung."
+    },
+
+    "s06": {
+      "label": "1.6 · Die Tonleiter und ihre Spannungen",
+      "title": "Die Durtonleiter",
+      "intro": "Die Durtonleiter hat 7 Töne. Das Muster der Abstände zwischen den Tönen ist immer dasselbe, unabhängig von der Starttonart:",
+      "pattern_label": "Muster (G = Ganzton, H = Halbton):",
+      "pattern": "G – G – H – G – G – G – H",
+      "table_headers": {
+        "degree": "Stufe",
+        "note": "Ton",
+        "distance": "Abstand (Halbton)"
+      },
+      "tip": "Das Muster G-G-H-G-G-G-H ist das „DNS\" jeder Durtonleiter. Es wiederholt sich identisch in allen 12 Tonarten."
+    },
+
+    "s07": {
+      "label": "1.7 · Dur- und Mollakkorde",
+      "title": "Dur- und Mollakkorde",
+      "intro": "Zusammenfassung von Dreiklängen und Intervallen:",
+      "major_def": "Durakkord = T + gr. Terz + r. Quinte (Tonika + große Terz + reine Quinte)",
+      "minor_def": "Mollakkord = T + kl. Terz + r. Quinte (Tonika + kleine Terz + reine Quinte)",
+      "comparison": "Nur die Terz ändert sich. Zwei von drei Tönen sind identisch — es sind fast dasselbe Akkord.",
+      "notation_title": "Schreibweise:",
+      "notation_major": "Durakkord → nur der Buchstabe. F = Fa Dur.",
+      "notation_minor": "Mollakkord → Buchstabe + kleines „m\". Fm = Fa Moll.",
+      "procedure_title": "Verfahren zum Finden des Dur- oder Mollakkords für jeden Ton:",
+      "procedure": [
+        "Den Dreiklang ab der Tonika aufschreiben (nur Buchstaben, natürlich).",
+        "Die Halbtöne der Terz zählen (gr. Terz = 4 Halbtöne oder kl. Terz = 3 Halbtöne) ab der Tonika.",
+        "Die Halbtöne bis zur reinen Quinte zählen (r. Quinte = 7 Halbtöne) ab der Tonika."
+      ],
+      "tip": "Der Unterschied zwischen Dur und Moll liegt allein in der Terz: 4 Halbtöne = Dur, 3 Halbtöne = Moll."
+    },
+
+    "s08": {
+      "label": "1.8 · Die Quintenzirkel-Regel",
+      "title": "Die Quintenzirkel-Regel",
+      "intro": "Es gibt eine Regel, um für jede Tonart die Vorzeichen zu bestimmen. Sie basiert auf dem Quintenzirkel — der Folge der reinen Quinten, die alle 12 Tonarten verbindet.",
+      "sequence_label": "Die Reihenfolge der Tonarten mit Kreuzen:",
+      "sequence": "F C G D A E B",
+      "rule_sharps": "Bei Tonarten mit Kreuzen (#): die Vorzeichen werden von links nach rechts in der Reihenfolge F C G D A E B hinzugefügt.",
+      "rule_flats": "Bei Tonarten mit Bs (b): die Vorzeichen werden von rechts nach links in der Reihenfolge B E A D G C F hinzugefügt.",
+      "exception_label": "Ausnahme:",
+      "exception": "F-Dur hat 1 B (Bb) — es folgt nicht dem Muster der Kreuztonarten.",
+      "tip": "Methodentipp: die Sequenz F C G D A E B auswendig lernen. Sie ist das Werkzeug zum Ableiten aller Vorzeichen aller 14 Durtonarten."
+    }
+  },
+
+  "t2": {
+    "module_title": "Tonarten und diatonische Harmonik",
+
+    "s41": {
+      "label": "4.1 · Tonarten",
+      "title": "Tonarten und Vorzeichen"
+    },
+
+    "s42": {
+      "label": "4.2 · Prozess der Kreuze",
+      "title": "Prozess der Kreuze"
+    },
+
+    "s43": {
+      "label": "4.3 · Prozess der Bs",
+      "title": "Prozess der Bs"
+    },
+
+    "s44": {
+      "label": "4.4 · Dur-Tonleiter",
+      "title": "Dur-Tonleiter aus der Tonart"
+    },
+
+    "s45": {
+      "label": "4.5 · Meistertabelle",
+      "title": "Meistertabelle der 14 Durtonarten",
+      "table_headers": {
+        "count": "Anzahl",
+        "key_signature": "Vorzeichen",
+        "tonality": "Tonart"
+      },
+      "sharps_section": "Tonarten mit Kreuzen (#)",
+      "flats_section": "Tonarten mit Bs (b)",
+      "observations_title": "Beobachtungen der Methode:",
+      "observations": [
+        "Bei Kreuztonarten ist die Tonika fast immer ein natürlicher Ton: G, D, A, E, B.",
+        "Bei B-Tonarten haben fast alle Toniken ein B im Namen: Bb, Eb, Ab, Db, Gb, Cb (Ausnahme: F).",
+        "Das hilft, schnell zu erkennen, mit welchem Vorzeichen eine Tonart arbeitet."
+      ]
+    },
+
+    "s46": {
+      "label": "4.6 · Klassenmode",
+      "title": "Klassenmode",
+      "instruction": "Tonart wählen und die Vorzeichen sowie die Tonleiter erkunden."
+    },
+
+    "s47": {
+      "label": "4.7 · Harmonische Stufen",
+      "title": "Harmonische Stufen nach der Durtonleiter",
+      "intro_symmetry": "Sprechen wir über Symmetrie und Fraktalität:",
+      "symmetry": "Symmetrie: die Musik funktioniert mit Formeln — 12 Halbtöne, 12 Intervalle, Tonleitern mit 7 Tönen, Dreiklänge mit 3 Tönen. Die Prozesse sind in allen Tonarten symmetrisch. Das Verfahren auswendig lernen, nicht das Ergebnis.",
+      "fractality": "Fraktalität: was im Kleinen gilt, gilt im Großen. Hat die Tonleiter 7 Töne, hat die Harmonik 7 Akkorde (einen pro Ton). Jeder Ton wird zu einem Akkord, indem man den Dreiklang darüber aufbaut.",
+      "procedure_title": "Verfahren zum Finden der harmonischen Stufen in A-Dur:",
+      "steps": {
+        "s1_label": "Schritt 1 — Jeden Ton als Dreiklang denken (nur Buchstaben):",
+        "s2_label": "Schritt 2 — Dreiklänge mit den Vorzeichen der Tonleiter aktualisieren (F# C# G#):",
+        "s3_label": "Schritt 3 — Jeden Akkord spielen und seinen Charakter hören (hell = Dur, dunkel = Moll):",
+        "s4_label": "Ergebnis — Muster der Akkordqualitäten:"
+      },
+      "pattern": "Muster der Qualitäten: Dur Moll Moll Dur Dur Moll verm. Drei Dur (I, IV, V), drei Moll (ii, iii, vi), ein verminderter (vii°). Dieses Muster auswendig lernen, da es sich in allen Durtonarten identisch wiederholt (Symmetrie).",
+      "table_title": "Name und Charakter jeder Stufe:",
+      "table_headers": {
+        "degree": "Stufe",
+        "chords": "Akkorde",
+        "name": "Name",
+        "character": "Charakter"
+      },
+      "degree_names": {
+        "I": "Tonika",
+        "ii": "Supertonika",
+        "iii": "Mediante",
+        "IV": "Subdominante",
+        "V": "Dominante",
+        "vi": "Superdominante",
+        "vii": "Leitton"
+      },
+      "degree_characters": {
+        "I": "Stabil",
+        "ii": "Mittel",
+        "iii": "Stabil-Mittel",
+        "IV": "Mittel-Spannend",
+        "V": "Spannend",
+        "vi": "Stabil",
+        "vii": "Spannend"
+      },
+      "analysis_title": "Charakteranalyse:",
+      "analysis_stable": "Stabile Stufen (I, vi): sie enthalten die Tonika und die Terz der Tonart. Die iii-Stufe hat ebenfalls zwei stabile Töne, enthält aber den spannendsten Ton (Leitton) — daher mittlerer Charakter.",
+      "analysis_tense": "Spannende Stufen (V, vii°): sie enthalten die 7. Stufe und die 4. Stufe (Leitton).",
+      "analysis_medium": "Mittlere Stufen (ii, IV): sie haben keinen Leitton, aber die 4. Stufe (modaler Leitton).",
+      "analysis_iv": "Über die IV. Stufe (wichtige Besonderheit): sie enthält die Tonika (stabilster Ton) UND die 4. Stufe (modaler Leitton). Da die 4. Stufe zur 3. Stufe tendiert (1 Halbton Abstand), ist die IV. Stufe ambivalent: mittel und spannend zugleich — sie kann direkt zu einem stabilen Akkord auflösen.",
+      "tip": "Das Muster Dur-Moll-Moll-Dur-Dur-Moll-verm. auswendig lernen: es ist identisch in allen 14 Durtonarten.",
+      "stepper": {
+        "s1": "Buchstaben",
+        "s2": "Mit Vorzeichen",
+        "s3": "Qualitäten",
+        "s4": "Ergebnis",
+        "instruction": "Durch die Schritte klicken, um das Verfahren zu erkunden."
+      }
+    },
+
+    "s48": {
+      "label": "4.8 · Harmonische Progressionen",
+      "title": "Harmonische Progressionen",
+      "intro": "Die Methode schlägt vor, mit den drei wichtigsten Stufen zu beginnen (I, IV, V) und von dort aus Progressionen aufzubauen:",
+      "procedure_title": "Progressive Übung:",
+      "procedure": [
+        "I spielen — dort will das Ohr ruhen und auflösen. Wiederholen, bis man sich gewöhnt hat.",
+        "V spielen (zweiter in der Wichtigkeit: seine Spannung erzeugt Bewegung). Mit dem I verbinden.",
+        "IV spielen, zum I auflösen oder mit V-I fortsetzen."
+      ],
+      "table_headers": {
+        "progression": "Progression",
+        "degrees": "Stufen",
+        "play": "Spielen"
+      },
+      "tip": "Methodentipp: mit längeren Progressionen experimentieren und dabei immer die Auflösung zu einem stabilen Akkord im Blick behalten.",
+      "play_button": "Spielen",
+      "stop_button": "Stopp",
+      "mode_arpeggio": "Arpeggiert",
+      "mode_block": "Block"
+    },
+
+    "s49": {
+      "label": "4.9 · Paralleltonarten",
+      "title": "Moll-Paralleltonarten",
+      "intro_p1": "Jede Durtonart hat eine Moll-Paralleltonart, die genau dieselben Vorzeichen teilt. Die Paralleltonart wird auf der 6. Stufe der Durtonart aufgebaut.",
+      "intro_p2": "Die natürliche Molltonleiter wird mit denselben 7 Tönen der Durtonleiter gebildet, beginnt aber auf dem 6. Ton. Die sieben Akkorde sind in beiden Fällen dieselben — nur die Reihenfolge ändert sich:",
+      "scale_example_major": "C-Dur:",
+      "scale_example_minor": "A-Moll:",
+      "process_title": "Schnellverfahren:",
+      "process": [
+        "Von Dur zu Moll-Parallel: 3 Halbtöne tiefer gehen.",
+        "Von Moll-Parallel zu Dur: 3 Halbtöne höher gehen."
+      ],
+      "table_headers": {
+        "major": "Durtonart",
+        "minor": "Paralleltonart (Moll)",
+        "key_signature": "Gemeinsame Vorzeichen"
+      },
+      "table_no_sharps_flats": "(keine)",
+      "tip": "Schnellregel: um die Moll-Paralleltonart zu finden — 3 Halbtöne von der Durtonika nach unten zählen.",
+      "circle_label": "−3 Ht.",
+      "instruction": "Eine Tonika wählen, um die Durtonart und ihre Moll-Paralleltonart zu sehen."
+    }
+  },
+
+  "common": {
+    "tonic_selector_label": "Tonika",
+    "mute_label": "Ton",
+    "volume_label": "Lautstärke",
+    "theme_label": "Erscheinungsbild",
+    "language_label": "Sprache",
+    "play": "Spielen",
+    "stop": "Stopp",
+    "next": "Weiter",
+    "prev": "Zurück",
+    "reset": "Zurücksetzen",
+    "major": "Dur",
+    "minor": "Moll",
+    "diminished": "verm.",
+    "semitone_abbr": "Ht.",
+    "sharp": "Kreuz",
+    "flat": "B",
+    "natural": "Auflösungszeichen",
+    "degree_label": "Stufe",
+    "chord_label": "Akkord",
+    "note_label": "Ton",
+    "interval_label": "Intervall",
+    "scale_label": "Tonleiter",
+    "key_signature_label": "Vorzeichen",
+    "tonality_label": "Tonart",
+    "octave_label": "Oktave",
+    "arpeggio_label": "Arpeggiert",
+    "block_label": "Block"
   }
 }

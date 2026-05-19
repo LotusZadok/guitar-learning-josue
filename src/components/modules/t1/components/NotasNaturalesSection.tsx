@@ -1,23 +1,22 @@
+import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
 import NoteToken from '../../../shared/NoteToken/NoteToken';
 import {
-  NATURALES_INTRO,
   NATURALES_TABLA_ES,
   NATURALES_TABLA_EN,
-  NATURALES_JERARQUIA,
-  NATURALES_BASE,
-  CONSEJO_NATURALES,
 } from '../data/literalContent';
 import styles from './NotasNaturalesSection.module.css';
 
 export default function NotasNaturalesSection() {
+  const { t } = useTranslation();
+
   return (
     <section className={styles.section}>
-      <SectionLabel text="01 · Notas naturales" />
-      <h2>Notas naturales y cifrado anglosajón</h2>
+      <SectionLabel text={t('t1.s01.label')} />
+      <h2>{t('t1.s01.title')}</h2>
 
-      <p className={styles.text}>{NATURALES_INTRO}</p>
+      <p className={styles.text}>{t('t1.s01.intro')}</p>
 
       <div className={styles.tableWrap}>
         <table className={styles.table}>
@@ -38,10 +37,10 @@ export default function NotasNaturalesSection() {
         </table>
       </div>
 
-      <p className={styles.text}>{NATURALES_JERARQUIA}</p>
-      <p className={styles.text}>{NATURALES_BASE}</p>
+      <p className={styles.text}>{t('t1.s01.body')}</p>
+      <p className={styles.text}>{t('t1.s01.rule')}</p>
 
-      <RuleNote>{CONSEJO_NATURALES}</RuleNote>
+      <RuleNote>{t('t1.s01.tip')}</RuleNote>
     </section>
   );
 }

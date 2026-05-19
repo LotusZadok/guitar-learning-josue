@@ -1,76 +1,70 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
 import Prose from '../../../shared/Prose/Prose';
 import AcordesBuilder from '../../../primitives/AcordesBuilder/AcordesBuilder';
 import { useUIStore } from '../../../../stores/useUIStore';
 import { chordSpelled } from '../../../../utils/noteCalculations';
 import {
-  ACORDES_INTRO,
-  ACORDES_DEFINICIONES,
-  ACORDES_DIFF,
-  ACORDES_NOMENCLATURA_INTRO,
-  ACORDES_NOMENCLATURA,
-  ACORDES_PROCEDIMIENTO_TITULO,
-  ACORDES_PROCEDIMIENTO_PASOS,
   ACORDES_EJEMPLO_PASOS,
-  ACORDES_PRIMITIVA_TITULO,
+  ACORDES_EJEMPLO_PASOS_DE,
 } from '../data/literalContent';
 import styles from './AcordesSection.module.css';
 
 export default function AcordesSection() {
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language;
+
   const tonic = useUIStore((s) => s.tonic);
   const chordM = useMemo(() => chordSpelled(tonic, 'M'), [tonic]);
   const chordm = useMemo(() => chordSpelled(tonic, 'm'), [tonic]);
 
+  const ejemploPasos = locale === 'de' ? ACORDES_EJEMPLO_PASOS_DE : ACORDES_EJEMPLO_PASOS;
+  const procedure = t('t1.s07.procedure', { returnObjects: true }) as string[];
+
   return (
     <section className={styles.section}>
-      <SectionLabel text="07 · Acordes" />
-      <h2>Acordes mayores y menores</h2>
+      <SectionLabel text={t('t1.s07.label')} />
+      <h2>{t('t1.s07.title')}</h2>
 
-      <p className={styles.text}>{ACORDES_INTRO}</p>
+      <p className={styles.text}>{t('t1.s07.intro')}</p>
 
       <ul className={styles.defList}>
-        {ACORDES_DEFINICIONES.map((d) => (
-          <li key={d.tipo}>
-            <strong>{d.tipo}</strong> = <span className={styles.formula}>{d.formula}</span> · {d.desc}
-          </li>
-        ))}
+        <li>{t('t1.s07.major_def')}</li>
+        <li>{t('t1.s07.minor_def')}</li>
       </ul>
 
-      <p className={styles.text}>{ACORDES_DIFF}</p>
+      <p className={styles.text}>{t('t1.s07.comparison')}</p>
 
-      <h3 className={styles.subheading}>{ACORDES_NOMENCLATURA_INTRO}</h3>
+      <h3 className={styles.subheading}>{t('t1.s07.notation_title')}</h3>
       <ul className={styles.nomList}>
-        {ACORDES_NOMENCLATURA.map((n) => (
-          <li key={n.regla}>
-            <strong>{n.regla}:</strong>{' '}
-            {typeof n.desc === 'string' ? n.desc : <Prose segment={n.desc} />}
-          </li>
-        ))}
+        <li>{t('t1.s07.notation_major')}</li>
+        <li>{t('t1.s07.notation_minor')}</li>
       </ul>
 
-      <h3 className={styles.subheading}>{ACORDES_PROCEDIMIENTO_TITULO}</h3>
+      <h3 className={styles.subheading}>{t('t1.s07.procedure_title')}</h3>
       <ol className={styles.steps}>
-        {ACORDES_PROCEDIMIENTO_PASOS.map((p, i) => (
+        {procedure.map((p, i) => (
           <li key={i}>{p}</li>
         ))}
       </ol>
 
-      <h3 className={styles.subheading}>{tonic} mayor</h3>
+      <h3 className={styles.subheading}>{tonic} {t('common.major')}</h3>
       <ol className={styles.steps}>
-        {ACORDES_EJEMPLO_PASOS.map((p, i) => (
+        {ejemploPasos.map((p, i) => (
           <li key={i}><Prose segment={p} /></li>
         ))}
       </ol>
 
       <p className={styles.resultado}>
-        {tonic} mayor = {chordM.map((m) => m.spelled).join('  ')}
+        {tonic} {t('common.major')} = {chordM.map((m) => m.spelled).join('  ')}
       </p>
       <p className={styles.text}>
-        {tonic} menor = {chordm.map((m) => m.spelled).join('  ')}
+        {tonic} {t('common.minor')} = {chordm.map((m) => m.spelled).join('  ')}
       </p>
 
-      <h3 className={styles.subheading}>{ACORDES_PRIMITIVA_TITULO}</h3>
+      {/* TODO i18n: sin clave — ACORDES_PRIMITIVA_TITULO e instrucción */}
+      <h3 className={styles.subheading}>Constructor de acordes</h3>
       <p className={styles.text}>
         Tónica activa: <strong>{tonic}</strong> · elegí una calidad (mayor o menor) para construir el acorde. Escuchalo bloque o arpegiado.
       </p>

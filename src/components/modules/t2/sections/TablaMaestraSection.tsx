@@ -1,17 +1,16 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
 import {
   TABLA_MAESTRA_INTRO,
-  OBSERVACION_TONICAS_NATURALES,
-  OBSERVACION_TONICAS_BEMOL,
-  OBSERVACION_UTILIDAD,
 } from '../data/literalContent';
 import { TONALIDADES } from '../data/tonalidades';
 import ProcesoView from '../components/ProcesoView';
 import styles from './TablaMaestraSection.module.css';
 
 export default function TablaMaestraSection() {
+  const { t } = useTranslation();
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const toggle = (id: string) => {
@@ -20,76 +19,75 @@ export default function TablaMaestraSection() {
 
   const sostenidos = TONALIDADES.filter(t => t.tipo === 'sostenido');
   const bemoles = TONALIDADES.filter(t => t.tipo === 'bemol');
+  const observations = t('t2.s45.observations', { returnObjects: true }) as string[];
 
   return (
     <section className={styles.section}>
-      <SectionLabel text="05 · Tabla maestra" />
-      <h2>Todas las tonalidades mayores</h2>
+      <SectionLabel text={t('t2.s45.label')} />
+      <h2>{t('t2.s45.title')}</h2>
 
+      {/* TODO i18n: sin clave — TABLA_MAESTRA_INTRO no tiene clave en de.json */}
       <p className={styles.intro}>{TABLA_MAESTRA_INTRO}</p>
 
-      {/* Sharps table */}
-      <h3 className={styles.subheading}>Tonalidades con #</h3>
+      <h3 className={styles.subheading}>{t('t2.s45.sharps_section')}</h3>
       <div className={styles.table}>
         <div className={styles.header}>
-          <span className={styles.colNum}>#</span>
-          <span className={styles.colArm}>Armadura</span>
-          <span className={styles.colTon}>Tonalidad</span>
+          <span className={styles.colNum}>{t('t2.s45.table_headers.count')}</span>
+          <span className={styles.colArm}>{t('t2.s45.table_headers.key_signature')}</span>
+          <span className={styles.colTon}>{t('t2.s45.table_headers.tonality')}</span>
         </div>
-        {sostenidos.map(t => (
-          <div key={t.id}>
+        {sostenidos.map(ton => (
+          <div key={ton.id}>
             <div
-              className={`${styles.row} ${expandedId === t.id ? styles.rowActive : ''}`}
-              onClick={() => toggle(t.id)}
+              className={`${styles.row} ${expandedId === ton.id ? styles.rowActive : ''}`}
+              onClick={() => toggle(ton.id)}
             >
-              <span className={styles.colNum}>{t.numAlteraciones}</span>
-              <span className={styles.colArm}>{t.armadura.join(' ')}</span>
-              <span className={styles.colTon}>{t.tonica} mayor</span>
-              <span className={styles.chevron}>{expandedId === t.id ? '▾' : '▸'}</span>
+              <span className={styles.colNum}>{ton.numAlteraciones}</span>
+              <span className={styles.colArm}>{ton.armadura.join(' ')}</span>
+              <span className={styles.colTon}>{ton.tonica} {t('common.major')}</span>
+              <span className={styles.chevron}>{expandedId === ton.id ? '▾' : '▸'}</span>
             </div>
-            {expandedId === t.id && (
+            {expandedId === ton.id && (
               <div className={styles.expanded}>
-                <ProcesoView tonalidad={t} compact />
+                <ProcesoView tonalidad={ton} compact />
               </div>
             )}
           </div>
         ))}
       </div>
 
-      {/* Flats table */}
-      <h3 className={styles.subheading}>Tonalidades con b</h3>
+      <h3 className={styles.subheading}>{t('t2.s45.flats_section')}</h3>
       <div className={styles.table}>
         <div className={styles.header}>
-          <span className={styles.colNum}>b</span>
-          <span className={styles.colArm}>Armadura</span>
-          <span className={styles.colTon}>Tonalidad</span>
+          <span className={styles.colNum}>{t('t2.s45.table_headers.count')}</span>
+          <span className={styles.colArm}>{t('t2.s45.table_headers.key_signature')}</span>
+          <span className={styles.colTon}>{t('t2.s45.table_headers.tonality')}</span>
         </div>
-        {bemoles.map(t => (
-          <div key={t.id}>
+        {bemoles.map(ton => (
+          <div key={ton.id}>
             <div
-              className={`${styles.row} ${expandedId === t.id ? styles.rowActive : ''}`}
-              onClick={() => toggle(t.id)}
+              className={`${styles.row} ${expandedId === ton.id ? styles.rowActive : ''}`}
+              onClick={() => toggle(ton.id)}
             >
-              <span className={styles.colNum}>{t.numAlteraciones}</span>
-              <span className={styles.colArm}>{t.armadura.join(' ')}</span>
-              <span className={styles.colTon}>{t.tonica} mayor</span>
-              <span className={styles.chevron}>{expandedId === t.id ? '▾' : '▸'}</span>
+              <span className={styles.colNum}>{ton.numAlteraciones}</span>
+              <span className={styles.colArm}>{ton.armadura.join(' ')}</span>
+              <span className={styles.colTon}>{ton.tonica} {t('common.major')}</span>
+              <span className={styles.chevron}>{expandedId === ton.id ? '▾' : '▸'}</span>
             </div>
-            {expandedId === t.id && (
+            {expandedId === ton.id && (
               <div className={styles.expanded}>
-                <ProcesoView tonalidad={t} compact />
+                <ProcesoView tonalidad={ton} compact />
               </div>
             )}
           </div>
         ))}
       </div>
 
-      {/* Observations — unified callout */}
       <RuleNote>
         <ul className={styles.observacionList}>
-          <li>{OBSERVACION_TONICAS_NATURALES}</li>
-          <li>{OBSERVACION_TONICAS_BEMOL}</li>
-          <li>{OBSERVACION_UTILIDAD}</li>
+          {observations.map((obs, i) => (
+            <li key={i}>{obs}</li>
+          ))}
         </ul>
       </RuleNote>
     </section>

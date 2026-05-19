@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
 import ChromaticCircleAnimated from '../components/ChromaticCircleAnimated';
 import { useAudioEngine } from '../../../../hooks/useAudioEngine';
@@ -35,6 +36,7 @@ function sortAscendingFromTonic(notes: string[], tonicIdx: number): string[] {
 }
 
 export default function ModoClaseSection() {
+  const { t } = useTranslation();
   const [tonic, setTonic] = useState<string>('C');
   const [scaleName, setScaleName] = useState<string>('Mayor');
   const [marked, setMarked] = useState<string[]>([]);
@@ -64,11 +66,12 @@ export default function ModoClaseSection() {
 
   return (
     <section className={styles.section}>
-      <SectionLabel text="06 · Modo clase" />
+      <SectionLabel text={t('t2.s46.label')} />
 
       <div className={styles.controls}>
         <div className={styles.row}>
-          <span className={styles.rowLabel}>Tónica</span>
+          {/* TODO i18n: sin clave — "Tónica" y "Escala" labels */}
+          <span className={styles.rowLabel}>{t('common.tonic_selector_label')}</span>
           <div className={styles.tonicGrid}>
             {CHROMATIC.map(n => (
               <button
@@ -83,7 +86,8 @@ export default function ModoClaseSection() {
         </div>
 
         <div className={styles.row}>
-          <span className={styles.rowLabel}>Escala</span>
+          {/* TODO i18n: sin clave — SCALE_NAMES no tienen equivalente en de.json */}
+          <span className={styles.rowLabel}>{t('common.scale_label')}</span>
           <div className={styles.scaleRow}>
             {SCALE_NAMES.map(s => (
               <button
@@ -98,6 +102,7 @@ export default function ModoClaseSection() {
         </div>
 
         <div className={styles.actions}>
+          {/* TODO i18n: sin clave — botones de acción */}
           <button className={styles.actionBtn} onClick={loadScale}>
             Cargar escala
           </button>
