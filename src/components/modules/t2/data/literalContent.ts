@@ -1,6 +1,7 @@
 // Contenido literal del método de Josué Barquero — NO parafrasear, NO corregir erratas
 
 import type { DiatonicDegree } from '../../../../types/music';
+import type { ProseSegment } from '../../../../types/prose';
 
 export const INTRO_LENGUAS = "Para comprender este tema utilizaremos una analogía con las diferentes lenguas del mundo, existen numerosos y vastos lenguajes, unos similares entre sí, por ejemplo: Español, Portugués, Italiano estos tres si bien es cierto no son el mismo comparten entre sí fonética, vocabulario, incluso gramática, esto gracias a compartir la misma raíz romance. Este mismo ejemplo pasa con el Alemán, Holandés, Inglés al compartir la raíz germánica, etc.";
 
@@ -150,3 +151,31 @@ export const PROGRESIONES_DATA: ReadonlyArray<{
 ];
 
 export const PROGRESIONES_CONSEJO = "Consejo: intente experimentar y crear progresiones más largas, siempre teniendo en cuenta la resolución hacia un acorde estable.";
+
+// === §4.9 Relativas menores ===
+
+export const RELATIVAS_INTRO: readonly ProseSegment[] = [
+  [
+    { type: 'text', value: 'Toda tonalidad mayor tiene una tonalidad menor relativa que comparte exactamente la misma armadura. La relativa menor se construye sobre el vi grado de la mayor.' },
+  ],
+  [
+    { type: 'text', value: 'La escala menor natural usa las mismas 7 notas, pero comienza en la 6ta. Los acordes son los mismos en ambos casos, solo cambia el orden: en ' },
+    { type: 'note', value: 'C' },
+    { type: 'text', value: ' mayor → C Dm Em F G Am B°; en ' },
+    { type: 'note', value: 'A' },
+    { type: 'text', value: ' menor → Am B° C Dm Em F G.' },
+  ],
+] as const;
+
+export const RELATIVAS_PROCESO: readonly string[] = [
+  'Mayor → menor: bajamos 3 semitonos desde la tónica mayor.',
+  'Menor → mayor: subimos 3 semitonos desde la tónica menor.',
+] as const;
+
+export const RELATIVAS_RULE_NOTE = 'Regla de los 3 semitonos: toda relativa menor está exactamente 3 semitonos por debajo de la tónica mayor. A la inversa, la mayor está 3 semitonos por encima de la menor.';
+
+export const RELATIVAS_TABLA_HEADERS: readonly [string, string, string] = [
+  'Tonalidad mayor',
+  'Relativa menor',
+  'Armadura compartida',
+] as const;
