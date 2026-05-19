@@ -4,6 +4,7 @@ import ProcesoSostenidosSection from './sections/ProcesoSostenidosSection';
 import ProcesoBemolesSection from './sections/ProcesoBemolesSection';
 import TablaMaestraSection from './sections/TablaMaestraSection';
 import GradosArmonicosSection from './components/GradosArmonicosSection';
+import ProgresionesArmonicasSection from './components/ProgresionesArmonicasSection';
 import ModoClaseSection from './sections/ModoClaseSection';
 import styles from './T2Module.module.css';
 
@@ -17,6 +18,7 @@ export default function T2Module() {
         <ProcesoBemolesSection />
         <TablaMaestraSection />
         <GradosArmonicosSection />
+        <ProgresionesArmonicasSection />
         <ModoClaseSection />
       </main>
     </div>

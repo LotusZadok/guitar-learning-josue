@@ -56,3 +56,5 @@ export interface IntervalDefinition {
 }
 
 export type ThemeMode = 'dark' | 'light';
+
+export type DiatonicDegree = 'I' | 'ii' | 'iii' | 'IV' | 'V' | 'vi' | 'vii°';

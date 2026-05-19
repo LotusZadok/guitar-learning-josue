@@ -1,5 +1,7 @@
 // Contenido literal del método de Josué Barquero — NO parafrasear, NO corregir erratas
 
+import type { DiatonicDegree } from '../../../../types/music';
+
 export const INTRO_LENGUAS = "Para comprender este tema utilizaremos una analogía con las diferentes lenguas del mundo, existen numerosos y vastos lenguajes, unos similares entre sí, por ejemplo: Español, Portugués, Italiano estos tres si bien es cierto no son el mismo comparten entre sí fonética, vocabulario, incluso gramática, esto gracias a compartir la misma raíz romance. Este mismo ejemplo pasa con el Alemán, Holandés, Inglés al compartir la raíz germánica, etc.";
 
 export const INTRO_VARIEDAD = "Todo esto nos hace entender que hay mucha variedad de lenguas algunas muy distintas entre sí otras muy similares donde cambian solo los detalles, esta misma idea la aplicamos a las TONALIDADES.";
@@ -119,3 +121,32 @@ export const GRADOS_ANALISIS_MEDIOS = "Los medios (ii, IV) no tienen la sensible
 export const GRADOS_ANALISIS_IV = "Sobre el IV grado: es ambivalente. Tiene la T (la nota más estable) y la 4ta (sensible modal). Como la 4ta tiende hacia la 3ra por estar a 1 s.t., el IV grado tiene carácter medio y tenso al mismo tiempo, y puede resolver directamente a un acorde estable.";
 
 export const GRADOS_CONSEJO = "Memorizar el patrón M m m M M m dim. Se repite idéntico en cualquier tonalidad mayor: la simetría que justifica aprenderlo una sola vez.";
+
+// === §4.8 Progresiones armónicas ===
+
+export const PROGRESIONES_INTRO = "La armonía diatónica no solo ofrece acordes individuales: también permite combinarlos en secuencias. A estas secuencias se les llama progresiones armónicas. Cada acorde cumple una función dentro de la tonalidad y contribuye a crear tensión o reposo.";
+
+export const PROGRESIONES_PROCEDIMIENTO_TITULO = "Práctica progresiva";
+
+export const PROGRESIONES_PROCEDIMIENTO_PASOS: readonly string[] = [
+  "Tocamos el I: ahí es donde el oído quiere reposar y resolver. Repetirlo hasta acostumbrarse.",
+  "Tocamos el V (segundo en importancia): su tensión crea movimiento. Conectarlo con el I.",
+  "Tocamos el IV, resolvemos al I, o lo seguimos de un V-I.",
+] as const;
+
+export const PROGRESIONES_PRIMITIVA_INSTRUCCION = "Tocá cada progresión sobre la tónica activa.";
+
+export const PROGRESIONES_DATA: ReadonlyArray<{
+  id: string;
+  label: string;
+  grados: ReadonlyArray<DiatonicDegree>;
+}> = [
+  { id: 'p1',  label: '1',  grados: ['I', 'V', 'I'] },
+  { id: 'p2a', label: '2a', grados: ['IV', 'I'] },
+  { id: 'p2b', label: '2b', grados: ['IV', 'V', 'I'] },
+  { id: 'p3',  label: '3',  grados: ['ii', 'V', 'I'] },
+  { id: 'p4',  label: '4',  grados: ['I', 'V', 'vi', 'IV'] },
+  { id: 'p5',  label: '5',  grados: ['I', 'iii', 'vi', 'IV'] },
+];
+
+export const PROGRESIONES_CONSEJO = "Consejo: intente experimentar y crear progresiones más largas, siempre teniendo en cuenta la resolución hacia un acorde estable.";
