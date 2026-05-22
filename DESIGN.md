@@ -357,7 +357,7 @@ Este componente es el que identifica la marca. Aparece en T1 (primitiva Chromati
 
 Esta sección lista deudas que las auditorías y pasadas de resolución identificaron pero **no** han sido resueltas. Son trabajo futuro explícito, no aprobaciones tácitas. Cada vez que una pasada resuelve una deuda, se remueve de esta lista; cada nueva deuda descubierta se añade.
 
-**Última actualización:** 2026-05-22 (12ª ola — identidad de marca, corrección TOC, numeración T2, ♭ integral).
+**Última actualización:** 2026-05-22 (13ª ola — limpieza de superficie: ModoClase y Footer eliminados).
 
 ### Doctrina activa (decisiones pendientes de diseño)
 
@@ -375,6 +375,11 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 ### Histórico (resueltas, conservar para contexto)
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
+
+**13ª ola — Limpieza de superficie (2026-05-22):**
+- ✓ **ModoClaseSection eliminada** (`ModoClaseSection.tsx` + `.module.css` + import en `T2Module.tsx` + claves `s46` en `es.json`/`de.json`). Sin rastro en codebase.
+- ✓ **Footer eliminado** (`Footer.tsx` + `.module.css` + import/JSX en `AppShell.tsx`). Sin rastro en codebase.
+- ✓ Sin deuda nueva introducida.
 
 **12ª ola — Identidad de marca, TOC, numeración T2, ♭ integral (2026-05-22):**
 - ✓ **Header** rediseñado: eliminado "APUNTES DE", eliminada cita tagline, eyebrow neutral "GUITARRA ELÉCTRICA / ACÚSTICA". Fuente Bebas Neue, rojo en "Guitarra". Eliminado `::before` ghost watermark (violación rgba documentada en lessons-learned).
