@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useRef, useState, type KeyboardEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { ALL } from '../../../data/notes';
 import { majorScaleSpelled } from '../../../utils/noteCalculations';
@@ -89,6 +90,8 @@ function chordMemberOctave(diatonic: DiatonicNote[], gradeIdx: number, offset: n
 }
 
 export default function GradosArmonicos({ tonalidad }: Props) {
+  const { i18n } = useTranslation();
+  const isDe = i18n.language === 'de';
   const [step, setStep] = useState<Step>(1);
   const [flatMode, setFlatMode] = useState(false);
   const [playingCell, setPlayingCell] = useState<number | null>(null);
@@ -179,7 +182,7 @@ export default function GradosArmonicos({ tonalidad }: Props) {
 
   return (
     <div className={styles.wrap}>
-      <div className={styles.stepperRow} role="tablist" aria-label="Paso del procedimiento">
+      <div className={styles.stepperRow} role="tablist" aria-label={isDe ? 'Verfahrensschritt' : 'Paso del procedimiento'}>
         {([1, 2, 3, 4] as Step[]).map((s) => (
           <button
             key={s}
@@ -189,14 +192,14 @@ export default function GradosArmonicos({ tonalidad }: Props) {
             onClick={() => setStep(s)}
           >
             <span className={styles.stepNum}>0{s}</span>
-            <span className={styles.stepLabel}>{stepLabel(s)}</span>
+            <span className={styles.stepLabel}>{stepLabel(s, isDe)}</span>
           </button>
         ))}
         <button
           className={flatMode ? styles.flatToggleActive : styles.flatToggle}
           onClick={() => setFlatMode((f) => !f)}
           aria-pressed={flatMode}
-          title="Mostrar bemoles"
+          title={isDe ? 'Bs anzeigen' : 'Mostrar bemoles'}
         >
           ♭
         </button>
@@ -205,17 +208,18 @@ export default function GradosArmonicos({ tonalidad }: Props) {
       <div className={styles.tableWrap}>
         <table className={styles.table}>
           <tbody>
-            <Row label="Escala" cells={fGlyph(escalaRow)} ascii={fAscii(escalaAscii)} />
+            <Row label={isDe ? 'Tonleiter' : 'Escala'} cells={fGlyph(escalaRow)} ascii={fAscii(escalaAscii)} />
             <TriadaRow
               tonicaRow={fGlyph(tonicaRow)} tonicaAscii={fAscii(tonicaAscii)}
               terceraRow={fGlyph(terceraRow)} terceraAscii={fAscii(terceraAscii)}
               quintaRow={fGlyph(quintaRow)} quintaAscii={fAscii(quintaAscii)}
               septRow={step >= 4 ? fGlyph(septRow) : undefined}
               septAscii={step >= 4 ? fAscii(septAscii) : undefined}
+              isDe={isDe}
             />
 
             <tr className={`${styles.revealRow} ${step >= 3 ? styles.revealOn : ''}`}>
-              <th scope="row" className={styles.rowLabel}>Grado</th>
+              <th scope="row" className={styles.rowLabel}>{isDe ? 'Stufe' : 'Grado'}</th>
               {ROMANS.map((roman, i) => (
                 <td key={i} className={styles.gradoCell}>
                   <RomanGlyph roman={roman} />
@@ -224,7 +228,7 @@ export default function GradosArmonicos({ tonalidad }: Props) {
             </tr>
 
             <tr className={`${styles.revealRow} ${step >= 3 ? styles.revealOn : ''}`}>
-              <th scope="row" className={styles.rowLabel}>Acorde</th>
+              <th scope="row" className={styles.rowLabel}>{isDe ? 'Akkord' : 'Acorde'}</th>
               {displayChords.map((sym, i) => (
                 <ChordCell
                   key={i}
@@ -233,6 +237,7 @@ export default function GradosArmonicos({ tonalidad }: Props) {
                   onPlay={() => playTriad(i)}
                   isPlaying={playingCell === i}
                   isDimmed={playingCell !== null && playingCell !== i}
+                  isDe={isDe}
                 />
               ))}
             </tr>
@@ -243,11 +248,11 @@ export default function GradosArmonicos({ tonalidad }: Props) {
   );
 }
 
-function stepLabel(s: Step): string {
-  if (s === 1) return 'Letras solas';
-  if (s === 2) return 'Con armadura';
-  if (s === 3) return 'Calidades';
-  return 'Séptimas';
+function stepLabel(s: Step, isDe: boolean): string {
+  if (s === 1) return isDe ? 'Nur Buchstaben' : 'Letras solas';
+  if (s === 2) return isDe ? 'Mit Vorzeichen' : 'Con armadura';
+  if (s === 3) return isDe ? 'Qualitäten' : 'Calidades';
+  return isDe ? 'Septimen' : 'Séptimas';
 }
 
 interface RowProps {
@@ -297,13 +302,14 @@ interface TriadaRowProps {
   quintaAscii: string[];
   septRow?: string[];
   septAscii?: string[];
+  isDe?: boolean;
 }
 
-function TriadaRow({ tonicaRow, tonicaAscii, terceraRow, terceraAscii, quintaRow, quintaAscii, septRow, septAscii }: TriadaRowProps) {
+function TriadaRow({ tonicaRow, tonicaAscii, terceraRow, terceraAscii, quintaRow, quintaAscii, septRow, septAscii, isDe }: TriadaRowProps) {
   const withSept = septRow !== undefined && septAscii !== undefined;
   return (
     <tr>
-      <th scope="row" className={styles.rowLabel}>{withSept ? 'Acorde' : 'Tríada'}</th>
+      <th scope="row" className={styles.rowLabel}>{withSept ? (isDe ? 'Akkord' : 'Acorde') : (isDe ? 'Dreiklang' : 'Tríada')}</th>
       {tonicaRow.map((_, i) => {
         const members: { display: string; ascii: string }[] = [
           { display: tonicaRow[i], ascii: tonicaAscii[i] },
@@ -338,9 +344,10 @@ interface ChordCellProps {
   onPlay: () => void;
   isPlaying?: boolean;
   isDimmed?: boolean;
+  isDe?: boolean;
 }
 
-function ChordCell({ symbol, active, onPlay, isPlaying, isDimmed }: ChordCellProps) {
+function ChordCell({ symbol, active, onPlay, isPlaying, isDimmed, isDe }: ChordCellProps) {
   const handleKey = useCallback(
     (e: KeyboardEvent<HTMLTableCellElement>) => {
       if (!active) return;
@@ -362,7 +369,7 @@ function ChordCell({ symbol, active, onPlay, isPlaying, isDimmed }: ChordCellPro
       role={active ? 'button' : undefined}
       tabIndex={active ? 0 : -1}
       aria-hidden={!active}
-      aria-label={active ? `Reproducir acorde ${symbol}` : undefined}
+      aria-label={active ? (isDe ? `Akkord ${symbol} spielen` : `Reproducir acorde ${symbol}`) : undefined}
       onClick={active ? onPlay : undefined}
       onFocus={active ? onPlay : undefined}
       onKeyDown={handleKey}

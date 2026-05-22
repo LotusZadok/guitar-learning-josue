@@ -1,7 +1,13 @@
 import { useCallback, useMemo, type KeyboardEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { useUIStore } from '../../../stores/useUIStore';
 import { ALL, NOTE_COLORS, NOTE_ES } from '../../../data/notes';
+
+const NOTE_DE_LETTER: Record<string, string> = {
+  C: 'C', 'C#': 'Cis', D: 'D', 'D#': 'Dis', E: 'E', F: 'F',
+  'F#': 'Fis', G: 'G', 'G#': 'Gis', A: 'A', 'A#': 'B', B: 'H',
+};
 import { majorScaleSpelled } from '../../../utils/noteCalculations';
 import type { ChromaticNote } from '../../../types/music';
 import styles from './EscalaMayor.module.css';
@@ -44,6 +50,8 @@ interface NodeData {
 }
 
 export default function EscalaMayor() {
+  const { i18n } = useTranslation();
+  const isDe = i18n.language === 'de';
   const tonic = useUIStore((s) => s.tonic);
   const { playNote } = useAudioEngine();
 
@@ -85,7 +93,7 @@ export default function EscalaMayor() {
         className={styles.svg}
         viewBox={`0 0 ${SVG_W} ${SVG_H}`}
         role="img"
-        aria-label={`Escala mayor de ${NOTE_ES[tonic]}`}
+        aria-label={isDe ? `Dur-Tonleiter von ${NOTE_DE_LETTER[tonic] ?? tonic}` : `Escala mayor de ${NOTE_ES[tonic]}`}
       >
         <defs>
           <marker
@@ -129,7 +137,7 @@ export default function EscalaMayor() {
         />
 
         {nodes.map((n) => (
-          <ScaleNode key={n.position} data={n} onPlay={handlePlay} />
+          <ScaleNode key={n.position} data={n} onPlay={handlePlay} isDe={isDe} />
         ))}
       </svg>
     </div>
@@ -139,9 +147,10 @@ export default function EscalaMayor() {
 interface ScaleNodeProps {
   data: NodeData;
   onPlay: (chromatic: ChromaticNote, octaveAdj: number) => void;
+  isDe?: boolean;
 }
 
-function ScaleNode({ data, onPlay }: ScaleNodeProps) {
+function ScaleNode({ data, onPlay, isDe }: ScaleNodeProps) {
   const { cx, chromatic, octaveAdj, role, spelled, grade } = data;
 
   const radius =
@@ -172,7 +181,9 @@ function ScaleNode({ data, onPlay }: ScaleNodeProps) {
       className={styles.node}
       tabIndex={0}
       role="button"
-      aria-label={`${NOTE_ES[chromatic]}${grade ? ` · grado ${grade}` : ' · cromática'}`}
+      aria-label={isDe
+        ? `${NOTE_DE_LETTER[chromatic] ?? chromatic}${grade ? ` · Stufe ${grade}` : ' · chromatisch'}`
+        : `${NOTE_ES[chromatic]}${grade ? ` · grado ${grade}` : ' · cromática'}`}
       onFocus={handleEnter}
       onKeyDown={handleKey}
     >

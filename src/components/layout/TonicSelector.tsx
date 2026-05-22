@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useUIStore } from '../../stores/useUIStore';
 import { ALL } from '../../data/notes';
 import { noteShort } from '../../utils/noteCalculations';
@@ -14,11 +15,13 @@ const noteLabel = (n: ChromaticNote) => FLAT_LABELS[n] ?? noteShort(n);
 export default function TonicSelector() {
   const tonic = useUIStore((s) => s.tonic);
   const setTonic = useUIStore((s) => s.setTonic);
+  const { i18n } = useTranslation();
+  const isDe = i18n.language === 'de';
 
   return (
     <div className={styles.wrap}>
       <label htmlFor="tonic-select" className={styles.label}>
-        TONALIDAD
+        {isDe ? 'TONART' : 'TONALIDAD'}
       </label>
       <select
         id="tonic-select"
@@ -32,7 +35,9 @@ export default function TonicSelector() {
           </option>
         ))}
       </select>
-      <span className={styles.hint}>Transpone escalas, acordes y grados</span>
+      <span className={styles.hint}>
+        {isDe ? 'Transponiert Tonleitern, Akkorde und Stufen' : 'Transpone escalas, acordes y grados'}
+      </span>
     </div>
   );
 }

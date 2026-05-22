@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import ChromaticNode from './ChromaticNode';
 import { ALL } from '../../../data/notes';
 import { chordSpelled, ensureAscending } from '../../../utils/noteCalculations';
@@ -13,6 +14,8 @@ const NOTE_DURATION = 2.0;
 type PlayMode = 'arpegio' | 'bloque';
 
 export default function ChromaticCircleSection() {
+  const { i18n } = useTranslation();
+  const isDe = i18n.language === 'de';
   const [playMode, setPlayMode] = useState<PlayMode>('arpegio');
   const { playNote } = useAudioEngine();
 
@@ -34,7 +37,7 @@ export default function ChromaticCircleSection() {
   return (
     <div className={styles.wrap}>
       <div className={styles.playToggleRow}>
-        <span className={styles.toggleLabel}>Reproducción:</span>
+        <span className={styles.toggleLabel}>{isDe ? 'Wiedergabe:' : 'Reproducción:'}</span>
         {(['arpegio', 'bloque'] as PlayMode[]).map((m) => (
           <button
             key={m}
@@ -42,13 +45,15 @@ export default function ChromaticCircleSection() {
             onClick={() => setPlayMode(m)}
             aria-pressed={playMode === m}
           >
-            {m.charAt(0).toUpperCase() + m.slice(1)}
+            {isDe
+              ? (m === 'arpegio' ? 'Arpeggio' : 'Block')
+              : m.charAt(0).toUpperCase() + m.slice(1)}
           </button>
         ))}
       </div>
       <svg className={styles.svg} viewBox="0 0 400 400">
         <circle cx={CX} cy={CY} r={R + 16} fill="none" style={{ stroke: 'var(--rule)' }} strokeWidth={0.5} />
-        {['Círculo', 'Cromático'].map((t, i) => (
+        {(isDe ? ['Chromatischer', 'Kreis'] : ['Círculo', 'Cromático']).map((t, i) => (
           <text key={t} x={CX} y={CY - 8 + i * 18} textAnchor="middle" style={{ fill: 'var(--muted)' }} fontSize={11}>
             {t}
           </text>

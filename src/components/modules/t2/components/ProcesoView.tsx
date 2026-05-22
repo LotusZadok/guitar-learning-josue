@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Tonalidad } from '../data/tonalidades';
 import { getProcessSteps, getIdleCircle } from '../data/processSteps';
 import { useProcessAnimation } from '../hooks/useProcessAnimation';
@@ -16,6 +17,8 @@ interface Props {
 }
 
 export default function ProcesoView({ tonalidad, compact }: Props) {
+  const { i18n } = useTranslation();
+  const isDe = i18n.language === 'de';
   const [dirRight, setDirRight] = useState(false);
   const direction = dirRight ? 'der' : 'izq';
 
@@ -48,8 +51,8 @@ export default function ProcesoView({ tonalidad, compact }: Props) {
     : undefined;
 
   const titulo = direction === 'izq'
-    ? '¿Cómo saber la armadura partiendo de la tonalidad?'
-    : '¿Cómo saber la tonalidad partiendo de la armadura?';
+    ? (isDe ? 'Wie ermittelt man die Vorzeichen ausgehend von der Tonart?' : '¿Cómo saber la armadura partiendo de la tonalidad?')
+    : (isDe ? 'Wie ermittelt man die Tonart ausgehend von den Vorzeichen?' : '¿Cómo saber la tonalidad partiendo de la armadura?');
 
   const closingText = anim.currentStep === maxSteps
     ? steps[maxSteps - 1].closingText
@@ -62,7 +65,7 @@ export default function ProcesoView({ tonalidad, compact }: Props) {
       {/* Direction toggle */}
       <div className={styles.dirToggle}>
         <span className={!dirRight ? styles.dirActive : styles.dirLabel}>
-          Tonalidad → Armadura
+          {isDe ? 'Tonart → Vorzeichen' : 'Tonalidad → Armadura'}
         </span>
         <ToggleSwitch
           label=""
@@ -70,7 +73,7 @@ export default function ProcesoView({ tonalidad, compact }: Props) {
           onToggle={() => !isException && setDirRight(v => !v)}
         />
         <span className={`${dirRight ? styles.dirActive : styles.dirLabel} ${isException ? styles.dirDisabled : ''}`}>
-          Armadura → Tonalidad
+          {isDe ? 'Vorzeichen → Tonart' : 'Armadura → Tonalidad'}
         </span>
       </div>
 

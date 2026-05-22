@@ -1,21 +1,6 @@
 .header {
-  position: relative;
-  padding: 80px 60px 60px;
+  padding: 60px 60px 44px;
   border-bottom: 1px solid var(--rule);
-  overflow: hidden;
-}
-
-.header::before {
-  content: 'GUITARRA';
-  position: absolute;
-  top: -20px;
-  right: -20px;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(120px, 20vw, 260px);
-  color: rgba(245, 240, 232, 0.04);
-  line-height: 1;
-  pointer-events: none;
-  user-select: none;
 }
 
 .eyebrow {
@@ -38,17 +23,9 @@
   color: var(--red);
 }
 
-.sub {
-  margin-top: 20px;
-  font-size: 12px;
-  color: var(--muted);
-  font-style: italic;
-  font-family: 'Playfair Display', serif;
-}
-
 @media (max-width: 900px) {
   .header {
-    padding: 40px 24px;
+    padding: 40px 24px 32px;
     padding-left: 60px;
   }
 }

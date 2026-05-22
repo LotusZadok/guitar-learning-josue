@@ -1,4 +1,4 @@
-{
+﻿{
   "site": { "title": "Guitarra didáctica · Prof. Josué Barquero" },
   "nav": {
     "t1": "T1 · Fundamentos musicales",
@@ -55,7 +55,7 @@
       "title": "Notas alteradas y círculo cromático",
       "intro": "Además de las 7 notas naturales existen 5 notas más, llamadas alteradas. Cada una tiene 2 nombres:",
       "sharp_def": "Sostenido (#) — cuando una nota natural sube un semitono (un traste).",
-      "flat_def": "Bemol (b) — cuando una nota natural baja un semitono (un traste).",
+      "flat_def": "Bemol (♭) — cuando una nota natural baja un semitono (un traste).",
       "body": "Sumando las 7 naturales y las 5 alteradas resultan las 12 notas del círculo cromático (CC):",
       "rule": "Importante: entre B–C y entre E–F no hay nota alterada (por el momento, se omiten B# y E# como alteraciones del círculo cromático; en este contexto son la misma nota que C y F respectivamente).",
       "tip": "Las 12 notas del círculo cromático conforman el sistema de sonidos completo."
@@ -74,11 +74,11 @@
       "procedure_title": "Procedimiento para encontrar los intervalos partiendo de una tónica G:",
       "procedure": [
         "Escribir las letras según el número del intervalo (ignorando alteraciones): G A A B B C C-D D E E F F G.",
-        "Escribir el círculo cromático desde la tónica: G G#/Ab A A#/Bb B C C#/Db D D#/Eb E F F#/Gb G.",
-        "Cuando hay dos notas alteradas, elegir según la letra del paso 1. Si en el paso 1 está \"B\", entonces se elige Bb antes que A#.",
+        "Escribir el círculo cromático desde la tónica: G G#/A♭ A A#/B♭ B C C#/D♭ D D#/E♭ E F F#/G♭ G.",
+        "Cuando hay dos notas alteradas, elegir según la letra del paso 1. Si en el paso 1 está \"B\", entonces se elige B♭ antes que A#.",
         "Actualizar la escala con los intervalos correctos."
       ],
-      "result": "Resultado para G: G Ab A Bb B C C#/Db D Eb E F F# G.",
+      "result": "Resultado para G: G A♭ A B♭ B C C#/D♭ D E♭ E F F# G.",
       "octave_rule": "La 8J (octava justa) es la misma nota más aguda o más grave. La 8J de G es G.",
       "tip": "Los intervalos son la medida de la música: toda relación melódica y armónica se puede describir en términos de intervalos."
     },
@@ -142,9 +142,9 @@
       "sequence_label": "La secuencia de tonalidades con sostenidos:",
       "sequence": "F C G D A E B",
       "rule_sharps": "En tonalidades con sostenidos (#): los sostenidos se añaden de izquierda a derecha en el orden F C G D A E B.",
-      "rule_flats": "En tonalidades con bemoles (b): los bemoles se añaden de derecha a izquierda en el orden B E A D G C F.",
+      "rule_flats": "En tonalidades con bemoles (♭): los bemoles se añaden de derecha a izquierda en el orden B E A D G C F.",
       "exception_label": "Excepción:",
-      "exception": "Fa mayor tiene 1 bemol (Bb) — no sigue el patrón de las tonalidades con sostenidos.",
+      "exception": "Fa mayor tiene 1 bemol (B♭) — no sigue el patrón de las tonalidades con sostenidos.",
       "tip": "Consejo del método: memorizar la secuencia F C G D A E B. Es la herramienta para derivar las armaduras de todas las tonalidades."
     }
   },
@@ -153,27 +153,27 @@
     "module_title": "Tonalidades y armonía diatónica",
 
     "s41": {
-      "label": "4.1 · Tonalidades",
+      "label": "2.1 · Tonalidades",
       "title": "Tonalidades y Armaduras"
     },
 
     "s42": {
-      "label": "4.2 · Proceso de sostenidos",
+      "label": "2.3 · Proceso de sostenidos",
       "title": "Proceso de sostenidos"
     },
 
     "s43": {
-      "label": "4.3 · Proceso de bemoles",
+      "label": "2.4 · Proceso de bemoles",
       "title": "Proceso de bemoles"
     },
 
     "s44": {
-      "label": "4.4 · Escala mayor",
+      "label": "2.4 · Escala mayor",
       "title": "Escala mayor de la tonalidad"
     },
 
     "s45": {
-      "label": "4.5 · Tabla maestra",
+      "label": "2.6 · Tabla maestra",
       "title": "Tabla maestra de las 14 tonalidades mayores",
       "table_headers": {
         "count": "Cantidad",
@@ -181,23 +181,23 @@
         "tonality": "Tonalidad"
       },
       "sharps_section": "Tonalidades con sostenidos (#)",
-      "flats_section": "Tonalidades con bemoles (b)",
+      "flats_section": "Tonalidades con bemoles (♭)",
       "observations_title": "Observaciones del método:",
       "observations": [
         "En tonalidades con sostenidos, la tónica casi siempre es una nota natural: G, D, A, E, B.",
-        "En tonalidades con bemoles, casi todas las tónicas llevan el b en su nombre: Bb, Eb, Ab, Db, Gb, Cb (excepción: F).",
+        "En tonalidades con bemoles, casi todas las tónicas llevan el ♭ en su nombre: B♭, E♭, A♭, D♭, G♭, C♭ (excepción: F).",
         "Esto ayuda a identificar rápidamente con qué alteración trabaja una tonalidad."
       ]
     },
 
     "s46": {
-      "label": "4.6 · Modo clase",
+      "label": "2.6 · Modo clase",
       "title": "Modo clase",
       "instruction": "Elegí una tonalidad y explorá las armaduras y las escalas."
     },
 
     "s47": {
-      "label": "4.7 · Grados armónicos",
+      "label": "2.7 · Grados armónicos",
       "title": "Grados armónicos según la escala mayor",
       "intro_symmetry": "Hablemos de simetría y fractalidad:",
       "symmetry": "Simetría: la música funciona con fórmulas — 12 semitonos, 12 intervalos, escalas de 7 notas, tríadas de 3 notas. Los procesos son simétricos en todas las tonalidades. Por eso conviene memorizar el procedimiento, no el resultado.",
@@ -251,7 +251,7 @@
     },
 
     "s48": {
-      "label": "4.8 · Progresiones armónicas",
+      "label": "2.9 · Progresiones armónicas",
       "title": "Progresiones armónicas",
       "intro": "La armonía diatónica no solo ofrece acordes individuales: también permite combinarlos en secuencias. A estas secuencias se les llama progresiones armónicas. Cada acorde cumple una función dentro de la tonalidad y contribuye a crear tensión o reposo.",
       "procedure_title": "Práctica progresiva:",
@@ -273,7 +273,7 @@
     },
 
     "s49": {
-      "label": "4.9 · Relativas menores",
+      "label": "2.10 · Relativas menores",
       "title": "Relativas menores",
       "intro_p1": "Toda tonalidad mayor tiene una tonalidad menor relativa que comparte exactamente la misma armadura. La relativa menor se construye sobre el vi grado de la mayor.",
       "intro_p2": "La escala menor natural usa las mismas 7 notas, pero comienza en la 6ta. Los acordes son los mismos en ambos casos, solo cambia el orden:",

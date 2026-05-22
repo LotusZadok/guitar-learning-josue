@@ -1,4 +1,4 @@
-{
+﻿{
   "site": {
     "title": "Didaktische Gitarre · Prof. Josué Barquero"
   },
@@ -57,7 +57,7 @@
       "title": "Alterierte Töne und chromatischer Kreis",
       "intro": "Neben den 7 natürlichen Tönen gibt es 5 weitere Töne, die sogenannten alterierten Töne. Jeder hat 2 Namen:",
       "sharp_def": "Kreuz (#) — wenn ein natürlicher Ton um einen Halbton (eine Bund) erhöht wird.",
-      "flat_def": "B (b) — wenn ein natürlicher Ton um einen Halbton (eine Bund) erniedrigt wird.",
+      "flat_def": "♭ (b) — wenn ein natürlicher Ton um einen Halbton (eine Bund) erniedrigt wird.",
       "body": "Addiert man die 7 natürlichen und die 5 alterierten Töne, erhält man die 12 Töne des chromatischen Kreises (CK):",
       "rule": "Wichtig: zwischen B–C und zwischen E–F gibt es keinen alterierten Ton (B# und E# existieren als Alterierungen im chromatischen Kreis in diesem Kontext nicht — sie entsprechen denselben Tönen wie C bzw. F).",
       "tip": "Die 12 Töne des chromatischen Kreises bilden das vollständige Tonsystem."
@@ -76,11 +76,11 @@
       "procedure_title": "Verfahren zum Finden der Intervalle ausgehend von der Tonika G:",
       "procedure": [
         "Die Buchstaben nach der Intervallnummer aufschreiben (Alterierungen ignorieren): G A A B B C C-D D E E F F G.",
-        "Den chromatischen Kreis ab der Tonika aufschreiben: G G#/Ab A A#/Bb B C C#/Db D D#/Eb E F F#/Gb G.",
-        "Wenn zwei alterierte Töne vorhanden sind, nach dem Buchstaben aus Schritt 1 wählen. Steht in Schritt 1 „B\", wählt man Bb statt A#.",
+        "Den chromatischen Kreis ab der Tonika aufschreiben: G G#/A♭ A A#/B♭ B C C#/D♭ D D#/E♭ E F F#/G♭ G.",
+        "Wenn zwei alterierte Töne vorhanden sind, nach dem Buchstaben aus Schritt 1 wählen. Steht in Schritt 1 „B\", wählt man B♭ statt A#.",
         "Die Tonleiter mit den richtigen Intervallen aktualisieren."
       ],
-      "result": "Ergebnis für G: G Ab A Bb B C C#/Db D Eb E F F# G.",
+      "result": "Ergebnis für G: G A♭ A B♭ B C C#/D♭ D E♭ E F F# G.",
       "octave_rule": "Die reine Oktave (8r) ist derselbe Ton eine Oktave höher oder tiefer. Die 8r von G ist G.",
       "tip": "Intervalle sind das Maß der Musik: jede melodische und harmonische Beziehung lässt sich in Intervallen beschreiben."
     },
@@ -144,9 +144,9 @@
       "sequence_label": "Die Reihenfolge der Tonarten mit Kreuzen:",
       "sequence": "F C G D A E B",
       "rule_sharps": "Bei Tonarten mit Kreuzen (#): die Vorzeichen werden von links nach rechts in der Reihenfolge F C G D A E B hinzugefügt.",
-      "rule_flats": "Bei Tonarten mit Bs (b): die Vorzeichen werden von rechts nach links in der Reihenfolge B E A D G C F hinzugefügt.",
+      "rule_flats": "Bei Tonarten mit Bs (♭): die Vorzeichen werden von rechts nach links in der Reihenfolge B E A D G C F hinzugefügt.",
       "exception_label": "Ausnahme:",
-      "exception": "F-Dur hat 1 B (Bb) — es folgt nicht dem Muster der Kreuztonarten.",
+      "exception": "F-Dur hat 1 ♭ (B♭) — es folgt nicht dem Muster der Kreuztonarten.",
       "tip": "Methodentipp: die Sequenz F C G D A E B auswendig lernen. Sie ist das Werkzeug zum Ableiten aller Vorzeichen aller 14 Durtonarten."
     }
   },
@@ -155,27 +155,27 @@
     "module_title": "Tonarten und diatonische Harmonik",
 
     "s41": {
-      "label": "4.1 · Tonarten",
+      "label": "2.1 · Tonarten",
       "title": "Tonarten und Vorzeichen"
     },
 
     "s42": {
-      "label": "4.2 · Prozess der Kreuze",
+      "label": "2.3 · Prozess der Kreuze",
       "title": "Prozess der Kreuze"
     },
 
     "s43": {
-      "label": "4.3 · Prozess der Bs",
+      "label": "2.4 · Prozess der Bs",
       "title": "Prozess der Bs"
     },
 
     "s44": {
-      "label": "4.4 · Dur-Tonleiter",
+      "label": "2.4 · Dur-Tonleiter",
       "title": "Dur-Tonleiter aus der Tonart"
     },
 
     "s45": {
-      "label": "4.5 · Meistertabelle",
+      "label": "2.6 · Meistertabelle",
       "title": "Meistertabelle der 14 Durtonarten",
       "table_headers": {
         "count": "Anzahl",
@@ -183,23 +183,23 @@
         "tonality": "Tonart"
       },
       "sharps_section": "Tonarten mit Kreuzen (#)",
-      "flats_section": "Tonarten mit Bs (b)",
+      "flats_section": "Tonarten mit Bs (♭)",
       "observations_title": "Beobachtungen der Methode:",
       "observations": [
         "Bei Kreuztonarten ist die Tonika fast immer ein natürlicher Ton: G, D, A, E, B.",
-        "Bei B-Tonarten haben fast alle Toniken ein B im Namen: Bb, Eb, Ab, Db, Gb, Cb (Ausnahme: F).",
+        "Bei B-Tonarten haben fast alle Toniken ein B im Namen: B♭, E♭, A♭, D♭, G♭, C♭ (Ausnahme: F).",
         "Das hilft, schnell zu erkennen, mit welchem Vorzeichen eine Tonart arbeitet."
       ]
     },
 
     "s46": {
-      "label": "4.6 · Klassenmode",
+      "label": "2.6 · Klassenmode",
       "title": "Klassenmode",
       "instruction": "Tonart wählen und die Vorzeichen sowie die Tonleiter erkunden."
     },
 
     "s47": {
-      "label": "4.7 · Harmonische Stufen",
+      "label": "2.7 · Harmonische Stufen",
       "title": "Harmonische Stufen nach der Durtonleiter",
       "intro_symmetry": "Sprechen wir über Symmetrie und Fraktalität:",
       "symmetry": "Symmetrie: die Musik funktioniert mit Formeln — 12 Halbtöne, 12 Intervalle, Tonleitern mit 7 Tönen, Dreiklänge mit 3 Tönen. Die Prozesse sind in allen Tonarten symmetrisch. Das Verfahren auswendig lernen, nicht das Ergebnis.",
@@ -253,7 +253,7 @@
     },
 
     "s48": {
-      "label": "4.8 · Harmonische Progressionen",
+      "label": "2.9 · Harmonische Progressionen",
       "title": "Harmonische Progressionen",
       "intro": "Die Methode schlägt vor, mit den drei wichtigsten Stufen zu beginnen (I, IV, V) und von dort aus Progressionen aufzubauen:",
       "procedure_title": "Progressive Übung:",
@@ -275,7 +275,7 @@
     },
 
     "s49": {
-      "label": "4.9 · Paralleltonarten",
+      "label": "2.10 · Paralleltonarten",
       "title": "Moll-Paralleltonarten",
       "intro_p1": "Jede Durtonart hat eine Moll-Paralleltonart, die genau dieselben Vorzeichen teilt. Die Paralleltonart wird auf der 6. Stufe der Durtonart aufgebaut.",
       "intro_p2": "Die natürliche Molltonleiter wird mit denselben 7 Tönen der Durtonleiter gebildet, beginnt aber auf dem 6. Ton. Die sieben Akkorde sind in beiden Fällen dieselben — nur die Reihenfolge ändert sich:",

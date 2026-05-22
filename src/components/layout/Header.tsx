@@ -1,13 +1,21 @@
+import { useTranslation } from 'react-i18next';
 import styles from './Header.module.css';
 
 export default function Header() {
+  const { i18n } = useTranslation();
+  const isDe = i18n.language === 'de';
   return (
     <header className={styles.header}>
-      <div className={styles.eyebrow}>Referencia Musical · Guitarra Eléctrica / Acústica</div>
+      <div className={styles.eyebrow}>
+        {isDe ? 'E-Gitarre / Akustikgitarre' : 'Guitarra Eléctrica / Acústica'}
+      </div>
       <h1 className={styles.title}>
-        Apuntes de<br /><span>Guitarra</span>
+        {isDe ? (
+          <>Gitarren-<br /><span>theorie</span></>
+        ) : (
+          <>Teoría de<br /><span>Guitarra</span></>
+        )}
       </h1>
-      <div className={styles.sub}>"Las notas no suben — la mano baja"</div>
     </header>
   );
 }

@@ -20,6 +20,7 @@ export default function Sidebar() {
   const location = useLocation();
   const { t, i18n } = useTranslation();
   const lang = i18n.language.startsWith('de') ? 'de' : 'es';
+  const isDe = lang === 'de';
   const { sidebarOpen, setSidebarOpen, volume, setVolume } = useUIStore();
 
   const tocItems = TOC_SECTIONS[location.pathname] ?? [];
@@ -50,7 +51,7 @@ export default function Sidebar() {
       <button
         className={styles.hamburger}
         onClick={() => setSidebarOpen(!sidebarOpen)}
-        aria-label="Abrir menú"
+        aria-label={isDe ? 'Menü öffnen' : 'Abrir menú'}
       >
         ☰
       </button>
@@ -61,38 +62,38 @@ export default function Sidebar() {
 
       <nav className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarOpen : ''}`}>
         <div className={styles.logo}>
-          Apuntes de <span>Guitarra</span>
+          {isDe ? <>Gitarren-<span>theorie</span></> : <>Teoría de <span>Guitarra</span></>}
         </div>
 
         {SECTIONS.map((s) => (
-          <button
-            key={s.id}
-            className={isActive(s.path) ? styles.linkActive : styles.link}
-            onClick={() => handleNav(s.path)}
-          >
-            {t(s.labelKey)}
-          </button>
-        ))}
-
-        {tocItems.length > 0 && (
-          <div className={styles.tocList}>
-            {tocItems.map((item) => (
-              <button
-                key={item.id}
-                className={activeId === item.id ? styles.tocItemActive : styles.tocItem}
-                onClick={() => handleTocClick(item.id)}
-              >
-                {item.labelKey ? t(item.labelKey) : item.label}
-              </button>
-            ))}
+          <div key={s.id}>
+            <button
+              className={isActive(s.path) ? styles.linkActive : styles.link}
+              onClick={() => handleNav(s.path)}
+            >
+              {t(s.labelKey)}
+            </button>
+            {isActive(s.path) && tocItems.length > 0 && (
+              <div className={styles.tocList}>
+                {tocItems.map((item) => (
+                  <button
+                    key={item.id}
+                    className={activeId === item.id ? styles.tocItemActive : styles.tocItem}
+                    onClick={() => handleTocClick(item.id)}
+                  >
+                    {item.labelKey ? t(item.labelKey) : item.label}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
-        )}
+        ))}
 
         <div className={styles.themeArea}>
           <ThemeToggle />
           <MuteToggle />
           <div className={styles.volumeWrap}>
-            <span className={styles.volumeLabel}>VOLUMEN</span>
+            <span className={styles.volumeLabel}>{isDe ? 'LAUTSTÄRKE' : 'VOLUMEN'}</span>
             <input
               type="range"
               className={styles.volumeSlider}
@@ -101,12 +102,12 @@ export default function Sidebar() {
               step={0.05}
               value={volume}
               onChange={handleVolume}
-              aria-label="Volumen de audio"
+              aria-label={isDe ? 'Audio-Lautstärke' : 'Volumen de audio'}
             />
           </div>
           <TonicSelector />
           <div className={styles.langWrap}>
-            <span className={styles.langLabel}>IDIOMA</span>
+            <span className={styles.langLabel}>{isDe ? 'SPRACHE' : 'IDIOMA'}</span>
             <div className={styles.langChips}>
               <button
                 className={lang === 'es' ? styles.langChipActive : styles.langChip}

@@ -1,6 +1,12 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { ALL, NOTE_COLORS, NOTE_ES } from '../../../data/notes';
+
+const NOTE_DE_LETTER: Record<string, string> = {
+  C: 'C', 'C#': 'Cis', D: 'D', 'D#': 'Dis', E: 'E', F: 'F',
+  'F#': 'Fis', G: 'G', 'G#': 'Gis', A: 'A', 'A#': 'B', B: 'H',
+};
 import { perfectFifth, noteShort } from '../../../utils/noteCalculations';
 import type { ChromaticNote } from '../../../types/music';
 import styles from './ReglaQuinta.module.css';
@@ -25,6 +31,8 @@ interface PlayingState {
 }
 
 export default function ReglaQuinta() {
+  const { i18n } = useTranslation();
+  const isDe = i18n.language === 'de';
   const { playNote } = useAudioEngine();
   const [playing, setPlaying] = useState<PlayingState | null>(null);
 
@@ -68,7 +76,7 @@ export default function ReglaQuinta() {
               className={row.isException ? styles.rowException : styles.row}
             >
               {row.isException && (
-                <span className={styles.exceptionTag}>Excepción</span>
+                <span className={styles.exceptionTag}>{isDe ? 'Ausnahme' : 'Excepción'}</span>
               )}
               <FifthNode
                 chromatic={row.tonic}
@@ -76,6 +84,7 @@ export default function ReglaQuinta() {
                 role="tonic"
                 isPlaying={isRowPlaying && playing?.step === 'tonic'}
                 isDimmed={isRowPlaying && playing?.step === 'fifth'}
+                isDe={isDe}
               />
               <span className={styles.arrow} aria-hidden="true">→</span>
               <FifthNode
@@ -84,12 +93,15 @@ export default function ReglaQuinta() {
                 role="fifth"
                 isPlaying={isRowPlaying && playing?.step === 'fifth'}
                 isDimmed={isRowPlaying && playing?.step === 'tonic'}
+                isDe={isDe}
               />
               <button
                 className={styles.playBtn}
                 onClick={() => handlePlay(row)}
                 disabled={playing !== null}
-                aria-label={`Escuchar ${NOTE_ES[row.tonic]} y su quinta justa ${row.fifthSpelled}`}
+                aria-label={isDe
+                  ? `${NOTE_DE_LETTER[row.tonic] ?? row.tonic} und seine reine Quinte ${row.fifthSpelled} hören`
+                  : `Escuchar ${NOTE_ES[row.tonic]} y su quinta justa ${row.fifthSpelled}`}
               >
                 ▶
               </button>
@@ -107,9 +119,10 @@ interface FifthNodeProps {
   role: 'tonic' | 'fifth';
   isPlaying?: boolean;
   isDimmed?: boolean;
+  isDe?: boolean;
 }
 
-function FifthNode({ chromatic, spelled, role, isPlaying, isDimmed }: FifthNodeProps) {
+function FifthNode({ chromatic, spelled, role, isPlaying, isDimmed, isDe }: FifthNodeProps) {
   return (
     <div
       className={role === 'tonic' ? styles.nodeTonic : styles.nodeFifth}
@@ -124,7 +137,7 @@ function FifthNode({ chromatic, spelled, role, isPlaying, isDimmed }: FifthNodeP
           {spelled}
         </text>
       </svg>
-      <span className={styles.nodeName}>{NOTE_ES[chromatic]}</span>
+      <span className={styles.nodeName}>{isDe ? (NOTE_DE_LETTER[chromatic] ?? chromatic) : NOTE_ES[chromatic]}</span>
     </div>
   );
 }

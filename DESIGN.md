@@ -357,7 +357,7 @@ Este componente es el que identifica la marca. Aparece en T1 (primitiva Chromati
 
 Esta sección lista deudas que las auditorías y pasadas de resolución identificaron pero **no** han sido resueltas. Son trabajo futuro explícito, no aprobaciones tácitas. Cada vez que una pasada resuelve una deuda, se remueve de esta lista; cada nueva deuda descubierta se añade.
 
-**Última actualización:** 2026-05-21 (11ª ola — interactividad global de tónica, tipos aumentado/disminuido, sistema diatónico de colores, arpegios ascendentes y formato T2).
+**Última actualización:** 2026-05-22 (12ª ola — identidad de marca, corrección TOC, numeración T2, ♭ integral).
 
 ### Doctrina activa (decisiones pendientes de diseño)
 
@@ -375,6 +375,14 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 ### Histórico (resueltas, conservar para contexto)
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
+
+**12ª ola — Identidad de marca, TOC, numeración T2, ♭ integral (2026-05-22):**
+- ✓ **Header** rediseñado: eliminado "APUNTES DE", eliminada cita tagline, eyebrow neutral "GUITARRA ELÉCTRICA / ACÚSTICA". Fuente Bebas Neue, rojo en "Guitarra". Eliminado `::before` ghost watermark (violación rgba documentada en lessons-learned).
+- ✓ **LockScreen** identity block: eyebrow "Teoría de" / título "Guitarra" — eliminado "Prof. Josué Barquero" (logo de app, no crédito personal). Actualiza la entrada de la 11ª ola.
+- ✓ **Sidebar TOC bug**: `tocList` movido dentro de `SECTIONS.map()` loop — los subíndices ahora aparecen inline bajo la sección activa, no al pie de todos los navegadores.
+- ✓ **TOC config**: eliminado `s-t2-modo-clase`; numeración T2 corregida de "4.X" a "2.X" según source of truth; herramienta renombrada a "2.2 · Orden de las alteraciones".
+- ✓ **♭ integral**: auditados y corregidos todos los textos renderizados — `literalContent.ts` (T1 + T2), `processSteps.ts` (template literals con `noteShort()`), `es.json`, `de.json`. Solo las arrays de datos internos (`HERRAMIENTA_BEMOLES`, `tonalidades.ts`) conservan "Bb/Eb/…" ya que pasan por `toFlat()` / `noteShort()` en el componente.
+- ✓ Build limpio. Sin deuda nueva introducida.
 
 **11ª ola — Interactividad global + tipos armónicos (2026-05-21):**
 - ✓ **NoteToken como setter de tónica global** (item 21): click en cualquier `<NoteToken>` llama `setTonic(chromatic)` via Zustand; `isTonic` deriva de `SPELLING_TO_CHROMATIC[note] === tonic`; clase `tokenTonic` añade underline bold 700. Hover ≠ select: `onMouseEnter` reproduce audio solo, `onClick`/`onKeyDown`(Enter|Space) cambia tónica + reproduce. `aria-pressed={isTonic}`.

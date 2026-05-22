@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import NoteSelector from '../../shared/NoteSelector';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { NATURALS, NOTE_COLORS, NOTE_ES } from '../../../data/notes';
@@ -8,7 +9,13 @@ import styles from './Triads.module.css';
 
 const CYCLES = 1;
 
+const NOTE_DE: Record<NaturalNote, string> = {
+  C: 'C', D: 'D', E: 'E', F: 'F', G: 'G', A: 'A', B: 'H',
+};
+
 export default function MasterTriad() {
+  const { i18n } = useTranslation();
+  const isDe = i18n.language === 'de';
   const [root, setRoot] = useState<NaturalNote>('A');
   const { playNote } = useAudioEngine();
 
@@ -17,10 +24,15 @@ export default function MasterTriad() {
 
   return (
     <div className={styles.masterWrap}>
-      <h3 className={styles.masterTitle}>Tríada Maestra (Cadena Infinita de Terceras)</h3>
+      <h3 className={styles.masterTitle}>
+        {isDe
+          ? 'Meisterdreiklang (Unendliche Terzkette)'
+          : 'Tríada Maestra (Cadena Infinita de Terceras)'}
+      </h3>
       <p className={styles.masterIntro}>
-        Seleccioná una nota raíz. La cadena apila terceras diatónicas en ciclo:
-        T → 3ra → 5ta → 7ma → 9na → 11na → 13na → repite.
+        {isDe
+          ? 'Wähle einen Grundton. Die Kette stapelt diatonische Terzen im Kreis: T → 3 → 5 → 7 → 9 → 11 → 13 → wiederholt.'
+          : 'Seleccioná una nota raíz. La cadena apila terceras diatónicas en ciclo: T → 3ra → 5ta → 7ma → 9na → 11na → 13na → repite.'}
       </p>
       <NoteSelector
         notes={[...NATURALS]}
@@ -42,7 +54,7 @@ export default function MasterTriad() {
                 onClick={() => playNote(note, 4, 2)}
                 tabIndex={0}
                 role="button"
-                aria-label={`Nota ${NOTE_ES[note]} en posición ${ROLE_LABELS[roleIdx]}`}
+                aria-label={isDe ? `Ton ${NOTE_DE[note]} in Position ${ROLE_LABELS[roleIdx]}` : `Nota ${NOTE_ES[note]} en posición ${ROLE_LABELS[roleIdx]}`}
                 onFocus={() => playNote(note, 4, 2)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
@@ -60,7 +72,7 @@ export default function MasterTriad() {
                 >
                   {note}
                 </div>
-                <span className={styles.chainLabel}>{NOTE_ES[note]}</span>
+                <span className={styles.chainLabel}>{isDe ? NOTE_DE[note] : NOTE_ES[note]}</span>
                 <span className={`${styles.chainRole} ${roleIdx === 0 ? styles.chainRoleTonic : ''}`}>
                   {ROLE_LABELS[roleIdx]}
                 </span>

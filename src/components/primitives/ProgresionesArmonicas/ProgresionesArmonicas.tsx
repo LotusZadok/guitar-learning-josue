@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { ALL } from '../../../data/notes';
 import { majorScaleSpelled } from '../../../utils/noteCalculations';
@@ -63,6 +64,13 @@ function chordLabel(diatonic: DiatonicNote[], gradeIdx: number): string {
 }
 
 export default function ProgresionesArmonicas({ tonalidad }: Props) {
+  const { i18n } = useTranslation();
+  const isDe = i18n.language === 'de';
+  const modeLabels: Record<PlayMode, string> = isDe
+    ? { arpegio: 'Arpeggiert', bloque: 'Block' }
+    : { arpegio: 'Arpegiado', bloque: 'Bloque' };
+  const reproduccionLabel = isDe ? 'Wiedergabe:' : 'Reproducción:';
+  const reproductionAria = isDe ? 'Wiedergabemodus' : 'Modo de reproducción';
   const [playMode, setPlayMode] = useState<PlayMode>('arpegio');
   const [playingId, setPlayingId] = useState<string | null>(null);
   const [activeChordIdx, setActiveChordIdx] = useState<number | null>(null);

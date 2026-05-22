@@ -1,4 +1,4 @@
-// Contenido literal del método de Josué Barquero — NO parafrasear, NO corregir erratas.
+﻿// Contenido literal del método de Josué Barquero — NO parafrasear, NO corregir erratas.
 // Fuente: docs/source_of_truth_T1_T2.md (T1 §1.1, §1.2, §1.3, §1.4, §1.5, §1.6, §1.7, §1.8).
 
 import type { ProseSegment } from '../../../../types/prose';
@@ -485,7 +485,7 @@ export const REGLA_EXCEPCION_BB: ProseSegment = [
   { type: 'note', value: 'Bb' },
   { type: 'text', value: ' es la tónica, su 5J es ' },
   { type: 'note', value: 'F' },
-  { type: 'text', value: ' (no Fb).' },
+  { type: 'text', value: ' (no F♭).' },
 ];
 
 export const CONSEJO_REGLA_5J =
@@ -508,7 +508,7 @@ export const REGLA_NOTA_BEMOLES: ProseSegment = [
   { type: 'note', value: 'Bb' },
   { type: 'text', value: ' → ' },
   { type: 'note', value: 'F' },
-  { type: 'text', value: ' (no Fb). En el sistema con sostenidos, esa misma 5J aparece como ' },
+  { type: 'text', value: ' (no F♭). En el sistema con sostenidos, esa misma 5J aparece como ' },
   { type: 'note', value: 'A#' },
   { type: 'text', value: ' → E# (enarmónica de ' },
   { type: 'note', value: 'F' },
@@ -812,7 +812,7 @@ export const REGLA_EXCEPCION_BB_DE: ProseSegment = [
   { type: 'note', value: 'Bb' },
   { type: 'text', value: ' die Tonika ist, ist ihre r. Quinte ' },
   { type: 'note', value: 'F' },
-  { type: 'text', value: ' (nicht Fb).' },
+  { type: 'text', value: ' (nicht F♭).' },
 ];
 
 export const REGLA_PRIMITIVA_INSTRUCCION_DE: ProseSegment = [
@@ -828,7 +828,7 @@ export const REGLA_NOTA_BEMOLES_DE: ProseSegment = [
   { type: 'note', value: 'Bb' },
   { type: 'text', value: ' → ' },
   { type: 'note', value: 'F' },
-  { type: 'text', value: ' (nicht Fb). Im System mit Kreuzen erscheint dieselbe r. Quinte als ' },
+  { type: 'text', value: ' (nicht F♭). Im System mit Kreuzen erscheint dieselbe r. Quinte als ' },
   { type: 'note', value: 'A#' },
   { type: 'text', value: ' → E# (enharmonisch zu ' },
   { type: 'note', value: 'F' },

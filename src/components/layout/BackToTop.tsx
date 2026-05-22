@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from './BackToTop.module.css';
 
 export default function BackToTop() {
   const [visible, setVisible] = useState(false);
+  const { i18n } = useTranslation();
+  const isDe = i18n.language === 'de';
 
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > 300);
@@ -16,7 +19,7 @@ export default function BackToTop() {
     <button
       className={styles.btn}
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      aria-label="Volver al inicio"
+      aria-label={isDe ? 'Zurück nach oben' : 'Volver al inicio'}
     >
       ↑
     </button>

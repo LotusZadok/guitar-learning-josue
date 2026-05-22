@@ -1,8 +1,13 @@
 import { useState, useCallback, type KeyboardEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { NOTE_COLORS, NOTE_ES } from '../../../data/notes';
 import type { NaturalNote } from '../../../types/music';
 import styles from './Triads.module.css';
+
+const NOTE_DE: Record<NaturalNote, string> = {
+  C: 'C', D: 'D', E: 'E', F: 'F', G: 'G', A: 'A', B: 'H',
+};
 
 interface Props {
   note: NaturalNote;
@@ -15,6 +20,8 @@ interface Props {
 }
 
 export default function TriadNode({ note, index, cx, cy, r, onHover, onPlay }: Props) {
+  const { i18n } = useTranslation();
+  const isDe = i18n.language === 'de';
   const [hovered, setHovered] = useState(false);
   const { playNote } = useAudioEngine();
 
@@ -52,7 +59,7 @@ export default function TriadNode({ note, index, cx, cy, r, onHover, onPlay }: P
       }}
       tabIndex={0}
       role="button"
-      aria-label={`Tríada de ${NOTE_ES[note]}`}
+      aria-label={isDe ? `Dreiklang von ${NOTE_DE[note]}` : `Tríada de ${NOTE_ES[note]}`}
       onFocus={handleEnter}
       onBlur={handleLeave}
       onKeyDown={handleKeyDown}
@@ -90,7 +97,7 @@ export default function TriadNode({ note, index, cx, cy, r, onHover, onPlay }: P
         textAnchor="middle" dominantBaseline="middle"
         style={{ fill: 'var(--muted)' }} fontSize={10}
       >
-        {NOTE_ES[note]}
+        {isDe ? NOTE_DE[note] : NOTE_ES[note]}
       </text>
     </g>
   );

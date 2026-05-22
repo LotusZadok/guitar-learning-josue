@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import TriadNode from './TriadNode';
 import MasterTriad from './MasterTriad';
 import { NATURALS, NOTE_COLORS, NOTE_ES } from '../../../data/notes';
@@ -30,9 +31,17 @@ function toAscending(notes: readonly NaturalNote[], startOctave = 4) {
 }
 
 const CX = 175, CY = 175, R = 110;
-const LABELS = ['Tónica', 'Tercera', 'Quinta'];
+const LABELS_ES = ['Tónica', 'Tercera', 'Quinta'];
+const LABELS_DE = ['Tonika', 'Terz', 'Quinte'];
+
+const NOTE_DE: Record<NaturalNote, string> = {
+  C: 'C', D: 'D', E: 'E', F: 'F', G: 'G', A: 'A', B: 'H',
+};
 
 export default function TriadsSection() {
+  const { i18n } = useTranslation();
+  const isDe = i18n.language === 'de';
+  const LABELS = isDe ? LABELS_DE : LABELS_ES;
   const [activeTriad, setActiveTriad] = useState<NaturalNote | null>(null);
   const [triadLines, setTriadLines] = useState<{ x1: number; y1: number; x2: number; y2: number; color: string }[]>([]);
   const [playMode, setPlayMode] = useState<PlayMode>('arpegio');
@@ -78,7 +87,7 @@ export default function TriadsSection() {
   return (
     <div className={styles.wrap}>
       <div className={styles.playToggleRow}>
-        <span className={styles.toggleLabel}>Reproducción:</span>
+        <span className={styles.toggleLabel}>{isDe ? 'Wiedergabe:' : 'Reproducción:'}</span>
         {(['arpegio', 'bloque'] as PlayMode[]).map((m) => (
           <button
             key={m}
@@ -86,13 +95,15 @@ export default function TriadsSection() {
             onClick={() => setPlayMode(m)}
             aria-pressed={playMode === m}
           >
-            {m.charAt(0).toUpperCase() + m.slice(1)}
+            {isDe
+              ? (m === 'arpegio' ? 'Arpeggio' : 'Block')
+              : m.charAt(0).toUpperCase() + m.slice(1)}
           </button>
         ))}
       </div>
       <div className={styles.circleWrap}>
         <svg className={styles.svg} viewBox="0 0 350 350">
-          {['Notas', 'Naturales'].map((t, i) => (
+          {(isDe ? ['Stammtöne', ''] : ['Notas', 'Naturales']).map((t, i) => (
             <text key={t} x={CX} y={CY - 6 + i * 16} textAnchor="middle" style={{ fill: 'var(--muted)' }} fontSize={11}>
               {t}
             </text>
@@ -114,9 +125,9 @@ export default function TriadsSection() {
           }}
         >
           <div className={styles.infoTitle} style={{ color: NOTE_COLORS[displayNote] }}>
-            {NOTE_ES[displayNote]} · {displayNote}
+            {isDe ? NOTE_DE[displayNote] : `${NOTE_ES[displayNote]} · ${displayNote}`}
           </div>
-          <div className={styles.infoType}>{triad.type}</div>
+          <div className={styles.infoType}>{isDe ? ({ Mayor: 'Dur', Menor: 'Moll', Disminuida: 'Vermindert' } as Record<string, string>)[triad.type] ?? triad.type : triad.type}</div>
           <div className={styles.infoNotes}>
             {triad.notes.map((n) => (
               <div key={n} className={styles.infoNote} style={{ background: NOTE_COLORS[n] }}>{n}</div>

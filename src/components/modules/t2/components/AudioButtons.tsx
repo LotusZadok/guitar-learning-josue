@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../../hooks/useAudioEngine';
 import styles from './AudioButtons.module.css';
 
@@ -24,6 +25,8 @@ function resolveNote(noteName: string): { name: string; octave: number } {
 type PlayingAction = 'escala' | 'tonica' | null;
 
 export default function AudioButtons({ escala, tonica, disabled }: Props) {
+  const { i18n } = useTranslation();
+  const isDe = i18n.language === 'de';
   const { playNote } = useAudioEngine();
   const [playingAction, setPlayingAction] = useState<PlayingAction>(null);
 
@@ -58,14 +61,14 @@ export default function AudioButtons({ escala, tonica, disabled }: Props) {
         onClick={playEscala}
         disabled={isDisabled}
       >
-        Escuchar escala
+        {isDe ? 'Tonleiter hören' : 'Escuchar escala'}
       </button>
       <button
         className={playingAction === 'tonica' ? styles.btnPlaying : styles.btn}
         onClick={playTonica}
         disabled={isDisabled}
       >
-        Escuchar tónica
+        {isDe ? 'Tonika hören' : 'Escuchar tónica'}
       </button>
     </div>
   );

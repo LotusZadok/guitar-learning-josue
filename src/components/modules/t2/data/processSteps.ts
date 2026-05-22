@@ -1,4 +1,5 @@
 import type { Tonalidad } from './tonalidades';
+import { noteShort } from '../../../../utils/noteCalculations';
 
 export type NoteState = 'tonica' | 'highlighted' | 'natural' | 'neutral';
 
@@ -159,9 +160,9 @@ function getSharpsRightSteps(t: Tonalidad): ProcessStepData[] {
       circleNotes: s3, scaleDisplay: naturalScale, armaduraDisplay: [...t.armadura],
     },
     {
-      description: `4. Actualizamos dicha escala con la armadura del punto 1 → ${t.escala.join(' ')}`,
+      description: `4. Actualizamos dicha escala con la armadura del punto 1 → ${t.escala.map(noteShort).join(' ')}`,
       circleNotes: s4, scaleDisplay: [...t.escala], armaduraDisplay: [...t.armadura],
-      closingText: `Concluimos que la armadura de ${t.tonica} mayor es ${t.armadura.join(' ')}. La escala o tonalidad (7 notas) de ${t.tonica} mayor es ${t.escala.join(' ')}`,
+      closingText: `Concluimos que la armadura de ${noteShort(t.tonica)} mayor es ${t.armadura.map(noteShort).join(' ')}. La escala o tonalidad (7 notas) de ${noteShort(t.tonica)} mayor es ${t.escala.map(noteShort).join(' ')}`,
     },
   ];
 }
@@ -191,11 +192,11 @@ function getFlatsLeftSteps(t: Tonalidad): ProcessStepData[] {
 
   return [
     {
-      description: `1. Partiendo de ${t.tonica} mayor, buscamos la tónica ${t.tonica} en la herramienta Bb Eb Ab Db Gb Cb Fb`,
+      description: `1. Partiendo de ${noteShort(t.tonica)} mayor, buscamos la tónica ${noteShort(t.tonica)} en la herramienta B♭ E♭ A♭ D♭ G♭ C♭ F♭`,
       circleNotes: s1, scaleDisplay: [], armaduraDisplay: [],
     },
     {
-      description: `2. Nos movemos un b más (${nextFlat}) y escribimos los b encontrados = ${t.armadura.join(' ')}`,
+      description: `2. Nos movemos un ♭ más (${noteShort(nextFlat)}) y escribimos los ♭ encontrados = ${t.armadura.map(noteShort).join(' ')}`,
       circleNotes: s2, scaleDisplay: [], armaduraDisplay: [...t.armadura],
     },
     {
@@ -203,9 +204,9 @@ function getFlatsLeftSteps(t: Tonalidad): ProcessStepData[] {
       circleNotes: s3, scaleDisplay: naturalScale, armaduraDisplay: [...t.armadura],
     },
     {
-      description: `4. Actualizamos dicha escala con las notas del punto 2 → ${t.escala.join(' ')}`,
+      description: `4. Actualizamos dicha escala con las notas del punto 2 → ${t.escala.map(noteShort).join(' ')}`,
       circleNotes: s4, scaleDisplay: [...t.escala], armaduraDisplay: [...t.armadura],
-      closingText: `Concluimos que la armadura de ${t.tonica} mayor es ${t.armadura.join(' ')}. La escala o tonalidad (7 notas) de ${t.tonica} mayor es ${t.escala.join(' ')}`,
+      closingText: `Concluimos que la armadura de ${noteShort(t.tonica)} mayor es ${t.armadura.map(noteShort).join(' ')}. La escala o tonalidad (7 notas) de ${noteShort(t.tonica)} mayor es ${t.escala.map(noteShort).join(' ')}`,
     },
   ];
 }
@@ -232,11 +233,11 @@ function getFlatsRightSteps(t: Tonalidad): ProcessStepData[] {
 
   return [
     {
-      description: `1. Tenemos la armadura ${t.armadura.join(' ')}, buscamos el penúltimo b de la armadura en cuestión = ${penultimate}`,
+      description: `1. Tenemos la armadura ${t.armadura.map(noteShort).join(' ')}, buscamos el penúltimo ♭ de la armadura en cuestión = ${noteShort(penultimate)}`,
       circleNotes: s1, scaleDisplay: [], armaduraDisplay: [...t.armadura],
     },
     {
-      description: `2. Esa es nuestra tónica = ${t.tonica} mayor`,
+      description: `2. Esa es nuestra tónica = ${noteShort(t.tonica)} mayor`,
       circleNotes: s2, scaleDisplay: [], armaduraDisplay: [...t.armadura],
     },
     {
@@ -244,9 +245,9 @@ function getFlatsRightSteps(t: Tonalidad): ProcessStepData[] {
       circleNotes: s3, scaleDisplay: naturalScale, armaduraDisplay: [...t.armadura],
     },
     {
-      description: `4. Actualizamos dicha escala con la armadura del punto 1 → ${t.escala.join(' ')}`,
+      description: `4. Actualizamos dicha escala con la armadura del punto 1 → ${t.escala.map(noteShort).join(' ')}`,
       circleNotes: s4, scaleDisplay: [...t.escala], armaduraDisplay: [...t.armadura],
-      closingText: `Concluimos que la armadura de ${t.tonica} mayor es ${t.armadura.join(' ')}. La escala o tonalidad (7 notas) de ${t.tonica} mayor es ${t.escala.join(' ')}`,
+      closingText: `Concluimos que la armadura de ${noteShort(t.tonica)} mayor es ${t.armadura.map(noteShort).join(' ')}. La escala o tonalidad (7 notas) de ${noteShort(t.tonica)} mayor es ${t.escala.map(noteShort).join(' ')}`,
     },
   ];
 }
@@ -264,15 +265,15 @@ function getFExceptionSteps(): ProcessStepData[] {
 
   return [
     {
-      description: 'F mayor solo cuenta con el primer b de la herramienta: Bb',
+      description: 'F mayor solo cuenta con el primer ♭ de la herramienta: B♭',
       circleNotes: s1, scaleDisplay: [], armaduraDisplay: ['Bb'],
     },
     {
-      description: 'Escala: F G A Bb C D E',
+      description: 'Escala: F G A B♭ C D E',
       circleNotes: s2,
       scaleDisplay: ['F', 'G', 'A', 'Bb', 'C', 'D', 'E'],
       armaduraDisplay: ['Bb'],
-      closingText: 'Podríamos concluir que la armadura de F mayor es solo Bb, y la escala es F G A Bb C D E',
+      closingText: 'Podríamos concluir que la armadura de F mayor es solo B♭, y la escala es F G A B♭ C D E',
     },
   ];
 }

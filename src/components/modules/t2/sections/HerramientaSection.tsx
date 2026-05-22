@@ -1,15 +1,23 @@
+import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
 import {
   HERRAMIENTA_INTRO,
+  HERRAMIENTA_INTRO_DE,
   HERRAMIENTA_SOSTENIDOS,
   HERRAMIENTA_BEMOLES,
   HERRAMIENTA_SOSTENIDOS_EXPLICACION,
+  HERRAMIENTA_SOSTENIDOS_EXPLICACION_DE,
   HERRAMIENTA_BEMOLES_EXPLICACION,
+  HERRAMIENTA_BEMOLES_EXPLICACION_DE,
   PROPIEDAD_ESPECIFICO,
+  PROPIEDAD_ESPECIFICO_DE,
   PROPIEDAD_ACUMULATIVO,
+  PROPIEDAD_ACUMULATIVO_DE,
   PROPIEDAD_MULTITONAL,
+  PROPIEDAD_MULTITONAL_DE,
   CONSEJO_MEMORIZAR,
+  CONSEJO_MEMORIZAR_DE,
 } from '../data/literalContent';
 import styles from './HerramientaSection.module.css';
 
@@ -18,13 +26,30 @@ function toFlat(s: string): string {
 }
 
 export default function HerramientaSection() {
+  const { i18n } = useTranslation();
+  const isDe = i18n.language === 'de';
+
+  const intro = isDe ? HERRAMIENTA_INTRO_DE : HERRAMIENTA_INTRO;
+  const sharpsExp = isDe ? HERRAMIENTA_SOSTENIDOS_EXPLICACION_DE : HERRAMIENTA_SOSTENIDOS_EXPLICACION;
+  const flatsExp = isDe ? HERRAMIENTA_BEMOLES_EXPLICACION_DE : HERRAMIENTA_BEMOLES_EXPLICACION;
+  const propEspecifico = isDe ? PROPIEDAD_ESPECIFICO_DE : PROPIEDAD_ESPECIFICO;
+  const propAcumulativo = isDe ? PROPIEDAD_ACUMULATIVO_DE : PROPIEDAD_ACUMULATIVO;
+  const propMultitonal = isDe ? PROPIEDAD_MULTITONAL_DE : PROPIEDAD_MULTITONAL;
+  const consejo = isDe ? CONSEJO_MEMORIZAR_DE : CONSEJO_MEMORIZAR;
+
+  const sectionLabel = isDe ? '2.2 · Reihenfolge der Vorzeichen' : '2.2 · Orden de las alteraciones';
+  const titleEspecifico = isDe ? 'Spezifisch' : 'Específico';
+  const titleAcumulativo = isDe ? 'Kumulativ' : 'Acumulativo';
+  const titleMultitonal = 'Multitonal';
+
+  const especificoParts = propEspecifico.split(' — ');
+
   return (
     <section id="s-t2-herramienta" className={styles.section}>
-      {/* TODO i18n: sin clave — HerramientaSection no tiene equivalente en de.json */}
-      <SectionLabel text="02 · La herramienta" />
+      <SectionLabel text={sectionLabel} />
       <h2>F C G D A E B</h2>
 
-      <p className={styles.text}>{HERRAMIENTA_INTRO}</p>
+      <p className={styles.text}>{intro}</p>
 
       <div className={styles.toolBox}>
         <div className={styles.toolRow}>
@@ -41,30 +66,30 @@ export default function HerramientaSection() {
         </div>
       </div>
 
-      <p className={styles.text}>{HERRAMIENTA_SOSTENIDOS_EXPLICACION}</p>
-      <p className={styles.text}>{HERRAMIENTA_BEMOLES_EXPLICACION}</p>
+      <p className={styles.text}>{sharpsExp}</p>
+      <p className={styles.text}>{flatsExp}</p>
 
       <div className={styles.cards}>
         <div className={styles.card}>
-          <h3 className={styles.cardTitle}>Específico</h3>
+          <h3 className={styles.cardTitle}>{titleEspecifico}</h3>
           <p className={styles.cardText}>
-            {PROPIEDAD_ESPECIFICO.split(' — ')[0]}
+            {especificoParts[0]}
             <br />
-            {toFlat(PROPIEDAD_ESPECIFICO.split(' — ')[1])}
+            {toFlat(especificoParts[1])}
           </p>
         </div>
         <div className={styles.card}>
-          <h3 className={styles.cardTitle}>Acumulativo</h3>
-          <p className={styles.cardText}>{PROPIEDAD_ACUMULATIVO}</p>
+          <h3 className={styles.cardTitle}>{titleAcumulativo}</h3>
+          <p className={styles.cardText}>{propAcumulativo}</p>
         </div>
         <div className={styles.card}>
-          <h3 className={styles.cardTitle}>Multitonal</h3>
-          <p className={styles.cardText}>{PROPIEDAD_MULTITONAL}</p>
+          <h3 className={styles.cardTitle}>{titleMultitonal}</h3>
+          <p className={styles.cardText}>{propMultitonal}</p>
         </div>
       </div>
 
       <RuleNote>
-        <strong>{CONSEJO_MEMORIZAR}</strong>
+        <strong>{consejo}</strong>
       </RuleNote>
     </section>
   );

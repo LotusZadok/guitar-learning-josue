@@ -40,9 +40,8 @@ export default function LockScreen({ onUnlock }: Props) {
     <div className={styles.screen}>
       <div className={styles.wrapper}>
       <div className={styles.identity}>
-        <span className={styles.identityEyebrow}>Apuntes de</span>
+        <span className={styles.identityEyebrow}>Teoría de</span>
         <span className={styles.identityTitle}>Guitarra</span>
-        <span className={styles.identitySubtitle}>Prof. Josué Barquero</span>
       </div>
       <form className={styles.card} onSubmit={handleSubmit}>
         <label className={styles.label} htmlFor="lock-password">
