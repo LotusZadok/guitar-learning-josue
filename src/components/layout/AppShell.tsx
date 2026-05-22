@@ -1,7 +1,6 @@
 import { type ReactNode } from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
-import Footer from './Footer';
 import BackToTop from './BackToTop';
 import styles from './AppShell.module.css';
 
@@ -18,7 +17,6 @@ export default function AppShell({ children }: AppShellProps) {
         <main className={styles.main}>
           {children}
         </main>
-        <Footer />
       </div>
       <BackToTop />
     </div>
