@@ -191,7 +191,7 @@
 .chordChip {
   display: flex;
   align-items: baseline;
-  gap: 1px;
+  gap: 0;
   font-family: 'IBM Plex Mono', monospace;
   font-size: 13px;
   color: var(--text-body);
