@@ -21,7 +21,7 @@ export default function TonicSelector() {
   return (
     <div className={styles.wrap}>
       <label htmlFor="tonic-select" className={styles.label}>
-        {isDe ? 'TONART' : 'TONALIDAD'}
+        {isDe ? 'TONART' : 'TÓNICA'}
       </label>
       <select
         id="tonic-select"
