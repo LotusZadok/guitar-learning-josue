@@ -1,4 +1,5 @@
 import type { KeyboardEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { useUIStore } from '../../../stores/useUIStore';
 import { noteShort } from '../../../utils/noteCalculations';
@@ -45,6 +46,8 @@ interface NoteTokenProps {
 }
 
 export default function NoteToken({ note, diatonicRole }: NoteTokenProps) {
+  const { i18n } = useTranslation();
+  const isDe = i18n.language === 'de';
   const { playNote } = useAudioEngine();
   const tonic = useUIStore((s) => s.tonic);
   const setTonic = useUIStore((s) => s.setTonic);
@@ -76,7 +79,7 @@ export default function NoteToken({ note, diatonicRole }: NoteTokenProps) {
       data-diatonic={diatonicRole}
       role="button"
       tabIndex={0}
-      aria-label={`Seleccionar ${display} como tónica`}
+      aria-label={isDe ? `${display} als Tonika auswählen` : `Seleccionar ${display} como tónica`}
       aria-pressed={isTonic}
       onMouseEnter={handlePlay}
       onFocus={handlePlay}

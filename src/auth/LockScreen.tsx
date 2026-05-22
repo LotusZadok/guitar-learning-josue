@@ -18,7 +18,8 @@ type Props = {
 }
 
 export default function LockScreen({ onUnlock }: Props) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const isDe = i18n.language === 'de'
   const [password, setPassword] = useState('')
   const [error, setError] = useState(false)
   const [submitting, setSubmitting] = useState(false)
@@ -40,8 +41,8 @@ export default function LockScreen({ onUnlock }: Props) {
     <div className={styles.screen}>
       <div className={styles.wrapper}>
       <div className={styles.identity}>
-        <span className={styles.identityEyebrow}>Teoría de</span>
-        <span className={styles.identityTitle}>Guitarra</span>
+        <span className={styles.identityEyebrow}>{isDe ? 'Gitarren-' : 'Teoría de'}</span>
+        <span className={styles.identityTitle}>{isDe ? 'theorie' : 'Guitarra'}</span>
       </div>
       <form className={styles.card} onSubmit={handleSubmit}>
         <label className={styles.label} htmlFor="lock-password">

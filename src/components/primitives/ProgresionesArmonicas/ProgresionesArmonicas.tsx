@@ -151,8 +151,8 @@ export default function ProgresionesArmonicas({ tonalidad }: Props) {
 
   return (
     <div className={styles.wrap}>
-      <div className={styles.modeRow} role="group" aria-label="Modo de reproducción">
-        <span className={styles.modeLabel}>Reproducción:</span>
+      <div className={styles.modeRow} role="group" aria-label={reproductionAria}>
+        <span className={styles.modeLabel}>{reproduccionLabel}</span>
         {(['arpegio', 'bloque'] as PlayMode[]).map((m) => (
           <button
             key={m}
@@ -160,7 +160,7 @@ export default function ProgresionesArmonicas({ tonalidad }: Props) {
             onClick={() => setPlayMode(m)}
             aria-pressed={playMode === m}
           >
-            {m.charAt(0).toUpperCase() + m.slice(1)}
+            {modeLabels[m]}
           </button>
         ))}
       </div>
@@ -178,6 +178,7 @@ export default function ProgresionesArmonicas({ tonalidad }: Props) {
               isPlaying={isPlaying}
               activeChordIdx={isPlaying ? activeChordIdx : null}
               onPlay={playRow}
+              isDe={isDe}
             />
           );
         })}
@@ -194,9 +195,10 @@ interface RowProps {
   isPlaying: boolean;
   activeChordIdx: number | null;
   onPlay: (id: string, grados: ReadonlyArray<DiatonicDegree>) => void;
+  isDe: boolean;
 }
 
-function ProgressionRow({ id, label, grados, diatonic, isPlaying, activeChordIdx, onPlay }: RowProps) {
+function ProgressionRow({ id, label, grados, diatonic, isPlaying, activeChordIdx, onPlay, isDe }: RowProps) {
   const handleKey = useCallback(
     (e: KeyboardEvent<HTMLButtonElement>) => {
       if (e.key === 'Enter' || e.key === ' ') {
@@ -207,7 +209,9 @@ function ProgressionRow({ id, label, grados, diatonic, isPlaying, activeChordIdx
     [id, grados, onPlay],
   );
 
-  const ariaLabel = `Reproducir progresión ${label}: ${grados.join(' ')}`;
+  const ariaLabel = isDe
+    ? `Progression ${label} abspielen: ${grados.join(' ')}`
+    : `Reproducir progresión ${label}: ${grados.join(' ')}`;
 
   return (
     <div className={`${styles.row} ${isPlaying ? styles.rowPlaying : ''}`}>

@@ -13,6 +13,7 @@ import {
   TRIADAS_TABLA_HEAD,
   TRIADAS_TABLA_ROW,
   TRIADAS_MAESTRA,
+  TRIADAS_MAESTRA_DE,
 } from '../data/literalContent';
 import styles from './TriadasSection.module.css';
 
@@ -84,8 +85,9 @@ export default function TriadasSection() {
   return (
     <section id="s-triadas" className={styles.section}>
       <SectionLabel text={t('t1.s02.label')} />
-      {/* TODO i18n: sin clave — h2 combinado no tiene clave directa */}
-      <h2>Construcción de las 7 tríadas y la tríada maestra</h2>
+      <h2>{locale === 'de'
+        ? 'Aufbau der 7 Dreiklänge und des Meisterdreiklangs'
+        : 'Construcción de las 7 tríadas y la tríada maestra'}</h2>
 
       <p className={styles.text}>{t('t1.s02.intro')}</p>
 
@@ -130,8 +132,7 @@ export default function TriadasSection() {
         </table>
       </div>
 
-      {/* TRIADAS_MAESTRA es ProseSegment no listado para bifurcación — queda en español */}
-      <p className={styles.maestra}><Prose segment={TRIADAS_MAESTRA} /></p>
+      <p className={styles.maestra}><Prose segment={locale === 'de' ? TRIADAS_MAESTRA_DE : TRIADAS_MAESTRA} /></p>
 
       <RuleNote>{t('t1.s02.tip')}</RuleNote>
 

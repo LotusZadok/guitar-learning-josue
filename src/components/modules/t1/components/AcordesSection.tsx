@@ -63,10 +63,13 @@ export default function AcordesSection() {
         {tonic} {t('common.minor')} = {chordm.map((m) => m.spelled).join('  ')}
       </p>
 
-      {/* TODO i18n: sin clave — ACORDES_PRIMITIVA_TITULO e instrucción */}
-      <h3 className={styles.subheading}>Constructor de acordes</h3>
+      <h3 className={styles.subheading}>{locale === 'de' ? 'Akkord-Konstruktor' : 'Constructor de acordes'}</h3>
       <p className={styles.text}>
-        Tónica activa: <strong>{tonic}</strong> · elegí una calidad (mayor o menor) para construir el acorde. Escuchalo bloque o arpegiado.
+        {locale === 'de' ? (
+          <>Aktive Tonika: <strong>{tonic}</strong> · wähle eine Qualität (Dur oder Moll), um den Akkord aufzubauen. Höre ihn als Block oder arpeggiert.</>
+        ) : (
+          <>Tónica activa: <strong>{tonic}</strong> · elegí una calidad (mayor o menor) para construir el acorde. Escuchalo bloque o arpegiado.</>
+        )}
       </p>
       <AcordesBuilder />
     </section>

@@ -823,6 +823,21 @@ export const REGLA_PRIMITIVA_INSTRUCCION_DE: ProseSegment = [
   { type: 'text', value: ' ist eingerahmt, um sie vom Muster abzuheben.' },
 ];
 
+export const TENSION_PRIMITIVA_INSTRUCCION_DE =
+  "Der Strip zeigt die 7 Stufen plus die Oktave. Die Pfeile verbinden jeden spannenden oder mittleren Ton mit seiner Auflösung. Klicke auf einen Pfeil, um die Auflösung zu hören (Spannung → Ruhe). Die Form gibt den Stufentyp an: gerade Linie = 4. und 7. (spannend), Bogen = 2. und 6. (mittel).";
+
+export const TRIADAS_MAESTRA_DE: ProseSegment = [
+  { type: 'text', value: 'Wenn wir das Muster ohne Pause weiterführen, bis wir wieder beim Ausgangston ankommen, erhalten wir den Meisterdreiklang: ' },
+  { type: 'note', value: 'F' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'A' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'C' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'E' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'G' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'B' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'D' }, { type: 'text', value: ' ' },
+  { type: 'note', value: 'F' }, { type: 'text', value: '.' },
+];
+
 export const REGLA_NOTA_BEMOLES_DE: ProseSegment = [
   { type: 'text', value: 'Wenn du die alterierten Töne mit Bs benennst, entsteht eine zweite Ausnahme: ' },
   { type: 'note', value: 'Bb' },

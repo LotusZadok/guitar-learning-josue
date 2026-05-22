@@ -5,14 +5,19 @@ import GradosArmonicos from '../../../primitives/GradosArmonicos/GradosArmonicos
 import { useUIStore } from '../../../../stores/useUIStore';
 import {
   GRADOS_PROCEDIMIENTO_PASOS,
+  GRADOS_PROCEDIMIENTO_PASOS_DE,
   GRADOS_PRIMITIVA_INSTRUCCION,
+  GRADOS_PRIMITIVA_INSTRUCCION_DE,
   GRADOS_NOMBRE_CARACTER,
 } from '../data/literalContent';
 import styles from './GradosArmonicosSection.module.css';
 
 export default function GradosArmonicosSection() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isDe = i18n.language === 'de';
   const tonalidad = useUIStore((s) => s.tonic);
+  const pasos = isDe ? GRADOS_PROCEDIMIENTO_PASOS_DE : GRADOS_PROCEDIMIENTO_PASOS;
+  const primitivaInstruccion = isDe ? GRADOS_PRIMITIVA_INSTRUCCION_DE : GRADOS_PRIMITIVA_INSTRUCCION;
 
   return (
     <section id="s-t2-grados" className={styles.section}>
@@ -23,15 +28,13 @@ export default function GradosArmonicosSection() {
       <p className={styles.text}>{t('t2.s47.fractality')}</p>
 
       <h3 className={styles.subheading}>{t('t2.s47.procedure_title')}</h3>
-      {/* TODO i18n: sin clave — GRADOS_PROCEDIMIENTO_PASOS (array de 3 pasos) no mapea a de.json s47.steps */}
       <ol className={styles.pasos}>
-        {GRADOS_PROCEDIMIENTO_PASOS.map((p) => (
+        {pasos.map((p) => (
           <li key={p}>{p}</li>
         ))}
       </ol>
 
-      {/* TODO i18n: sin clave — GRADOS_PRIMITIVA_INSTRUCCION */}
-      <p className={styles.text}>{GRADOS_PRIMITIVA_INSTRUCCION}</p>
+      <p className={styles.text}>{primitivaInstruccion}</p>
 
       <GradosArmonicos tonalidad={tonalidad} />
 

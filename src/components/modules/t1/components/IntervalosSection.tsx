@@ -7,8 +7,8 @@ import IntervalsSection from '../../../primitives/Intervals/IntervalsSection';
 import { useUIStore } from '../../../../stores/useUIStore';
 import { ALL } from '../../../../data/notes';
 import { majorScaleSpelled } from '../../../../utils/noteCalculations';
-import type { ChromaticNote } from '../../../../types/music';
-import type { ProseSegment } from '../../../../types/prose';
+import type { ChromaticNote, NoteSpelling } from '../../../../types/music';
+import type { ProseSegment, ProseFragment } from '../../../../types/prose';
 import {
   INTERVALOS_13_HEAD,
   INTERVALOS_13_ROW,
@@ -33,14 +33,14 @@ function buildTitulo(tonicAscii: string, locale: string): ProseSegment {
   const text = locale === 'de'
     ? 'Verfahren zum Finden der Intervalle ausgehend von der Tonika '
     : 'Procedimiento para encontrar los intervalos partiendo de una tónica ';
-  return [{ type: 'text', value: text }, { type: 'note', value: tonicAscii }];
+  return [{ type: 'text', value: text }, { type: 'note', value: tonicAscii as NoteSpelling }];
 }
 
 function buildStep1(letterIdx: number, locale: string): ProseSegment {
   const prefix = locale === 'de'
     ? 'Die Buchstaben nach der Intervallnummer aufschreiben (Alterierungen ignorieren): '
     : 'Escribir las letras según el número del intervalo (ignorando alteraciones): ';
-  const seg: ProseSegment = [{ type: 'text', value: prefix }];
+  const seg: ProseFragment[] = [{ type: 'text', value: prefix }];
   for (let i = 0; i <= 12; i++) {
     if (i === 6) {
       const l3 = NATURAL_LETTERS_7[(letterIdx + 3) % 7];
@@ -59,12 +59,12 @@ function buildStep2(tonicIdx: number, locale: string): ProseSegment {
   const prefix = locale === 'de'
     ? 'Den chromatischen Kreis ab der Tonika aufschreiben: '
     : 'Escribir el círculo cromático desde la tónica: ';
-  const seg: ProseSegment = [{ type: 'text', value: prefix }];
+  const seg: ProseFragment[] = [{ type: 'text', value: prefix }];
   for (let i = 0; i <= 12; i++) {
     const note = ALL[(tonicIdx + i) % 12];
     const flat = SHARP_TO_FLAT_ASCII[note];
     if (flat) {
-      seg.push({ type: 'note', value: note }, { type: 'text', value: '/' }, { type: 'note', value: flat });
+      seg.push({ type: 'note', value: note }, { type: 'text', value: '/' }, { type: 'note', value: flat as NoteSpelling });
     } else {
       seg.push({ type: 'note', value: note });
     }
@@ -75,9 +75,9 @@ function buildStep2(tonicIdx: number, locale: string): ProseSegment {
 
 function buildResultado(tonicIdx: number, letterIdx: number, tonicAscii: string, locale: string): ProseSegment {
   const prefix = locale === 'de' ? 'Ergebnis für ' : 'Resultado para ';
-  const seg: ProseSegment = [
+  const seg: ProseFragment[] = [
     { type: 'text', value: prefix },
-    { type: 'note', value: tonicAscii },
+    { type: 'note', value: tonicAscii as NoteSpelling },
     { type: 'text', value: ': ' },
   ];
   for (let i = 0; i <= 12; i++) {
@@ -85,11 +85,11 @@ function buildResultado(tonicIdx: number, letterIdx: number, tonicAscii: string,
     const flat = SHARP_TO_FLAT_ASCII[note];
     if (flat && i === 6) {
       // Tritone: show both enharmonic forms.
-      seg.push({ type: 'note', value: note }, { type: 'text', value: '/' }, { type: 'note', value: flat });
+      seg.push({ type: 'note', value: note }, { type: 'text', value: '/' }, { type: 'note', value: flat as NoteSpelling });
     } else if (flat) {
       // Pick the enharmonic whose first letter matches the expected letter.
       const expected = NATURAL_LETTERS_7[(letterIdx + LETTER_OFFSETS_13[i]) % 7];
-      seg.push({ type: 'note', value: flat[0] === expected ? flat : note });
+      seg.push({ type: 'note', value: (flat[0] === expected ? flat : note) as NoteSpelling });
     } else {
       seg.push({ type: 'note', value: note });
     }
@@ -99,20 +99,21 @@ function buildResultado(tonicIdx: number, letterIdx: number, tonicAscii: string,
 }
 
 function buildOctava(tonicAscii: string, locale: string): ProseSegment {
+  const t = tonicAscii as NoteSpelling;
   if (locale === 'de') {
     return [
       { type: 'text', value: 'Die reine Oktave (8r) ist derselbe Ton eine Oktave höher oder tiefer. Die 8r von ' },
-      { type: 'note', value: tonicAscii },
+      { type: 'note', value: t },
       { type: 'text', value: ' ist ' },
-      { type: 'note', value: tonicAscii },
+      { type: 'note', value: t },
       { type: 'text', value: '.' },
     ];
   }
   return [
     { type: 'text', value: 'La 8J (octava justa) es la misma nota más aguda o más grave. La 8J de ' },
-    { type: 'note', value: tonicAscii },
+    { type: 'note', value: t },
     { type: 'text', value: ' es ' },
-    { type: 'note', value: tonicAscii },
+    { type: 'note', value: t },
     { type: 'text', value: '.' },
   ];
 }

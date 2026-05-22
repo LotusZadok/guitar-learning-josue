@@ -43,7 +43,7 @@ export default function CirculoCromaticoSection() {
       <p className={styles.text}>{t('t1.s03.body')}</p>
 
       <div className={styles.ccStripWrap}>
-        <ol className={styles.ccStrip} aria-label="Las 12 notas del círculo cromático">
+        <ol className={styles.ccStrip} aria-label={locale === 'de' ? 'Die 12 Töne des chromatischen Kreises' : 'Las 12 notas del círculo cromático'}>
           {CC_TABLA.map((n) => (
             <li key={n}>{renderCcCell(n)}</li>
           ))}

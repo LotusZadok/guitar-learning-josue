@@ -8,6 +8,7 @@ import { useUIStore } from '../../../../stores/useUIStore';
 import { majorScaleSpelled } from '../../../../utils/noteCalculations';
 import type { NoteSpelling } from '../../../../types/music';
 import type { ProseSegment } from '../../../../types/prose';
+// Cast tonicAscii (string) to NoteSpelling at the prose boundary.
 import {
   ESCALA_TABLA_HEAD,
   ESCALA_PRIMITIVA_TITULO,
@@ -21,7 +22,8 @@ const VALID_NOTE_SPELLINGS = new Set([
 ]);
 
 export default function EscalaMayorSection() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isDe = i18n.language === 'de';
   const tonic = useUIStore((s) => s.tonic);
   const spelledScale = useMemo(() => majorScaleSpelled(tonic), [tonic]);
 
@@ -30,14 +32,20 @@ export default function EscalaMayorSection() {
     () => spelledScale[0].replace('♯', '#').replace('♭', 'b'),
     [spelledScale],
   );
-  // Dynamic intro: "Ejemplo en {T} mayor:"
+  // Dynamic intro: "Ejemplo en {T} mayor:" / "Beispiel in {T} Dur:"
   const ejemploIntro = useMemo<ProseSegment>(
-    () => [
-      { type: 'text', value: 'Ejemplo en ' },
-      { type: 'note', value: tonicAscii },
-      { type: 'text', value: ' mayor:' },
-    ],
-    [tonicAscii],
+    () => isDe
+      ? [
+          { type: 'text', value: 'Beispiel in ' },
+          { type: 'note', value: tonicAscii as NoteSpelling },
+          { type: 'text', value: ' Dur:' },
+        ]
+      : [
+          { type: 'text', value: 'Ejemplo en ' },
+          { type: 'note', value: tonicAscii as NoteSpelling },
+          { type: 'text', value: ' mayor:' },
+        ],
+    [tonicAscii, isDe],
   );
   // Notes row: 7 spelled + octave repeat. Glyph → ASCII for NoteToken.
   const notasRow = useMemo(
@@ -50,10 +58,8 @@ export default function EscalaMayorSection() {
 
   return (
     <section id="s-escala" className={styles.section}>
-      {/* TODO i18n: sin clave para label de la sección en de.json (se usa t1.s05/s06) */}
       <SectionLabel text={t('t1.s05.label')} />
-      {/* TODO i18n: sin clave — h2 no tiene clave directa en de.json */}
-      <h2>Escala mayor: notas estables y tensas</h2>
+      <h2>{isDe ? 'Dur-Tonleiter: stabile und spannende Töne' : 'Escala mayor: notas estables y tensas'}</h2>
 
       <p className={styles.text}>{t('t1.s05.intro')}</p>
 
@@ -70,7 +76,7 @@ export default function EscalaMayorSection() {
           </thead>
           <tbody>
             <tr>
-              <th scope="row">Nota</th>
+              <th scope="row">{isDe ? 'Ton' : 'Nota'}</th>
               {notasRow.map((n, i) => (
                 <td key={i}>
                   {VALID_NOTE_SPELLINGS.has(n)
@@ -83,13 +89,12 @@ export default function EscalaMayorSection() {
         </table>
       </div>
 
-      {/* TODO i18n: sin clave — roleGrid labels no tienen clave en de.json */}
-      <p className={styles.text}>La escala se divide en:</p>
+      <p className={styles.text}>{isDe ? 'Die Tonleiter teilt sich in:' : 'La escala se divide en:'}</p>
       <div className={styles.roleGrid}>
         {([
-          { color: 'var(--diatonic-stable)',  label: 'Estable',    degrees: ['1', '3', '5'] },
-          { color: 'var(--diatonic-medium)',  label: 'Intermedia', degrees: ['2', '6'] },
-          { color: 'var(--diatonic-tense)',   label: 'Tensa',      degrees: ['4', '7'] },
+          { color: 'var(--diatonic-stable)',  label: isDe ? 'Stabil'   : 'Estable',    degrees: ['1', '3', '5'] },
+          { color: 'var(--diatonic-medium)',  label: isDe ? 'Mittel'   : 'Intermedia', degrees: ['2', '6'] },
+          { color: 'var(--diatonic-tense)',   label: isDe ? 'Spannend' : 'Tensa',      degrees: ['4', '7'] },
         ] as const).map(({ color, label, degrees }) => (
           <div key={label} className={styles.roleRow}>
             <span className={styles.roleDot} style={{ background: color }} />
@@ -103,9 +108,10 @@ export default function EscalaMayorSection() {
         ))}
       </div>
 
-      {/* TODO i18n: sin clave — primitiva título e instrucción */}
-      <h3 className={styles.subheading}>{ESCALA_PRIMITIVA_TITULO}</h3>
-      <p className={styles.text}>{ESCALA_PRIMITIVA_INSTRUCCION}</p>
+      <h3 className={styles.subheading}>{isDe ? 'Dur-Tonleiter Visualisierer' : ESCALA_PRIMITIVA_TITULO}</h3>
+      <p className={styles.text}>{isDe
+        ? 'Töne in Grün sind stabil. Töne in Orange sind mittel. Töne in Rot sind spannend.'
+        : ESCALA_PRIMITIVA_INSTRUCCION}</p>
       <EscalaMayor />
     </section>
   );

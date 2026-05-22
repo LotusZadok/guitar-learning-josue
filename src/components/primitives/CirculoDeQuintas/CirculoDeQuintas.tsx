@@ -1,6 +1,12 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { NOTE_COLORS, NOTE_ES } from '../../../data/notes';
+
+const NOTE_DE_LETTER: Record<string, string> = {
+  C: 'C', 'C#': 'Cis', D: 'D', 'D#': 'Dis', E: 'E', F: 'F',
+  'F#': 'Fis', G: 'G', 'G#': 'Gis', A: 'A', 'A#': 'B', B: 'H',
+};
 import { perfectFifth, noteShort } from '../../../utils/noteCalculations';
 import type { ChromaticNote } from '../../../types/music';
 import styles from './CirculoDeQuintas.module.css';
@@ -31,6 +37,8 @@ interface NodeData {
 }
 
 export default function CirculoDeQuintas() {
+  const { i18n } = useTranslation();
+  const isDe = i18n.language === 'de';
   const [hovered, setHovered] = useState<ChromaticNote | null>(null);
   const [playing, setPlaying] = useState(false);
   const { playNote } = useAudioEngine();
@@ -80,7 +88,9 @@ export default function CirculoDeQuintas() {
         className={styles.svg}
         viewBox="0 0 400 400"
         role="img"
-        aria-label="Círculo de quintas: 12 notas dispuestas en reloj, cada una conectada a su quinta justa"
+        aria-label={isDe
+          ? 'Quintenzirkel: 12 Töne uhrenförmig angeordnet, jeder mit seiner reinen Quinte verbunden'
+          : 'Círculo de quintas: 12 notas dispuestas en reloj, cada una conectada a su quinta justa'}
       >
         {/* Connection line from hovered note to its fifth */}
         {hoveredNode && fifthPos && (
@@ -107,7 +117,9 @@ export default function CirculoDeQuintas() {
               style={{ transformOrigin: `${node.x}px ${node.y}px` }}
               tabIndex={0}
               role="button"
-              aria-label={`${NOTE_ES[node.note]}: quinta justa → ${noteLabel(node.fifthChromatic)}${node.isException ? ' (excepción)' : ''}`}
+              aria-label={isDe
+                ? `${NOTE_DE_LETTER[node.note] ?? node.note}: reine Quinte → ${noteLabel(node.fifthChromatic)}${node.isException ? ' (Ausnahme)' : ''}`
+                : `${NOTE_ES[node.note]}: quinta justa → ${noteLabel(node.fifthChromatic)}${node.isException ? ' (excepción)' : ''}`}
               onMouseEnter={() => setHovered(node.note)}
               onMouseLeave={() => setHovered(null)}
               onFocus={() => setHovered(node.note)}
@@ -171,17 +183,21 @@ export default function CirculoDeQuintas() {
         ) : (
           <>
             <text x={CX} y={CY - 6} textAnchor="middle" className={styles.centerLabel}>
-              5J
+              {isDe ? '5r' : '5J'}
             </text>
             <text x={CX} y={CY + 12} textAnchor="middle" className={styles.centerSub}>
-              toca · clic
+              {isDe ? 'tippen · klicken' : 'toca · clic'}
             </text>
           </>
         )}
       </svg>
 
       <p className={styles.footnote}>
-        * La quinta de <strong>B</strong> es <strong>F♯</strong> (no F natural): excepción documentada en §1.8.
+        {isDe ? (
+          <>* Die Quinte von <strong>H</strong> ist <strong>F♯</strong> (nicht F): dokumentierte Ausnahme in §1.8.</>
+        ) : (
+          <>* La quinta de <strong>B</strong> es <strong>F♯</strong> (no F natural): excepción documentada en §1.8.</>
+        )}
       </p>
     </div>
   );

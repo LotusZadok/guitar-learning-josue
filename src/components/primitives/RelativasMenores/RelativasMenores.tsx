@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback, type KeyboardEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { ALL, NOTE_COLORS } from '../../../data/notes';
 import type { ChromaticNote } from '../../../types/music';
@@ -24,6 +25,8 @@ function nodePos(idx: number): { x: number; y: number } {
 const NODES = ALL.map((note, i) => ({ note, ...nodePos(i) }));
 
 export default function RelativasMenores({ tonic }: Props) {
+  const { i18n } = useTranslation();
+  const isDe = i18n.language === 'de';
   const [hovered, setHovered] = useState<ChromaticNote | null>(null);
   const { playNote } = useAudioEngine();
 
@@ -46,7 +49,9 @@ export default function RelativasMenores({ tonic }: Props) {
         className={styles.svg}
         viewBox="0 0 400 400"
         role="img"
-        aria-label={`Círculo cromático: ${noteLabel(tonic)} mayor y su relativa ${noteLabel(relativeMinor)} menor comparten la misma armadura`}
+        aria-label={isDe
+          ? `Chromatischer Kreis: ${noteLabel(tonic)}-Dur und seine Moll-Paralleltonart ${noteLabel(relativeMinor)}-Moll teilen dieselben Vorzeichen`
+          : `Círculo cromático: ${noteLabel(tonic)} mayor y su relativa ${noteLabel(relativeMinor)} menor comparten la misma armadura`}
       >
         {/* Interior arc between tonic and relative minor */}
         <path
@@ -80,7 +85,9 @@ export default function RelativasMenores({ tonic }: Props) {
               style={{ transformOrigin: `${x}px ${y}px` }}
               tabIndex={0}
               role="button"
-              aria-label={`${noteLabel(note)}${isTonic ? ' (tónica mayor)' : isRelative ? ' (relativa menor)' : ''}: reproducir nota`}
+              aria-label={isDe
+                ? `${noteLabel(note)}${isTonic ? ' (Dur-Tonika)' : isRelative ? ' (Moll-Paralleltonart)' : ''}: Ton abspielen`
+                : `${noteLabel(note)}${isTonic ? ' (tónica mayor)' : isRelative ? ' (relativa menor)' : ''}: reproducir nota`}
               onMouseEnter={() => { setHovered(note); handleAudio(note); }}
               onMouseLeave={() => setHovered(null)}
               onFocus={() => setHovered(note)}
@@ -112,10 +119,10 @@ export default function RelativasMenores({ tonic }: Props) {
 
         {/* Center label */}
         <text x={CX} y={CY - 7} textAnchor="middle" className={styles.centerLabel}>
-          −3 s.t.
+          {isDe ? '−3 Ht.' : '−3 s.t.'}
         </text>
         <text x={CX} y={CY + 11} textAnchor="middle" className={styles.centerSub}>
-          mayor → menor
+          {isDe ? 'Dur → Moll' : 'mayor → menor'}
         </text>
       </svg>
     </div>

@@ -39,20 +39,18 @@ export default function ReglaQuintaSection() {
         {bullets.map((b, i) => (
           <li key={i}>
             <strong>{b.regla}</strong> · {b.desc}{' '}
-            <span className={styles.ejemplo}>Ejemplo: <Prose segment={b.ejemplo} /></span>
+            <span className={styles.ejemplo}>{locale === 'de' ? 'Beispiel' : 'Ejemplo'}: <Prose segment={b.ejemplo} /></span>
           </li>
         ))}
       </ul>
 
-      {/* TODO i18n: sin clave — REGLA_EXCEPCIONES_TITULO */}
-      <h3 className={styles.subheading}>Excepciones</h3>
+      <h3 className={styles.subheading}>{locale === 'de' ? 'Ausnahmen' : 'Excepciones'}</h3>
       <ul className={styles.bullets}>
         <li><Prose segment={excepcionB} /></li>
         <li><Prose segment={excepcionBb} /></li>
       </ul>
 
-      {/* TODO i18n: sin clave — REGLA_PRIMITIVA_TITULO */}
-      <h3 className={styles.subheading}>{REGLA_PRIMITIVA_TITULO}</h3>
+      <h3 className={styles.subheading}>{locale === 'de' ? 'Die 12 reinen Quinten' : REGLA_PRIMITIVA_TITULO}</h3>
       <p className={styles.text}><Prose segment={primitiva} /></p>
       <CirculoDeQuintas />
 

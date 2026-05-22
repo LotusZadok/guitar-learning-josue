@@ -15,13 +15,27 @@ const FREE_NOTES: CircleNoteData[] = CHROMATIC.map(label => ({
 }));
 
 const SCALE_FORMULAS: Record<string, number[]> = {
-  'Mayor':              [0, 2, 4, 5, 7, 9, 11],
-  'Menor natural':      [0, 2, 3, 5, 7, 8, 10],
-  'Menor armónica':     [0, 2, 3, 5, 7, 8, 11],
-  'Pentatónica mayor':  [0, 2, 4, 7, 9],
-  'Pentatónica menor':  [0, 3, 5, 7, 10],
+  'major':              [0, 2, 4, 5, 7, 9, 11],
+  'minor_natural':      [0, 2, 3, 5, 7, 8, 10],
+  'minor_harmonic':     [0, 2, 3, 5, 7, 8, 11],
+  'pentatonic_major':   [0, 2, 4, 7, 9],
+  'pentatonic_minor':   [0, 3, 5, 7, 10],
 };
-const SCALE_NAMES = Object.keys(SCALE_FORMULAS);
+const SCALE_KEYS = Object.keys(SCALE_FORMULAS);
+const SCALE_LABELS_ES: Record<string, string> = {
+  major: 'Mayor',
+  minor_natural: 'Menor natural',
+  minor_harmonic: 'Menor armónica',
+  pentatonic_major: 'Pentatónica mayor',
+  pentatonic_minor: 'Pentatónica menor',
+};
+const SCALE_LABELS_DE: Record<string, string> = {
+  major: 'Dur',
+  minor_natural: 'Natürlich Moll',
+  minor_harmonic: 'Harmonisch Moll',
+  pentatonic_major: 'Pentatonisch Dur',
+  pentatonic_minor: 'Pentatonisch Moll',
+};
 
 function getScaleNotes(rootIndex: number, formula: number[]): string[] {
   return formula.map(semitones => CHROMATIC[(rootIndex + semitones) % 12]);
@@ -36,9 +50,11 @@ function sortAscendingFromTonic(notes: string[], tonicIdx: number): string[] {
 }
 
 export default function ModoClaseSection() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isDe = i18n.language === 'de';
+  const SCALE_LABELS = isDe ? SCALE_LABELS_DE : SCALE_LABELS_ES;
   const [tonic, setTonic] = useState<string>('C');
-  const [scaleName, setScaleName] = useState<string>('Mayor');
+  const [scaleName, setScaleName] = useState<string>('major');
   const [marked, setMarked] = useState<string[]>([]);
   const [playingNote, setPlayingNote] = useState<string | null>(null);
   const isPlayingRef = useRef(false);
@@ -80,7 +96,6 @@ export default function ModoClaseSection() {
 
       <div className={styles.controls}>
         <div className={styles.row}>
-          {/* TODO i18n: sin clave — "Tónica" y "Escala" labels */}
           <span className={styles.rowLabel}>{t('common.tonic_selector_label')}</span>
           <div className={styles.tonicGrid}>
             {CHROMATIC.map(n => (
@@ -96,32 +111,30 @@ export default function ModoClaseSection() {
         </div>
 
         <div className={styles.row}>
-          {/* TODO i18n: sin clave — SCALE_NAMES no tienen equivalente en de.json */}
           <span className={styles.rowLabel}>{t('common.scale_label')}</span>
           <div className={styles.scaleRow}>
-            {SCALE_NAMES.map(s => (
+            {SCALE_KEYS.map(s => (
               <button
                 key={s}
                 className={`${styles.chip} ${scaleName === s ? styles.chipActive : ''}`}
                 onClick={() => setScaleName(s)}
               >
-                {s}
+                {SCALE_LABELS[s]}
               </button>
             ))}
           </div>
         </div>
 
         <div className={styles.actions}>
-          {/* TODO i18n: sin clave — botones de acción */}
           <button className={styles.actionBtn} onClick={loadScale}>
-            Cargar escala
+            {isDe ? 'Tonleiter laden' : 'Cargar escala'}
           </button>
           <button
             className={styles.actionBtn}
             onClick={playScale}
             disabled={marked.length === 0 || playingNote !== null}
           >
-            Tocar escala
+            {isDe ? 'Tonleiter spielen' : 'Tocar escala'}
           </button>
         </div>
       </div>

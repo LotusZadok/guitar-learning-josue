@@ -9,7 +9,13 @@ import {
   TENSION_REGLAS,
   TENSION_REGLAS_DE,
   TENSION_PRIMITIVA_INSTRUCCION,
+  TENSION_PRIMITIVA_INSTRUCCION_DE,
 } from '../data/literalContent';
+
+const NOTE_DE_NAME: Record<string, string> = {
+  C: 'C', 'C#': 'Cis', D: 'D', 'D#': 'Dis', E: 'E', F: 'F',
+  'F#': 'Fis', G: 'G', 'G#': 'Gis', A: 'A', 'A#': 'B', B: 'H',
+};
 import styles from './TensionResolucionSection.module.css';
 
 export default function TensionResolucionSection() {
@@ -33,9 +39,10 @@ export default function TensionResolucionSection() {
         ))}
       </ol>
 
-      {/* TODO i18n: sin clave — primitiva título e instrucción */}
-      <h3 className={styles.subheading}>Mapa de resoluciones en {NOTE_ES[tonic]} mayor</h3>
-      <p className={styles.text}>{TENSION_PRIMITIVA_INSTRUCCION}</p>
+      <h3 className={styles.subheading}>{locale === 'de'
+        ? `Karte der Auflösungen in ${NOTE_DE_NAME[tonic] ?? tonic} Dur`
+        : `Mapa de resoluciones en ${NOTE_ES[tonic]} mayor`}</h3>
+      <p className={styles.text}>{locale === 'de' ? TENSION_PRIMITIVA_INSTRUCCION_DE : TENSION_PRIMITIVA_INSTRUCCION}</p>
       <TensionResolucion />
 
       <RuleNote>{t('t1.s05.tip')}</RuleNote>

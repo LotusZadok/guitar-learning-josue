@@ -30,8 +30,8 @@ export default function ProcesoView({ tonalidad, compact }: Props) {
   }, [isException]);
 
   const steps = useMemo(
-    () => getProcessSteps(tonalidad, direction),
-    [tonalidad, direction]
+    () => getProcessSteps(tonalidad, direction, isDe ? 'de' : 'es'),
+    [tonalidad, direction, isDe]
   );
   const maxSteps = steps.length;
 

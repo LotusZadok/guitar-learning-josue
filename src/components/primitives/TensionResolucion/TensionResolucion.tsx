@@ -1,7 +1,13 @@
 import { useCallback, useMemo, useRef, useState, type KeyboardEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { useUIStore } from '../../../stores/useUIStore';
 import { ALL, NOTE_ES } from '../../../data/notes';
+
+const NOTE_DE_LETTER: Record<string, string> = {
+  C: 'C', 'C#': 'Cis', D: 'D', 'D#': 'Dis', E: 'E', F: 'F',
+  'F#': 'Fis', G: 'G', 'G#': 'Gis', A: 'A', 'A#': 'B', B: 'H',
+};
 import type { ChromaticNote } from '../../../types/music';
 import styles from './TensionResolucion.module.css';
 
@@ -79,6 +85,8 @@ function arrowPath(originX: number, destX: number, kind: 'straight' | 'curve'): 
 }
 
 export default function TensionResolucion() {
+  const { i18n } = useTranslation();
+  const isDe = i18n.language === 'de';
   const tonic = useUIStore((s) => s.tonic);
   const nodes = useMemo(() => buildNodes(tonic), [tonic]);
   const { playNote } = useAudioEngine();
@@ -110,7 +118,9 @@ export default function TensionResolucion() {
         className={styles.svg}
         viewBox={`0 0 ${SVG_W} ${SVG_H}`}
         role="img"
-        aria-label={`Mapa de resoluciones de tensión en ${NOTE_ES[tonic]} mayor`}
+        aria-label={isDe
+          ? `Karte der Spannungsauflösungen in ${NOTE_DE_LETTER[tonic] ?? tonic}-Dur`
+          : `Mapa de resoluciones de tensión en ${NOTE_ES[tonic]} mayor`}
       >
         <defs>
           <marker
@@ -144,7 +154,9 @@ export default function TensionResolucion() {
               key={a.id}
               d={arrowPath(nodeX(from.pos), nodeX(to.pos), a.kind)}
               width={a.width}
-              ariaLabel={`Reproducir resolución de ${NOTE_ES[from.note]} a ${NOTE_ES[to.note]}`}
+              ariaLabel={isDe
+                ? `Auflösung von ${NOTE_DE_LETTER[from.note] ?? from.note} nach ${NOTE_DE_LETTER[to.note] ?? to.note} spielen`
+                : `Reproducir resolución de ${NOTE_ES[from.note]} a ${NOTE_ES[to.note]}`}
               onPlay={() => playSequence(a.fromIdx, a.toIdx, a.id)}
               isPlaying={playingArrow === a.id}
               isDimmed={playingArrow !== null && playingArrow !== a.id}
@@ -158,26 +170,26 @@ export default function TensionResolucion() {
         ))}
       </svg>
 
-      <ul className={styles.legend} aria-label="Convenciones del mapa">
+      <ul className={styles.legend} aria-label={isDe ? 'Kartenkonventionen' : 'Convenciones del mapa'}>
         <li>
           <span className={`${styles.swatch} ${styles.swatchStraight}`} />
-          4ª · 7ª (tensos)
+          {isDe ? '4. · 7. (spannend)' : '4ª · 7ª (tensos)'}
         </li>
         <li>
           <span className={`${styles.swatch} ${styles.swatchCurve}`} />
-          2ª · 6ª (intermedios)
+          {isDe ? '2. · 6. (mittel)' : '2ª · 6ª (intermedios)'}
         </li>
         <li>
           <span className={styles.swatchStable} />
-          Estable
+          {isDe ? 'Stabil' : 'Estable'}
         </li>
         <li>
           <span className={styles.swatchIntermediate} />
-          Intermedia
+          {isDe ? 'Mittel' : 'Intermedia'}
         </li>
         <li>
           <span className={styles.swatchTense} />
-          Tensa
+          {isDe ? 'Spannend' : 'Tensa'}
         </li>
       </ul>
     </div>
