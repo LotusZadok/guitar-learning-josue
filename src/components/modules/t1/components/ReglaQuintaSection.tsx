@@ -29,7 +29,7 @@ export default function ReglaQuintaSection() {
   const notaBemoles = locale === 'de' ? REGLA_NOTA_BEMOLES_DE : REGLA_NOTA_BEMOLES;
 
   return (
-    <section className={styles.section}>
+    <section id="s-quinta" className={styles.section}>
       <SectionLabel text={t('t1.s08.label')} />
       <h2>{t('t1.s08.title')}</h2>
 

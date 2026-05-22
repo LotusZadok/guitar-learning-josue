@@ -21,28 +21,32 @@ function resolveNote(noteName: string): { name: string; octave: number } {
   return { name: noteName, octave: 4 };
 }
 
+type PlayingAction = 'escala' | 'tonica' | null;
+
 export default function AudioButtons({ escala, tonica, disabled }: Props) {
   const { playNote } = useAudioEngine();
-  const [playing, setPlaying] = useState(false);
+  const [playingAction, setPlayingAction] = useState<PlayingAction>(null);
+
+  const playing = playingAction !== null;
 
   const playTonica = useCallback(() => {
     if (playing) return;
-    setPlaying(true);
+    setPlayingAction('tonica');
     const { name, octave } = resolveNote(tonica);
     playNote(name, octave, 1.5);
-    setTimeout(() => setPlaying(false), 1500);
+    setTimeout(() => setPlayingAction(null), 1500);
   }, [tonica, playNote, playing]);
 
   const playEscala = useCallback(() => {
     if (playing) return;
-    setPlaying(true);
+    setPlayingAction('escala');
     escala.forEach((note, i) => {
       setTimeout(() => {
         const { name, octave } = resolveNote(note);
         playNote(name, octave, 1.2);
       }, i * 300);
     });
-    setTimeout(() => setPlaying(false), escala.length * 300 + 1200);
+    setTimeout(() => setPlayingAction(null), escala.length * 300 + 1200);
   }, [escala, playNote, playing]);
 
   const isDisabled = disabled || playing;
@@ -50,14 +54,14 @@ export default function AudioButtons({ escala, tonica, disabled }: Props) {
   return (
     <div className={styles.wrap}>
       <button
-        className={styles.btn}
+        className={playingAction === 'escala' ? styles.btnPlaying : styles.btn}
         onClick={playEscala}
         disabled={isDisabled}
       >
         Escuchar escala
       </button>
       <button
-        className={styles.btn}
+        className={playingAction === 'tonica' ? styles.btnPlaying : styles.btn}
         onClick={playTonica}
         disabled={isDisabled}
       >

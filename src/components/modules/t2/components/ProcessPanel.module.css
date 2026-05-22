@@ -23,7 +23,7 @@
   line-height: 1.7;
   color: var(--muted);
   padding: 10px 14px;
-  transition: all 0.3s;
+  transition: background 0.3s, color 0.3s;
 }
 
 .stepActive {

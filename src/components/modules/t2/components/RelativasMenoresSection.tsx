@@ -34,7 +34,7 @@ export default function RelativasMenoresSection() {
   const process = t('t2.s49.process', { returnObjects: true }) as string[];
 
   return (
-    <section className={styles.section}>
+    <section id="s-t2-relativas" className={styles.section}>
       <SectionLabel text={t('t2.s49.label')} />
       <h2>{t('t2.s49.title')}</h2>
 

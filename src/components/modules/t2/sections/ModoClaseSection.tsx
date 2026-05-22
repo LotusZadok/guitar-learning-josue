@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
 import ChromaticCircleAnimated from '../components/ChromaticCircleAnimated';
@@ -40,6 +40,8 @@ export default function ModoClaseSection() {
   const [tonic, setTonic] = useState<string>('C');
   const [scaleName, setScaleName] = useState<string>('Mayor');
   const [marked, setMarked] = useState<string[]>([]);
+  const [playingNote, setPlayingNote] = useState<string | null>(null);
+  const isPlayingRef = useRef(false);
   const { playNote } = useAudioEngine();
 
   const loadScale = useCallback(() => {
@@ -49,7 +51,8 @@ export default function ModoClaseSection() {
   }, [tonic, scaleName]);
 
   const playScale = useCallback(() => {
-    if (marked.length === 0) return;
+    if (isPlayingRef.current || marked.length === 0) return;
+    isPlayingRef.current = true;
     const tonicIdx = NOTE_TO_POS[tonic] ?? 0;
     const ordered = sortAscendingFromTonic(marked, tonicIdx);
     let octave = 4;
@@ -59,13 +62,20 @@ export default function ModoClaseSection() {
       if (pos === undefined) return;
       if (i > 0 && pos <= prevPos) octave++;
       const oct = octave;
-      setTimeout(() => playNote(note, oct, 1.2), i * 320);
+      setTimeout(() => {
+        setPlayingNote(note);
+        playNote(note, oct, 1.2);
+      }, i * 320);
       prevPos = pos;
     });
+    setTimeout(() => {
+      setPlayingNote(null);
+      isPlayingRef.current = false;
+    }, (ordered.length - 1) * 320 + 1200);
   }, [marked, tonic, playNote]);
 
   return (
-    <section className={styles.section}>
+    <section id="s-t2-modo-clase" className={styles.section}>
       <SectionLabel text={t('t2.s46.label')} />
 
       <div className={styles.controls}>
@@ -109,7 +119,7 @@ export default function ModoClaseSection() {
           <button
             className={styles.actionBtn}
             onClick={playScale}
-            disabled={marked.length === 0}
+            disabled={marked.length === 0 || playingNote !== null}
           >
             Tocar escala
           </button>
@@ -123,6 +133,7 @@ export default function ModoClaseSection() {
           inlineClearButton
           markedNotes={marked}
           onMarkedNotesChange={setMarked}
+          playingNote={playingNote}
         />
       </div>
     </section>

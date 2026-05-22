@@ -85,6 +85,8 @@ export default function RelativasMenores({ tonic }: Props) {
               onMouseLeave={() => setHovered(null)}
               onFocus={() => setHovered(note)}
               onBlur={() => setHovered(null)}
+              onTouchStart={(e) => { e.preventDefault(); setHovered(note); handleAudio(note); }}
+              onTouchEnd={() => setTimeout(() => setHovered(null), 600)}
               onClick={() => handleAudio(note)}
               onKeyDown={(e: KeyboardEvent<SVGGElement>) => {
                 if (e.key === 'Enter' || e.key === ' ') {

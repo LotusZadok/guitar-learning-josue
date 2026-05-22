@@ -14,7 +14,7 @@ export default function ProcesoSostenidosSection() {
   const tonalidad = TONALIDADES_SOSTENIDOS.find(t => t.id === selected)!;
 
   return (
-    <section className={styles.section}>
+    <section id="s-t2-sostenidos" className={styles.section}>
       <SectionLabel text={t('t2.s42.label')} />
       <h2 className={styles.titulo}>{t('t2.s42.title')}</h2>
 

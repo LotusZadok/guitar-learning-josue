@@ -11,6 +11,24 @@ const ARPEGGIO_GAP_MS = 200;
 const PLAY_DURATION = 2.0;
 type PlayMode = 'arpegio' | 'bloque';
 
+const NATURAL_SEMITONES: Record<NaturalNote, number> = {
+  C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11,
+};
+
+/** Assigns ascending octaves so each note is higher than the previous. */
+function toAscending(notes: readonly NaturalNote[], startOctave = 4) {
+  const result: { note: NaturalNote; octave: number }[] = [];
+  let prevSemi = -1;
+  let octave = startOctave;
+  for (const n of notes) {
+    const semi = NATURAL_SEMITONES[n];
+    if (semi <= prevSemi) octave++;
+    result.push({ note: n, octave });
+    prevSemi = semi;
+  }
+  return result;
+}
+
 const CX = 175, CY = 175, R = 110;
 const LABELS = ['Tónica', 'Tercera', 'Quinta'];
 
@@ -42,10 +60,13 @@ export default function TriadsSection() {
   const makePlayTriad = useCallback(
     (note: NaturalNote) => () => {
       const { notes } = TRIADS[note];
+      const ascending = toAscending(notes);
       if (playMode === 'bloque') {
-        notes.forEach((n) => playNote(n, 4, PLAY_DURATION));
+        ascending.forEach(({ note: n, octave }) => playNote(n, octave, PLAY_DURATION));
       } else {
-        notes.forEach((n, i) => setTimeout(() => playNote(n, 4, PLAY_DURATION), i * ARPEGGIO_GAP_MS));
+        ascending.forEach(({ note: n, octave }, i) =>
+          setTimeout(() => playNote(n, octave, PLAY_DURATION), i * ARPEGGIO_GAP_MS),
+        );
       }
     },
     [playMode, playNote],

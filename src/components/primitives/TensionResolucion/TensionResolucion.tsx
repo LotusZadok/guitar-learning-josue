@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, type KeyboardEvent } from 'react';
+import { useCallback, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { useUIStore } from '../../../stores/useUIStore';
 import { ALL, NOTE_ES } from '../../../data/notes';
@@ -42,7 +42,7 @@ const ARROWS = [
   { id: 'd-c',   fromIdx: 1, toIdx: 0, width: 1.5, kind: 'curve'    },
   { id: 'd-e',   fromIdx: 1, toIdx: 2, width: 1.5, kind: 'curve'    },
   { id: 'f-e',   fromIdx: 3, toIdx: 2, width: 1.5, kind: 'straight' },
-  { id: 'f-g',   fromIdx: 3, toIdx: 4, width: 1.5, kind: 'curve'    },
+  { id: 'f-g',   fromIdx: 3, toIdx: 4, width: 1.5, kind: 'straight' },
   { id: 'a-g',   fromIdx: 5, toIdx: 4, width: 1.5, kind: 'curve'    },
   { id: 'b-c8',  fromIdx: 6, toIdx: 7, width: 1.5, kind: 'straight' },
 ] as const;
@@ -57,7 +57,7 @@ const RADIUS_TONIC = 22;
 const RADIUS_STABLE = 18;
 const RADIUS_TENSE = 18;
 const ARC_BASELINE = NODE_Y - RADIUS_TONIC - 6; // top of node circle
-const ARC_PEAK_LONG = 28;   // arc peak for 2-step jumps
+const ARC_RISE = 52;        // how far above baseline the arc peaks
 const ARPEGGIO_GAP_MS = 260;
 const NOTE_DURATION = 1.4;
 const FIRE_DEBOUNCE_MS = 150;
@@ -69,12 +69,13 @@ function nodeX(pos: number): number {
 function arrowPath(originX: number, destX: number, kind: 'straight' | 'curve'): string {
   const startY = ARC_BASELINE;
   if (kind === 'straight') {
-    // 1 s.t.: línea recta horizontal entre los dos nodos adyacentes.
+    // Grados tensos (4ª, 7ª): línea recta horizontal.
     return `M ${originX} ${startY} L ${destX} ${startY}`;
   }
-  // 2 s.t.: arco cúbico con tangentes verticales en ambos extremos.
-  const peakY = ARC_PEAK_LONG;
-  return `M ${originX} ${startY} C ${originX} ${peakY} ${destX} ${peakY} ${destX} ${startY}`;
+  // Grados intermedios (2ª, 6ª): arco cuadrático proporcional a la distancia.
+  const midX = (originX + destX) / 2;
+  const peakY = startY - ARC_RISE;
+  return `M ${originX} ${startY} Q ${midX} ${peakY} ${destX} ${startY}`;
 }
 
 export default function TensionResolucion() {
@@ -82,13 +83,15 @@ export default function TensionResolucion() {
   const nodes = useMemo(() => buildNodes(tonic), [tonic]);
   const { playNote } = useAudioEngine();
   const lastFireRef = useRef<number>(0);
+  const [playingArrow, setPlayingArrow] = useState<string | null>(null);
 
   const playSequence = useCallback(
-    (fromIdx: number, toIdx: number) => {
+    (fromIdx: number, toIdx: number, arrowId: string) => {
       const now = performance.now();
       if (now - lastFireRef.current < FIRE_DEBOUNCE_MS) return;
       lastFireRef.current = now;
 
+      setPlayingArrow(arrowId);
       const from = nodes[fromIdx];
       const to = nodes[toIdx];
       playNote(from.note, 4 + from.octaveAdj, NOTE_DURATION);
@@ -96,6 +99,7 @@ export default function TensionResolucion() {
         () => playNote(to.note, 4 + to.octaveAdj, NOTE_DURATION),
         ARPEGGIO_GAP_MS,
       );
+      setTimeout(() => setPlayingArrow(null), ARPEGGIO_GAP_MS + NOTE_DURATION * 1000);
     },
     [playNote, nodes],
   );
@@ -113,12 +117,12 @@ export default function TensionResolucion() {
             id="tension-arrowhead"
             markerWidth="6"
             markerHeight="6"
-            refX="3"
-            refY="5"
-            orient="auto-start-reverse"
+            refX="6"
+            refY="3"
+            orient="auto"
             markerUnits="strokeWidth"
           >
-            <path d="M0,0 L6,0 L3,5 Z" className={styles.arrowHead} />
+            <path d="M0,0 L6,3 L0,6 Z" className={styles.arrowHead} />
           </marker>
         </defs>
 
@@ -141,7 +145,9 @@ export default function TensionResolucion() {
               d={arrowPath(nodeX(from.pos), nodeX(to.pos), a.kind)}
               width={a.width}
               ariaLabel={`Reproducir resolución de ${NOTE_ES[from.note]} a ${NOTE_ES[to.note]}`}
-              onPlay={() => playSequence(a.fromIdx, a.toIdx)}
+              onPlay={() => playSequence(a.fromIdx, a.toIdx, a.id)}
+              isPlaying={playingArrow === a.id}
+              isDimmed={playingArrow !== null && playingArrow !== a.id}
             />
           );
         })}
@@ -155,11 +161,11 @@ export default function TensionResolucion() {
       <ul className={styles.legend} aria-label="Convenciones del mapa">
         <li>
           <span className={`${styles.swatch} ${styles.swatchStraight}`} />
-          1 s.t.: resolución directa
+          4ª · 7ª (tensos)
         </li>
         <li>
           <span className={`${styles.swatch} ${styles.swatchCurve}`} />
-          2 s.t.: salto
+          2ª · 6ª (intermedios)
         </li>
         <li>
           <span className={styles.swatchStable} />
@@ -183,9 +189,11 @@ interface ArrowPathProps {
   width: number;
   ariaLabel: string;
   onPlay: () => void;
+  isPlaying?: boolean;
+  isDimmed?: boolean;
 }
 
-function ArrowPath({ d, width, ariaLabel, onPlay }: ArrowPathProps) {
+function ArrowPath({ d, width, ariaLabel, onPlay, isPlaying, isDimmed }: ArrowPathProps) {
   const handleKey = useCallback(
     (e: KeyboardEvent<SVGPathElement>) => {
       if (e.key === 'Enter' || e.key === ' ') {
@@ -196,11 +204,17 @@ function ArrowPath({ d, width, ariaLabel, onPlay }: ArrowPathProps) {
     [onPlay],
   );
 
+  const strokeColor = isPlaying ? 'var(--amber)' : undefined;
+  const strokeWidth = isPlaying ? width + 1 : width;
+  const opacity = isDimmed ? 0.25 : 1;
+
   return (
     <path
       d={d}
       className={styles.arrow}
-      strokeWidth={width}
+      strokeWidth={strokeWidth}
+      stroke={strokeColor}
+      opacity={opacity}
       markerEnd="url(#tension-arrowhead)"
       tabIndex={0}
       role="button"
@@ -208,6 +222,7 @@ function ArrowPath({ d, width, ariaLabel, onPlay }: ArrowPathProps) {
       onClick={onPlay}
       onFocus={onPlay}
       onKeyDown={handleKey}
+      style={{ transition: 'opacity 0.2s, stroke 0.15s' }}
     />
   );
 }

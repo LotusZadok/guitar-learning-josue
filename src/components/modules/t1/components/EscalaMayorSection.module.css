@@ -5,7 +5,7 @@
 }
 
 .text {
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1.8;
   color: var(--text-body);
   margin-bottom: 16px;
@@ -57,28 +57,47 @@
   color: var(--text-body);
 }
 
-.divList {
-  list-style: none;
-  padding: 0;
-  margin: 8px 0 24px;
+.roleGrid {
   display: flex;
   flex-direction: column;
+  gap: 10px;
+  margin: 16px 0 28px;
+}
+
+.roleRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.roleDot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.roleLabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: var(--text-body);
+  min-width: 90px;
+}
+
+.roleDegrees {
+  display: flex;
   gap: 6px;
 }
 
-.divList li {
-  font-size: 13px;
-  line-height: 1.8;
-  color: var(--text-body);
-  padding-left: 16px;
-  position: relative;
-}
-
-.divList li::before {
-  content: '·';
-  position: absolute;
-  left: 0;
-  color: var(--muted);
+.roleBadge {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 14px;
+  letter-spacing: 1px;
+  color: var(--paper);
+  border: 1px solid;
+  border-radius: 3px;
+  padding: 0 7px;
+  line-height: 22px;
 }
 
 .subheading {
@@ -98,5 +117,18 @@
     min-width: 44px;
     padding: 8px 10px;
     font-size: 12px;
+  }
+}
+
+@media (max-width: 900px) {
+  .tableWrap {
+    -webkit-overflow-scrolling: touch;
+    background:
+      linear-gradient(to right, var(--bg) 20%, transparent),
+      linear-gradient(to left,  var(--bg) 20%, transparent) right;
+    background-attachment: local, local;
+    background-repeat: no-repeat;
+    background-size: 24px 100%, 24px 100%;
+    background-color: var(--bg);
   }
 }

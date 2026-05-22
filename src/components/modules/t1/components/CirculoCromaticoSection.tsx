@@ -29,7 +29,7 @@ export default function CirculoCromaticoSection() {
   const ccNoAlterada = locale === 'de' ? CC_NO_ALTERADA_DE : CC_NO_ALTERADA;
 
   return (
-    <section className={styles.section}>
+    <section id="s-circulo" className={styles.section}>
       <SectionLabel text={t('t1.s03.label')} />
       <h2>{t('t1.s03.title')}</h2>
 

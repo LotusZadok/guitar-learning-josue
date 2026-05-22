@@ -137,3 +137,14 @@
     gap: 16px;
   }
 }
+
+.cardPlaying {
+  border-color: var(--amber);
+  box-shadow: 0 0 0 1px var(--amber);
+  transition: border-color 0.15s, box-shadow 0.15s, opacity 0.2s;
+}
+
+.cardDimmed {
+  opacity: 0.35;
+  transition: opacity 0.2s;
+}

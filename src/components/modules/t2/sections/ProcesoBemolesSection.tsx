@@ -14,7 +14,7 @@ export default function ProcesoBemolesSection() {
   const tonalidad = TONALIDADES_BEMOLES.find(t => t.id === selected)!;
 
   return (
-    <section className={styles.section}>
+    <section id="s-t2-bemoles" className={styles.section}>
       <SectionLabel text={t('t2.s43.label')} />
       <h2 className={`${styles.titulo} ${styles.tituloMono}`}>{t('t2.s43.title')}</h2>
 

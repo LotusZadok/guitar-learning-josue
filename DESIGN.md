@@ -357,11 +357,10 @@ Este componente es el que identifica la marca. Aparece en T1 (primitiva Chromati
 
 Esta sección lista deudas que las auditorías y pasadas de resolución identificaron pero **no** han sido resueltas. Son trabajo futuro explícito, no aprobaciones tácitas. Cada vez que una pasada resuelve una deuda, se remueve de esta lista; cada nueva deuda descubierta se añade.
 
-**Última actualización:** 2026-05-08 (después de la 10ª ola — Bloque D de T2: sección 4.7 Grados armónicos).
+**Última actualización:** 2026-05-21 (11ª ola — interactividad global de tónica, tipos aumentado/disminuido, sistema diatónico de colores, arpegios ascendentes y formato T2).
 
 ### Doctrina activa (decisiones pendientes de diseño)
 
-- **AudioButtons sin feedback visual de qué nota suena durante reproducción.** Un usuario sordo "puede usar la app" pero pierde la pedagogía de la escala/tónica reproducidas. Decisión 2026-05-04: documentar como pendiente, abordar en pasada futura. Implementación esperada: highlight progresivo de la nota actual sincronizado con `useAudioEngine`. Afecta `AudioButtons.tsx` y `ModoClase` `playScale`.
 - **`ProcessPanel.titulo` en Playfair italic.** Las preguntas pedagógicas ("¿Cómo saber la armadura partiendo de la tonalidad?") **se tratan como citas del método** de Josué (decisión 2026-05-04). Excepción al Editorial Trio Rule documentada aquí: las preguntas-pregunta del método cuentan como citas literales. NO mover a Plex Mono. Cualquier auditoría futura que la flagee debe consultar esta entrada antes.
 - **One Voice Rule en concentración alta** (≥10% combinado de rojo + ámbar en TablaMaestra/ModoClase con SectionLabels rojos + chipActive + ToggleSwitch ON + spans de marca). Decisión 2026-05-04: **aceptable**. La densidad de las dos secciones más interactivas justifica el peso visual del acento. No requiere acción mientras el resto de pantallas se mantenga ≤10%.
 - **`--string1..6` y `--caged-*` están definidos solo en `:root`.** Per DESIGN.md §2 doctrina, los hues de nota base son **fijos** (la identidad de la cuerda E al aire es la nota E). Esta entrada existe para documentar la decisión: dejarlos en `:root` es correcto. Si una pasada futura los redefine para light, está rompiendo doctrina. Nota: las **note hues principales** (`--note-c..--note-b`) sí tienen overrides para light desde la 4ª ola — son cosa distinta.
@@ -371,12 +370,33 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
   - `--fret-num` para `.fretNum` en mástil. Hoy usa `var(--muted)` que puede competir con los dots en oscuro. Si el fretNum se siente prominente, token dedicado.
   - Comentario inline en `Intervals.module.css .dot { color: #fff }` señalando "Signature: letra blanca sobre nota saturada, no tokenizar" para que un agente futuro no lo "corrija".
 - **Doble sostenido / doble bemol en spelling de acordes para tónicas extremas.** Las funciones `majorScaleSpelled`/`chordSpelled` aplican la regla "una letra por grado". Para D♯, G♯, A♯ mayores eso produce F♯♯, B♯, C♯♯ (correcto teóricamente, inusual visualmente). Pedagogía musical estándar resuelve esto eligiendo la enarmonía bemol equivalente (E♭, A♭, B♭). Decisión pendiente: dejar la teoría estricta como está, o auto-redirigir tonics extremas a spelling con bemoles. Hoy la primitiva acepta toda tónica del tipo `ChromaticNote` (con sostenidos) y muestra el resultado como sale. Si emerge fricción de uso (estudiantes pidiendo "Eb mayor"), pasada futura puede añadir un input flat-aware sin romper la actual.
-- **AudioButtons highlight progresivo se hereda en Bloque B, C y D.** AcordesBuilder (Bloque/Arpegiado), ReglaQuinta (botones por fila), `TensionResolucion` (flechas que reproducen origen → destino con gap de 260ms) y `GradosArmonicos` (cada celda Acorde reproduce la tríada con arpegio de 220ms) replican el patrón estático de `AudioButtons.tsx`. Cuando se aborde la deuda original de highlight progresivo, los 5 sitios paralelos se actualizan en la misma pasada; comparten la misma forma del problema (secuencia de notas sin highlight visual sincronizado).
 - **Spellings inválidos en prosa quedan como texto plano (no token).** El método menciona explícitamente `B#`, `E#` y `Fb` como spellings que NO existen o NO se usan ("se omiten B# y E#", "5J de Bb es F (no Fb)", "5J de A# aparece como E# enarmónica"). NoteToken solo cubre los 17 spellings con `--note-X` (12 cromáticos con sostenidos + 5 enarmonías bemol comunes). Decisión: dejar `B#`/`E#`/`Fb` como texto sin tokenizar para preservar el contraste pedagógico "lo válido vs lo descartado". Si futuras secciones del método requieren tokenizarlos (improbable), añadir vars dedicadas o alias enarmónicos al `DATA_NOTE` map.
 
 ### Histórico (resueltas, conservar para contexto)
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
+
+**11ª ola — Interactividad global + tipos armónicos (2026-05-21):**
+- ✓ **NoteToken como setter de tónica global** (item 21): click en cualquier `<NoteToken>` llama `setTonic(chromatic)` via Zustand; `isTonic` deriva de `SPELLING_TO_CHROMATIC[note] === tonic`; clase `tokenTonic` añade underline bold 700. Hover ≠ select: `onMouseEnter` reproduce audio solo, `onClick`/`onKeyDown`(Enter|Space) cambia tónica + reproduce. `aria-pressed={isTonic}`.
+- ✓ **Sistema diatónico de colores en NoteToken** (item 32): prop `diatonicRole?: 'stable' | 'medium' | 'tense'` + atributo `data-diatonic` en span. Reglas CSS `[data-diatonic]` colocadas DESPUÉS de `[data-note]` (misma especificidad, el orden gana) para que el contexto diatónico override el color cromático. `DEGREE_ROLE[]` en `GradosArmonicos` mapea grado → rol; fórmula `(i + j*2) % 7` computa el grado correcto para cada miembro de tríada.
+- ✓ **Tipos aumentado/disminuido en `AcordesBuilder`** (item 22): `ChordType` extendido a `'M' | 'm' | 'aug' | 'dim'`; `chordSpelled` actualizado con offsets (aug 5ta = 8st, dim 5ta = 6st) y roles `'5aug' | '5dim'`. Font-size reduction (15px) en SVG para spelling ≥3 chars (Cx, Fx, B♭♭). Confirma dobles accidentales en tónicas extremas (B aug → `[B, D♯, Fx]`).
+- ✓ **Arpegio ascendente en `TriadsSection`** (item 34): helper `toAscending(notes, startOctave=4)` — incrementa octava cuando `semitone(next) ≤ semitone(prev)`. Corrige inversión de voz: F-A-C todos en oct. 4 producía C4 < F4.
+- ✓ **Tríada mayor en `ChromaticCircleSection`** (item 23): cada nodo reproduce tríada mayor vía `makePlayFn(note)` con `chordSpelled(note, 'M')` + `ensureAscending()`. Toggle arpegio/bloque. `ChromaticNode` extrae prop `onPlay: () => void`, delega audio al parent.
+- ✓ **Ejemplo dinámico en `TriadasSection`** (item 18): `NoteSelector` con 7 notas naturales; `buildEjemplo(root)` genera `ProseSegment` dinámicamente con los 4 vecinos consecutivos de la escala natural. Reemplaza el ejemplo hardcodeado en C.
+- ✓ **Formato T2** (items 27-31): `text-indent: 1.5em` en `.text` de `IntroSection`; glifos ♭ nativos via `toFlat()` en `TablaMaestraSection` y `HerramientaSection`; fila en blanco eliminada de herramienta; `PROPIEDAD_ESPECIFICO` dividido con `<br/>` en el guión; 3 `<RuleNote>` → 1 con 3 `<p>` hijos en `IntroSection`.
+- ✓ Build limpio. Lint limpio. Anti-checklist 14/14 OK. Sin deuda nueva introducida.
+
+**Pasada de auditoría completa (2026-05-21) — critique + 7 correcciones:**
+- ✓ ES/DE switcher duplicado en `Header.tsx` eliminado (selector único vive en Sidebar themeArea).
+- ✓ `LockScreen` sin identidad de marca: añadido bloque `.identity` con eyebrow + título "Guitarra" rojo Bebas 52px + subtítulo "Prof. Josué Barquero".
+- ✓ TOC interno en sidebar: `tocConfig.ts` + `useActiveSection` hook (IntersectionObserver) + `tocItems`/`tocItemActive` styles. 17 secciones con `id` explícito.
+- ✓ Botón back-to-top flotante (`BackToTop.tsx`) — aparece tras 300px scroll, smooth-scroll al top.
+- ✓ TONALIDAD selector sin alcance visible: hint text "Transpone escalas, acordes y grados" bajo el `<select>`.
+- ✓ Touch affordances: `onTouchStart`/`onTouchEnd` en CirculoDeQuintas y RelativasMenores; "hover · clic" → "toca · clic"; scroll shadow (CSS background attachment local) en 5 wrappers de tabla T1.
+- ✓ Body text IBM Plex Mono 13px → 16px: `global.css p, li` + 14 `.text` rules en CSS modules de sección.
+- ✓ `transition: all` → propiedades explícitas en 5 archivos CSS (NoteSelector, AudioButtons, ModoClaseSection, ProcessControls, ProcessPanel).
+- ✓ TOC label duplicado (`s-escala` y `s-tension` apuntaban a `t1.s05.label`): `tocConfig.ts` corregido para usar `t1.s06.label` en `s-escala` — la key correcta ya existía.
+- ✓ Highlight progresivo durante reproducción de audio: `playingAction` en `AudioButtons`, `playingIdx` en `AcordesBuilder`, `playingCell` en `GradosArmonicos`, `PlayingState {tonic,step}` en `ReglaQuinta`, `playingArrow` en `TensionResolucion`, `playingNote` + `isPlayingRef` en `ModoClaseSection` → `playingNote` prop en `ChromaticCircleAnimated`. Amber ring SVG + dimming opacity 0.25–0.4 en los 6 sitios. Verificado por inspección DOM.
 
 **1ª ola — Rule 2 / Craft / Polish (2026-05-04):**
 - ✓ Rule 2 (Note-Color Quarantine): `ROLE_COLORS` eliminado, `userPicked` migrado, `IntervalsSection.color` eliminado, `MasterTriad` `#fff` border → `var(--paper)`.

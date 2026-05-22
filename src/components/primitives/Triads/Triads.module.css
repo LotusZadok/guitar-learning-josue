@@ -82,6 +82,8 @@
   padding: 20px;
   background: var(--surface);
   border: 1px solid var(--rule);
+  width: fit-content;
+  max-width: 100%;
 }
 
 .chain {

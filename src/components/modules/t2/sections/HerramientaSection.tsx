@@ -2,7 +2,6 @@ import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
 import {
   HERRAMIENTA_INTRO,
-  HERRAMIENTA_NOTAS,
   HERRAMIENTA_SOSTENIDOS,
   HERRAMIENTA_BEMOLES,
   HERRAMIENTA_SOSTENIDOS_EXPLICACION,
@@ -14,9 +13,13 @@ import {
 } from '../data/literalContent';
 import styles from './HerramientaSection.module.css';
 
+function toFlat(s: string): string {
+  return s.replace(/([A-G])b/g, '$1♭');
+}
+
 export default function HerramientaSection() {
   return (
-    <section className={styles.section}>
+    <section id="s-t2-herramienta" className={styles.section}>
       {/* TODO i18n: sin clave — HerramientaSection no tiene equivalente en de.json */}
       <SectionLabel text="02 · La herramienta" />
       <h2>F C G D A E B</h2>
@@ -31,15 +34,9 @@ export default function HerramientaSection() {
           ))}
         </div>
         <div className={styles.toolRow}>
-          <span className={styles.rowLabel}> </span>
-          {HERRAMIENTA_NOTAS.map(n => (
-            <span key={n} className={styles.noteNatural}>{n}</span>
-          ))}
-        </div>
-        <div className={styles.toolRow}>
-          <span className={styles.rowLabel}>b</span>
+          <span className={styles.rowLabel}>♭</span>
           {HERRAMIENTA_BEMOLES.map(n => (
-            <span key={n} className={styles.noteFlat}>{n}</span>
+            <span key={n} className={styles.noteFlat}>{toFlat(n)}</span>
           ))}
         </div>
       </div>
@@ -50,7 +47,11 @@ export default function HerramientaSection() {
       <div className={styles.cards}>
         <div className={styles.card}>
           <h3 className={styles.cardTitle}>Específico</h3>
-          <p className={styles.cardText}>{PROPIEDAD_ESPECIFICO}</p>
+          <p className={styles.cardText}>
+            {PROPIEDAD_ESPECIFICO.split(' — ')[0]}
+            <br />
+            {toFlat(PROPIEDAD_ESPECIFICO.split(' — ')[1])}
+          </p>
         </div>
         <div className={styles.card}>
           <h3 className={styles.cardTitle}>Acumulativo</h3>

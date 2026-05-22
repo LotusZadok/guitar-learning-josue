@@ -2,6 +2,7 @@ import { type ReactNode } from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import Footer from './Footer';
+import BackToTop from './BackToTop';
 import styles from './AppShell.module.css';
 
 interface AppShellProps {
@@ -19,6 +20,7 @@ export default function AppShell({ children }: AppShellProps) {
         </main>
         <Footer />
       </div>
+      <BackToTop />
     </div>
   );
 }

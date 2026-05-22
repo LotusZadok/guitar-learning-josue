@@ -32,6 +32,7 @@ export default function TonicSelector() {
           </option>
         ))}
       </select>
+      <span className={styles.hint}>Transpone escalas, acordes y grados</span>
     </div>
   );
 }

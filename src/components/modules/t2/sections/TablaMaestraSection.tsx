@@ -7,6 +7,10 @@ import {
 } from '../data/literalContent';
 import { TONALIDADES } from '../data/tonalidades';
 import ProcesoView from '../components/ProcesoView';
+
+function toFlat(s: string): string {
+  return s.replace(/([A-G])b/g, '$1♭');
+}
 import styles from './TablaMaestraSection.module.css';
 
 export default function TablaMaestraSection() {
@@ -22,7 +26,7 @@ export default function TablaMaestraSection() {
   const observations = t('t2.s45.observations', { returnObjects: true }) as string[];
 
   return (
-    <section className={styles.section}>
+    <section id="s-t2-tabla" className={styles.section}>
       <SectionLabel text={t('t2.s45.label')} />
       <h2>{t('t2.s45.title')}</h2>
 
@@ -43,8 +47,8 @@ export default function TablaMaestraSection() {
               onClick={() => toggle(ton.id)}
             >
               <span className={styles.colNum}>{ton.numAlteraciones}</span>
-              <span className={styles.colArm}>{ton.armadura.join(' ')}</span>
-              <span className={styles.colTon}>{ton.tonica} {t('common.major')}</span>
+              <span className={styles.colArm}>{ton.armadura.map(toFlat).join(' ')}</span>
+              <span className={styles.colTon}>{toFlat(ton.tonica)} {t('common.major')}</span>
               <span className={styles.chevron}>{expandedId === ton.id ? '▾' : '▸'}</span>
             </div>
             {expandedId === ton.id && (
@@ -70,8 +74,8 @@ export default function TablaMaestraSection() {
               onClick={() => toggle(ton.id)}
             >
               <span className={styles.colNum}>{ton.numAlteraciones}</span>
-              <span className={styles.colArm}>{ton.armadura.join(' ')}</span>
-              <span className={styles.colTon}>{ton.tonica} {t('common.major')}</span>
+              <span className={styles.colArm}>{ton.armadura.map(toFlat).join(' ')}</span>
+              <span className={styles.colTon}>{toFlat(ton.tonica)} {t('common.major')}</span>
               <span className={styles.chevron}>{expandedId === ton.id ? '▾' : '▸'}</span>
             </div>
             {expandedId === ton.id && (

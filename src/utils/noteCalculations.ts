@@ -78,26 +78,33 @@ export function majorScaleSpelled(tonic: ChromaticNote): string[] {
   return result;
 }
 
-export type ChordType = 'M' | 'm';
+export type ChordType = 'M' | 'm' | 'aug' | 'dim';
 
 export interface ChordMember {
-  spelled: string;        // e.g., "C♯", "E♭"
+  spelled: string;        // e.g., "C♯", "E♭", "Cx" (double sharp)
   chromatic: ChromaticNote; // for audio engine
   octave: number;
-  role: 'T' | '3M' | '3m' | '5J';
+  role: 'T' | '3M' | '3m' | '5J' | '5aug' | '5dim';
 }
 
-// Build a major or minor triad from a tonic. Letters skip one each (T, third, fifth).
-// Major = T + 3M (4 s.t.) + 5J (7 s.t.). Minor = T + 3m (3 s.t.) + 5J (7 s.t.).
-// Octave numbering wraps when chromatic index exceeds 11 — so D + 7 s.t. = A4, but G + 7 s.t. = D5.
+// Build a triad from a tonic. Letters skip one each (T, third, fifth).
+// Major:     T + 3M (4 s.t.) + 5J  (7 s.t.)
+// Minor:     T + 3m (3 s.t.) + 5J  (7 s.t.)
+// Augmented: T + 3M (4 s.t.) + 5aug (8 s.t.) — may produce double-sharp (x)
+// Diminished:T + 3m (3 s.t.) + 5dim (6 s.t.) — may produce double-flat (♭♭)
 export function chordSpelled(tonic: ChromaticNote, type: ChordType): ChordMember[] {
   const resolvedTonic: SpelledTonic = ENHARMONIC_REDIRECT[tonic] ?? tonic;
   const startLetterIdx = LETTERS.indexOf(resolvedTonic[0] as typeof LETTERS[number]);
   const tonicSemi = tonicSemitone(resolvedTonic);
   const tonicIdx = ALL.indexOf(tonic); // original sharp tonic for chromatic index
-  const thirdSt = type === 'M' ? 4 : 3;
-  const offsets = [0, thirdSt, 7] as const;
-  const roles: ChordMember['role'][] = ['T', type === 'M' ? '3M' : '3m', '5J'];
+  const thirdSt = (type === 'M' || type === 'aug') ? 4 : 3;
+  const fifthSt  = type === 'aug' ? 8 : type === 'dim' ? 6 : 7;
+  const offsets: [number, number, number] = [0, thirdSt, fifthSt];
+  const roles: ChordMember['role'][] = [
+    'T',
+    (type === 'M' || type === 'aug') ? '3M' : '3m',
+    type === 'aug' ? '5aug' : type === 'dim' ? '5dim' : '5J',
+  ];
 
   return offsets.map((semis, i) => {
     const letter = LETTERS[(startLetterIdx + i * 2) % 7];

@@ -54,6 +54,39 @@
   background: rgba(192, 57, 43, 0.08);
 }
 
+.tocList {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 0 10px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 4px;
+}
+
+.tocItem {
+  display: block;
+  padding: 5px 20px 5px 28px;
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  text-align: left;
+  width: 100%;
+  font-family: inherit;
+  line-height: 1.5;
+  transition: color 0.12s;
+}
+
+.tocItem:hover {
+  color: var(--paper);
+}
+
+.tocItemActive {
+  composes: tocItem;
+  color: var(--paper);
+}
+
 .themeArea {
   margin-top: auto;
   padding: 16px 20px;

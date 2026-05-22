@@ -70,7 +70,7 @@
         "example": "Ejemplo",
         "semitone": "Semitono"
       },
-      "quality_intro": "Los intervalos tienen además calidad: menores (m), mayores (M), justos (J), aumentados (a), disminuidos (d). Combinando número y calidad se obtienen 13 intervalos dentro de una octava:",
+      "quality_intro": "Los intervalos tienen además calidad: menores (m), mayores (M), justos (J), aumentados (a), disminuidos (d). Combinando número y calidad se obtienen 12 intervalos dentro de una octava:",
       "procedure_title": "Procedimiento para encontrar los intervalos partiendo de una tónica G:",
       "procedure": [
         "Escribir las letras según el número del intervalo (ignorando alteraciones): G A A B B C C-D D E E F F G.",

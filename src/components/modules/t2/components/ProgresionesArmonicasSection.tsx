@@ -14,7 +14,7 @@ export default function ProgresionesArmonicasSection() {
   const procedure = t('t2.s48.procedure', { returnObjects: true }) as string[];
 
   return (
-    <section className={styles.section}>
+    <section id="s-t2-progresiones" className={styles.section}>
       <SectionLabel text={t('t2.s48.label')} />
       <h2>{t('t2.s48.title')}</h2>
 

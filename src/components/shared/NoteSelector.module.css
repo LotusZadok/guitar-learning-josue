@@ -13,7 +13,7 @@
   background: none;
   color: var(--paper);
   cursor: pointer;
-  transition: all 0.15s;
+  transition: border-color 0.15s;
 }
 
 .btn:hover {

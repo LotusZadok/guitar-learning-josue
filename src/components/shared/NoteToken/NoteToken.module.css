@@ -13,6 +13,19 @@
   outline-offset: 1px;
 }
 
+/* Token that matches the active tonic — subrayado con el color de la nota */
+.tokenTonic {
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 2px;
+}
+
+/* Diatonic role overrides — must come after [data-note] rules to win specificity */
+.token[data-diatonic="stable"] { color: var(--diatonic-stable); }
+.token[data-diatonic="medium"] { color: var(--diatonic-medium); }
+.token[data-diatonic="tense"]  { color: var(--diatonic-tense);  }
+
 .token[data-note="c"] { color: var(--note-c); }
 .token[data-note="c-sharp"] { color: var(--note-c-sharp); }
 .token[data-note="d"] { color: var(--note-d); }

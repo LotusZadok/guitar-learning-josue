@@ -72,7 +72,7 @@
         "example": "Beispiel",
         "semitone": "Halbton"
       },
-      "quality_intro": "Intervalle haben außerdem eine Qualität: klein (m), groß (M), rein (r), übermäßig (ü), vermindert (v). Kombiniert man Zahl und Qualität, erhält man 13 Intervalle innerhalb einer Oktave:",
+      "quality_intro": "Intervalle haben außerdem eine Qualität: klein (m), groß (M), rein (r), übermäßig (ü), vermindert (v). Kombiniert man Zahl und Qualität, erhält man 12 Intervalle innerhalb einer Oktave:",
       "procedure_title": "Verfahren zum Finden der Intervalle ausgehend von der Tonika G:",
       "procedure": [
         "Die Buchstaben nach der Intervallnummer aufschreiben (Alterierungen ignorieren): G A A B B C C-D D E E F F G.",

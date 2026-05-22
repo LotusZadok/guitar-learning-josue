@@ -8,8 +8,6 @@ import styles from './ReglaQuinta.module.css';
 const ARPEGGIO_GAP_MS = 250;
 const NOTE_DURATION = 1.4;
 
-// §1.8 exception in sharp notation:
-// B (natural tonic) → 5J = F♯ (not F natural that the "natural-copies-natural" rule would suggest).
 const EXCEPTION_TONICS = new Set<ChromaticNote>(['B']);
 
 interface FifthRow {
@@ -20,9 +18,15 @@ interface FifthRow {
   isException: boolean;
 }
 
+// Tracks which row + which step (tonic / fifth) is currently playing
+interface PlayingState {
+  tonic: ChromaticNote;
+  step: 'tonic' | 'fifth';
+}
+
 export default function ReglaQuinta() {
   const { playNote } = useAudioEngine();
-  const [playingTonic, setPlayingTonic] = useState<ChromaticNote | null>(null);
+  const [playing, setPlaying] = useState<PlayingState | null>(null);
 
   const rows = useMemo<FifthRow[]>(
     () =>
@@ -41,46 +45,57 @@ export default function ReglaQuinta() {
 
   const handlePlay = useCallback(
     (row: FifthRow) => {
-      if (playingTonic) return;
-      setPlayingTonic(row.tonic);
+      if (playing) return;
+      setPlaying({ tonic: row.tonic, step: 'tonic' });
       playNote(row.tonic, 4, NOTE_DURATION);
-      setTimeout(
-        () => playNote(row.fifthChromatic, row.fifthOctave, NOTE_DURATION),
-        ARPEGGIO_GAP_MS,
-      );
-      setTimeout(() => setPlayingTonic(null), ARPEGGIO_GAP_MS + NOTE_DURATION * 1000);
+      setTimeout(() => {
+        setPlaying({ tonic: row.tonic, step: 'fifth' });
+        playNote(row.fifthChromatic, row.fifthOctave, NOTE_DURATION);
+      }, ARPEGGIO_GAP_MS);
+      setTimeout(() => setPlaying(null), ARPEGGIO_GAP_MS + NOTE_DURATION * 1000);
     },
-    [playNote, playingTonic],
+    [playNote, playing],
   );
 
   return (
     <div className={styles.wrap}>
       <ul className={styles.list}>
-        {rows.map((row) => (
-          <li
-            key={row.tonic}
-            className={row.isException ? styles.rowException : styles.row}
-          >
-            {row.isException && (
-              <span className={styles.exceptionTag}>Excepción</span>
-            )}
-            <FifthNode chromatic={row.tonic} spelled={noteShort(row.tonic)} role="tonic" />
-            <span className={styles.arrow} aria-hidden="true">→</span>
-            <FifthNode
-              chromatic={row.fifthChromatic}
-              spelled={row.fifthSpelled}
-              role="fifth"
-            />
-            <button
-              className={styles.playBtn}
-              onClick={() => handlePlay(row)}
-              disabled={playingTonic !== null}
-              aria-label={`Escuchar ${NOTE_ES[row.tonic]} y su quinta justa ${row.fifthSpelled}`}
+        {rows.map((row) => {
+          const isRowPlaying = playing?.tonic === row.tonic;
+          return (
+            <li
+              key={row.tonic}
+              className={row.isException ? styles.rowException : styles.row}
             >
-              ▶
-            </button>
-          </li>
-        ))}
+              {row.isException && (
+                <span className={styles.exceptionTag}>Excepción</span>
+              )}
+              <FifthNode
+                chromatic={row.tonic}
+                spelled={noteShort(row.tonic)}
+                role="tonic"
+                isPlaying={isRowPlaying && playing?.step === 'tonic'}
+                isDimmed={isRowPlaying && playing?.step === 'fifth'}
+              />
+              <span className={styles.arrow} aria-hidden="true">→</span>
+              <FifthNode
+                chromatic={row.fifthChromatic}
+                spelled={row.fifthSpelled}
+                role="fifth"
+                isPlaying={isRowPlaying && playing?.step === 'fifth'}
+                isDimmed={isRowPlaying && playing?.step === 'tonic'}
+              />
+              <button
+                className={styles.playBtn}
+                onClick={() => handlePlay(row)}
+                disabled={playing !== null}
+                aria-label={`Escuchar ${NOTE_ES[row.tonic]} y su quinta justa ${row.fifthSpelled}`}
+              >
+                ▶
+              </button>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
@@ -90,13 +105,21 @@ interface FifthNodeProps {
   chromatic: ChromaticNote;
   spelled: string;
   role: 'tonic' | 'fifth';
+  isPlaying?: boolean;
+  isDimmed?: boolean;
 }
 
-function FifthNode({ chromatic, spelled, role }: FifthNodeProps) {
+function FifthNode({ chromatic, spelled, role, isPlaying, isDimmed }: FifthNodeProps) {
   return (
-    <div className={role === 'tonic' ? styles.nodeTonic : styles.nodeFifth}>
+    <div
+      className={role === 'tonic' ? styles.nodeTonic : styles.nodeFifth}
+      style={{ opacity: isDimmed ? 0.4 : 1, transition: 'opacity 0.2s' }}
+    >
       <svg viewBox="0 0 56 56" className={styles.nodeSvg} aria-hidden="true">
         <circle cx={28} cy={28} r={22} fill={NOTE_COLORS[chromatic]} />
+        {isPlaying && (
+          <circle cx={28} cy={28} r={26} fill="none" stroke="var(--amber)" strokeWidth={2} />
+        )}
         <text x={28} y={30} className={styles.nodeLetter}>
           {spelled}
         </text>

@@ -12,7 +12,7 @@ export default function NotasNaturalesSection() {
   const { t } = useTranslation();
 
   return (
-    <section className={styles.section}>
+    <section id="s-notas" className={styles.section}>
       <SectionLabel text={t('t1.s01.label')} />
       <h2>{t('t1.s01.title')}</h2>
 

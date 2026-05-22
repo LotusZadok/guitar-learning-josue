@@ -12,6 +12,7 @@ interface Props {
   inlineClearButton?: boolean;
   markedNotes?: string[];
   onMarkedNotesChange?: (notes: string[]) => void;
+  playingNote?: string | null;
 }
 
 const ENHARMONIC_MAP: Record<string, { name: string; octaveAdj: number }> = {
@@ -54,7 +55,7 @@ function arcPath(fromPos: number, toPos: number): string {
   return `M ${from.x} ${from.y} Q ${cx} ${cy} ${to.x} ${to.y}`;
 }
 
-export default function ChromaticCircleAnimated({ notes, arrow, compact, playOnClick = false, inlineClearButton = false, markedNotes, onMarkedNotesChange }: Props) {
+export default function ChromaticCircleAnimated({ notes, arrow, compact, playOnClick = false, inlineClearButton = false, markedNotes, onMarkedNotesChange, playingNote }: Props) {
   const size = compact ? 280 : 400;
   const isControlled = markedNotes !== undefined;
   const [picked, setPicked] = useState<Set<number>>(new Set());
@@ -144,6 +145,8 @@ export default function ChromaticCircleAnimated({ notes, arrow, compact, playOnC
           const isPicked = picked.has(i);
           const effectiveState = isPicked ? 'userPicked' : note.state;
           const colors = STATE_COLORS[effectiveState] || STATE_COLORS.neutral;
+          const isThisPlaying = playingNote === note.label;
+          const isAnyPlaying = playingNote != null;
           const handleKeyDown = (e: KeyboardEvent<SVGGElement>) => {
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
@@ -159,6 +162,7 @@ export default function ChromaticCircleAnimated({ notes, arrow, compact, playOnC
               role="button"
               aria-label={`Nota ${note.label}`}
               onKeyDown={handleKeyDown}
+              style={{ opacity: isAnyPlaying && !isThisPlaying ? 0.4 : 1, transition: 'opacity 0.15s' }}
             >
               {/* hover/picked ring */}
               <circle
@@ -170,6 +174,17 @@ export default function ChromaticCircleAnimated({ notes, arrow, compact, playOnC
                 strokeWidth={2}
                 className={styles.ring}
               />
+              {/* playing ring */}
+              {isThisPlaying && (
+                <circle
+                  cx={x}
+                  cy={y}
+                  r={NODE_R + 7}
+                  fill="none"
+                  stroke="var(--amber)"
+                  strokeWidth={2}
+                />
+              )}
               <circle
                 cx={x}
                 cy={y}

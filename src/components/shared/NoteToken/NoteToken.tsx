@@ -1,7 +1,8 @@
 import type { KeyboardEvent } from 'react';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
+import { useUIStore } from '../../../stores/useUIStore';
 import { noteShort } from '../../../utils/noteCalculations';
-import type { NoteSpelling } from '../../../types/music';
+import type { NoteSpelling, ChromaticNote } from '../../../types/music';
 import styles from './NoteToken.module.css';
 
 // Mapea cada spelling al `data-note` que selecciona el `--note-X` correcto.
@@ -27,35 +28,59 @@ const DATA_NOTE: Record<NoteSpelling, string> = {
   Bb: 'a-sharp',
 };
 
+// Maps every NoteSpelling to its ChromaticNote (flat spellings → sharp enharmonic)
+const SPELLING_TO_CHROMATIC: Record<NoteSpelling, ChromaticNote> = {
+  C: 'C',   'C#': 'C#', D: 'D',   'D#': 'D#', E: 'E',
+  F: 'F',   'F#': 'F#', G: 'G',   'G#': 'G#', A: 'A',
+  'A#': 'A#', B: 'B',
+  Db: 'C#', Eb: 'D#', Gb: 'F#', Ab: 'G#', Bb: 'A#',
+};
+
+export type DiatonicRole = 'stable' | 'medium' | 'tense';
+
 interface NoteTokenProps {
   note: NoteSpelling;
+  /** When provided, overrides the per-note chromatic color with the diatonic function color. */
+  diatonicRole?: DiatonicRole;
 }
 
-export default function NoteToken({ note }: NoteTokenProps) {
+export default function NoteToken({ note, diatonicRole }: NoteTokenProps) {
   const { playNote } = useAudioEngine();
+  const tonic = useUIStore((s) => s.tonic);
+  const setTonic = useUIStore((s) => s.setTonic);
   const display = noteShort(note);
   const dataNote = DATA_NOTE[note];
+  const chromatic = SPELLING_TO_CHROMATIC[note];
+  const isTonic = chromatic === tonic;
 
   const handlePlay = () => {
+    playNote(note, 4);
+  };
+
+  const handleClick = () => {
+    setTonic(chromatic);
     playNote(note, 4);
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLSpanElement>) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      handlePlay();
+      handleClick();
     }
   };
 
   return (
     <span
-      className={styles.token}
+      className={`${styles.token}${isTonic ? ` ${styles.tokenTonic}` : ''}`}
       data-note={dataNote}
+      data-diatonic={diatonicRole}
       role="button"
       tabIndex={0}
-      aria-label={`Reproducir nota ${display}`}
+      aria-label={`Seleccionar ${display} como tónica`}
+      aria-pressed={isTonic}
       onMouseEnter={handlePlay}
       onFocus={handlePlay}
+      onClick={handleClick}
       onKeyDown={handleKeyDown}
     >
       {display}

@@ -12,7 +12,7 @@ export default function IntroSection() {
   const { t } = useTranslation();
 
   return (
-    <section className={styles.section}>
+    <section id="s-t2-intro" className={styles.section}>
       <SectionLabel text={t('t2.s41.label')} />
       <h2>{t('t2.s41.title')}</h2>
 
@@ -21,15 +21,9 @@ export default function IntroSection() {
       <p className={styles.text}>{INTRO_VARIEDAD}</p>
 
       <RuleNote>
-        <strong>Tonalidades:</strong> {DEF_TONALIDADES}
-      </RuleNote>
-
-      <RuleNote>
-        <strong>Armadura:</strong> {DEF_ARMADURA}
-      </RuleNote>
-
-      <RuleNote>
-        <strong>Regla:</strong> {REGLA_NO_MEZCLA}
+        <p><strong>Tonalidades:</strong> {DEF_TONALIDADES}</p>
+        <p><strong>Armadura:</strong> {DEF_ARMADURA}</p>
+        <p><strong>Regla:</strong> {REGLA_NO_MEZCLA}</p>
       </RuleNote>
 
       <p className={styles.conclusion}>{CONCLUSION_COHABITAN}</p>

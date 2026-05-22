@@ -14,7 +14,7 @@
   color: var(--paper);
   cursor: pointer;
   border-radius: 4px;
-  transition: all 0.2s;
+  transition: border-color 0.2s, color 0.2s;
 }
 
 .btn:hover:not(:disabled) {
@@ -25,4 +25,17 @@
 .btn:disabled {
   opacity: 0.35;
   cursor: default;
+}
+
+.btnPlaying {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  padding: 8px 16px;
+  border: 1px solid var(--amber);
+  background: none;
+  color: var(--paper);
+  cursor: default;
+  border-radius: 4px;
+  box-shadow: 0 0 0 1.5px var(--amber);
+  transition: border-color 0.15s, box-shadow 0.15s;
 }

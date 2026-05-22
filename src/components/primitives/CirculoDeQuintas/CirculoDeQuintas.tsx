@@ -112,6 +112,8 @@ export default function CirculoDeQuintas() {
               onMouseLeave={() => setHovered(null)}
               onFocus={() => setHovered(node.note)}
               onBlur={() => setHovered(null)}
+              onTouchStart={(e) => { e.preventDefault(); setHovered(node.note); handlePlay(node); }}
+              onTouchEnd={() => setTimeout(() => setHovered(null), 600)}
               onClick={() => handlePlay(node)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -172,7 +174,7 @@ export default function CirculoDeQuintas() {
               5J
             </text>
             <text x={CX} y={CY + 12} textAnchor="middle" className={styles.centerSub}>
-              hover · clic
+              toca · clic
             </text>
           </>
         )}

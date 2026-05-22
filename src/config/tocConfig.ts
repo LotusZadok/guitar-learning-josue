@@ -1,0 +1,27 @@
+type TocItem =
+  | { id: string; labelKey: string; label?: never }
+  | { id: string; label: string; labelKey?: never };
+
+export const TOC_SECTIONS: Record<string, TocItem[]> = {
+  '/t1': [
+    { id: 's-notas',       labelKey: 't1.s01.label' },
+    { id: 's-circulo',     labelKey: 't1.s03.label' },
+    { id: 's-intervalos',  labelKey: 't1.s04.label' },
+    { id: 's-escala',      labelKey: 't1.s06.label' },
+    { id: 's-tension',     labelKey: 't1.s05.label' },
+    { id: 's-triadas',     labelKey: 't1.s02.label' },
+    { id: 's-acordes',     labelKey: 't1.s07.label' },
+    { id: 's-quinta',      labelKey: 't1.s08.label' },
+  ],
+  '/t2': [
+    { id: 's-t2-intro',        labelKey: 't2.s41.label' },
+    { id: 's-t2-herramienta',  label: '02 · La herramienta' },
+    { id: 's-t2-sostenidos',   labelKey: 't2.s42.label' },
+    { id: 's-t2-bemoles',      labelKey: 't2.s43.label' },
+    { id: 's-t2-tabla',        labelKey: 't2.s45.label' },
+    { id: 's-t2-grados',       labelKey: 't2.s47.label' },
+    { id: 's-t2-progresiones', labelKey: 't2.s48.label' },
+    { id: 's-t2-relativas',    labelKey: 't2.s49.label' },
+    { id: 's-t2-modo-clase',   labelKey: 't2.s46.label' },
+  ],
+};

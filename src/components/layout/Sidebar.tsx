@@ -1,7 +1,10 @@
+import { useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useUIStore } from '../../stores/useUIStore';
 import { setMasterVolume } from '../../hooks/useAudioEngine';
+import { TOC_SECTIONS } from '../../config/tocConfig';
+import { useActiveSection } from '../../hooks/useActiveSection';
 import ThemeToggle from './ThemeToggle';
 import MuteToggle from './MuteToggle';
 import TonicSelector from './TonicSelector';
@@ -19,6 +22,10 @@ export default function Sidebar() {
   const lang = i18n.language.startsWith('de') ? 'de' : 'es';
   const { sidebarOpen, setSidebarOpen, volume, setVolume } = useUIStore();
 
+  const tocItems = TOC_SECTIONS[location.pathname] ?? [];
+  const tocIds = useMemo(() => tocItems.map((s) => s.id), [location.pathname]); // eslint-disable-line react-hooks/exhaustive-deps
+  const activeId = useActiveSection(tocIds);
+
   const handleVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
     const v = Number(e.target.value);
     setVolume(v);
@@ -27,6 +34,11 @@ export default function Sidebar() {
 
   const handleNav = (path: string) => {
     navigate(path);
+    setSidebarOpen(false);
+  };
+
+  const handleTocClick = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     setSidebarOpen(false);
   };
 
@@ -51,6 +63,7 @@ export default function Sidebar() {
         <div className={styles.logo}>
           Apuntes de <span>Guitarra</span>
         </div>
+
         {SECTIONS.map((s) => (
           <button
             key={s.id}
@@ -60,6 +73,21 @@ export default function Sidebar() {
             {t(s.labelKey)}
           </button>
         ))}
+
+        {tocItems.length > 0 && (
+          <div className={styles.tocList}>
+            {tocItems.map((item) => (
+              <button
+                key={item.id}
+                className={activeId === item.id ? styles.tocItemActive : styles.tocItem}
+                onClick={() => handleTocClick(item.id)}
+              >
+                {item.labelKey ? t(item.labelKey) : item.label}
+              </button>
+            ))}
+          </div>
+        )}
+
         <div className={styles.themeArea}>
           <ThemeToggle />
           <MuteToggle />

@@ -46,46 +46,9 @@
   font-family: 'Playfair Display', serif;
 }
 
-.langSwitch {
-  position: absolute;
-  top: 24px;
-  right: 24px;
-  display: flex;
-  gap: 4px;
-  z-index: 1;
-}
-
-.lang {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 14px;
-  letter-spacing: 1px;
-  padding: 4px 10px;
-  background: transparent;
-  color: var(--muted);
-  border: 1px solid var(--rule);
-  cursor: pointer;
-  transition: color 0.15s, border-color 0.15s;
-}
-
-.lang:hover {
-  color: var(--paper);
-  border-color: var(--amber);
-}
-
-.langActive {
-  composes: lang;
-  color: var(--paper);
-  border-color: var(--amber);
-  background: rgba(212, 160, 23, 0.1);
-}
-
 @media (max-width: 900px) {
   .header {
     padding: 40px 24px;
     padding-left: 60px;
-  }
-  .langSwitch {
-    top: 16px;
-    right: 16px;
   }
 }

@@ -97,7 +97,7 @@ export const GRADOS_PROCEDIMIENTO_PASOS = [
   "Tocar cada acorde y oír su carácter: brillante (mayor) u oscuro (menor).",
 ] as const;
 
-export const GRADOS_PRIMITIVA_INSTRUCCION = "Cambiá de paso para ver cómo se transforma la tabla. En el último paso, hacé clic sobre cada acorde para escucharlo.";
+export const GRADOS_PRIMITIVA_INSTRUCCION = "Cambia de paso para ver cómo se transforma la tabla. En el último paso, haz clic sobre cada acorde para escucharlo.";
 
 export const GRADOS_PATRON = "El resultado es siempre el mismo patrón de calidades: M m m M M m dim. Tres mayores (I, IV, V), tres menores (ii, iii, vi), uno disminuido (vii°). Este patrón se memoriza porque se repite idéntico en todas las tonalidades mayores.";
 
@@ -135,7 +135,7 @@ export const PROGRESIONES_PROCEDIMIENTO_PASOS: readonly string[] = [
   "Tocamos el IV, resolvemos al I, o lo seguimos de un V-I.",
 ] as const;
 
-export const PROGRESIONES_PRIMITIVA_INSTRUCCION = "Tocá cada progresión sobre la tónica activa.";
+export const PROGRESIONES_PRIMITIVA_INSTRUCCION = "Toca cada progresión sobre la tónica activa.";
 
 export const PROGRESIONES_DATA: ReadonlyArray<{
   id: string;

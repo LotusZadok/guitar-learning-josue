@@ -5,7 +5,7 @@
 }
 
 .text {
-  font-size: 13px;
+  font-size: 16px;
   line-height: 1.8;
   color: var(--text-body);
   margin-bottom: 16px;
@@ -130,5 +130,18 @@
   }
   .table td {
     font-size: 12px;
+  }
+}
+
+@media (max-width: 900px) {
+  .tableWrap {
+    -webkit-overflow-scrolling: touch;
+    background:
+      linear-gradient(to right, var(--bg) 20%, transparent),
+      linear-gradient(to left,  var(--bg) 20%, transparent) right;
+    background-attachment: local, local;
+    background-repeat: no-repeat;
+    background-size: 24px 100%, 24px 100%;
+    background-color: var(--bg);
   }
 }

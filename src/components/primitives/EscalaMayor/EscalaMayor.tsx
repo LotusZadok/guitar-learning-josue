@@ -27,7 +27,7 @@ const PATTERN: ReadonlyArray<'T' | 'S'> = ['T', 'T', 'S', 'T', 'T', 'T', 'S'];
 
 const NODE_COUNT = 13;
 const SVG_W = 560;
-const SVG_H = 180;
+const SVG_H = 200;
 const PAD_X = 32;
 const STEP_X = (SVG_W - 2 * PAD_X) / (NODE_COUNT - 1);
 const NODE_Y = 100;
@@ -187,7 +187,7 @@ function ScaleNode({ data, onPlay }: ScaleNodeProps) {
 
       {/* Spelled note name above (scale notes only) */}
       {spelled && (
-        <text x={cx} y={NODE_Y - radius - 14} className={styles.noteName}>
+        <text x={cx} y={NODE_Y - radius - 30} className={styles.noteName}>
           {spelled}
         </text>
       )}

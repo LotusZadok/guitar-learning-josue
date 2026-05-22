@@ -12,6 +12,8 @@ export default function AcordesBuilder() {
   const tonic = useUIStore((s) => s.tonic);
   const [type, setType] = useState<ChordType>('M');
   const [playing, setPlaying] = useState(false);
+  // null = idle; -1 = all (bloque); 0..n = arpeggio index in chord order
+  const [playingIdx, setPlayingIdx] = useState<number | null>(null);
   const { playNote } = useAudioEngine();
 
   const chord = useMemo(() => chordSpelled(tonic, type), [tonic, type]);
@@ -24,16 +26,23 @@ export default function AcordesBuilder() {
   const handlePlayBlock = useCallback(() => {
     if (playing) return;
     setPlaying(true);
+    setPlayingIdx(-1); // all cards active simultaneously
     chord.forEach((m) => playMember(m));
-    setTimeout(() => setPlaying(false), NOTE_DURATION * 1000);
+    setTimeout(() => { setPlaying(false); setPlayingIdx(null); }, NOTE_DURATION * 1000);
   }, [chord, playMember, playing]);
 
   const handlePlayArpeggio = useCallback(() => {
     if (playing) return;
     setPlaying(true);
-    ensureAscending(chord).forEach((m, i) => setTimeout(() => playMember(m), i * ARPEGGIO_GAP_MS));
+    const ascending = ensureAscending(chord);
+    ascending.forEach((m, i) => {
+      setTimeout(() => {
+        playMember(m);
+        setPlayingIdx(i);
+      }, i * ARPEGGIO_GAP_MS);
+    });
     setTimeout(
-      () => setPlaying(false),
+      () => { setPlaying(false); setPlayingIdx(null); },
       chord.length * ARPEGGIO_GAP_MS + NOTE_DURATION * 1000,
     );
   }, [chord, playMember, playing]);
@@ -41,25 +50,29 @@ export default function AcordesBuilder() {
   return (
     <div className={styles.wrap}>
       <div className={styles.qualityRow} role="group" aria-label="Calidad del acorde">
-        <button
-          className={type === 'M' ? styles.qualityActive : styles.quality}
-          onClick={() => setType('M')}
-          aria-pressed={type === 'M'}
-        >
-          Mayor
-        </button>
-        <button
-          className={type === 'm' ? styles.qualityActive : styles.quality}
-          onClick={() => setType('m')}
-          aria-pressed={type === 'm'}
-        >
-          Menor
-        </button>
+        {([ ['M', 'Mayor'], ['m', 'Menor'], ['aug', 'Aum.'], ['dim', 'Dis.'] ] as const).map(
+          ([t, label]) => (
+            <button
+              key={t}
+              className={type === t ? styles.qualityActive : styles.quality}
+              onClick={() => setType(t)}
+              aria-pressed={type === t}
+            >
+              {label}
+            </button>
+          ),
+        )}
       </div>
 
       <div className={styles.chordRow}>
         {chord.map((m, i) => (
-          <ChordNoteCard key={`${m.role}-${i}`} member={m} onPlay={playMember} />
+          <ChordNoteCard
+            key={`${m.role}-${i}`}
+            member={m}
+            onPlay={playMember}
+            isPlaying={playingIdx === -1 || playingIdx === i}
+            isDimmed={playingIdx !== null && playingIdx !== -1 && playingIdx !== i}
+          />
         ))}
       </div>
 
@@ -86,9 +99,16 @@ export default function AcordesBuilder() {
 interface ChordNoteCardProps {
   member: ChordMember;
   onPlay: (m: ChordMember) => void;
+  isPlaying?: boolean;
+  isDimmed?: boolean;
 }
 
-function ChordNoteCard({ member, onPlay }: ChordNoteCardProps) {
+const ROLE_DISPLAY: Partial<Record<ChordMember['role'], string>> = {
+  '5aug': '5+',
+  '5dim': '5°',
+};
+
+function ChordNoteCard({ member, onPlay, isPlaying, isDimmed }: ChordNoteCardProps) {
   const handleEnter = useCallback(() => onPlay(member), [member, onPlay]);
   const handleKey = useCallback(
     (e: KeyboardEvent<HTMLDivElement>) => {
@@ -100,32 +120,34 @@ function ChordNoteCard({ member, onPlay }: ChordNoteCardProps) {
     [member, onPlay],
   );
 
+  let cardClass = styles.card;
+  if (isPlaying) cardClass = `${styles.card} ${styles.cardPlaying}`;
+  else if (isDimmed) cardClass = `${styles.card} ${styles.cardDimmed}`;
+
+  const roleLabel = ROLE_DISPLAY[member.role] ?? member.role;
+  // Reduce font when spelled has 3+ chars (e.g. "B♭♭", "F♭♭")
+  const spelledStyle = member.spelled.length > 2 ? { fontSize: '15px' } : undefined;
+
   return (
     <div
-      className={styles.card}
+      className={cardClass}
       tabIndex={0}
       role="button"
-      aria-label={`${NOTE_ES[member.chromatic]} · ${member.role}`}
+      aria-label={`${NOTE_ES[member.chromatic]} · ${roleLabel}`}
       onMouseEnter={handleEnter}
       onFocus={handleEnter}
       onKeyDown={handleKey}
     >
       <svg className={styles.nodeSvg} viewBox="0 0 80 80" aria-hidden="true">
-        <circle
-          cx={40}
-          cy={40}
-          r={28}
-          fill={NOTE_COLORS[member.chromatic]}
-        />
-        <text
-          x={40}
-          y={42}
-          className={styles.nodeLetter}
-        >
+        <circle cx={40} cy={40} r={28} fill={NOTE_COLORS[member.chromatic]} />
+        {isPlaying && (
+          <circle cx={40} cy={40} r={33} fill="none" stroke="var(--amber)" strokeWidth={2} />
+        )}
+        <text x={40} y={42} className={styles.nodeLetter} style={spelledStyle}>
           {member.spelled}
         </text>
       </svg>
-      <div className={styles.cardLabel}>{member.role}</div>
+      <div className={styles.cardLabel}>{roleLabel}</div>
       <div className={styles.cardName}>{NOTE_ES[member.chromatic]}</div>
     </div>
   );

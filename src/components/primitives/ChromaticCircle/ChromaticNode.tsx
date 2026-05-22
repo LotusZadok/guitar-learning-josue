@@ -1,5 +1,4 @@
 import { useState, useCallback, type KeyboardEvent } from 'react';
-import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { NOTE_COLORS, NOTE_ES } from '../../../data/notes';
 import { noteShort } from '../../../utils/noteCalculations';
 import type { ChromaticNote } from '../../../types/music';
@@ -11,11 +10,11 @@ interface ChromaticNodeProps {
   cx: number;
   cy: number;
   r: number;
+  onPlay: () => void;
 }
 
-export default function ChromaticNode({ note, index, cx, cy, r }: ChromaticNodeProps) {
+export default function ChromaticNode({ note, index, cx, cy, r, onPlay }: ChromaticNodeProps) {
   const [hovered, setHovered] = useState(false);
-  const { playNote } = useAudioEngine();
 
   const angle = (index * 30 - 90) * Math.PI / 180;
   const x = cx + r * Math.cos(angle);
@@ -25,8 +24,8 @@ export default function ChromaticNode({ note, index, cx, cy, r }: ChromaticNodeP
 
   const handleEnter = useCallback(() => {
     setHovered(true);
-    playNote(note, 4, 2);
-  }, [note, playNote]);
+    onPlay();
+  }, [onPlay]);
 
   const handleLeave = useCallback(() => {
     setHovered(false);
@@ -35,9 +34,9 @@ export default function ChromaticNode({ note, index, cx, cy, r }: ChromaticNodeP
   const handleKeyDown = useCallback((e: KeyboardEvent<SVGGElement>) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      playNote(note, 4, 2);
+      onPlay();
     }
-  }, [note, playNote]);
+  }, [onPlay]);
 
   return (
     <g

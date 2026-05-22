@@ -2,7 +2,7 @@ import { useCallback, useMemo, useRef, useState, type KeyboardEvent } from 'reac
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { ALL } from '../../../data/notes';
 import { majorScaleSpelled } from '../../../utils/noteCalculations';
-import NoteToken from '../../shared/NoteToken/NoteToken';
+import NoteToken, { type DiatonicRole } from '../../shared/NoteToken/NoteToken';
 import type { ChromaticNote, NoteSpelling } from '../../../types/music';
 import styles from './GradosArmonicos.module.css';
 
@@ -18,6 +18,17 @@ const QUALITIES = ['M', 'm', 'm', 'M', 'M', 'm', 'dim'] as const;
 const SEVENTH_QUALITIES = ['maj7', 'm7', 'm7', 'maj7', '7', 'm7', 'm7b5'] as const;
 const ROMANS = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'] as const;
 
+/** Maps diatonic degree (0-based) → diatonic role color */
+const DEGREE_ROLE: DiatonicRole[] = [
+  'stable',  // 1 — Tónica
+  'medium',  // 2 — Supertónica
+  'stable',  // 3 — Mediante
+  'tense',   // 4 — Subdominante
+  'stable',  // 5 — Dominante
+  'medium',  // 6 — Superdominante
+  'tense',   // 7 — Sensible
+];
+
 // 17 spellings cubiertos por NoteToken (12 sostenidos + 5 enarmonías bemol).
 // El método permite tonalidades que producen E♯ / B♯ / dobles accidentales;
 // esos casos caen como texto plano (decisión doctrinal §7).
@@ -25,6 +36,22 @@ const VALID_SPELLINGS: ReadonlySet<string> = new Set([
   'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B',
   'Db', 'Eb', 'Gb', 'Ab', 'Bb',
 ]);
+
+// Flat conversion maps (glyph and ASCII).
+const GLYPH_FLAT: Record<string, string> = {
+  'C♯': 'D♭', 'D♯': 'E♭', 'F♯': 'G♭', 'G♯': 'A♭', 'A♯': 'B♭',
+};
+const ASCII_FLAT: Record<string, string> = {
+  'C#': 'Db', 'D#': 'Eb', 'F#': 'Gb', 'G#': 'Ab', 'A#': 'Bb',
+};
+function toFlatGlyph(s: string): string { return GLYPH_FLAT[s] ?? s; }
+function toFlatAscii(s: string): string { return ASCII_FLAT[s] ?? s; }
+function toFlatChord(sym: string): string {
+  for (const [sharp, flat] of Object.entries(GLYPH_FLAT)) {
+    if (sym.startsWith(sharp)) return flat + sym.slice(sharp.length);
+  }
+  return sym;
+}
 
 const ARPEGGIO_GAP_MS = 220;
 const NOTE_DURATION = 1.4;
@@ -63,6 +90,8 @@ function chordMemberOctave(diatonic: DiatonicNote[], gradeIdx: number, offset: n
 
 export default function GradosArmonicos({ tonalidad }: Props) {
   const [step, setStep] = useState<Step>(1);
+  const [flatMode, setFlatMode] = useState(false);
+  const [playingCell, setPlayingCell] = useState<number | null>(null);
   const { playNote } = useAudioEngine();
   const lastFireRef = useRef<number>(0);
 
@@ -82,15 +111,22 @@ export default function GradosArmonicos({ tonalidad }: Props) {
       const thirdOct = chordMemberOctave(diatonic, gradeIdx, 2);
       const fifthOct = chordMemberOctave(diatonic, gradeIdx, 4);
 
+      setPlayingCell(gradeIdx);
       playNote(root.chromatic, rootOct, NOTE_DURATION);
       setTimeout(() => playNote(third.chromatic, thirdOct, NOTE_DURATION), ARPEGGIO_GAP_MS);
       setTimeout(() => playNote(fifth.chromatic, fifthOct, NOTE_DURATION), ARPEGGIO_GAP_MS * 2);
+
+      const totalMs = step >= 4
+        ? ARPEGGIO_GAP_MS * 3 + NOTE_DURATION * 1000
+        : ARPEGGIO_GAP_MS * 2 + NOTE_DURATION * 1000;
 
       if (step >= 4) {
         const seventh = diatonic[(gradeIdx + 6) % 7];
         const seventhOct = chordMemberOctave(diatonic, gradeIdx, 6);
         setTimeout(() => playNote(seventh.chromatic, seventhOct, NOTE_DURATION), ARPEGGIO_GAP_MS * 3);
       }
+
+      setTimeout(() => setPlayingCell(null), totalMs);
     },
     [diatonic, playNote, step],
   );
@@ -136,6 +172,11 @@ export default function GradosArmonicos({ tonalidad }: Props) {
     return d.spelled + '°';
   });
 
+  // Flat-mode: convert displayed spellings and ASCII keys.
+  const fGlyph = (row: string[]) => flatMode ? row.map(toFlatGlyph) : row;
+  const fAscii = (row: string[]) => flatMode ? row.map(toFlatAscii) : row;
+  const displayChords = flatMode ? chordSymbols.map(toFlatChord) : chordSymbols;
+
   return (
     <div className={styles.wrap}>
       <div className={styles.stepperRow} role="tablist" aria-label="Paso del procedimiento">
@@ -151,27 +192,27 @@ export default function GradosArmonicos({ tonalidad }: Props) {
             <span className={styles.stepLabel}>{stepLabel(s)}</span>
           </button>
         ))}
+        <button
+          className={flatMode ? styles.flatToggleActive : styles.flatToggle}
+          onClick={() => setFlatMode((f) => !f)}
+          aria-pressed={flatMode}
+          title="Mostrar bemoles"
+        >
+          ♭
+        </button>
       </div>
 
       <div className={styles.tableWrap}>
         <table className={styles.table}>
           <tbody>
-            <Row label="Escala" cells={escalaRow} ascii={escalaAscii} />
-            {step < 3 ? (
-              <>
-                <Row label="Tónica" cells={tonicaRow} ascii={tonicaAscii} />
-                <Row label="Tercera" cells={terceraRow} ascii={terceraAscii} />
-                <Row label="Quinta" cells={quintaRow} ascii={quintaAscii} />
-              </>
-            ) : (
-              <TriadaRow
-                tonicaRow={tonicaRow} tonicaAscii={tonicaAscii}
-                terceraRow={terceraRow} terceraAscii={terceraAscii}
-                quintaRow={quintaRow} quintaAscii={quintaAscii}
-                septRow={step >= 4 ? septRow : undefined}
-                septAscii={step >= 4 ? septAscii : undefined}
-              />
-            )}
+            <Row label="Escala" cells={fGlyph(escalaRow)} ascii={fAscii(escalaAscii)} />
+            <TriadaRow
+              tonicaRow={fGlyph(tonicaRow)} tonicaAscii={fAscii(tonicaAscii)}
+              terceraRow={fGlyph(terceraRow)} terceraAscii={fAscii(terceraAscii)}
+              quintaRow={fGlyph(quintaRow)} quintaAscii={fAscii(quintaAscii)}
+              septRow={step >= 4 ? fGlyph(septRow) : undefined}
+              septAscii={step >= 4 ? fAscii(septAscii) : undefined}
+            />
 
             <tr className={`${styles.revealRow} ${step >= 3 ? styles.revealOn : ''}`}>
               <th scope="row" className={styles.rowLabel}>Grado</th>
@@ -184,12 +225,14 @@ export default function GradosArmonicos({ tonalidad }: Props) {
 
             <tr className={`${styles.revealRow} ${step >= 3 ? styles.revealOn : ''}`}>
               <th scope="row" className={styles.rowLabel}>Acorde</th>
-              {chordSymbols.map((sym, i) => (
+              {displayChords.map((sym, i) => (
                 <ChordCell
                   key={i}
                   symbol={sym}
                   active={step >= 3}
                   onPlay={() => playTriad(i)}
+                  isPlaying={playingCell === i}
+                  isDimmed={playingCell !== null && playingCell !== i}
                 />
               ))}
             </tr>
@@ -273,13 +316,14 @@ function TriadaRow({ tonicaRow, tonicaAscii, terceraRow, terceraAscii, quintaRow
         return (
           <td key={i} className={styles.triadaCell}>
             <div className={styles.triadStack}>
-              {members.map((m, j) =>
-                VALID_SPELLINGS.has(m.ascii) ? (
-                  <NoteToken key={j} note={m.ascii as NoteSpelling} />
+              {members.map((m, j) => {
+                const degree = (i + j * 2) % 7;
+                return VALID_SPELLINGS.has(m.ascii) ? (
+                  <NoteToken key={j} note={m.ascii as NoteSpelling} diatonicRole={DEGREE_ROLE[degree]} />
                 ) : (
                   <span key={j} className={styles.rawNote}>{m.display}</span>
-                )
-              )}
+                );
+              })}
             </div>
           </td>
         );
@@ -292,9 +336,11 @@ interface ChordCellProps {
   symbol: string;
   active: boolean;
   onPlay: () => void;
+  isPlaying?: boolean;
+  isDimmed?: boolean;
 }
 
-function ChordCell({ symbol, active, onPlay }: ChordCellProps) {
+function ChordCell({ symbol, active, onPlay, isPlaying, isDimmed }: ChordCellProps) {
   const handleKey = useCallback(
     (e: KeyboardEvent<HTMLTableCellElement>) => {
       if (!active) return;
@@ -306,9 +352,13 @@ function ChordCell({ symbol, active, onPlay }: ChordCellProps) {
     [active, onPlay],
   );
 
+  let className = active ? styles.chordCellActive : styles.chordCell;
+  if (active && isPlaying) className = `${styles.chordCellActive} ${styles.chordCellPlaying}`;
+  else if (active && isDimmed) className = `${styles.chordCellActive} ${styles.chordCellDimmed}`;
+
   return (
     <td
-      className={active ? styles.chordCellActive : styles.chordCell}
+      className={className}
       role={active ? 'button' : undefined}
       tabIndex={active ? 0 : -1}
       aria-hidden={!active}

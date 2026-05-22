@@ -15,7 +15,7 @@ export default function GradosArmonicosSection() {
   const tonalidad = useUIStore((s) => s.tonic);
 
   return (
-    <section className={styles.section}>
+    <section id="s-t2-grados" className={styles.section}>
       <SectionLabel text={t('t2.s47.label')} />
       <h2>{t('t2.s47.title')}</h2>
 

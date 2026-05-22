@@ -23,7 +23,7 @@ export default function AcordesSection() {
   const procedure = t('t1.s07.procedure', { returnObjects: true }) as string[];
 
   return (
-    <section className={styles.section}>
+    <section id="s-acordes" className={styles.section}>
       <SectionLabel text={t('t1.s07.label')} />
       <h2>{t('t1.s07.title')}</h2>
 

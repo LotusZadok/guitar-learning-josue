@@ -222,9 +222,8 @@ export const TENSION_REGLAS: readonly { titulo: string; cuerpo: ProseSegment }[]
 export const CONSEJO_TENSION =
   "Consejo del método: tocar las notas tensas un poco más fuertes que las estables. A esto se le llama resolver.";
 
-export const TENSION_PRIMITIVA_TITULO = "Mapa de resoluciones en C mayor";
 export const TENSION_PRIMITIVA_INSTRUCCION =
-  "El strip muestra los 7 grados más la octava. Las flechas conectan cada nota tensa con su(s) reposo(s). Pasá el foco o hacé clic sobre una flecha para escuchar la resolución (tensión → reposo). La forma de la flecha indica la distancia: línea recta = 1 s.t., arco = 2 s.t.";
+  "El strip muestra los 7 grados más la octava. Las flechas conectan cada nota tensa o intermedia con su(s) reposo(s). Haz clic sobre una flecha para escuchar la resolución (tensión → reposo). La forma indica el tipo de grado: línea recta = 4ª y 7ª (tensos), arco = 2ª y 6ª (intermedios).";
 
 // === 06 · Construcción de las 7 tríadas y la tríada maestra (§1.6) ===
 
