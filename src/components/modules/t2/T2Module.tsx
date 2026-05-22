@@ -6,7 +6,6 @@ import TablaMaestraSection from './sections/TablaMaestraSection';
 import GradosArmonicosSection from './components/GradosArmonicosSection';
 import ProgresionesArmonicasSection from './components/ProgresionesArmonicasSection';
 import RelativasMenoresSection from './components/RelativasMenoresSection';
-import ModoClaseSection from './sections/ModoClaseSection';
 import styles from './T2Module.module.css';
 
 export default function T2Module() {
@@ -21,7 +20,6 @@ export default function T2Module() {
         <GradosArmonicosSection />
         <ProgresionesArmonicasSection />
         <RelativasMenoresSection />
-        <ModoClaseSection />
       </main>
     </div>
   );
