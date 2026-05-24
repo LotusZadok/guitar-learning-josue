@@ -16,7 +16,7 @@
     "module_title": "Musikalische Grundlagen",
 
     "s01": {
-      "label": "1.1 · Natürliche Töne",
+      "label": "1.1 · Natürliche Töne und angelsächsische Notation",
       "title": "Natürliche Töne und angelsächsische Notation",
       "intro": "Die 7 Töne auf Spanisch haben einen zugehörigen Buchstaben in der angelsächsischen Notation:",
       "table": {
@@ -29,7 +29,7 @@
     },
 
     "s02": {
-      "label": "1.2 · Dreiklänge",
+      "label": "1.6 · Die 7 Dreiklänge",
       "title": "Die 7 Dreiklänge",
       "intro": "Ein Dreiklang besteht aus 3 bestimmten Tönen. Er wird auch „Akkord\" genannt. Die drei Töne haben drei Namen:",
       "roles": {
@@ -53,7 +53,7 @@
     },
 
     "s03": {
-      "label": "1.3 · Chromatischer Kreis",
+      "label": "1.2 · Alterierte Töne und chromatischer Kreis",
       "title": "Alterierte Töne und chromatischer Kreis",
       "intro": "Neben den 7 natürlichen Tönen gibt es 5 weitere Töne, die sogenannten alterierten Töne. Jeder hat 2 Namen:",
       "sharp_def": "Kreuz (#) — wenn ein natürlicher Ton um einen Halbton (eine Bund) erhöht wird.",
@@ -64,7 +64,7 @@
     },
 
     "s04": {
-      "label": "1.4 · Intervalle",
+      "label": "1.3 · Intervalle",
       "title": "Intervalle",
       "intro": "Ein Intervall ist der Abstand zwischen zwei Tönen. Es wird zuerst nach Zahl benannt (Sekunde, Terz, … Oktave), wobei die Tonika 0 ist und nicht mitgezählt wird.",
       "table_headers": {
@@ -105,7 +105,7 @@
     },
 
     "s06": {
-      "label": "1.6 · Die Tonleiter und ihre Spannungen",
+      "label": "1.4 · Die Tonleiter und ihre Spannungen",
       "title": "Die Durtonleiter",
       "intro": "Die Durtonleiter hat 7 Töne. Das Muster der Abstände zwischen den Tönen ist immer dasselbe, unabhängig von der Starttonart:",
       "pattern_label": "Muster (G = Ganzton, H = Halbton):",
@@ -138,7 +138,7 @@
     },
 
     "s08": {
-      "label": "1.8 · Die Quintenzirkel-Regel",
+      "label": "1.8 · Die Quintenzirkel-Regel – das \"Spiegelintervall\"",
       "title": "Die Quintenzirkel-Regel",
       "intro": "Es gibt eine Regel, um für jede Tonart die Vorzeichen zu bestimmen. Sie basiert auf dem Quintenzirkel — der Folge der reinen Quinten, die alle 12 Tonarten verbindet.",
       "sequence_label": "Die Reihenfolge der Tonarten mit Kreuzen:",
