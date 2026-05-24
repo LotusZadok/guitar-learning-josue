@@ -58,7 +58,7 @@ export default function EscalaMayorSection() {
 
   return (
     <section id="s-escala" className={styles.section}>
-      <SectionLabel text={t('t1.s05.label')} />
+      <SectionLabel text={t('t1.s06.label')} />
       <h2>{isDe ? 'Dur-Tonleiter: stabile und spannende Töne' : 'Escala mayor: notas estables y tensas'}</h2>
 
       <p className={styles.text}>{t('t1.s05.intro')}</p>
