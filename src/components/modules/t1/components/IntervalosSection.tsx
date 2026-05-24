@@ -1,13 +1,12 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
-import NoteSelector from '../../../shared/NoteSelector';
 import Prose from '../../../shared/Prose/Prose';
 import IntervalsSection from '../../../primitives/Intervals/IntervalsSection';
 import { useUIStore } from '../../../../stores/useUIStore';
 import { ALL } from '../../../../data/notes';
 import { majorScaleSpelled } from '../../../../utils/noteCalculations';
-import type { ChromaticNote, NoteSpelling } from '../../../../types/music';
+import type { NoteSpelling } from '../../../../types/music';
 import type { ProseSegment, ProseFragment } from '../../../../types/prose';
 import {
   INTERVALOS_13_HEAD,
@@ -36,41 +35,51 @@ function buildTitulo(tonicAscii: string, locale: string): ProseSegment {
   return [{ type: 'text', value: text }, { type: 'note', value: tonicAscii as NoteSpelling }];
 }
 
-function buildStep1(letterIdx: number, locale: string): ProseSegment {
-  const prefix = locale === 'de'
-    ? 'Die Buchstaben nach der Intervallnummer aufschreiben (Alterierungen ignorieren): '
-    : 'Escribir las letras según el número del intervalo (ignorando alteraciones): ';
-  const seg: ProseFragment[] = [{ type: 'text', value: prefix }];
+// Reunión 24/5/26: el prefijo de texto y la lista de notas van en líneas separadas.
+// Devolvemos un tuple [prefix, notes] que el render coloca con <br/> entre medio.
+type StepWithBreak = { prefix: ProseSegment; notes: ProseSegment };
+
+function buildStep1(letterIdx: number, locale: string): StepWithBreak {
+  const prefix: ProseSegment = [{
+    type: 'text',
+    value: locale === 'de'
+      ? 'Die Buchstaben nach der Intervallnummer aufschreiben (Alterierungen ignorieren):'
+      : 'Escribir las letras según el número del intervalo (ignorando alteraciones):',
+  }];
+  const notes: ProseFragment[] = [];
   for (let i = 0; i <= 12; i++) {
     if (i === 6) {
       const l3 = NATURAL_LETTERS_7[(letterIdx + 3) % 7];
       const l4 = NATURAL_LETTERS_7[(letterIdx + 4) % 7];
-      seg.push({ type: 'note', value: l3 }, { type: 'text', value: '-' }, { type: 'note', value: l4 });
+      notes.push({ type: 'note', value: l3 }, { type: 'text', value: '-' }, { type: 'note', value: l4 });
     } else {
       const letter = NATURAL_LETTERS_7[(letterIdx + LETTER_OFFSETS_13[i]) % 7];
-      seg.push({ type: 'note', value: letter });
+      notes.push({ type: 'note', value: letter });
     }
-    seg.push({ type: 'text', value: i < 12 ? ' ' : '.' });
+    notes.push({ type: 'text', value: i < 12 ? ' ' : '.' });
   }
-  return seg;
+  return { prefix, notes };
 }
 
-function buildStep2(tonicIdx: number, locale: string): ProseSegment {
-  const prefix = locale === 'de'
-    ? 'Den chromatischen Kreis ab der Tonika aufschreiben: '
-    : 'Escribir el círculo cromático desde la tónica: ';
-  const seg: ProseFragment[] = [{ type: 'text', value: prefix }];
+function buildStep2(tonicIdx: number, locale: string): StepWithBreak {
+  const prefix: ProseSegment = [{
+    type: 'text',
+    value: locale === 'de'
+      ? 'Den chromatischen Kreis ab der Tonika aufschreiben:'
+      : 'Escribir el círculo cromático desde la tónica:',
+  }];
+  const notes: ProseFragment[] = [];
   for (let i = 0; i <= 12; i++) {
     const note = ALL[(tonicIdx + i) % 12];
     const flat = SHARP_TO_FLAT_ASCII[note];
     if (flat) {
-      seg.push({ type: 'note', value: note }, { type: 'text', value: '/' }, { type: 'note', value: flat as NoteSpelling });
+      notes.push({ type: 'note', value: note }, { type: 'text', value: '/' }, { type: 'note', value: flat as NoteSpelling });
     } else {
-      seg.push({ type: 'note', value: note });
+      notes.push({ type: 'note', value: note });
     }
-    seg.push({ type: 'text', value: i < 12 ? ' ' : '.' });
+    notes.push({ type: 'text', value: i < 12 ? ' ' : '.' });
   }
-  return seg;
+  return { prefix, notes };
 }
 
 function buildResultado(tonicIdx: number, letterIdx: number, tonicAscii: string, locale: string): ProseSegment {
@@ -118,10 +127,20 @@ function buildOctava(tonicAscii: string, locale: string): ProseSegment {
   ];
 }
 
-const GRADE_LABELS = ['T', 'II', 'III', 'IV', 'V', 'VI', 'VII'] as const;
+const GRADE_LABELS = ['T', '2', '3', '4', '5', '6', '7'] as const;
 
-function renderStep(step: string | ProseSegment) {
-  return typeof step === 'string' ? step : <Prose segment={step} />;
+function renderStep(step: string | ProseSegment | StepWithBreak) {
+  if (typeof step === 'string') return step;
+  if ('prefix' in step && 'notes' in step) {
+    return (
+      <>
+        <Prose segment={step.prefix} />
+        <br />
+        <Prose segment={step.notes} />
+      </>
+    );
+  }
+  return <Prose segment={step} />;
 }
 
 export default function IntervalosSection() {
@@ -129,7 +148,6 @@ export default function IntervalosSection() {
   const locale = i18n.language;
 
   const tonic = useUIStore((s) => s.tonic);
-  const setTonic = useUIStore((s) => s.setTonic);
   const spelledScale = useMemo(() => majorScaleSpelled(tonic), [tonic]);
 
   // tonicAscii: ASCII form of spelled tonic (e.g. 'Bb' for A#, 'G' for G).
@@ -172,12 +190,6 @@ export default function IntervalosSection() {
       <h2>{t('t1.s04.title')}</h2>
 
       <p className={styles.text}>{t('t1.s04.intro')}</p>
-
-      <NoteSelector
-        notes={[...ALL]}
-        selected={tonic}
-        onSelect={(n) => setTonic(n as ChromaticNote)}
-      />
 
       <div className={styles.tableWrap}>
         <table className={styles.table}>

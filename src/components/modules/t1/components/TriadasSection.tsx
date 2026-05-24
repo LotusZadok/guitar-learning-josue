@@ -1,11 +1,11 @@
-import { Fragment, useState, useMemo } from 'react';
+import { Fragment, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
 import NoteToken from '../../../shared/NoteToken/NoteToken';
 import Prose from '../../../shared/Prose/Prose';
-import NoteSelector from '../../../shared/NoteSelector';
 import TriadsSection from '../../../primitives/Triads/TriadsSection';
+import { useUIStore } from '../../../../stores/useUIStore';
 import { NATURALS } from '../../../../data/notes';
 import type { NoteSpelling, NaturalNote } from '../../../../types/music';
 import type { ProseSegment } from '../../../../types/prose';
@@ -78,7 +78,10 @@ function buildEjemplo(root: NaturalNote, locale: string): ProseSegment {
 export default function TriadasSection() {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
-  const [exampleRoot, setExampleRoot] = useState<NaturalNote>('F');
+  const tonic = useUIStore((s) => s.tonic);
+  // El ejemplo de tríada trabaja sobre letras naturales (el método las usa así).
+  // Tomamos la letra natural de la tónica activa.
+  const exampleRoot = tonic[0] as NaturalNote;
   const procedure = t('t1.s02.procedure', { returnObjects: true }) as string[];
   const ejemplo = useMemo(() => buildEjemplo(exampleRoot, locale), [exampleRoot, locale]);
 
@@ -104,11 +107,6 @@ export default function TriadasSection() {
         ))}
       </ol>
 
-      <NoteSelector
-        notes={[...NATURALS]}
-        selected={exampleRoot}
-        onSelect={(n) => setExampleRoot(n as NaturalNote)}
-      />
       <p className={styles.ejemplo}><Prose segment={ejemplo} /></p>
 
       <p className={styles.text}>{t('t1.s02.table_title')}</p>

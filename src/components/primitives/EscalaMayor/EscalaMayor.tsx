@@ -17,19 +17,11 @@ import styles from './EscalaMayor.module.css';
 // Chromatic off-scale degrees: 1, 3, 6, 8, 10.
 
 const SCALE_POSITIONS = [0, 2, 4, 5, 7, 9, 11, 12] as const;
-const GRADE_LABELS = ['T', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'T'] as const;
+// Reunión 24/5/26: calidades en lugar de romanos en el visualizador.
+const GRADE_LABELS = ['T', '2M', '3M', '4J', '5J', '6M', '7M', '8J'] as const;
 const STABLE_POSITIONS = new Set<number>([4, 7]);
 const INTERMEDIATE_POSITIONS = new Set<number>([2, 9]);
 const TENSE_POSITIONS = new Set<number>([5, 11]);
-
-// Direction arrows for non-stable degrees: 'up' = resolves toward higher pitch, 'down' = lower.
-const ARROW_DIRS: Partial<Record<string, ReadonlyArray<'up' | 'down'>>> = {
-  II:  ['up', 'down'],
-  IV:  ['down'],
-  VI:  ['up', 'down'],
-  VII: ['up', 'down'],
-};
-const PATTERN: ReadonlyArray<'T' | 'S'> = ['T', 'T', 'S', 'T', 'T', 'T', 'S'];
 
 const NODE_COUNT = 13;
 const SVG_W = 560;
@@ -95,38 +87,6 @@ export default function EscalaMayor() {
         role="img"
         aria-label={isDe ? `Dur-Tonleiter von ${NOTE_DE_LETTER[tonic] ?? tonic}` : `Escala mayor de ${NOTE_ES[tonic]}`}
       >
-        <defs>
-          <marker
-            id="scale-dir-arrow"
-            markerWidth="5"
-            markerHeight="5"
-            refX="5"
-            refY="2.5"
-            orient="auto"
-            markerUnits="userSpaceOnUse"
-          >
-            <path d="M 0 0 L 5 2.5 L 0 5 Z" fill="var(--muted)" />
-          </marker>
-        </defs>
-
-        {/* Pattern T/S labels between consecutive scale notes */}
-        {PATTERN.map((step, i) => {
-          const fromPos = SCALE_POSITIONS[i];
-          const toPos = SCALE_POSITIONS[i + 1];
-          const x = (PAD_X + fromPos * STEP_X + PAD_X + toPos * STEP_X) / 2;
-          return (
-            <text
-              key={i}
-              x={x}
-              y={32}
-              textAnchor="middle"
-              className={styles.patternLabel}
-            >
-              {step}
-            </text>
-          );
-        })}
-
         {/* Subtle baseline rule between nodes */}
         <line
           x1={PAD_X}
@@ -152,6 +112,7 @@ interface ScaleNodeProps {
 
 function ScaleNode({ data, onPlay, isDe }: ScaleNodeProps) {
   const { cx, chromatic, octaveAdj, role, spelled, grade } = data;
+  const isOnScale = role !== 'chromatic';
 
   const radius =
     role === 'tonic' ? 22 :
@@ -163,38 +124,42 @@ function ScaleNode({ data, onPlay, isDe }: ScaleNodeProps) {
     role === 'intermediate' ? 'var(--diatonic-medium)' :
     role === 'tense' ? 'var(--diatonic-tense)' :
     'var(--diatonic-stable)'; // tonic + stable
-  const isOnScale = role !== 'chromatic';
 
-  const handleEnter = useCallback(() => onPlay(chromatic, octaveAdj), [chromatic, octaveAdj, onPlay]);
+  // Reunión 24/5/26: las notas fuera de escala (cromáticas tenues) no deben sonar.
+  const handleEnter = useCallback(() => {
+    if (isOnScale) onPlay(chromatic, octaveAdj);
+  }, [chromatic, octaveAdj, onPlay, isOnScale]);
   const handleKey = useCallback(
     (e: KeyboardEvent<SVGGElement>) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        onPlay(chromatic, octaveAdj);
+        if (isOnScale) onPlay(chromatic, octaveAdj);
       }
     },
-    [chromatic, octaveAdj, onPlay],
+    [chromatic, octaveAdj, onPlay, isOnScale],
   );
 
   return (
     <g
       className={styles.node}
-      tabIndex={0}
-      role="button"
-      aria-label={isDe
-        ? `${NOTE_DE_LETTER[chromatic] ?? chromatic}${grade ? ` · Stufe ${grade}` : ' · chromatisch'}`
-        : `${NOTE_ES[chromatic]}${grade ? ` · grado ${grade}` : ' · cromática'}`}
-      onFocus={handleEnter}
-      onKeyDown={handleKey}
+      tabIndex={isOnScale ? 0 : -1}
+      role={isOnScale ? 'button' : undefined}
+      aria-label={isOnScale ? (isDe
+        ? `${NOTE_DE_LETTER[chromatic] ?? chromatic}${grade ? ` · Stufe ${grade}` : ''}`
+        : `${NOTE_ES[chromatic]}${grade ? ` · grado ${grade}` : ''}`) : undefined}
+      onFocus={isOnScale ? handleEnter : undefined}
+      onKeyDown={isOnScale ? handleKey : undefined}
     >
-      {/* Hit area: larger transparent circle for easier hover/click */}
-      <circle
-        cx={cx}
-        cy={NODE_Y}
-        r={Math.max(radius + 6, 18)}
-        fill="transparent"
-        onMouseEnter={handleEnter}
-      />
+      {/* Hit area: solo en notas de la escala (las cromáticas son silenciosas) */}
+      {isOnScale && (
+        <circle
+          cx={cx}
+          cy={NODE_Y}
+          r={Math.max(radius + 6, 18)}
+          fill="transparent"
+          onMouseEnter={handleEnter}
+        />
+      )}
 
       {/* Spelled note name above (scale notes only) */}
       {spelled && (
@@ -202,23 +167,6 @@ function ScaleNode({ data, onPlay, isDe }: ScaleNodeProps) {
           {spelled}
         </text>
       )}
-
-      {/* Direction arrows for tense/intermediate nodes */}
-      {grade && ARROW_DIRS[grade]?.map((dir, i) => {
-        const y1 = dir === 'up' ? NODE_Y - radius - 4 : NODE_Y + radius + 4;
-        const y2 = dir === 'up' ? NODE_Y - radius - 16 : NODE_Y + radius + 16;
-        return (
-          <path
-            key={`arrow-${dir}-${i}`}
-            d={`M ${cx} ${y1} L ${cx} ${y2}`}
-            stroke="var(--muted)"
-            strokeWidth={1}
-            fill="none"
-            markerEnd="url(#scale-dir-arrow)"
-            aria-hidden="true"
-          />
-        );
-      })}
 
       {/* Visible node */}
       <circle

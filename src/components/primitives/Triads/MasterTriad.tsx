@@ -1,7 +1,6 @@
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import NoteSelector from '../../shared/NoteSelector';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
+import { useUIStore } from '../../../stores/useUIStore';
 import { NATURALS, NOTE_COLORS, NOTE_ES } from '../../../data/notes';
 import { ROLE_LABELS } from '../../../data/triads';
 import type { NaturalNote } from '../../../types/music';
@@ -13,10 +12,17 @@ const NOTE_DE: Record<NaturalNote, string> = {
   C: 'C', D: 'D', E: 'E', F: 'F', G: 'G', A: 'A', B: 'H',
 };
 
+// La tónica global puede ser alterada; la cadena maestra trabaja con letras naturales.
+// Tomamos la letra de la tónica activa (descartando alteración) como raíz pedagógica.
+function naturalFromTonic(tonic: string): NaturalNote {
+  return tonic[0] as NaturalNote;
+}
+
 export default function MasterTriad() {
   const { i18n } = useTranslation();
   const isDe = i18n.language === 'de';
-  const [root, setRoot] = useState<NaturalNote>('A');
+  const tonic = useUIStore((s) => s.tonic);
+  const root = naturalFromTonic(tonic);
   const { playNote } = useAudioEngine();
 
   const startIdx = NATURALS.indexOf(root);
@@ -34,11 +40,6 @@ export default function MasterTriad() {
           ? 'Wähle einen Grundton. Die Kette stapelt diatonische Terzen im Kreis: T → 3 → 5 → 7 → 9 → 11 → 13 → wiederholt.'
           : 'Seleccioná una nota raíz. La cadena apila terceras diatónicas en ciclo: T → 3ra → 5ta → 7ma → 9na → 11na → 13na → repite.'}
       </p>
-      <NoteSelector
-        notes={[...NATURALS]}
-        selected={root}
-        onSelect={(n) => setRoot(n as NaturalNote)}
-      />
       <div className={styles.chain}>
         {Array.from({ length: totalNotes }, (_, i) => {
           const ni = (startIdx + i) % 7;

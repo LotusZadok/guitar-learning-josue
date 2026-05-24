@@ -222,8 +222,10 @@ export const TENSION_REGLAS: readonly { titulo: string; cuerpo: ProseSegment }[]
 export const CONSEJO_TENSION =
   "Consejo del método: tocar las notas tensas un poco más fuertes que las estables. A esto se le llama resolver.";
 
+// Reunión 24/5/26: removida la descripción "línea recta = 4ª y 7ª / arco = 2ª y 6ª"
+// — ahora todas las flechas son arcos para evidenciar que cada resolución sale del grado tenso/intermedio.
 export const TENSION_PRIMITIVA_INSTRUCCION =
-  "El strip muestra los 7 grados más la octava. Las flechas conectan cada nota tensa o intermedia con su(s) reposo(s). Haz clic sobre una flecha para escuchar la resolución (tensión → reposo). La forma indica el tipo de grado: línea recta = 4ª y 7ª (tensos), arco = 2ª y 6ª (intermedios).";
+  "El strip muestra los 7 grados más la octava. Las flechas conectan cada nota tensa o intermedia con su(s) reposo(s). Haz clic sobre una flecha para escuchar la resolución (tensión → reposo).";
 
 // === 06 · Construcción de las 7 tríadas y la tríada maestra (§1.6) ===
 
@@ -298,7 +300,8 @@ export const ESCALA_EJEMPLO_INTRO: ProseSegment = [
   { type: 'text', value: ' mayor (única tonalidad sin alteraciones):' },
 ];
 
-export const ESCALA_TABLA_HEAD = ['Grado', 'T', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'T'] as const;
+// Encabezado con calidad de intervalo (reunión 24/5/26): T 2M 3M 4J 5J 6M 7M 8J.
+export const ESCALA_TABLA_HEAD = ['Grado', 'T', '2M', '3M', '4J', '5J', '6M', '7M', '8J'] as const;
 export const ESCALA_TABLA_NOTAS = ['Nota', 'C', 'D', 'E', 'F', 'G', 'A', 'B', 'C'] as const;
 export const ESCALA_TABLA_DIST = ['Distancia (s.t.)', '2', '2', '1', '2', '2', '2', '1', ''] as const;
 
@@ -824,7 +827,7 @@ export const REGLA_PRIMITIVA_INSTRUCCION_DE: ProseSegment = [
 ];
 
 export const TENSION_PRIMITIVA_INSTRUCCION_DE =
-  "Der Strip zeigt die 7 Stufen plus die Oktave. Die Pfeile verbinden jeden spannenden oder mittleren Ton mit seiner Auflösung. Klicke auf einen Pfeil, um die Auflösung zu hören (Spannung → Ruhe). Die Form gibt den Stufentyp an: gerade Linie = 4. und 7. (spannend), Bogen = 2. und 6. (mittel).";
+  "Der Strip zeigt die 7 Stufen plus die Oktave. Die Pfeile verbinden jeden spannenden oder mittleren Ton mit seiner Auflösung. Klicke auf einen Pfeil, um die Auflösung zu hören (Spannung → Ruhe).";
 
 export const TRIADAS_MAESTRA_DE: ProseSegment = [
   { type: 'text', value: 'Wenn wir das Muster ohne Pause weiterführen, bis wir wieder beim Ausgangston ankommen, erhalten wir den Meisterdreiklang: ' },

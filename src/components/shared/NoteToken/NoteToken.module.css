@@ -26,15 +26,17 @@
 .token[data-diatonic="medium"] { color: var(--diatonic-medium); }
 .token[data-diatonic="tense"]  { color: var(--diatonic-tense);  }
 
-.token[data-note="c"] { color: var(--note-c); }
-.token[data-note="c-sharp"] { color: var(--note-c-sharp); }
-.token[data-note="d"] { color: var(--note-d); }
-.token[data-note="d-sharp"] { color: var(--note-d-sharp); }
-.token[data-note="e"] { color: var(--note-e); }
-.token[data-note="f"] { color: var(--note-f); }
-.token[data-note="f-sharp"] { color: var(--note-f-sharp); }
-.token[data-note="g"] { color: var(--note-g); }
-.token[data-note="g-sharp"] { color: var(--note-g-sharp); }
-.token[data-note="a"] { color: var(--note-a); }
-.token[data-note="a-sharp"] { color: var(--note-a-sharp); }
-.token[data-note="b"] { color: var(--note-b); }
+/* Color cromático SOLO en hover/focus. En reposo, las notas son monocromas
+   (reunión 24/5/26 — el profesor sugiere enseñar el color al hacer hover). */
+.token[data-note="c"]:hover,        .token[data-note="c"]:focus-visible        { color: var(--note-c); }
+.token[data-note="c-sharp"]:hover,  .token[data-note="c-sharp"]:focus-visible  { color: var(--note-c-sharp); }
+.token[data-note="d"]:hover,        .token[data-note="d"]:focus-visible        { color: var(--note-d); }
+.token[data-note="d-sharp"]:hover,  .token[data-note="d-sharp"]:focus-visible  { color: var(--note-d-sharp); }
+.token[data-note="e"]:hover,        .token[data-note="e"]:focus-visible        { color: var(--note-e); }
+.token[data-note="f"]:hover,        .token[data-note="f"]:focus-visible        { color: var(--note-f); }
+.token[data-note="f-sharp"]:hover,  .token[data-note="f-sharp"]:focus-visible  { color: var(--note-f-sharp); }
+.token[data-note="g"]:hover,        .token[data-note="g"]:focus-visible        { color: var(--note-g); }
+.token[data-note="g-sharp"]:hover,  .token[data-note="g-sharp"]:focus-visible  { color: var(--note-g-sharp); }
+.token[data-note="a"]:hover,        .token[data-note="a"]:focus-visible        { color: var(--note-a); }
+.token[data-note="a-sharp"]:hover,  .token[data-note="a-sharp"]:focus-visible  { color: var(--note-a-sharp); }
+.token[data-note="b"]:hover,        .token[data-note="b"]:focus-visible        { color: var(--note-b); }

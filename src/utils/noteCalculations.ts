@@ -131,6 +131,79 @@ export function ensureAscending(members: ChordMember[]): ChordMember[] {
   });
 }
 
+// === Generalized enharmonic interval spelling (reunión 24/5/26) ===
+// Regla: el número del intervalo determina la LETRA; la calidad la alteración.
+// Una 3ra de G es siempre B (B♭ o B). Una 4ta de F es siempre B (B♭ o B), nunca A#.
+
+export type IntervalNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+export type IntervalQuality = 'P' | 'M' | 'm' | 'aug' | 'dim';
+
+const DIATONIC_MAJOR_SEMITONES: Record<IntervalNumber, number> = {
+  1: 0, 2: 2, 3: 4, 4: 5, 5: 7, 6: 9, 7: 11, 8: 12,
+};
+const PERFECTABLE: Set<IntervalNumber> = new Set([1, 4, 5, 8]);
+
+function intervalSemitones(number: IntervalNumber, quality: IntervalQuality): number {
+  const base = DIATONIC_MAJOR_SEMITONES[number];
+  if (PERFECTABLE.has(number)) {
+    if (quality === 'P') return base;
+    if (quality === 'aug') return base + 1;
+    if (quality === 'dim') return base - 1;
+    throw new Error(`Intervalo ${number} no acepta calidad ${quality} (solo P/aug/dim)`);
+  }
+  if (quality === 'M') return base;
+  if (quality === 'm') return base - 1;
+  if (quality === 'aug') return base + 1;
+  if (quality === 'dim') return base - 2;
+  throw new Error(`Intervalo ${number} no acepta calidad ${quality} (solo M/m/aug/dim)`);
+}
+
+// Devuelve la ortografía del intervalo desde la tónica (con la letra correcta y alteración).
+// Ej.: spelledIntervalFromTonic('F', 4, 'P') === 'B♭'
+//      spelledIntervalFromTonic('G', 3, 'M') === 'B'
+//      spelledIntervalFromTonic('A', 2, 'M') === 'B'  (nunca A♯)
+export function spelledIntervalFromTonic(
+  tonic: ChromaticNote,
+  number: IntervalNumber,
+  quality: IntervalQuality,
+): string {
+  const resolvedTonic: SpelledTonic = ENHARMONIC_REDIRECT[tonic] ?? tonic;
+  const startLetterIdx = LETTERS.indexOf(resolvedTonic[0] as typeof LETTERS[number]);
+  const tonicSemi = tonicSemitone(resolvedTonic);
+  const letter = LETTERS[(startLetterIdx + (number - 1)) % 7];
+  const targetSemi = (tonicSemi + intervalSemitones(number, quality)) % 12;
+  return spelledFromLetterAndSemi(letter, targetSemi);
+}
+
+// Devuelve las 13 posiciones del círculo cromático desde la tónica, cada una con su
+// ortografía estándar. Posiciones naturales tienen solo `sharp` (la nota natural);
+// posiciones alteradas exponen ambas enarmonías estándar (C♯/D♭, etc.).
+// Posición 0 = tónica; posición 12 = octava.
+export interface CircleStep {
+  semitones: number;
+  sharp: string;            // siempre presente (natural o sostenido)
+  flat: string | null;      // presente solo en posiciones alteradas
+}
+
+// Enarmonía estándar para los 5 sostenidos. Las notas naturales no tienen alteración aquí
+// (B♯, E♯ son válidas musicalmente pero el método de Josué las excluye del círculo).
+const STANDARD_FLAT: Partial<Record<ChromaticNote, string>> = {
+  'C#': 'D♭', 'D#': 'E♭', 'F#': 'G♭', 'G#': 'A♭', 'A#': 'B♭',
+};
+const NATURAL_DISPLAY: Partial<Record<ChromaticNote, string>> = {
+  'C#': 'C♯', 'D#': 'D♯', 'F#': 'F♯', 'G#': 'G♯', 'A#': 'A♯',
+};
+
+export function spelledChromaticCircle(tonic: ChromaticNote): CircleStep[] {
+  const tonicIdx = ALL.indexOf(tonic);
+  return Array.from({ length: 13 }, (_, i) => {
+    const note = ALL[(tonicIdx + i) % 12];
+    const flat = STANDARD_FLAT[note] ?? null;
+    const sharp = NATURAL_DISPLAY[note] ?? note;
+    return { semitones: i, sharp, flat };
+  });
+}
+
 // Returns the perfect-fifth pair for a tonic, honoring the §1.8 alteration-mirror rule.
 // Most cases: 5J copies the alteration of the tonic. Exception: B → F♯ (not F).
 // Bb → F (not Fb) is a parallel exception when using flat spelling — see literalContent.

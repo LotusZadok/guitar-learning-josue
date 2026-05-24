@@ -357,7 +357,7 @@ Este componente es el que identifica la marca. Aparece en T1 (primitiva Chromati
 
 Esta sección lista deudas que las auditorías y pasadas de resolución identificaron pero **no** han sido resueltas. Son trabajo futuro explícito, no aprobaciones tácitas. Cada vez que una pasada resuelve una deuda, se remueve de esta lista; cada nueva deuda descubierta se añade.
 
-**Última actualización:** 2026-05-22 (13ª ola — limpieza de superficie: ModoClase y Footer eliminados).
+**Última actualización:** 2026-05-24 (14ª ola — reunión Josué: validador de enarmonía + fixes T1 §1.1–§1.8).
 
 ### Doctrina activa (decisiones pendientes de diseño)
 
@@ -375,6 +375,24 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 ### Histórico (resueltas, conservar para contexto)
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
+
+**14ª ola — Reunión Josué (2026-05-24):**
+- ✓ **Validador de enarmonía generalizado** en `utils/noteCalculations.ts`: `spelledIntervalFromTonic(tonic, number, quality)` + `spelledChromaticCircle(tonic)`. Regla "el número del intervalo determina la letra; la calidad la alteración". El IntervalsSection primitive ahora computa las 3ras menores correctas para cualquier tónica (antes producía A♯ donde debía ser B♭).
+- ✓ **Selectores locales removidos en T1**: `IntervalosSection`, `IntervalsSection` (primitive), `TriadasSection`, `MasterTriad` consumen `useUIStore.tonic` (`AcordesSection` y `ReglaQuintaSection` ya lo hacían). Excepción documentada: T2 `ProcesoBemolesSection`/`ProcesoSostenidosSection` mantienen selector local porque escogen *tonalidad pedagógica* dentro de un set acotado (Eb, Ab, Bb… para bemoles), no la tónica global.
+- ✓ **Numerales: arábigos en intervalos, romanos en acordes**. Tablas de §1.3 y §1.4 con `T 2 3 4 5 6 7` y `T 2M 3M 4J 5J 6M 7M 8J` respectivamente; visualizador de escala mayor con calidades; grados de acordes mantienen `I ii iii IV V vi vii°`.
+- ✓ **Colores cromáticos solo en hover/focus**: `NoteToken.module.css` y `ChromaticNode.tsx` monocromos en reposo; el color de nota aparece solo al hover/focus. Implementación: gating CSS `:hover, :focus-visible` + ramas condicionales `hovered ? color : neutral` en SVG.
+- ✓ **Acordes ejemplo dinámico (§1.7)**: `ACORDES_EJEMPLO_PASOS` hardcodeado en A reemplazado por `buildPasoLetras`/`buildPasoSemitonos` que construyen prose dinámicamente con la tónica activa. El caveat "Por la regla del paso 1, la letra es X, entonces es Y (no Z)" solo aparece cuando hay ambigüedad enarmónica real.
+- ✓ **Tensión/Resolución (§1.5)**:
+  - Reglas dinámicas según tónica activa (antes hardcoded "En C mayor").
+  - Strip usa `majorScaleSpelled` para display (4ta de F = B♭, no A♯).
+  - Flechas del 4to grado pasaron de rectas a arcos cortos — antes parecían una recta III↔V atravesando IV; ahora visiblemente emergen del IV.
+  - Legend depurado: removidas las entradas duplicadas "4ª · 7ª (tensos)" / "2ª · 6ª (intermedios)" (la forma del arco ya es informativa).
+- ✓ **Escala mayor visualizador (§1.4)**: removido patrón "TTSTTTS", removidas flechas de dirección, calidades de intervalo reemplazan romanos. Las notas fuera de escala (cromáticas tenues) ya no responden a hover/focus ni reproducen audio.
+- ✓ **Notas naturales (§1.1)**: tabla 7 notas → círculo SVG de 7 notas. Refuerza la circularidad de la escala.
+- ✓ **Círculo cromático (§1.2)**: removido toggle Arpegio/Bloque; los nodos reproducen solo la nota individual al hover/click (la construcción de acorde vive en §1.7).
+- ✓ **Salto de línea en pasos de Intervalos (§1.3)**: pasos 1 y 2 del procedimiento separan prefijo de texto y lista de notas en líneas distintas (`StepWithBreak` + render con `<br/>`).
+- ✓ **Sidebar label**: TONALIDAD → TÓNICA (commit anterior `e1f1048`, mantenido).
+- ✓ Build limpio (typecheck verde). Verificado en browser rotando tónicas F, A, B, C#. Sin deuda nueva introducida.
 
 **13ª ola — Limpieza de superficie (2026-05-22):**
 - ✓ **ModoClaseSection eliminada** (`ModoClaseSection.tsx` + `.module.css` + import en `T2Module.tsx` + claves `s46` en `es.json`/`de.json`). Sin rastro en codebase.

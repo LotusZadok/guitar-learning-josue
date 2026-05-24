@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { useUIStore } from '../../../stores/useUIStore';
 import { ALL, NOTE_ES } from '../../../data/notes';
+import { majorScaleSpelled } from '../../../utils/noteCalculations';
 
 const NOTE_DE_LETTER: Record<string, string> = {
   C: 'C', 'C#': 'Cis', D: 'D', 'D#': 'Dis', E: 'E', F: 'F',
@@ -11,46 +12,47 @@ const NOTE_DE_LETTER: Record<string, string> = {
 import type { ChromaticNote } from '../../../types/music';
 import styles from './TensionResolucion.module.css';
 
-// buildNodes: los 8 nodos del strip (7 grados + octava de T) para cualquier tónica.
-// Posiciones (semitonos desde T), grados y roles son invariantes; solo cambia la nota.
-// `majorScaleSpelled` devuelve string[] con glifos ♯/♭ — no tiene campo `.chromatic`,
-// por lo que usamos ALL[(tonicIdx + pos) % 12] para obtener el ChromaticNote del audio.
+// Reunión 24/5/26: la ortografía respeta la escala mayor (B♭ en F mayor, no A#).
+// El audio sigue usando ChromaticNote; el display usa la versión spelled.
 
 interface TensionNode {
   pos: number;
-  note: ChromaticNote;
+  note: ChromaticNote;       // para audio
+  spelled: string;           // para display (con ♯/♭ correcto según escala mayor)
   octaveAdj: number;
   grade: string;
   role: 'tonic' | 'stable' | 'intermediate' | 'tense';
 }
 
 const SCALE_POS   = [0, 2, 4, 5, 7, 9, 11, 12] as const;
-const GRADE_NAMES = ['T', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'T'] as const;
+const GRADE_NAMES = ['T', '2', '3', '4', '5', '6', '7', 'T'] as const;
 const NODE_ROLES: TensionNode['role'][] = [
   'tonic', 'intermediate', 'stable', 'tense', 'stable', 'intermediate', 'tense', 'tonic',
 ];
 
 function buildNodes(tonic: ChromaticNote): TensionNode[] {
   const tonicIdx = ALL.indexOf(tonic);
+  const spelledScale = majorScaleSpelled(tonic); // 7 grados con ortografía correcta
   return SCALE_POS.map((pos, i) => ({
     pos,
     note: ALL[(tonicIdx + pos) % 12],
+    spelled: spelledScale[i % 7],
     octaveAdj: pos === 12 ? 1 : 0,
     grade: GRADE_NAMES[i],
     role: NODE_ROLES[i],
   }));
 }
 
-// Las flechas de resolución del método. `kind` codifica la distancia interválica:
-// 'straight' = 1 s.t. (resolución directa), 'curve' = 2 s.t. (salto).
-// Grosor uniforme — el mensaje semántico está en la forma, no en el peso.
+// Flechas de resolución. Tras la reunión 24/5/26 las del 4to grado también son arcos
+// (antes eran rectas y aparentaban una línea continua III—V que cruzaba el IV).
+// 'curve' = arco amplio; 'shortCurve' = arco corto (1 s.t. de distancia).
 const ARROWS = [
-  { id: 'd-c',   fromIdx: 1, toIdx: 0, width: 1.5, kind: 'curve'    },
-  { id: 'd-e',   fromIdx: 1, toIdx: 2, width: 1.5, kind: 'curve'    },
-  { id: 'f-e',   fromIdx: 3, toIdx: 2, width: 1.5, kind: 'straight' },
-  { id: 'f-g',   fromIdx: 3, toIdx: 4, width: 1.5, kind: 'straight' },
-  { id: 'a-g',   fromIdx: 5, toIdx: 4, width: 1.5, kind: 'curve'    },
-  { id: 'b-c8',  fromIdx: 6, toIdx: 7, width: 1.5, kind: 'straight' },
+  { id: 'd-c',  fromIdx: 1, toIdx: 0, width: 1.5, kind: 'curve'      },
+  { id: 'd-e',  fromIdx: 1, toIdx: 2, width: 1.5, kind: 'curve'      },
+  { id: 'f-e',  fromIdx: 3, toIdx: 2, width: 1.5, kind: 'shortCurve' },
+  { id: 'f-g',  fromIdx: 3, toIdx: 4, width: 1.5, kind: 'shortCurve' },
+  { id: 'a-g',  fromIdx: 5, toIdx: 4, width: 1.5, kind: 'curve'      },
+  { id: 'b-c8', fromIdx: 6, toIdx: 7, width: 1.5, kind: 'shortCurve' },
 ] as const;
 
 const SVG_W = 560;
@@ -72,15 +74,13 @@ function nodeX(pos: number): number {
   return PAD_X + pos * STEP_X;
 }
 
-function arrowPath(originX: number, destX: number, kind: 'straight' | 'curve'): string {
+function arrowPath(originX: number, destX: number, kind: 'shortCurve' | 'curve'): string {
   const startY = ARC_BASELINE;
-  if (kind === 'straight') {
-    // Grados tensos (4ª, 7ª): línea recta horizontal.
-    return `M ${originX} ${startY} L ${destX} ${startY}`;
-  }
-  // Grados intermedios (2ª, 6ª): arco cuadrático proporcional a la distancia.
   const midX = (originX + destX) / 2;
-  const peakY = startY - ARC_RISE;
+  // 'shortCurve' = arco menor para resoluciones de 1 s.t. — sigue saliendo visiblemente
+  // del nodo origen (no como recta que cruza nodos intermedios).
+  const rise = kind === 'shortCurve' ? ARC_RISE * 0.4 : ARC_RISE;
+  const peakY = startY - rise;
   return `M ${originX} ${startY} Q ${midX} ${peakY} ${destX} ${startY}`;
 }
 
@@ -170,15 +170,9 @@ export default function TensionResolucion() {
         ))}
       </svg>
 
+      {/* Reunión 24/5/26: removidas las entradas "4ª/7ª tensos" y "2ª/6ª intermedios"
+          del legend (la información ya está implícita en el strip y se duplica). */}
       <ul className={styles.legend} aria-label={isDe ? 'Kartenkonventionen' : 'Convenciones del mapa'}>
-        <li>
-          <span className={`${styles.swatch} ${styles.swatchStraight}`} />
-          {isDe ? '4. · 7. (spannend)' : '4ª · 7ª (tensos)'}
-        </li>
-        <li>
-          <span className={`${styles.swatch} ${styles.swatchCurve}`} />
-          {isDe ? '2. · 6. (mittel)' : '2ª · 6ª (intermedios)'}
-        </li>
         <li>
           <span className={styles.swatchStable} />
           {isDe ? 'Stabil' : 'Estable'}
@@ -244,7 +238,7 @@ interface ScaleNodeProps {
 }
 
 function ScaleNode({ data }: ScaleNodeProps) {
-  const { pos, note, role } = data;
+  const { pos, spelled, role } = data;
   const cx = nodeX(pos);
   const radius =
     role === 'tonic' ? RADIUS_TONIC :
@@ -271,7 +265,7 @@ function ScaleNode({ data }: ScaleNodeProps) {
         y={NODE_Y + 1}
         className={isLargeLetter ? styles.innerLetterLarge : styles.innerLetter}
       >
-        {note}
+        {spelled}
       </text>
       <text x={cx} y={NODE_Y + radius + 22} className={styles.gradeLabel}>
         {data.grade}
