@@ -71,23 +71,24 @@ export default function TriadNode({ note, index, cx, cy, r, onHover, onPlay }: P
         onMouseEnter={handleEnter}
         onMouseLeave={handleLeave}
       />
+      {/* Reunión 24/5/26: monocromo en reposo, color sólo en hover. */}
       <line
         x1={cx} y1={cy} x2={x} y2={y}
-        stroke={NOTE_COLORS[note]}
+        stroke={hovered ? NOTE_COLORS[note] : 'var(--rule)'}
         strokeWidth={hovered ? 2 : 0.5}
         opacity={hovered ? 0.4 : 0.12}
       />
       <circle
         cx={x} cy={y}
         r={hovered ? 28 : 24}
-        fill={NOTE_COLORS[note]}
-        stroke={hovered ? '#fff' : 'none'}
-        strokeWidth={hovered ? 2 : 0}
+        fill={hovered ? NOTE_COLORS[note] : 'var(--surface)'}
+        stroke={hovered ? '#fff' : 'var(--rule)'}
+        strokeWidth={hovered ? 2 : 1}
       />
       <text
         x={x} y={y + 1}
         textAnchor="middle" dominantBaseline="middle"
-        fill="#fff" fontSize={16} fontWeight={700}
+        fill={hovered ? '#fff' : 'var(--text-body)'} fontSize={16} fontWeight={700}
       >
         {note}
       </text>

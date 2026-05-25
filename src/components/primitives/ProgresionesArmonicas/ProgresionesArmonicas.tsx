@@ -1,12 +1,18 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAudioEngine } from '../../../hooks/useAudioEngine';
+import { useAudioEngine, stopAllNotes } from '../../../hooks/useAudioEngine';
 import { ALL } from '../../../data/notes';
 import { majorScaleSpelled } from '../../../utils/noteCalculations';
-import NoteToken from '../../shared/NoteToken/NoteToken';
-import type { ChromaticNote, DiatonicDegree, NoteSpelling } from '../../../types/music';
+import type { DiatonicRole } from '../../shared/NoteToken/NoteToken';
+import type { ChromaticNote, DiatonicDegree } from '../../../types/music';
 import { PROGRESIONES_DATA } from '../../modules/t2/data/literalContent';
 import styles from './ProgresionesArmonicas.module.css';
+
+// Reunión 24/5/26: formato armónico para los chips de grado y acorde.
+const HARMONIC_ROLE: Record<DiatonicDegree, DiatonicRole> = {
+  'I': 'stable', 'ii': 'medium', 'iii': 'medium',
+  'IV': 'mediumTense', 'V': 'tense', 'vi': 'stable', 'vii°': 'tense',
+};
 
 interface Props {
   tonalidad: ChromaticNote;
@@ -20,16 +26,12 @@ const DEGREE_TO_IDX: Record<DiatonicDegree, number> = {
 const QUALITIES = ['M', 'm', 'm', 'M', 'M', 'm', 'dim'] as const;
 const MAJOR_INTERVALS = [0, 2, 4, 5, 7, 9, 11] as const;
 
-const ARPEGGIO_GAP_MS = 220;
-const CHORD_GAP_MS = 400;
-const NOTE_DURATION = 1.4;
+// Reunión 24/5/26: progresiones más lentas y sin solapamiento de acordes.
+// Cada acorde se corta antes de que arranque el siguiente (stopAllNotes).
+const ARPEGGIO_GAP_MS = 260;
+const CHORD_GAP_MS = 1500;
+const NOTE_DURATION = 1.3;
 const FIRE_DEBOUNCE_MS = 150;
-
-// 17 spellings cubiertos por NoteToken (12 sostenidos + 5 enarmonías bemol).
-const VALID_SPELLINGS: ReadonlySet<string> = new Set([
-  'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B',
-  'Db', 'Eb', 'Gb', 'Ab', 'Bb',
-]);
 
 interface DiatonicNote {
   spelled: string;
@@ -118,7 +120,6 @@ export default function ProgresionesArmonicas({ tonalidad }: Props) {
 
       grados.forEach((degree, chordIdx) => {
         const chordStart = chordIdx * CHORD_GAP_MS;
-        schedule(() => setActiveChordIdx(chordIdx), chordStart);
 
         const gradeIdx = DEGREE_TO_IDX[degree];
         const root = diatonic[gradeIdx];
@@ -128,16 +129,22 @@ export default function ProgresionesArmonicas({ tonalidad }: Props) {
         const thirdOct = chordMemberOctave(diatonic, gradeIdx, 2);
         const fifthOct = chordMemberOctave(diatonic, gradeIdx, 4);
 
+        // Cortar el sonido del acorde anterior antes de tocar el siguiente.
+        schedule(() => {
+          if (chordIdx > 0) stopAllNotes(60);
+          setActiveChordIdx(chordIdx);
+        }, chordStart);
+
         if (playMode === 'bloque') {
           schedule(() => {
             playNote(root.chromatic, rootOct, NOTE_DURATION);
             playNote(third.chromatic, thirdOct, NOTE_DURATION);
             playNote(fifth.chromatic, fifthOct, NOTE_DURATION);
-          }, chordStart);
+          }, chordStart + 30);
         } else {
-          schedule(() => playNote(root.chromatic, rootOct, NOTE_DURATION), chordStart);
-          schedule(() => playNote(third.chromatic, thirdOct, NOTE_DURATION), chordStart + ARPEGGIO_GAP_MS);
-          schedule(() => playNote(fifth.chromatic, fifthOct, NOTE_DURATION), chordStart + ARPEGGIO_GAP_MS * 2);
+          schedule(() => playNote(root.chromatic, rootOct, NOTE_DURATION), chordStart + 30);
+          schedule(() => playNote(third.chromatic, thirdOct, NOTE_DURATION), chordStart + 30 + ARPEGGIO_GAP_MS);
+          schedule(() => playNote(fifth.chromatic, fifthOct, NOTE_DURATION), chordStart + 30 + ARPEGGIO_GAP_MS * 2);
         }
       });
 
@@ -145,6 +152,38 @@ export default function ProgresionesArmonicas({ tonalidad }: Props) {
       schedule(() => {
         if (playingIdRef.current === rowId) clearAll();
       }, totalTime);
+    },
+    [diatonic, playMode, playNote, clearAll, schedule],
+  );
+
+  // Reunión 24/5/26: tocar el acorde individual al hacer click en un chip.
+  // Siempre ascendente, respetando playMode (bloque/arpegio).
+  const playSingleChord = useCallback(
+    (gradeIdx: number) => {
+      const now = performance.now();
+      if (now - lastFireRef.current < FIRE_DEBOUNCE_MS) return;
+      lastFireRef.current = now;
+      clearAll();
+      stopAllNotes(50);
+
+      const root = diatonic[gradeIdx];
+      const third = diatonic[(gradeIdx + 2) % 7];
+      const fifth = diatonic[(gradeIdx + 4) % 7];
+      const rootOct = root.octave;
+      const thirdOct = chordMemberOctave(diatonic, gradeIdx, 2);
+      const fifthOct = chordMemberOctave(diatonic, gradeIdx, 4);
+
+      if (playMode === 'bloque') {
+        schedule(() => {
+          playNote(root.chromatic, rootOct, NOTE_DURATION);
+          playNote(third.chromatic, thirdOct, NOTE_DURATION);
+          playNote(fifth.chromatic, fifthOct, NOTE_DURATION);
+        }, 60);
+      } else {
+        schedule(() => playNote(root.chromatic, rootOct, NOTE_DURATION), 60);
+        schedule(() => playNote(third.chromatic, thirdOct, NOTE_DURATION), 60 + ARPEGGIO_GAP_MS);
+        schedule(() => playNote(fifth.chromatic, fifthOct, NOTE_DURATION), 60 + ARPEGGIO_GAP_MS * 2);
+      }
     },
     [diatonic, playMode, playNote, clearAll, schedule],
   );
@@ -178,6 +217,7 @@ export default function ProgresionesArmonicas({ tonalidad }: Props) {
               isPlaying={isPlaying}
               activeChordIdx={isPlaying ? activeChordIdx : null}
               onPlay={playRow}
+              onPlayChord={playSingleChord}
               isDe={isDe}
             />
           );
@@ -195,10 +235,11 @@ interface RowProps {
   isPlaying: boolean;
   activeChordIdx: number | null;
   onPlay: (id: string, grados: ReadonlyArray<DiatonicDegree>) => void;
+  onPlayChord: (gradeIdx: number) => void;
   isDe: boolean;
 }
 
-function ProgressionRow({ id, label, grados, diatonic, isPlaying, activeChordIdx, onPlay, isDe }: RowProps) {
+function ProgressionRow({ id, label, grados, diatonic, isPlaying, activeChordIdx, onPlay, onPlayChord, isDe }: RowProps) {
   const handleKey = useCallback(
     (e: KeyboardEvent<HTMLButtonElement>) => {
       if (e.key === 'Enter' || e.key === ' ') {
@@ -231,28 +272,29 @@ function ProgressionRow({ id, label, grados, diatonic, isPlaying, activeChordIdx
       <div className={styles.chords}>
         {grados.map((degree, i) => {
           const gradeIdx = DEGREE_TO_IDX[degree];
-          const label_chord = chordLabel(diatonic, gradeIdx);
-          const rootAscii = diatonic[gradeIdx].ascii;
+          const sym = chordLabel(diatonic, gradeIdx);
           const isActive = activeChordIdx === i;
+          const harmonic = HARMONIC_ROLE[degree];
 
+          // Reunión 24/5/26: click sobre el chord-pair toca el acorde completo
+          // (ascending), no la nota suelta. Formato armónico aplicado al chip.
           return (
             <div key={i} className={styles.chordGroup}>
               {i > 0 && <span className={styles.sep} aria-hidden="true">·</span>}
-              <div className={`${styles.chordPair} ${isActive ? styles.chordHighlight : ''}`}>
-                <span className={styles.degreeChip}>
+              <button
+                type="button"
+                className={`${styles.chordPair} ${styles.chordPairBtn} ${isActive ? styles.chordHighlight : ''}`}
+                data-harmonic={harmonic}
+                onClick={() => onPlayChord(gradeIdx)}
+                aria-label={isDe ? `Akkord ${sym} spielen` : `Reproducir acorde ${sym}`}
+              >
+                <span className={styles.degreeChip} data-harmonic={harmonic}>
                   <DegreeGlyph degree={degree} />
                 </span>
                 <span className={styles.chordChip}>
-                  {VALID_SPELLINGS.has(rootAscii) ? (
-                    <NoteToken note={rootAscii as NoteSpelling} />
-                  ) : (
-                    <span className={styles.rawNote}>{label_chord}</span>
-                  )}
-                  {VALID_SPELLINGS.has(rootAscii) && (
-                    <span className={styles.chordSuffix}>{QUALITIES[gradeIdx] === 'm' ? 'm' : QUALITIES[gradeIdx] === 'dim' ? '°' : ''}</span>
-                  )}
+                  <span className={styles.chordSymbol}>{sym}</span>
                 </span>
-              </div>
+              </button>
             </div>
           );
         })}

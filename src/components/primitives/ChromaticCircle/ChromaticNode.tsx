@@ -4,6 +4,15 @@ import { noteShort } from '../../../utils/noteCalculations';
 import type { ChromaticNote } from '../../../types/music';
 import styles from './ChromaticCircle.module.css';
 
+// Reunión 24/5/26: mostrar ambas enarmonías (#/b) en notas alteradas del círculo cromático.
+const ENHARMONIC_PAIRS: Partial<Record<ChromaticNote, { sharp: string; flat: string; nameES: string }>> = {
+  'C#': { sharp: 'C♯', flat: 'D♭', nameES: 'Do♯ / Re♭' },
+  'D#': { sharp: 'D♯', flat: 'E♭', nameES: 'Re♯ / Mi♭' },
+  'F#': { sharp: 'F♯', flat: 'G♭', nameES: 'Fa♯ / Sol♭' },
+  'G#': { sharp: 'G♯', flat: 'A♭', nameES: 'Sol♯ / La♭' },
+  'A#': { sharp: 'A♯', flat: 'B♭', nameES: 'La♯ / Si♭' },
+};
+
 interface ChromaticNodeProps {
   note: ChromaticNote;
   index: number;
@@ -71,20 +80,46 @@ export default function ChromaticNode({ note, index, cx, cy, r, onPlay }: Chroma
         stroke={hovered ? '#fff' : 'var(--rule)'}
         strokeWidth={hovered ? 2 : 1}
       />
-      <text
-        x={x} y={y + 1}
-        textAnchor="middle" dominantBaseline="middle"
-        fill="#fff" fontSize={isNat ? 15 : 11} fontWeight={700}
-      >
-        {noteShort(note)}
-      </text>
+      {(() => {
+        const pair = ENHARMONIC_PAIRS[note];
+        const textColor = hovered ? '#fff' : 'var(--text-body)';
+        if (pair) {
+          return (
+            <>
+              <text
+                x={x} y={y - 5}
+                textAnchor="middle" dominantBaseline="middle"
+                fill={textColor} fontSize={10} fontWeight={700}
+              >
+                {pair.sharp}
+              </text>
+              <text
+                x={x} y={y + 7}
+                textAnchor="middle" dominantBaseline="middle"
+                fill={textColor} fontSize={10} fontWeight={700}
+              >
+                {pair.flat}
+              </text>
+            </>
+          );
+        }
+        return (
+          <text
+            x={x} y={y + 1}
+            textAnchor="middle" dominantBaseline="middle"
+            fill={textColor} fontSize={15} fontWeight={700}
+          >
+            {noteShort(note)}
+          </text>
+        );
+      })()}
       <text
         x={cx + labelR * Math.cos(angle)}
         y={cy + labelR * Math.sin(angle)}
         textAnchor="middle" dominantBaseline="middle"
         style={{ fill: 'var(--muted)' }} fontSize={9}
       >
-        {NOTE_ES[note]}
+        {ENHARMONIC_PAIRS[note]?.nameES ?? NOTE_ES[note]}
       </text>
     </g>
   );

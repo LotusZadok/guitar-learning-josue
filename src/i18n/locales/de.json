@@ -119,22 +119,25 @@
     },
 
     "s07": {
-      "label": "1.7 · Dur- und Mollakkorde",
-      "title": "Dur- und Mollakkorde",
+      "label": "1.7 · Akkorde",
+      "title": "Akkorde",
       "intro": "Zusammenfassung von Dreiklängen und Intervallen:",
       "major_def": "Durakkord = T + gr. Terz + r. Quinte (Tonika + große Terz + reine Quinte)",
       "minor_def": "Mollakkord = T + kl. Terz + r. Quinte (Tonika + kleine Terz + reine Quinte)",
-      "comparison": "Nur die Terz ändert sich. Zwei von drei Tönen sind identisch — es sind fast dasselbe Akkord.",
+      "diminished_def": "Verminderter Akkord = T + kl. Terz + verm. Quinte (Tonika + kleine Terz + verminderte Quinte)",
+      "comparison": "Zwischen Dur und Moll ändert sich nur die Terz; beim verminderten Akkord wird zusätzlich die Quinte um einen Halbton gesenkt.",
       "notation_title": "Schreibweise:",
       "notation_major": "Durakkord → nur der Buchstabe. F = Fa Dur.",
       "notation_minor": "Mollakkord → Buchstabe + kleines „m\". Fm = Fa Moll.",
-      "procedure_title": "Verfahren zum Finden des Dur- oder Mollakkords für jeden Ton:",
+      "notation_diminished": "Verminderter Akkord → Buchstabe + „dim\". Fdim = Fa vermindert.",
+      "procedure_title": "Verfahren zum Finden des Dur-, Moll- oder verminderten Akkords für jeden Ton:",
       "procedure": [
         "Den Dreiklang ab der Tonika aufschreiben (nur Buchstaben, natürlich).",
-        "Die Halbtöne der Terz zählen (gr. Terz = 4 Halbtöne oder kl. Terz = 3 Halbtöne) ab der Tonika.",
-        "Die Halbtöne bis zur reinen Quinte zählen (r. Quinte = 7 Halbtöne) ab der Tonika."
+        "Die Halbtöne bis zur Terz zählen ab der Tonika (gr. Terz = 4 HT oder kl. Terz = 3 HT).",
+        "Die Halbtöne bis zur Quinte zählen ab der Tonika (r. Quinte = 7 HT oder verm. Quinte = 6 HT).",
+        "Nach Qualität kombinieren: Dur (gr. Terz + r. Quinte), Moll (kl. Terz + r. Quinte), vermindert (kl. Terz + verm. Quinte)."
       ],
-      "tip": "Der Unterschied zwischen Dur und Moll liegt allein in der Terz: 4 Halbtöne = Dur, 3 Halbtöne = Moll."
+      "tip": "Der Unterschied zwischen Dur und Moll liegt allein in der Terz. Der verminderte Akkord übernimmt die kleine Terz und senkt zusätzlich die Quinte um einen Halbton."
     },
 
     "s08": {
@@ -169,13 +172,8 @@
       "title": "Prozess der Bs"
     },
 
-    "s44": {
-      "label": "2.4 · Dur-Tonleiter",
-      "title": "Dur-Tonleiter aus der Tonart"
-    },
-
     "s45": {
-      "label": "2.6 · Meistertabelle",
+      "label": "2.5 · Meistertabelle",
       "title": "Meistertabelle der 14 Durtonarten",
       "table_headers": {
         "count": "Anzahl",
@@ -193,7 +191,7 @@
     },
 
     "s47": {
-      "label": "2.7 · Harmonische Stufen",
+      "label": "2.6 · Harmonische Stufen",
       "title": "Harmonische Stufen nach der Durtonleiter",
       "intro_symmetry": "Sprechen wir über Symmetrie und Fraktalität:",
       "symmetry": "Symmetrie: die Musik funktioniert mit Formeln — 12 Halbtöne, 12 Intervalle, Tonleitern mit 7 Tönen, Dreiklänge mit 3 Tönen. Die Prozesse sind in allen Tonarten symmetrisch. Das Verfahren auswendig lernen, nicht das Ergebnis.",
@@ -223,12 +221,12 @@
         "vii": "Leitton"
       },
       "degree_characters": {
-        "I": "Stabil",
+        "I": "Ruhe",
         "ii": "Mittel",
-        "iii": "Stabil-Mittel",
+        "iii": "Mittel",
         "IV": "Mittel-Spannend",
         "V": "Spannend",
-        "vi": "Stabil",
+        "vi": "Ruhe",
         "vii": "Spannend"
       },
       "analysis_title": "Charakteranalyse:",
@@ -247,7 +245,7 @@
     },
 
     "s48": {
-      "label": "2.9 · Harmonische Progressionen",
+      "label": "2.7 · Harmonische Progressionen",
       "title": "Harmonische Progressionen",
       "intro": "Die Methode schlägt vor, mit den drei wichtigsten Stufen zu beginnen (I, IV, V) und von dort aus Progressionen aufzubauen:",
       "procedure_title": "Progressive Übung:",
@@ -269,7 +267,7 @@
     },
 
     "s49": {
-      "label": "2.10 · Paralleltonarten",
+      "label": "2.8 · Paralleltonarten",
       "title": "Moll-Paralleltonarten",
       "intro_p1": "Jede Durtonart hat eine Moll-Paralleltonart, die genau dieselben Vorzeichen teilt. Die Paralleltonart wird auf der 6. Stufe der Durtonart aufgebaut.",
       "intro_p2": "Die natürliche Molltonleiter wird mit denselben 7 Tönen der Durtonleiter gebildet, beginnt aber auf dem 6. Ton. Die sieben Akkorde sind in beiden Fällen dieselben — nur die Reihenfolge ändert sich:",

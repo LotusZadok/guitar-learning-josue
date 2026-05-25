@@ -120,6 +120,16 @@
   width: 30%;
 }
 
+/* Reunión 24/5/26: formato armónico también en la tabla de nombre + carácter. */
+.caracterTable tr[data-harmonic="stable"]      .romanCell,
+.caracterTable tr[data-harmonic="stable"]      .caracterCell { color: var(--diatonic-stable); }
+.caracterTable tr[data-harmonic="medium"]      .romanCell,
+.caracterTable tr[data-harmonic="medium"]      .caracterCell { color: var(--diatonic-medium); }
+.caracterTable tr[data-harmonic="mediumTense"] .romanCell,
+.caracterTable tr[data-harmonic="mediumTense"] .caracterCell { color: var(--diatonic-medium-tense); }
+.caracterTable tr[data-harmonic="tense"]       .romanCell,
+.caracterTable tr[data-harmonic="tense"]       .caracterCell { color: var(--diatonic-tense); }
+
 @media (max-width: 900px) {
   .section {
     padding: 36px 24px;

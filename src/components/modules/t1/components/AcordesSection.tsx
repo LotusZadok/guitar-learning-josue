@@ -114,6 +114,7 @@ export default function AcordesSection() {
       <ul className={styles.defList}>
         <li>{t('t1.s07.major_def')}</li>
         <li>{t('t1.s07.minor_def')}</li>
+        <li>{t('t1.s07.diminished_def')}</li>
       </ul>
 
       <p className={styles.text}>{t('t1.s07.comparison')}</p>
@@ -122,6 +123,7 @@ export default function AcordesSection() {
       <ul className={styles.nomList}>
         <li>{t('t1.s07.notation_major')}</li>
         <li>{t('t1.s07.notation_minor')}</li>
+        <li>{t('t1.s07.notation_diminished')}</li>
       </ul>
 
       <h3 className={styles.subheading}>{t('t1.s07.procedure_title')}</h3>
@@ -148,9 +150,9 @@ export default function AcordesSection() {
       <h3 className={styles.subheading}>{locale === 'de' ? 'Akkord-Konstruktor' : 'Constructor de acordes'}</h3>
       <p className={styles.text}>
         {locale === 'de' ? (
-          <>Aktive Tonika: <strong>{tonic}</strong> · wähle eine Qualität (Dur oder Moll), um den Akkord aufzubauen. Höre ihn als Block oder arpeggiert.</>
+          <>Aktive Tonika: <strong>{tonic}</strong> · wähle eine Qualität (Dur, Moll oder vermindert), um den Akkord aufzubauen. Höre ihn als Block oder arpeggiert.</>
         ) : (
-          <>Tónica activa: <strong>{tonic}</strong> · elegí una calidad (mayor o menor) para construir el acorde. Escuchalo bloque o arpegiado.</>
+          <>Tónica activa: <strong>{tonic}</strong> · elegí una calidad (mayor, menor o disminuido) para construir el acorde. Escuchalo bloque o arpegiado.</>
         )}
       </p>
       <AcordesBuilder />

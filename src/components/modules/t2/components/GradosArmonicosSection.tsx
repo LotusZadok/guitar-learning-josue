@@ -51,10 +51,17 @@ export default function GradosArmonicosSection() {
             </tr>
           </thead>
           <tbody>
-            {GRADOS_NOMBRE_CARACTER.map((g) => {
+            {GRADOS_NOMBRE_CARACTER.map((g, idx) => {
               const degreeKey = g.roman.replace('°', '');
+              // Reunión 24/5/26: formato armónico (I/vi = reposo, ii/iii = medio,
+              // IV = medio-tenso, V/vii = tenso).
+              const harmonic =
+                idx === 0 || idx === 5 ? 'stable'      :
+                idx === 1 || idx === 2 ? 'medium'      :
+                idx === 3              ? 'mediumTense' :
+                                         'tense';
               return (
-                <tr key={g.roman}>
+                <tr key={g.roman} data-harmonic={harmonic}>
                   <td className={styles.romanCell}>{g.roman}</td>
                   <td>{t(`t2.s47.degree_names.${degreeKey}` as never)}</td>
                   <td className={styles.caracterCell}>{t(`t2.s47.degree_characters.${degreeKey}` as never)}</td>

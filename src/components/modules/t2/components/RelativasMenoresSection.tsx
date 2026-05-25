@@ -5,25 +5,56 @@ import Prose from '../../../shared/Prose/Prose';
 import NoteToken from '../../../shared/NoteToken/NoteToken';
 import RelativasMenores from '../../../primitives/RelativasMenores/RelativasMenores';
 import { useUIStore } from '../../../../stores/useUIStore';
-import type { NoteSpelling } from '../../../../types/music';
+import { ALL } from '../../../../data/notes';
+import type { NoteSpelling, ChromaticNote } from '../../../../types/music';
+import { TONALIDADES } from '../data/tonalidades';
 import {
   RELATIVAS_INTRO,
   RELATIVAS_INTRO_DE,
 } from '../data/literalContent';
 import styles from './RelativasMenoresSection.module.css';
 
-const TABLA_ROWS: ReadonlyArray<{
-  mayor: NoteSpelling;
-  menor: NoteSpelling;
-  armadura: readonly NoteSpelling[];
-}> = [
-  { mayor: 'C',  menor: 'A',  armadura: [] },
-  { mayor: 'G',  menor: 'E',  armadura: ['F#'] },
-  { mayor: 'D',  menor: 'B',  armadura: ['F#', 'C#'] },
-  { mayor: 'A',  menor: 'F#', armadura: ['F#', 'C#', 'G#'] },
-  { mayor: 'F',  menor: 'D',  armadura: ['Bb'] },
-  { mayor: 'Bb', menor: 'G',  armadura: ['Bb', 'Eb'] },
-] as const;
+// Reunión 24/5/26: tabla con TODAS las tonalidades (estilo §2.5).
+// La menor relativa es el 6º grado (scale[5]) de la escala mayor.
+interface RelativaRow {
+  mayor: string;
+  menor: string;
+  armadura: readonly string[];
+  /** Forma cromática de la tónica mayor — para el highlight contra useUIStore.tonic. */
+  chromatic: ChromaticNote;
+}
+
+// Mapea spelling con bemol al equivalente sharp del ChromaticNote.
+const FLAT_TO_SHARP: Record<string, ChromaticNote> = {
+  'Db': 'C#', 'Eb': 'D#', 'Gb': 'F#', 'Ab': 'G#', 'Bb': 'A#',
+  'Cb': 'B', 'Fb': 'E',
+};
+function spelledToChromatic(s: string): ChromaticNote {
+  if ((ALL as readonly string[]).includes(s)) return s as ChromaticNote;
+  if (FLAT_TO_SHARP[s]) return FLAT_TO_SHARP[s];
+  return s[0] as ChromaticNote;
+}
+
+const TABLA_ROWS: RelativaRow[] = [
+  // C natural — encabeza la lista (sin armadura).
+  { mayor: 'C', menor: 'A', armadura: [], chromatic: 'C' },
+  ...TONALIDADES.map<RelativaRow>((t) => ({
+    mayor: t.tonica,
+    menor: t.escala[5],
+    armadura: t.armadura,
+    chromatic: spelledToChromatic(t.tonica),
+  })),
+];
+
+const VALID_SPELLINGS: ReadonlySet<string> = new Set([
+  'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B',
+  'Db', 'Eb', 'Gb', 'Ab', 'Bb',
+]);
+function renderNote(s: string) {
+  return VALID_SPELLINGS.has(s)
+    ? <NoteToken note={s as NoteSpelling} />
+    : <span>{s.replace('#', '♯').replace('b', '♭')}</span>;
+}
 
 export default function RelativasMenoresSection() {
   const { t, i18n } = useTranslation();
@@ -63,22 +94,25 @@ export default function RelativasMenoresSection() {
             </tr>
           </thead>
           <tbody>
-            {TABLA_ROWS.map((row) => (
-              <tr key={row.mayor}>
-                <td><NoteToken note={row.mayor} /> {t('common.major')}</td>
-                <td><NoteToken note={row.menor} />m</td>
-                <td>
-                  {row.armadura.length === 0
-                    ? t('t2.s49.table_no_sharps_flats')
-                    : row.armadura.map((n, i) => (
-                        <span key={n}>
-                          {i > 0 && ' '}
-                          <NoteToken note={n} />
-                        </span>
-                      ))}
-                </td>
-              </tr>
-            ))}
+            {TABLA_ROWS.map((row) => {
+              const isActive = row.chromatic === tonic;
+              return (
+                <tr key={row.mayor} className={isActive ? styles.rowActive : undefined}>
+                  <td>{renderNote(row.mayor)} {t('common.major')}</td>
+                  <td>{renderNote(row.menor)}m</td>
+                  <td>
+                    {row.armadura.length === 0
+                      ? t('t2.s49.table_no_sharps_flats')
+                      : row.armadura.map((n, i) => (
+                          <span key={n}>
+                            {i > 0 && ' '}
+                            {renderNote(n)}
+                          </span>
+                        ))}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

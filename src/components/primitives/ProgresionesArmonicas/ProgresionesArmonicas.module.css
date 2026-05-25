@@ -150,9 +150,55 @@
   transition: outline 0.12s, background-color 0.12s;
 }
 
+/* Reunión 24/5/26: el chip es clickable y toca el acorde ascending. */
+.chordPairBtn {
+  background: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  border-radius: 4px;
+}
+
+.chordPairBtn:hover {
+  border-color: var(--rule);
+  background-color: rgba(245, 240, 232, 0.04);
+}
+
+.chordPairBtn:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
 .chordHighlight {
   outline: 1px solid var(--paper);
   background-color: var(--surface);
+}
+
+/* Formato armónico — color de fondo y texto según función (reunión 24/5/26). */
+.chordPairBtn[data-harmonic="stable"]      { border-color: color-mix(in srgb, var(--diatonic-stable) 35%, transparent); }
+.chordPairBtn[data-harmonic="medium"]      { border-color: color-mix(in srgb, var(--diatonic-medium) 35%, transparent); }
+.chordPairBtn[data-harmonic="mediumTense"] { border-color: color-mix(in srgb, var(--diatonic-medium-tense) 40%, transparent); }
+.chordPairBtn[data-harmonic="tense"]       { border-color: color-mix(in srgb, var(--diatonic-tense) 35%, transparent); }
+
+.chordPairBtn[data-harmonic="stable"]      .chordSymbol,
+.chordPairBtn[data-harmonic="stable"]      .romanMajor,
+.chordPairBtn[data-harmonic="stable"]      .romanMinor { color: var(--diatonic-stable); }
+.chordPairBtn[data-harmonic="medium"]      .chordSymbol,
+.chordPairBtn[data-harmonic="medium"]      .romanMajor,
+.chordPairBtn[data-harmonic="medium"]      .romanMinor { color: var(--diatonic-medium); }
+.chordPairBtn[data-harmonic="mediumTense"] .chordSymbol,
+.chordPairBtn[data-harmonic="mediumTense"] .romanMajor,
+.chordPairBtn[data-harmonic="mediumTense"] .romanMinor { color: var(--diatonic-medium-tense); }
+.chordPairBtn[data-harmonic="tense"]       .chordSymbol,
+.chordPairBtn[data-harmonic="tense"]       .romanMajor,
+.chordPairBtn[data-harmonic="tense"]       .romanMinor,
+.chordPairBtn[data-harmonic="tense"]       .romanDim { color: var(--diatonic-tense); }
+
+.chordSymbol {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  letter-spacing: 0.5px;
 }
 
 /* === Degree chip (roman numeral) === */

@@ -19,7 +19,8 @@ const QUALITIES = ['M', 'm', 'm', 'M', 'M', 'm', 'dim'] as const;
 const SEVENTH_QUALITIES = ['maj7', 'm7', 'm7', 'maj7', '7', 'm7', 'm7b5'] as const;
 const ROMANS = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'] as const;
 
-/** Maps diatonic degree (0-based) → diatonic role color */
+/** Maps diatonic degree (0-based) → diatonic role color (formato diatónico,
+ *  para la fila Escala donde se ve la estabilidad nota-a-nota). */
 const DEGREE_ROLE: DiatonicRole[] = [
   'stable',  // 1 — Tónica
   'medium',  // 2 — Supertónica
@@ -28,6 +29,19 @@ const DEGREE_ROLE: DiatonicRole[] = [
   'stable',  // 5 — Dominante
   'medium',  // 6 — Superdominante
   'tense',   // 7 — Sensible
+];
+
+/** Reunión 24/5/26: formato armónico para los grados y acordes diatónicos.
+ *  Refleja la función dentro de la tonalidad (no la estabilidad nota-a-nota).
+ *  I y vi → reposo · ii y iii → medio · IV → medio-tenso · V y vii → tenso. */
+const HARMONIC_ROLE: DiatonicRole[] = [
+  'stable',       // I   — reposo
+  'medium',       // ii  — medio
+  'medium',       // iii — medio
+  'mediumTense',  // IV  — medio-tenso
+  'tense',        // V   — tenso
+  'stable',       // vi  — reposo
+  'tense',        // vii — tenso
 ];
 
 // 17 spellings cubiertos por NoteToken (12 sostenidos + 5 enarmonías bemol).
@@ -199,16 +213,24 @@ export default function GradosArmonicos({ tonalidad }: Props) {
           className={flatMode ? styles.flatToggleActive : styles.flatToggle}
           onClick={() => setFlatMode((f) => !f)}
           aria-pressed={flatMode}
-          title={isDe ? 'Bs anzeigen' : 'Mostrar bemoles'}
+          aria-label={isDe ? 'Vorzeichen umschalten: # ↔ b' : 'Cambiar notación: # ↔ b'}
+          title={isDe ? 'Vorzeichen umschalten' : 'Cambiar # ↔ ♭'}
         >
-          ♭
+          <span className={styles.flatToggleSym}>♯</span>
+          <span className={styles.flatToggleArrow}>↔</span>
+          <span className={styles.flatToggleSym}>♭</span>
         </button>
       </div>
 
       <div className={styles.tableWrap}>
         <table className={styles.table}>
           <tbody>
-            <Row label={isDe ? 'Tonleiter' : 'Escala'} cells={fGlyph(escalaRow)} ascii={fAscii(escalaAscii)} />
+            <Row
+              label={isDe ? 'Tonleiter' : 'Escala'}
+              cells={fGlyph(escalaRow)}
+              ascii={fAscii(escalaAscii)}
+              roles={DEGREE_ROLE}
+            />
             <TriadaRow
               tonicaRow={fGlyph(tonicaRow)} tonicaAscii={fAscii(tonicaAscii)}
               terceraRow={fGlyph(terceraRow)} terceraAscii={fAscii(terceraAscii)}
@@ -221,8 +243,8 @@ export default function GradosArmonicos({ tonalidad }: Props) {
             <tr className={`${styles.revealRow} ${step >= 3 ? styles.revealOn : ''}`}>
               <th scope="row" className={styles.rowLabel}>{isDe ? 'Stufe' : 'Grado'}</th>
               {ROMANS.map((roman, i) => (
-                <td key={i} className={styles.gradoCell}>
-                  <RomanGlyph roman={roman} />
+                <td key={i} className={styles.gradoCell} data-harmonic={HARMONIC_ROLE[i]}>
+                  <RomanGlyph roman={roman} role={HARMONIC_ROLE[i]} />
                 </td>
               ))}
             </tr>
@@ -233,6 +255,7 @@ export default function GradosArmonicos({ tonalidad }: Props) {
                 <ChordCell
                   key={i}
                   symbol={sym}
+                  role={HARMONIC_ROLE[i]}
                   active={step >= 3}
                   onPlay={() => playTriad(i)}
                   isPlaying={playingCell === i}
@@ -259,9 +282,10 @@ interface RowProps {
   label: string;
   cells: string[];
   ascii: string[];
+  roles?: DiatonicRole[];
 }
 
-function Row({ label, cells, ascii }: RowProps) {
+function Row({ label, cells, ascii, roles }: RowProps) {
   return (
     <tr>
       <th scope="row" className={styles.rowLabel}>{label}</th>
@@ -271,7 +295,7 @@ function Row({ label, cells, ascii }: RowProps) {
         return (
           <td key={i} className={styles.noteCell}>
             {tokenizable ? (
-              <NoteToken note={a as NoteSpelling} />
+              <NoteToken note={a as NoteSpelling} diatonicRole={roles?.[i]} />
             ) : (
               <span className={styles.rawNote}>{display}</span>
             )}
@@ -282,14 +306,17 @@ function Row({ label, cells, ascii }: RowProps) {
   );
 }
 
-function RomanGlyph({ roman }: { roman: typeof ROMANS[number] }) {
-  if (roman === 'vii°') {
-    return <span className={styles.romanDim}>{roman}</span>;
-  }
-  // Mayúsculas → mayor (bold). Minúsculas → menor (regular).
-  const isMajor = roman === roman.toUpperCase();
+function RomanGlyph({ roman, role }: { roman: typeof ROMANS[number]; role: DiatonicRole }) {
+  // Reunión 24/5/26: color por formato armónico (no por mayor/menor visual).
+  const isMajor = roman === roman.toUpperCase() && roman !== 'vii°';
+  const isDim = roman === 'vii°';
   return (
-    <span className={isMajor ? styles.romanMajor : styles.romanMinor}>{roman}</span>
+    <span
+      className={isDim ? styles.romanDim : (isMajor ? styles.romanMajor : styles.romanMinor)}
+      data-harmonic={role}
+    >
+      {roman}
+    </span>
   );
 }
 
@@ -340,6 +367,7 @@ function TriadaRow({ tonicaRow, tonicaAscii, terceraRow, terceraAscii, quintaRow
 
 interface ChordCellProps {
   symbol: string;
+  role: DiatonicRole;
   active: boolean;
   onPlay: () => void;
   isPlaying?: boolean;
@@ -347,7 +375,7 @@ interface ChordCellProps {
   isDe?: boolean;
 }
 
-function ChordCell({ symbol, active, onPlay, isPlaying, isDimmed, isDe }: ChordCellProps) {
+function ChordCell({ symbol, role, active, onPlay, isPlaying, isDimmed, isDe }: ChordCellProps) {
   const handleKey = useCallback(
     (e: KeyboardEvent<HTMLTableCellElement>) => {
       if (!active) return;
@@ -366,6 +394,7 @@ function ChordCell({ symbol, active, onPlay, isPlaying, isDimmed, isDe }: ChordC
   return (
     <td
       className={className}
+      data-harmonic={role}
       role={active ? 'button' : undefined}
       tabIndex={active ? 0 : -1}
       aria-hidden={!active}

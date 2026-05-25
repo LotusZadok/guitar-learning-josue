@@ -183,11 +183,14 @@
   padding: 8px 6px;
 }
 
+/* Reunión 24/5/26: tríada en formato horizontal (notas en una sola línea). */
 .triadStack {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 3px;
+  justify-content: center;
+  gap: 4px;
+  flex-wrap: nowrap;
 }
 
 /* === Chord cell (interactive en estado 3) === */
@@ -218,6 +221,40 @@
   font-family: 'IBM Plex Mono', monospace;
   font-size: 14px;
   letter-spacing: 0.5px;
+}
+
+/* Reunión 24/5/26: formato armónico — color de fondo y texto según función. */
+.gradoCell[data-harmonic="stable"]      { background: color-mix(in srgb, var(--diatonic-stable) 12%, transparent); }
+.gradoCell[data-harmonic="medium"]      { background: color-mix(in srgb, var(--diatonic-medium) 12%, transparent); }
+.gradoCell[data-harmonic="mediumTense"] { background: color-mix(in srgb, var(--diatonic-medium-tense) 14%, transparent); }
+.gradoCell[data-harmonic="tense"]       { background: color-mix(in srgb, var(--diatonic-tense) 12%, transparent); }
+
+.chordCellActive[data-harmonic="stable"]      { background: color-mix(in srgb, var(--diatonic-stable) 10%, transparent); }
+.chordCellActive[data-harmonic="medium"]      { background: color-mix(in srgb, var(--diatonic-medium) 10%, transparent); }
+.chordCellActive[data-harmonic="mediumTense"] { background: color-mix(in srgb, var(--diatonic-medium-tense) 12%, transparent); }
+.chordCellActive[data-harmonic="tense"]       { background: color-mix(in srgb, var(--diatonic-tense) 10%, transparent); }
+
+.chordCellActive[data-harmonic="stable"]      .chordSymbol { color: var(--diatonic-stable); }
+.chordCellActive[data-harmonic="medium"]      .chordSymbol { color: var(--diatonic-medium); }
+.chordCellActive[data-harmonic="mediumTense"] .chordSymbol { color: var(--diatonic-medium-tense); }
+.chordCellActive[data-harmonic="tense"]       .chordSymbol { color: var(--diatonic-tense); }
+
+[data-harmonic="stable"]      > .romanMajor,
+[data-harmonic="stable"]      > .romanMinor { color: var(--diatonic-stable); }
+[data-harmonic="medium"]      > .romanMajor,
+[data-harmonic="medium"]      > .romanMinor { color: var(--diatonic-medium); }
+[data-harmonic="mediumTense"] > .romanMajor,
+[data-harmonic="mediumTense"] > .romanMinor { color: var(--diatonic-medium-tense); }
+[data-harmonic="tense"]       > .romanMajor,
+[data-harmonic="tense"]       > .romanMinor,
+[data-harmonic="tense"]       > .romanDim   { color: var(--diatonic-tense); }
+
+/* Toggle ♯ ↔ ♭ — más explícito sobre su función. */
+.flatToggleSym { font-size: 14px; }
+.flatToggleArrow {
+  font-size: 11px;
+  margin: 0 4px;
+  opacity: 0.6;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -69,6 +69,8 @@ export default function RelativasMenores({ tonic }: Props) {
           const isHovered = hovered === note;
           const highlighted = isTonic || isRelative;
 
+          // Reunión 24/5/26: monocromo salvo tónica + relativa (que son la lección)
+          // y el nodo bajo hover. Color reservado para enfatizar.
           const fill = highlighted || isHovered ? NOTE_COLORS[note] : 'var(--surface)';
           const stroke = highlighted
             ? 'var(--paper)'
@@ -76,7 +78,7 @@ export default function RelativasMenores({ tonic }: Props) {
             ? 'var(--amber)'
             : 'var(--rule)';
           const strokeWidth = highlighted ? 2.5 : 1;
-          const textFill = highlighted || isHovered ? '#fff' : 'var(--muted)';
+          const textFill = highlighted || isHovered ? '#fff' : 'var(--text-body)';
 
           return (
             <g

@@ -15,13 +15,22 @@ import styles from './CirculoDeQuintas.module.css';
 // D#/G#/A# appear in sharp spelling internally; labels show flat equivalents.
 const COF_ORDER: ChromaticNote[] = ['C', 'G', 'D', 'A', 'E', 'B', 'F#', 'C#', 'G#', 'D#', 'A#', 'F'];
 
-const FLAT_LABELS: Partial<Record<ChromaticNote, string>> = {
-  'D#': 'E♭', 'G#': 'A♭', 'A#': 'B♭',
+// Reunión 24/5/26: en el círculo mostrar ambas enarmonías (#/b) en las 5 notas alteradas.
+const ENHARMONIC_PAIRS: Partial<Record<ChromaticNote, { sharp: string; flat: string }>> = {
+  'C#': { sharp: 'C♯', flat: 'D♭' },
+  'D#': { sharp: 'D♯', flat: 'E♭' },
+  'F#': { sharp: 'F♯', flat: 'G♭' },
+  'G#': { sharp: 'G♯', flat: 'A♭' },
+  'A#': { sharp: 'A♯', flat: 'B♭' },
 };
-const noteLabel = (n: ChromaticNote) => FLAT_LABELS[n] ?? noteShort(n);
+// Single-line fallback for accessibility labels and the center display.
+const noteLabel = (n: ChromaticNote) => {
+  const pair = ENHARMONIC_PAIRS[n];
+  return pair ? `${pair.sharp}/${pair.flat}` : noteShort(n);
+};
 
-// B → F# is the documented exception (the rule says "natural copies natural", but B → F#).
-const EXCEPTION_NOTE: ChromaticNote = 'B';
+// Excepciones a la regla 5J: B → F♯ (no F) y A♯(Bb) → F (no F♭). Marcadas con *.
+const EXCEPTION_NOTES: ReadonlySet<ChromaticNote> = new Set<ChromaticNote>(['B', 'A#']);
 
 const CX = 200, CY = 200, R = 140, NODE_R = 24;
 const ARPEGGIO_GAP_MS = 280;
@@ -31,6 +40,7 @@ interface NodeData {
   note: ChromaticNote;
   x: number;
   y: number;
+  angleDeg: number;
   fifthChromatic: ChromaticNote;
   fifthOctave: number;
   isException: boolean;
@@ -52,9 +62,10 @@ export default function CirculoDeQuintas() {
         note,
         x: CX + R * Math.cos(angleRad),
         y: CY + R * Math.sin(angleRad),
+        angleDeg,
         fifthChromatic: fifth.chromatic,
         fifthOctave: fifth.octave,
-        isException: note === EXCEPTION_NOTE,
+        isException: EXCEPTION_NOTES.has(note),
       };
     }),
   []);
@@ -134,34 +145,76 @@ export default function CirculoDeQuintas() {
                 }
               }}
             >
+              {/* Reunión 24/5/26: monocromo salvo nodo activo y su 5J. */}
               <circle
                 cx={node.x} cy={node.y}
                 r={isHovered || isFifthOf ? NODE_R + 4 : NODE_R}
-                fill={NOTE_COLORS[node.note]}
+                fill={isHovered || isFifthOf ? NOTE_COLORS[node.note] : 'var(--surface)'}
                 opacity={dim ? 0.25 : 1}
-                stroke={isHovered ? 'var(--paper)' : isFifthOf ? 'var(--amber)' : 'none'}
-                strokeWidth={isHovered || isFifthOf ? 2 : 0}
+                stroke={isHovered ? 'var(--paper)' : isFifthOf ? 'var(--amber)' : 'var(--rule)'}
+                strokeWidth={isHovered || isFifthOf ? 2 : 1}
               />
-              <text
-                x={node.x} y={node.y + 1}
-                textAnchor="middle" dominantBaseline="middle"
-                className={styles.noteText}
-                opacity={dim ? 0.3 : 1}
-              >
-                {noteLabel(node.note)}
-              </text>
+              {(() => {
+                const pair = ENHARMONIC_PAIRS[node.note];
+                const fillC = isHovered || isFifthOf ? '#fff' : 'var(--text-body)';
+                if (pair) {
+                  // Reunión 24/5/26: en alteradas mostrar ambas enarmonías apiladas.
+                  return (
+                    <>
+                      <text
+                        x={node.x} y={node.y - 4}
+                        textAnchor="middle" dominantBaseline="middle"
+                        className={styles.noteText}
+                        fill={fillC}
+                        opacity={dim ? 0.3 : 1}
+                        fontSize={11}
+                      >
+                        {pair.sharp}
+                      </text>
+                      <text
+                        x={node.x} y={node.y + 9}
+                        textAnchor="middle" dominantBaseline="middle"
+                        className={styles.noteText}
+                        fill={fillC}
+                        opacity={dim ? 0.3 : 1}
+                        fontSize={11}
+                      >
+                        {pair.flat}
+                      </text>
+                    </>
+                  );
+                }
+                return (
+                  <text
+                    x={node.x} y={node.y + 1}
+                    textAnchor="middle" dominantBaseline="middle"
+                    className={styles.noteText}
+                    fill={fillC}
+                    opacity={dim ? 0.3 : 1}
+                  >
+                    {noteShort(node.note)}
+                  </text>
+                );
+              })()}
 
-              {/* Exception badge on B */}
-              {node.isException && (
-                <text
-                  x={node.x + NODE_R - 2}
-                  y={node.y - NODE_R + 2}
-                  className={styles.exceptionDot}
-                  aria-hidden="true"
-                >
-                  *
-                </text>
-              )}
+              {/* Asterisco junto al lado del nodo que apunta a su 5J (entre B-F♯ y B♭-F). */}
+              {node.isException && (() => {
+                // Posición a +15° desde el nodo (la siguiente nota en sentido horario es la 5J).
+                const midAngleRad = (node.angleDeg + 15) * Math.PI / 180;
+                const badgeR = R + 16;
+                const bx = CX + badgeR * Math.cos(midAngleRad);
+                const by = CY + badgeR * Math.sin(midAngleRad);
+                return (
+                  <text
+                    x={bx} y={by}
+                    textAnchor="middle" dominantBaseline="middle"
+                    className={styles.exceptionDot}
+                    aria-hidden="true"
+                  >
+                    *
+                  </text>
+                );
+              })()}
             </g>
           );
         })}
@@ -194,9 +247,9 @@ export default function CirculoDeQuintas() {
 
       <p className={styles.footnote}>
         {isDe ? (
-          <>* Die Quinte von <strong>H</strong> ist <strong>F♯</strong> (nicht F): dokumentierte Ausnahme in §1.8.</>
+          <>* Ausnahmen: <strong>H → F♯</strong> (nicht F) und <strong>B♭ → F</strong> (nicht F♭). Dokumentiert in §1.8.</>
         ) : (
-          <>* La quinta de <strong>B</strong> es <strong>F♯</strong> (no F natural): excepción documentada en §1.8.</>
+          <>* Excepciones: <strong>B → F♯</strong> (no F) y <strong>B♭ → F</strong> (no F♭). Documentadas en §1.8.</>
         )}
       </p>
     </div>

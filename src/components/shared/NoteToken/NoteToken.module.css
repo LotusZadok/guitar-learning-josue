@@ -22,9 +22,10 @@
 }
 
 /* Diatonic role overrides — must come after [data-note] rules to win specificity */
-.token[data-diatonic="stable"] { color: var(--diatonic-stable); }
-.token[data-diatonic="medium"] { color: var(--diatonic-medium); }
-.token[data-diatonic="tense"]  { color: var(--diatonic-tense);  }
+.token[data-diatonic="stable"]      { color: var(--diatonic-stable); }
+.token[data-diatonic="medium"]      { color: var(--diatonic-medium); }
+.token[data-diatonic="mediumTense"] { color: var(--diatonic-medium-tense); }
+.token[data-diatonic="tense"]       { color: var(--diatonic-tense);  }
 
 /* Color cromático SOLO en hover/focus. En reposo, las notas son monocromas
    (reunión 24/5/26 — el profesor sugiere enseñar el color al hacer hover). */

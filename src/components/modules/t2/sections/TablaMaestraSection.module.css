@@ -36,6 +36,15 @@
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--muted);
+  /* Reunión 24/5/26: evitar overflow de textos largos como "CANTIDAD" sobre la
+     columna siguiente. Cada celda controla su propio ancho. */
+  gap: 12px;
+  white-space: nowrap;
+}
+
+.header > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .row {
@@ -63,7 +72,7 @@
 }
 
 .colNum {
-  width: 50px;
+  width: 90px;
   flex-shrink: 0;
   font-family: 'Bebas Neue', sans-serif;
   font-size: 16px;
@@ -106,6 +115,9 @@
 @media (max-width: 900px) {
   .section {
     padding: 36px 24px;
+  }
+  .colNum {
+    width: 72px;
   }
   .colTon {
     width: 80px;

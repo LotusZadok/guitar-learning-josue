@@ -5,6 +5,24 @@ import { useUIStore } from '../stores/useUIStore';
 let audioCtx: AudioContext | null = null;
 let masterVolumeNode: GainNode | null = null;
 
+// Reunión 24/5/26: poder cortar el sonido del acorde anterior cuando arranca el siguiente.
+// Tracking global de gains activos; cualquier consumidor puede llamar stopAllNotes() para cortar.
+const activeGains = new Set<GainNode>();
+export function stopAllNotes(fadeMs = 80) {
+  if (!audioCtx) return;
+  const t = audioCtx.currentTime;
+  const fadeSec = fadeMs / 1000;
+  activeGains.forEach((g) => {
+    try {
+      g.gain.cancelScheduledValues(t);
+      const v = Math.max(g.gain.value, 0.0001);
+      g.gain.setValueAtTime(v, t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + fadeSec);
+    } catch { /* ignored */ }
+  });
+  activeGains.clear();
+}
+
 const getCtx = (): AudioContext => {
   if (!audioCtx) {
     audioCtx = new AudioContext();
@@ -39,6 +57,8 @@ export const useAudioEngine = () => {
     const now = ctx.currentTime;
     const masterGain = ctx.createGain();
     masterGain.connect(masterVolumeNode ?? ctx.destination);
+    activeGains.add(masterGain);
+    setTimeout(() => activeGains.delete(masterGain), (duration + 0.1) * 1000);
 
     masterGain.gain.setValueAtTime(0, now);
     masterGain.gain.linearRampToValueAtTime(0.20, now + 0.006);

@@ -44,6 +44,7 @@
      Complementario a --note-X; los dos subsistemas no se mezclan (ver DESIGN.md §2). */
   --diatonic-stable: #28c692;   /* verde esmeralda */
   --diatonic-medium: #f5900a;   /* naranja ámbar    */
+  --diatonic-medium-tense: #a259d4; /* púrpura — IV grado (reunión 24/5/26) */
   --diatonic-tense:  var(--red); /* alias del acento de marca */
 
   --fret-bg: #110e06;
@@ -86,6 +87,7 @@
   --note-b:        #0e7560; /* 4.96:1 — deep teal */
   --diatonic-stable: #167040;  /* verde oscuro bosque    */
   --diatonic-medium: #8c4800;  /* naranja quemado oscuro */
+  --diatonic-medium-tense: #6a2d8f; /* púrpura oscuro para light theme */
 }
 
 html { scroll-behavior: smooth; }

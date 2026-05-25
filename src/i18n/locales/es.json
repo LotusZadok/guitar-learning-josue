@@ -117,22 +117,25 @@
     },
 
     "s07": {
-      "label": "1.7 · Acordes mayores y menores",
-      "title": "Acordes mayores y menores",
+      "label": "1.7 · Acordes",
+      "title": "Acordes",
       "intro": "Recapitulando lo de tríadas e intervalos.",
       "major_def": "Acorde mayor = T + 3M + 5J (tónica + tercera mayor + quinta justa)",
       "minor_def": "Acorde menor = T + 3m + 5J (tónica + tercera menor + quinta justa)",
-      "comparison": "Solo cambia la tercera. Dos de tres notas son iguales — son casi el mismo acorde.",
+      "diminished_def": "Acorde disminuido = T + 3m + 5d (tónica + tercera menor + quinta disminuida)",
+      "comparison": "Solo cambia la tercera entre mayor y menor; el disminuido baja también la quinta. Dos o tres de las cuatro notas se mantienen entre los tres tipos — son casi el mismo acorde.",
       "notation_title": "Nomenclatura:",
       "notation_major": "Acorde mayor: solo la letra. F = Fa mayor.",
       "notation_minor": "Acorde menor: letra + \"m\" minúscula. Fm = Fa menor.",
-      "procedure_title": "Procedimiento para encontrar la tríada mayor o menor de cualquier nota:",
+      "notation_diminished": "Acorde disminuido: letra + \"dim\". Fdim = Fa disminuido.",
+      "procedure_title": "Procedimiento para encontrar la tríada mayor, menor o disminuida de cualquier nota:",
       "procedure": [
         "Escribir la tríada partiendo de la tónica (solo notas naturales).",
-        "Contar cromáticamente a partir de la tónica, los semitonos hasta tercera (3M = 4 s.t. o 3m = 3 s.t.).",
-        "Contar cromáticamente a partir de la tónica, los semitonos hasta la quinta justa (5J = 7 s.t.)."
+        "Contar cromáticamente a partir de la tónica, los semitonos hasta la tercera (3M = 4 s.t. o 3m = 3 s.t.).",
+        "Contar cromáticamente a partir de la tónica, los semitonos hasta la quinta (5J = 7 s.t. o 5d = 6 s.t.).",
+        "Combinar según la calidad deseada: mayor (3M + 5J), menor (3m + 5J), disminuido (3m + 5d)."
       ],
-      "tip": "La diferencia entre mayor y menor está solo en la tercera: 4 semitonos = mayor, 3 semitonos = menor."
+      "tip": "La diferencia entre mayor y menor está solo en la tercera. El disminuido toma la tercera menor y además baja la quinta un semitono."
     },
 
     "s08": {
@@ -167,13 +170,8 @@
       "title": "Proceso de bemoles"
     },
 
-    "s44": {
-      "label": "2.4 · Escala mayor",
-      "title": "Escala mayor de la tonalidad"
-    },
-
     "s45": {
-      "label": "2.6 · Tabla maestra",
+      "label": "2.5 · Tabla maestra",
       "title": "Tabla maestra de las 14 tonalidades mayores",
       "table_headers": {
         "count": "Cantidad",
@@ -191,7 +189,7 @@
     },
 
     "s47": {
-      "label": "2.7 · Grados armónicos",
+      "label": "2.6 · Grados armónicos",
       "title": "Grados armónicos según la escala mayor",
       "intro_symmetry": "Hablemos de simetría y fractalidad:",
       "symmetry": "Simetría: la música funciona con fórmulas — 12 semitonos, 12 intervalos, escalas de 7 notas, tríadas de 3 notas. Los procesos son simétricos en todas las tonalidades. Por eso conviene memorizar el procedimiento, no el resultado.",
@@ -221,12 +219,12 @@
         "vii": "Sensible"
       },
       "degree_characters": {
-        "I": "Estable",
+        "I": "Reposo",
         "ii": "Medio",
-        "iii": "Estable-Medio",
+        "iii": "Medio",
         "IV": "Medio-Tenso",
         "V": "Tenso",
-        "vi": "Estable",
+        "vi": "Reposo",
         "vii": "Tenso"
       },
       "analysis_title": "Análisis de caracteres:",
@@ -245,7 +243,7 @@
     },
 
     "s48": {
-      "label": "2.9 · Progresiones armónicas",
+      "label": "2.7 · Progresiones armónicas",
       "title": "Progresiones armónicas",
       "intro": "La armonía diatónica no solo ofrece acordes individuales: también permite combinarlos en secuencias. A estas secuencias se les llama progresiones armónicas. Cada acorde cumple una función dentro de la tonalidad y contribuye a crear tensión o reposo.",
       "procedure_title": "Práctica progresiva:",
@@ -267,7 +265,7 @@
     },
 
     "s49": {
-      "label": "2.10 · Relativas menores",
+      "label": "2.8 · Relativas menores",
       "title": "Relativas menores",
       "intro_p1": "Toda tonalidad mayor tiene una tonalidad menor relativa que comparte exactamente la misma armadura. La relativa menor se construye sobre el vi grado de la mayor.",
       "intro_p2": "La escala menor natural usa las mismas 7 notas, pero comienza en la 6ta. Los acordes son los mismos en ambos casos, solo cambia el orden:",

@@ -85,6 +85,13 @@
   background: var(--surface);
 }
 
+/* Reunión 24/5/26: highlight de la fila activa según la tónica global. */
+.rowActive td {
+  background: color-mix(in srgb, var(--red) 8%, transparent);
+  color: var(--paper);
+  font-weight: 600;
+}
+
 @media (max-width: 900px) {
   .section {
     padding: 36px 24px;

@@ -11,6 +11,24 @@ import {
 } from '../data/literalContent';
 import styles from './IntroSection.module.css';
 
+// Reunión 24/5/26: separar contenidos en líneas. Partimos los párrafos largos
+// en oraciones (punto seguido) para mejorar la lectura. No se parafrasea texto.
+function splitSentences(s: string): string[] {
+  // Split en ". " pero preserva el punto al final de cada oración.
+  const parts = s.split(/(?<=\.) +/);
+  return parts.filter((p) => p.trim().length > 0);
+}
+
+function Paragraphs({ source, className }: { source: string; className: string }) {
+  return (
+    <>
+      {splitSentences(source).map((sentence, i) => (
+        <p key={i} className={className}>{sentence}</p>
+      ))}
+    </>
+  );
+}
+
 export default function IntroSection() {
   const { t, i18n } = useTranslation();
   const isDe = i18n.language === 'de';
@@ -20,8 +38,8 @@ export default function IntroSection() {
       <SectionLabel text={t('t2.s41.label')} />
       <h2>{t('t2.s41.title')}</h2>
 
-      <p className={styles.text}>{isDe ? INTRO_LENGUAS_DE : INTRO_LENGUAS}</p>
-      <p className={styles.text}>{isDe ? INTRO_VARIEDAD_DE : INTRO_VARIEDAD}</p>
+      <Paragraphs source={isDe ? INTRO_LENGUAS_DE : INTRO_LENGUAS} className={styles.text} />
+      <Paragraphs source={isDe ? INTRO_VARIEDAD_DE : INTRO_VARIEDAD} className={styles.text} />
 
       <RuleNote>
         <p><strong>{isDe ? 'Tonarten' : 'Tonalidades'}:</strong> {isDe ? DEF_TONALIDADES_DE : DEF_TONALIDADES}</p>

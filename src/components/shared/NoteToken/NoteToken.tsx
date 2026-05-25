@@ -37,7 +37,7 @@ const SPELLING_TO_CHROMATIC: Record<NoteSpelling, ChromaticNote> = {
   Db: 'C#', Eb: 'D#', Gb: 'F#', Ab: 'G#', Bb: 'A#',
 };
 
-export type DiatonicRole = 'stable' | 'medium' | 'tense';
+export type DiatonicRole = 'stable' | 'medium' | 'mediumTense' | 'tense';
 
 interface NoteTokenProps {
   note: NoteSpelling;
