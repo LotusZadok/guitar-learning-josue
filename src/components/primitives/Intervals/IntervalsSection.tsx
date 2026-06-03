@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import IntervalRow from './IntervalRow';
 import { useUIStore } from '../../../stores/useUIStore';
 import { NOTE_ES } from '../../../data/notes';
-import { noteShort, spelledIntervalFromTonic } from '../../../utils/noteCalculations';
+import { noteShort, spelledIntervalFromTonic, tonicChromatic } from '../../../utils/noteCalculations';
 import type { ChromaticNote } from '../../../types/music';
 import styles from './Intervals.module.css';
 
@@ -23,8 +23,8 @@ export default function IntervalsSection() {
   const t3M = spelledIntervalFromTonic(root, 3, 'M');
   const quinta = spelledIntervalFromTonic(root, 5, 'P');
   const rootSpelled = noteShort(root);
-  const rootES = NOTE_ES[root];
-  const rootDE = NOTE_DE_LETTER[root];
+  const rootES = NOTE_ES[tonicChromatic(root)];
+  const rootDE = NOTE_DE_LETTER[tonicChromatic(root)];
 
   const intervals = isDe
     ? [

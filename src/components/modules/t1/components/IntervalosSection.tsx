@@ -5,7 +5,7 @@ import Prose from '../../../shared/Prose/Prose';
 import IntervalsSection from '../../../primitives/Intervals/IntervalsSection';
 import { useUIStore } from '../../../../stores/useUIStore';
 import { ALL } from '../../../../data/notes';
-import { majorScaleSpelled } from '../../../../utils/noteCalculations';
+import { majorScaleSpelled, tonicChromatic } from '../../../../utils/noteCalculations';
 import type { NoteSpelling } from '../../../../types/music';
 import type { ProseSegment, ProseFragment } from '../../../../types/prose';
 import {
@@ -159,7 +159,7 @@ export default function IntervalosSection() {
     () => NATURAL_LETTERS_7.indexOf(tonicAscii[0] as typeof NATURAL_LETTERS_7[number]),
     [tonicAscii],
   );
-  const tonicIdx = useMemo(() => ALL.indexOf(tonic), [tonic]);
+  const tonicIdx = useMemo(() => ALL.indexOf(tonicChromatic(tonic)), [tonic]);
   const staticPasos = locale === 'de' ? INTERVALOS_PROCEDIMIENTO_PASOS_DE : INTERVALOS_PROCEDIMIENTO_PASOS;
 
   const procedimientoTitulo = useMemo(

@@ -2,13 +2,13 @@ import { useCallback, useMemo, useRef, useState, type KeyboardEvent } from 'reac
 import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { ALL } from '../../../data/notes';
-import { majorScaleSpelled } from '../../../utils/noteCalculations';
+import { majorScaleSpelled, tonicChromatic } from '../../../utils/noteCalculations';
 import NoteToken, { type DiatonicRole } from '../../shared/NoteToken/NoteToken';
-import type { ChromaticNote, NoteSpelling } from '../../../types/music';
+import type { ChromaticNote, NoteSpelling, Tonic } from '../../../types/music';
 import styles from './GradosArmonicos.module.css';
 
 interface Props {
-  tonalidad: ChromaticNote;
+  tonalidad: Tonic;
 }
 
 type Step = 1 | 2 | 3 | 4;
@@ -63,8 +63,8 @@ interface DiatonicNote {
   octave: number;
 }
 
-function buildDiatonic(tonic: ChromaticNote): DiatonicNote[] {
-  const tIdx = ALL.indexOf(tonic);
+function buildDiatonic(tonic: Tonic): DiatonicNote[] {
+  const tIdx = ALL.indexOf(tonicChromatic(tonic));
   const spelled = majorScaleSpelled(tonic);
   return MAJOR_INTERVALS.map((semis, i) => ({
     spelled: spelled[i],
@@ -75,7 +75,7 @@ function buildDiatonic(tonic: ChromaticNote): DiatonicNote[] {
 }
 
 // Letras naturales rotadas desde la letra-tónica (estado 1).
-function naturalRoots(tonic: ChromaticNote): string[] {
+function naturalRoots(tonic: Tonic): string[] {
   const startIdx = NATURAL_LETTERS.indexOf(tonic[0] as typeof NATURAL_LETTERS[number]);
   return Array.from({ length: 7 }, (_, i) => NATURAL_LETTERS[(startIdx + i) % 7]);
 }

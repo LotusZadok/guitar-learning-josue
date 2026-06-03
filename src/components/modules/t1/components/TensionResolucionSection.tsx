@@ -6,8 +6,8 @@ import Prose from '../../../shared/Prose/Prose';
 import TensionResolucion from '../../../primitives/TensionResolucion/TensionResolucion';
 import { useUIStore } from '../../../../stores/useUIStore';
 import { NOTE_ES } from '../../../../data/notes';
-import { majorScaleSpelled } from '../../../../utils/noteCalculations';
-import type { NoteSpelling, ChromaticNote } from '../../../../types/music';
+import { majorScaleSpelled, tonicChromatic } from '../../../../utils/noteCalculations';
+import type { NoteSpelling, Tonic } from '../../../../types/music';
 import type { ProseSegment } from '../../../../types/prose';
 import {
   TENSION_PRIMITIVA_INSTRUCCION,
@@ -17,7 +17,7 @@ import {
 const ASCII = (s: string) => s.replace('♯', '#').replace('♭', 'b') as NoteSpelling;
 
 // Reunión 24/5/26: las reglas de tensión deben renderizar la tónica activa, no quedarse en C.
-function buildReglas(tonic: ChromaticNote, isDe: boolean): { titulo: string; cuerpo: ProseSegment }[] {
+function buildReglas(tonic: Tonic, isDe: boolean): { titulo: string; cuerpo: ProseSegment }[] {
   const scale = majorScaleSpelled(tonic).map(ASCII); // [1,2,3,4,5,6,7]
   const tn = ASCII(scale[0]);
   const ctx = (label: string): ProseSegment => isDe
@@ -104,8 +104,8 @@ export default function TensionResolucionSection() {
       </ol>
 
       <h3 className={styles.subheading}>{locale === 'de'
-        ? `Karte der Auflösungen in ${NOTE_DE_NAME[tonic] ?? tonic} Dur`
-        : `Mapa de resoluciones en ${NOTE_ES[tonic]} mayor`}</h3>
+        ? `Karte der Auflösungen in ${NOTE_DE_NAME[tonicChromatic(tonic)] ?? tonic} Dur`
+        : `Mapa de resoluciones en ${NOTE_ES[tonicChromatic(tonic)]} mayor`}</h3>
       <p className={styles.text}>{locale === 'de' ? TENSION_PRIMITIVA_INSTRUCCION_DE : TENSION_PRIMITIVA_INSTRUCCION}</p>
       <TensionResolucion />
 

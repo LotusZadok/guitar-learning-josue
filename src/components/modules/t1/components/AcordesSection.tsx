@@ -9,7 +9,7 @@ import {
   spelledChromaticCircle,
   spelledIntervalFromTonic,
 } from '../../../../utils/noteCalculations';
-import type { NoteSpelling, ChromaticNote } from '../../../../types/music';
+import type { NoteSpelling, Tonic } from '../../../../types/music';
 import type { ProseSegment, ProseFragment } from '../../../../types/prose';
 import styles from './AcordesSection.module.css';
 
@@ -19,7 +19,7 @@ import styles from './AcordesSection.module.css';
 
 const ASCII = (s: string) => s.replace('♯', '#').replace('♭', 'b');
 
-function buildPasoLetras(tonic: ChromaticNote, locale: string): ProseSegment {
+function buildPasoLetras(tonic: Tonic, locale: string): ProseSegment {
   const [t1, t3, t5] = chordSpelled(tonic, 'M').map((m) => ASCII(m.spelled) as NoteSpelling);
   const prefix = locale === 'de' ? 'Buchstaben der Trias: ' : 'Letras de la tríada: ';
   return [
@@ -31,7 +31,7 @@ function buildPasoLetras(tonic: ChromaticNote, locale: string): ProseSegment {
 }
 
 function buildPasoSemitonos(
-  tonic: ChromaticNote,
+  tonic: Tonic,
   targetSemis: number,
   targetSpelled: string,
   letterRuleNote: string,

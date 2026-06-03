@@ -11,6 +11,11 @@ export type NoteSpelling =
   | ChromaticNote
   | 'Db' | 'Eb' | 'Gb' | 'Ab' | 'Bb';
 
+// Tónica seleccionable: las 12 alturas con sostenido (ChromaticNote) más las 5
+// enarmonías bemoles. La grafía elegida determina la ortografía de escalas y
+// acordes — C♯ mayor y D♭ mayor suenan igual pero se escriben distinto.
+export type Tonic = NoteSpelling;
+
 export type NoteNameES =
   | 'Do' | 'Do♯' | 'Re' | 'Re♯' | 'Mi' | 'Fa'
   | 'Fa♯' | 'Sol' | 'Sol♯' | 'La' | 'La♯' | 'Si';

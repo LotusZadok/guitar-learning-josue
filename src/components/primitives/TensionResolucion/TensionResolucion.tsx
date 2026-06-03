@@ -3,13 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { useUIStore } from '../../../stores/useUIStore';
 import { ALL, NOTE_ES } from '../../../data/notes';
-import { majorScaleSpelled } from '../../../utils/noteCalculations';
+import { majorScaleSpelled, tonicChromatic } from '../../../utils/noteCalculations';
 
 const NOTE_DE_LETTER: Record<string, string> = {
   C: 'C', 'C#': 'Cis', D: 'D', 'D#': 'Dis', E: 'E', F: 'F',
   'F#': 'Fis', G: 'G', 'G#': 'Gis', A: 'A', 'A#': 'B', B: 'H',
 };
-import type { ChromaticNote } from '../../../types/music';
+import type { ChromaticNote, Tonic } from '../../../types/music';
 import styles from './TensionResolucion.module.css';
 
 // Reunión 24/5/26: la ortografía respeta la escala mayor (B♭ en F mayor, no A#).
@@ -30,8 +30,8 @@ const NODE_ROLES: TensionNode['role'][] = [
   'tonic', 'intermediate', 'stable', 'tense', 'stable', 'intermediate', 'tense', 'tonic',
 ];
 
-function buildNodes(tonic: ChromaticNote): TensionNode[] {
-  const tonicIdx = ALL.indexOf(tonic);
+function buildNodes(tonic: Tonic): TensionNode[] {
+  const tonicIdx = ALL.indexOf(tonicChromatic(tonic));
   const spelledScale = majorScaleSpelled(tonic); // 7 grados con ortografía correcta
   return SCALE_POS.map((pos, i) => ({
     pos,
@@ -119,8 +119,8 @@ export default function TensionResolucion() {
         viewBox={`0 0 ${SVG_W} ${SVG_H}`}
         role="img"
         aria-label={isDe
-          ? `Karte der Spannungsauflösungen in ${NOTE_DE_LETTER[tonic] ?? tonic}-Dur`
-          : `Mapa de resoluciones de tensión en ${NOTE_ES[tonic]} mayor`}
+          ? `Karte der Spannungsauflösungen in ${NOTE_DE_LETTER[tonicChromatic(tonic)] ?? tonic}-Dur`
+          : `Mapa de resoluciones de tensión en ${NOTE_ES[tonicChromatic(tonic)]} mayor`}
       >
         <defs>
           <marker

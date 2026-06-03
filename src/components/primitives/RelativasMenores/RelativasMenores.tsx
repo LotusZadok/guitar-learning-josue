@@ -2,11 +2,12 @@ import { useState, useMemo, useCallback, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { ALL, NOTE_COLORS } from '../../../data/notes';
-import type { ChromaticNote } from '../../../types/music';
+import { tonicChromatic } from '../../../utils/noteCalculations';
+import type { ChromaticNote, Tonic } from '../../../types/music';
 import styles from './RelativasMenores.module.css';
 
 interface Props {
-  tonic: ChromaticNote;
+  tonic: Tonic;
 }
 
 const CX = 200, CY = 200, R = 140, NODE_R = 24;
@@ -29,12 +30,13 @@ export default function RelativasMenores({ tonic }: Props) {
   const isDe = i18n.language === 'de';
   const [hovered, setHovered] = useState<ChromaticNote | null>(null);
   const { playNote } = useAudioEngine();
+  const tonicChrom = tonicChromatic(tonic);
 
   const relativeMinor = useMemo<ChromaticNote>(() => {
-    return ALL[(ALL.indexOf(tonic) - 3 + 12) % 12];
-  }, [tonic]);
+    return ALL[(ALL.indexOf(tonicChrom) - 3 + 12) % 12];
+  }, [tonicChrom]);
 
-  const tonicP = nodePos(ALL.indexOf(tonic));
+  const tonicP = nodePos(ALL.indexOf(tonicChrom));
   const relP = nodePos(ALL.indexOf(relativeMinor));
   const arcPath = `M ${tonicP.x} ${tonicP.y} Q ${CX} ${CY} ${relP.x} ${relP.y}`;
 
@@ -50,8 +52,8 @@ export default function RelativasMenores({ tonic }: Props) {
         viewBox="0 0 400 400"
         role="img"
         aria-label={isDe
-          ? `Chromatischer Kreis: ${noteLabel(tonic)}-Dur und seine Moll-Paralleltonart ${noteLabel(relativeMinor)}-Moll teilen dieselben Vorzeichen`
-          : `Círculo cromático: ${noteLabel(tonic)} mayor y su relativa ${noteLabel(relativeMinor)} menor comparten la misma armadura`}
+          ? `Chromatischer Kreis: ${noteLabel(tonicChrom)}-Dur und seine Moll-Paralleltonart ${noteLabel(relativeMinor)}-Moll teilen dieselben Vorzeichen`
+          : `Círculo cromático: ${noteLabel(tonicChrom)} mayor y su relativa ${noteLabel(relativeMinor)} menor comparten la misma armadura`}
       >
         {/* Interior arc between tonic and relative minor */}
         <path
@@ -64,7 +66,7 @@ export default function RelativasMenores({ tonic }: Props) {
         />
 
         {NODES.map(({ note, x, y }) => {
-          const isTonic = note === tonic;
+          const isTonic = note === tonicChrom;
           const isRelative = note === relativeMinor;
           const isHovered = hovered === note;
           const highlighted = isTonic || isRelative;

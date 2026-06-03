@@ -2,7 +2,7 @@ import type { KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { useUIStore } from '../../../stores/useUIStore';
-import { noteShort } from '../../../utils/noteCalculations';
+import { noteShort, tonicChromatic } from '../../../utils/noteCalculations';
 import type { NoteSpelling, ChromaticNote } from '../../../types/music';
 import styles from './NoteToken.module.css';
 
@@ -54,14 +54,14 @@ export default function NoteToken({ note, diatonicRole }: NoteTokenProps) {
   const display = noteShort(note);
   const dataNote = DATA_NOTE[note];
   const chromatic = SPELLING_TO_CHROMATIC[note];
-  const isTonic = chromatic === tonic;
+  const isTonic = chromatic === tonicChromatic(tonic);
 
   const handlePlay = () => {
     playNote(note, 4);
   };
 
   const handleClick = () => {
-    setTonic(chromatic);
+    setTonic(note);
     playNote(note, 4);
   };
 

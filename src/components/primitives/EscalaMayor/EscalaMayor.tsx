@@ -8,7 +8,7 @@ const NOTE_DE_LETTER: Record<string, string> = {
   C: 'C', 'C#': 'Cis', D: 'D', 'D#': 'Dis', E: 'E', F: 'F',
   'F#': 'Fis', G: 'G', 'G#': 'Gis', A: 'A', 'A#': 'B', B: 'H',
 };
-import { majorScaleSpelled } from '../../../utils/noteCalculations';
+import { majorScaleSpelled, tonicChromatic } from '../../../utils/noteCalculations';
 import type { ChromaticNote } from '../../../types/music';
 import styles from './EscalaMayor.module.css';
 
@@ -48,7 +48,7 @@ export default function EscalaMayor() {
   const { playNote } = useAudioEngine();
 
   const nodes = useMemo<NodeData[]>(() => {
-    const tonicIdx = ALL.indexOf(tonic);
+    const tonicIdx = ALL.indexOf(tonicChromatic(tonic));
     const spelledScale = majorScaleSpelled(tonic);
     const scaleByPos = new Map<number, number>();
     SCALE_POSITIONS.forEach((p, i) => scaleByPos.set(p, i));
@@ -85,7 +85,7 @@ export default function EscalaMayor() {
         className={styles.svg}
         viewBox={`0 0 ${SVG_W} ${SVG_H}`}
         role="img"
-        aria-label={isDe ? `Dur-Tonleiter von ${NOTE_DE_LETTER[tonic] ?? tonic}` : `Escala mayor de ${NOTE_ES[tonic]}`}
+        aria-label={isDe ? `Dur-Tonleiter von ${NOTE_DE_LETTER[tonicChromatic(tonic)] ?? tonic}` : `Escala mayor de ${NOTE_ES[tonicChromatic(tonic)]}`}
       >
         {/* Subtle baseline rule between nodes */}
         <line

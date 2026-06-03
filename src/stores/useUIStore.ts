@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { ThemeMode, ChromaticNote } from '../types/music';
+import type { ThemeMode, Tonic } from '../types/music';
 
 interface UIState {
   theme: ThemeMode;
@@ -8,7 +8,7 @@ interface UIState {
   activeSection: string;
   audioMuted: boolean;
   volume: number;
-  tonic: ChromaticNote;
+  tonic: Tonic;
 
   setTheme: (theme: ThemeMode) => void;
   toggleTheme: () => void;
@@ -17,7 +17,7 @@ interface UIState {
   toggleAudioMute: () => void;
   setAudioMuted: (muted: boolean) => void;
   setVolume: (v: number) => void;
-  setTonic: (t: ChromaticNote) => void;
+  setTonic: (t: Tonic) => void;
 }
 
 export const useUIStore = create<UIState>()(

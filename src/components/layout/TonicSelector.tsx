@@ -1,14 +1,15 @@
 import { useTranslation } from 'react-i18next';
 import { useUIStore } from '../../stores/useUIStore';
-import { ALL } from '../../data/notes';
-import { noteDisplay } from '../../utils/noteCalculations';
-import type { ChromaticNote } from '../../types/music';
+import { noteShort } from '../../utils/noteCalculations';
+import type { Tonic } from '../../types/music';
 import styles from './TonicSelector.module.css';
 
-// Show both enharmonic spellings on black keys (e.g. "A♯/B♭") so the selector
-// exposes the # ↔ ♭ equivalence explicitly. The method still picks the correct
-// spelling per tonality internally (chordSpelled / majorScaleSpelled).
-const noteLabel = (n: ChromaticNote) => noteDisplay(n);
+// Cada altura negra aparece con sus dos grafías como opciones independientes:
+// elegir C♯ y elegir D♭ dan la misma altura pero distinta ortografía de escala.
+const TONIC_OPTIONS: Tonic[] = [
+  'C', 'C#', 'Db', 'D', 'D#', 'Eb', 'E', 'F',
+  'F#', 'Gb', 'G', 'G#', 'Ab', 'A', 'A#', 'Bb', 'B',
+];
 
 export default function TonicSelector() {
   const tonic = useUIStore((s) => s.tonic);
@@ -25,11 +26,11 @@ export default function TonicSelector() {
         id="tonic-select"
         className={styles.select}
         value={tonic}
-        onChange={(e) => setTonic(e.target.value as ChromaticNote)}
+        onChange={(e) => setTonic(e.target.value as Tonic)}
       >
-        {ALL.map((note) => (
+        {TONIC_OPTIONS.map((note) => (
           <option key={note} value={note}>
-            {noteLabel(note)}
+            {noteShort(note)}
           </option>
         ))}
       </select>

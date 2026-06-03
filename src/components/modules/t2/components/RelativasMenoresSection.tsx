@@ -6,6 +6,7 @@ import NoteToken from '../../../shared/NoteToken/NoteToken';
 import RelativasMenores from '../../../primitives/RelativasMenores/RelativasMenores';
 import { useUIStore } from '../../../../stores/useUIStore';
 import { ALL } from '../../../../data/notes';
+import { tonicChromatic } from '../../../../utils/noteCalculations';
 import type { NoteSpelling, ChromaticNote } from '../../../../types/music';
 import { TONALIDADES } from '../data/tonalidades';
 import {
@@ -95,7 +96,7 @@ export default function RelativasMenoresSection() {
           </thead>
           <tbody>
             {TABLA_ROWS.map((row) => {
-              const isActive = row.chromatic === tonic;
+              const isActive = row.chromatic === tonicChromatic(tonic);
               return (
                 <tr key={row.mayor} className={isActive ? styles.rowActive : undefined}>
                   <td>{renderNote(row.mayor)} {t('common.major')}</td>

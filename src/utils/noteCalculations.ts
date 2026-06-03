@@ -1,5 +1,5 @@
 import { ALL, NOTE_ES, NOTE_FREQS } from '../data/notes';
-import type { ChromaticNote, NoteInfo } from '../types/music';
+import type { ChromaticNote, NoteInfo, Tonic } from '../types/music';
 
 export function noteAtFret(openNote: ChromaticNote, openOct: number, fret: number): NoteInfo {
   const si = ALL.indexOf(openNote);
@@ -25,14 +25,16 @@ export function noteNameES(n: ChromaticNote): string {
 
 // === Major scale spelling (T1 §1.4 / §1.7) ===
 
-// Tónicas problemáticas: D#, G#, A# producen dobles sostenidos en la escala mayor.
-// El método de Josué siempre usa la ortografía bemol para estas tres.
-// C# y F# se mantienen — tienen ortografías estándar sin dobles alteraciones.
-// SpelledTonic extiende ChromaticNote para aceptar nombres con bemol en redirect.
-type SpelledTonic = ChromaticNote | 'Eb' | 'Ab' | 'Bb';
-const ENHARMONIC_REDIRECT: Partial<Record<ChromaticNote, SpelledTonic>> = {
-  'D#': 'Eb', 'G#': 'Ab', 'A#': 'Bb',
+// La tónica lleva su propia grafía (sostenido o bemol). La altura cromática para
+// audio e índices se deriva con `tonicChromatic`; la ortografía de escalas/acordes
+// respeta la grafía elegida (C♯ mayor usa sostenidos; D♭ mayor usa bemoles).
+const FLAT_TO_SHARP: Record<string, ChromaticNote> = {
+  Db: 'C#', Eb: 'D#', Gb: 'F#', Ab: 'G#', Bb: 'A#',
 };
+
+export function tonicChromatic(tonic: Tonic): ChromaticNote {
+  return (FLAT_TO_SHARP[tonic] ?? tonic) as ChromaticNote;
+}
 
 const LETTERS = ['C', 'D', 'E', 'F', 'G', 'A', 'B'] as const;
 const NATURAL_SEMITONE: Record<string, number> = {
@@ -40,7 +42,7 @@ const NATURAL_SEMITONE: Record<string, number> = {
 };
 const MAJOR_INTERVALS = [0, 2, 4, 5, 7, 9, 11] as const;
 
-function tonicSemitone(tonic: SpelledTonic): number {
+function tonicSemitone(tonic: Tonic): number {
   const letter = tonic[0];
   const acc = tonic[1];
   const delta = acc === '#' ? 1 : acc === 'b' ? -1 : 0;
@@ -64,10 +66,9 @@ function spelledFromLetterAndSemi(letter: string, targetSemi: number): string {
 // Returns the 7 spelled grades of the major scale starting at `tonic`,
 // preserving the rule of one letter per grade (with proper #/b accidentals).
 // Output uses ♯ / ♭ glyphs ready for display.
-export function majorScaleSpelled(tonic: ChromaticNote): string[] {
-  const resolvedTonic: SpelledTonic = ENHARMONIC_REDIRECT[tonic] ?? tonic;
-  const startLetterIdx = LETTERS.indexOf(resolvedTonic[0] as typeof LETTERS[number]);
-  const tonicSemi = tonicSemitone(resolvedTonic);
+export function majorScaleSpelled(tonic: Tonic): string[] {
+  const startLetterIdx = LETTERS.indexOf(tonic[0] as typeof LETTERS[number]);
+  const tonicSemi = tonicSemitone(tonic);
   const result: string[] = [];
 
   for (let i = 0; i < 7; i++) {
@@ -92,11 +93,10 @@ export interface ChordMember {
 // Minor:     T + 3m (3 s.t.) + 5J  (7 s.t.)
 // Augmented: T + 3M (4 s.t.) + 5aug (8 s.t.) — may produce double-sharp (x)
 // Diminished:T + 3m (3 s.t.) + 5dim (6 s.t.) — may produce double-flat (♭♭)
-export function chordSpelled(tonic: ChromaticNote, type: ChordType): ChordMember[] {
-  const resolvedTonic: SpelledTonic = ENHARMONIC_REDIRECT[tonic] ?? tonic;
-  const startLetterIdx = LETTERS.indexOf(resolvedTonic[0] as typeof LETTERS[number]);
-  const tonicSemi = tonicSemitone(resolvedTonic);
-  const tonicIdx = ALL.indexOf(tonic); // original sharp tonic for chromatic index
+export function chordSpelled(tonic: Tonic, type: ChordType): ChordMember[] {
+  const startLetterIdx = LETTERS.indexOf(tonic[0] as typeof LETTERS[number]);
+  const tonicSemi = tonicSemitone(tonic);
+  const tonicIdx = ALL.indexOf(tonicChromatic(tonic)); // chromatic index for audio
   const thirdSt = (type === 'M' || type === 'aug') ? 4 : 3;
   const fifthSt  = type === 'aug' ? 8 : type === 'dim' ? 6 : 7;
   const offsets: [number, number, number] = [0, thirdSt, fifthSt];
@@ -163,13 +163,12 @@ function intervalSemitones(number: IntervalNumber, quality: IntervalQuality): nu
 //      spelledIntervalFromTonic('G', 3, 'M') === 'B'
 //      spelledIntervalFromTonic('A', 2, 'M') === 'B'  (nunca A♯)
 export function spelledIntervalFromTonic(
-  tonic: ChromaticNote,
+  tonic: Tonic,
   number: IntervalNumber,
   quality: IntervalQuality,
 ): string {
-  const resolvedTonic: SpelledTonic = ENHARMONIC_REDIRECT[tonic] ?? tonic;
-  const startLetterIdx = LETTERS.indexOf(resolvedTonic[0] as typeof LETTERS[number]);
-  const tonicSemi = tonicSemitone(resolvedTonic);
+  const startLetterIdx = LETTERS.indexOf(tonic[0] as typeof LETTERS[number]);
+  const tonicSemi = tonicSemitone(tonic);
   const letter = LETTERS[(startLetterIdx + (number - 1)) % 7];
   const targetSemi = (tonicSemi + intervalSemitones(number, quality)) % 12;
   return spelledFromLetterAndSemi(letter, targetSemi);
@@ -194,8 +193,8 @@ const NATURAL_DISPLAY: Partial<Record<ChromaticNote, string>> = {
   'C#': 'C♯', 'D#': 'D♯', 'F#': 'F♯', 'G#': 'G♯', 'A#': 'A♯',
 };
 
-export function spelledChromaticCircle(tonic: ChromaticNote): CircleStep[] {
-  const tonicIdx = ALL.indexOf(tonic);
+export function spelledChromaticCircle(tonic: Tonic): CircleStep[] {
+  const tonicIdx = ALL.indexOf(tonicChromatic(tonic));
   return Array.from({ length: 13 }, (_, i) => {
     const note = ALL[(tonicIdx + i) % 12];
     const flat = STANDARD_FLAT[note] ?? null;

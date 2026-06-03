@@ -2,9 +2,9 @@ import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent }
 import { useTranslation } from 'react-i18next';
 import { useAudioEngine, stopAllNotes } from '../../../hooks/useAudioEngine';
 import { ALL } from '../../../data/notes';
-import { majorScaleSpelled } from '../../../utils/noteCalculations';
+import { majorScaleSpelled, tonicChromatic } from '../../../utils/noteCalculations';
 import type { DiatonicRole } from '../../shared/NoteToken/NoteToken';
-import type { ChromaticNote, DiatonicDegree } from '../../../types/music';
+import type { ChromaticNote, DiatonicDegree, Tonic } from '../../../types/music';
 import { PROGRESIONES_DATA } from '../../modules/t2/data/literalContent';
 import styles from './ProgresionesArmonicas.module.css';
 
@@ -15,7 +15,7 @@ const HARMONIC_ROLE: Record<DiatonicDegree, DiatonicRole> = {
 };
 
 interface Props {
-  tonalidad: ChromaticNote;
+  tonalidad: Tonic;
 }
 
 type PlayMode = 'arpegio' | 'bloque';
@@ -40,8 +40,8 @@ interface DiatonicNote {
   octave: number;
 }
 
-function buildDiatonic(tonic: ChromaticNote): DiatonicNote[] {
-  const tIdx = ALL.indexOf(tonic);
+function buildDiatonic(tonic: Tonic): DiatonicNote[] {
+  const tIdx = ALL.indexOf(tonicChromatic(tonic));
   const spelled = majorScaleSpelled(tonic);
   return MAJOR_INTERVALS.map((semis, i) => ({
     spelled: spelled[i],
