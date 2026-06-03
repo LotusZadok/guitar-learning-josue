@@ -52,22 +52,6 @@ const VALID_SPELLINGS: ReadonlySet<string> = new Set([
   'Db', 'Eb', 'Gb', 'Ab', 'Bb',
 ]);
 
-// Flat conversion maps (glyph and ASCII).
-const GLYPH_FLAT: Record<string, string> = {
-  'C♯': 'D♭', 'D♯': 'E♭', 'F♯': 'G♭', 'G♯': 'A♭', 'A♯': 'B♭',
-};
-const ASCII_FLAT: Record<string, string> = {
-  'C#': 'Db', 'D#': 'Eb', 'F#': 'Gb', 'G#': 'Ab', 'A#': 'Bb',
-};
-function toFlatGlyph(s: string): string { return GLYPH_FLAT[s] ?? s; }
-function toFlatAscii(s: string): string { return ASCII_FLAT[s] ?? s; }
-function toFlatChord(sym: string): string {
-  for (const [sharp, flat] of Object.entries(GLYPH_FLAT)) {
-    if (sym.startsWith(sharp)) return flat + sym.slice(sharp.length);
-  }
-  return sym;
-}
-
 const ARPEGGIO_GAP_MS = 220;
 const NOTE_DURATION = 1.4;
 const FIRE_DEBOUNCE_MS = 150;
@@ -107,7 +91,6 @@ export default function GradosArmonicos({ tonalidad }: Props) {
   const { i18n } = useTranslation();
   const isDe = i18n.language === 'de';
   const [step, setStep] = useState<Step>(1);
-  const [flatMode, setFlatMode] = useState(false);
   const [playingCell, setPlayingCell] = useState<number | null>(null);
   const { playNote } = useAudioEngine();
   const lastFireRef = useRef<number>(0);
@@ -189,10 +172,7 @@ export default function GradosArmonicos({ tonalidad }: Props) {
     return d.spelled + '°';
   });
 
-  // Flat-mode: convert displayed spellings and ASCII keys.
-  const fGlyph = (row: string[]) => flatMode ? row.map(toFlatGlyph) : row;
-  const fAscii = (row: string[]) => flatMode ? row.map(toFlatAscii) : row;
-  const displayChords = flatMode ? chordSymbols.map(toFlatChord) : chordSymbols;
+  const displayChords = chordSymbols;
 
   return (
     <div className={styles.wrap}>
@@ -209,17 +189,6 @@ export default function GradosArmonicos({ tonalidad }: Props) {
             <span className={styles.stepLabel}>{stepLabel(s, isDe)}</span>
           </button>
         ))}
-        <button
-          className={flatMode ? styles.flatToggleActive : styles.flatToggle}
-          onClick={() => setFlatMode((f) => !f)}
-          aria-pressed={flatMode}
-          aria-label={isDe ? 'Vorzeichen umschalten: # ↔ b' : 'Cambiar notación: # ↔ b'}
-          title={isDe ? 'Vorzeichen umschalten' : 'Cambiar # ↔ ♭'}
-        >
-          <span className={styles.flatToggleSym}>♯</span>
-          <span className={styles.flatToggleArrow}>↔</span>
-          <span className={styles.flatToggleSym}>♭</span>
-        </button>
       </div>
 
       <div className={styles.tableWrap}>
@@ -227,16 +196,16 @@ export default function GradosArmonicos({ tonalidad }: Props) {
           <tbody>
             <Row
               label={isDe ? 'Tonleiter' : 'Escala'}
-              cells={fGlyph(escalaRow)}
-              ascii={fAscii(escalaAscii)}
+              cells={escalaRow}
+              ascii={escalaAscii}
               roles={DEGREE_ROLE}
             />
             <TriadaRow
-              tonicaRow={fGlyph(tonicaRow)} tonicaAscii={fAscii(tonicaAscii)}
-              terceraRow={fGlyph(terceraRow)} terceraAscii={fAscii(terceraAscii)}
-              quintaRow={fGlyph(quintaRow)} quintaAscii={fAscii(quintaAscii)}
-              septRow={step >= 4 ? fGlyph(septRow) : undefined}
-              septAscii={step >= 4 ? fAscii(septAscii) : undefined}
+              tonicaRow={tonicaRow} tonicaAscii={tonicaAscii}
+              terceraRow={terceraRow} terceraAscii={terceraAscii}
+              quintaRow={quintaRow} quintaAscii={quintaAscii}
+              septRow={step >= 4 ? septRow : undefined}
+              septAscii={step >= 4 ? septAscii : undefined}
               isDe={isDe}
             />
 

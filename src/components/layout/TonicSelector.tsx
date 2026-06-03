@@ -1,16 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import { useUIStore } from '../../stores/useUIStore';
 import { ALL } from '../../data/notes';
-import { noteShort } from '../../utils/noteCalculations';
+import { noteDisplay } from '../../utils/noteCalculations';
 import type { ChromaticNote } from '../../types/music';
 import styles from './TonicSelector.module.css';
 
-// D#/G#/A# are spelled as flats by the method (ENHARMONIC_REDIRECT).
-// Show the flat label so the selector matches the output of chordSpelled / majorScaleSpelled.
-const FLAT_LABELS: Partial<Record<ChromaticNote, string>> = {
-  'D#': 'E♭', 'G#': 'A♭', 'A#': 'B♭',
-};
-const noteLabel = (n: ChromaticNote) => FLAT_LABELS[n] ?? noteShort(n);
+// Show both enharmonic spellings on black keys (e.g. "A♯/B♭") so the selector
+// exposes the # ↔ ♭ equivalence explicitly. The method still picks the correct
+// spelling per tonality internally (chordSpelled / majorScaleSpelled).
+const noteLabel = (n: ChromaticNote) => noteDisplay(n);
 
 export default function TonicSelector() {
   const tonic = useUIStore((s) => s.tonic);

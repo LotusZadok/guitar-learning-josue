@@ -53,38 +53,6 @@
   font-size: 11px;
 }
 
-.flatToggle {
-  display: inline-flex;
-  align-items: center;
-  padding: 8px 14px;
-  background: none;
-  border: 1px solid var(--rule);
-  color: var(--muted);
-  cursor: pointer;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 16px;
-  line-height: 1;
-  margin-left: auto;
-  transition: border-color 0.15s, color 0.15s, background 0.15s;
-}
-
-.flatToggle:hover {
-  border-color: var(--amber);
-  color: var(--paper);
-}
-
-.flatToggle:focus-visible {
-  outline: 2px solid var(--amber);
-  outline-offset: 2px;
-}
-
-.flatToggleActive {
-  composes: flatToggle;
-  border-color: var(--paper);
-  color: var(--paper);
-  background: rgba(245, 240, 232, 0.06);
-}
-
 /* === Table === */
 
 .tableWrap {
@@ -248,14 +216,6 @@
 [data-harmonic="tense"]       > .romanMajor,
 [data-harmonic="tense"]       > .romanMinor,
 [data-harmonic="tense"]       > .romanDim   { color: var(--diatonic-tense); }
-
-/* Toggle ♯ ↔ ♭ — más explícito sobre su función. */
-.flatToggleSym { font-size: 14px; }
-.flatToggleArrow {
-  font-size: 11px;
-  margin: 0 4px;
-  opacity: 0.6;
-}
 
 @media (prefers-reduced-motion: reduce) {
   .revealRow,

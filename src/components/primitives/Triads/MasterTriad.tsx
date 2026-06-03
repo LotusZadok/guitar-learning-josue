@@ -42,7 +42,7 @@ export default function MasterTriad() {
       </p>
       <div className={styles.chain}>
         {Array.from({ length: totalNotes }, (_, i) => {
-          const ni = (startIdx + i) % 7;
+          const ni = (startIdx + i * 2) % 7;
           const note = NATURALS[ni];
           const roleIdx = i % 7;
           const isRoot = note === root;
