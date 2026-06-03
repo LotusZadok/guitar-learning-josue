@@ -43,9 +43,15 @@ interface NoteTokenProps {
   note: NoteSpelling;
   /** When provided, overrides the per-note chromatic color with the diatonic function color. */
   diatonicRole?: DiatonicRole;
+  /**
+   * Si es `false`, hacer clic solo reproduce la nota y NO cambia la tónica global.
+   * Úsalo en tablas-resultado (grados, progresiones) donde las notas son derivadas
+   * de la tónica activa y seleccionarlas transpondría la propia tabla. Default: true.
+   */
+  selectable?: boolean;
 }
 
-export default function NoteToken({ note, diatonicRole }: NoteTokenProps) {
+export default function NoteToken({ note, diatonicRole, selectable = true }: NoteTokenProps) {
   const { i18n } = useTranslation();
   const isDe = i18n.language === 'de';
   const { playNote } = useAudioEngine();
@@ -61,7 +67,7 @@ export default function NoteToken({ note, diatonicRole }: NoteTokenProps) {
   };
 
   const handleClick = () => {
-    setTonic(note);
+    if (selectable) setTonic(note);
     playNote(note, 4);
   };
 
@@ -79,8 +85,10 @@ export default function NoteToken({ note, diatonicRole }: NoteTokenProps) {
       data-diatonic={diatonicRole}
       role="button"
       tabIndex={0}
-      aria-label={isDe ? `${display} als Tonika auswählen` : `Seleccionar ${display} como tónica`}
-      aria-pressed={isTonic}
+      aria-label={selectable
+        ? (isDe ? `${display} als Tonika auswählen` : `Seleccionar ${display} como tónica`)
+        : (isDe ? `${display} anhören` : `Escuchar ${display}`)}
+      aria-pressed={selectable ? isTonic : undefined}
       onMouseEnter={handlePlay}
       onFocus={handlePlay}
       onClick={handleClick}

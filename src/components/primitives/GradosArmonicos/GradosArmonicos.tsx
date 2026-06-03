@@ -264,7 +264,7 @@ function Row({ label, cells, ascii, roles }: RowProps) {
         return (
           <td key={i} className={styles.noteCell}>
             {tokenizable ? (
-              <NoteToken note={a as NoteSpelling} diatonicRole={roles?.[i]} />
+              <NoteToken note={a as NoteSpelling} diatonicRole={roles?.[i]} selectable={false} />
             ) : (
               <span className={styles.rawNote}>{display}</span>
             )}
@@ -321,7 +321,7 @@ function TriadaRow({ tonicaRow, tonicaAscii, terceraRow, terceraAscii, quintaRow
               {members.map((m, j) => {
                 const degree = (i + j * 2) % 7;
                 return VALID_SPELLINGS.has(m.ascii) ? (
-                  <NoteToken key={j} note={m.ascii as NoteSpelling} diatonicRole={DEGREE_ROLE[degree]} />
+                  <NoteToken key={j} note={m.ascii as NoteSpelling} diatonicRole={DEGREE_ROLE[degree]} selectable={false} />
                 ) : (
                   <span key={j} className={styles.rawNote}>{m.display}</span>
                 );
