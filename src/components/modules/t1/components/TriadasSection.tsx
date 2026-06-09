@@ -1,14 +1,12 @@
-import { Fragment, useMemo } from 'react';
+import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
 import NoteToken from '../../../shared/NoteToken/NoteToken';
 import Prose from '../../../shared/Prose/Prose';
 import TriadsSection from '../../../primitives/Triads/TriadsSection';
-import { useUIStore } from '../../../../stores/useUIStore';
-import { NATURALS } from '../../../../data/notes';
-import type { NoteSpelling, NaturalNote } from '../../../../types/music';
-import type { ProseSegment } from '../../../../types/prose';
+import TriadaProceso from '../../../primitives/TriadaProceso/TriadaProceso';
+import type { NoteSpelling } from '../../../../types/music';
 import {
   TRIADAS_TABLA_HEAD,
   TRIADAS_TABLA_ROW,
@@ -27,63 +25,10 @@ function renderTriadCell(cell: string) {
   ));
 }
 
-function buildEjemplo(root: NaturalNote, locale: string): ProseSegment {
-  const i = NATURALS.indexOf(root);
-  const n1 = NATURALS[(i + 1) % 7] as NaturalNote;
-  const n2 = NATURALS[(i + 2) % 7] as NaturalNote;
-  const n3 = NATURALS[(i + 3) % 7] as NaturalNote;
-  const n4 = NATURALS[(i + 4) % 7] as NaturalNote;
-
-  if (locale === 'de') {
-    return [
-      { type: 'text', value: 'Beispiel: ' },
-      { type: 'note', value: root },
-      { type: 'text', value: ' → ' },
-      { type: 'note', value: n1 },
-      { type: 'text', value: ' auslassen → ' },
-      { type: 'note', value: n2 },
-      { type: 'text', value: ' → ' },
-      { type: 'note', value: n3 },
-      { type: 'text', value: ' auslassen → ' },
-      { type: 'note', value: n4 },
-      { type: 'text', value: '. Der Dreiklang von ' },
-      { type: 'note', value: root },
-      { type: 'text', value: ' ist ' },
-      { type: 'note', value: root }, { type: 'text', value: ' ' },
-      { type: 'note', value: n2 }, { type: 'text', value: ' ' },
-      { type: 'note', value: n4 }, { type: 'text', value: '.' },
-    ];
-  }
-
-  return [
-    { type: 'text', value: 'Ejemplo: ' },
-    { type: 'note', value: root },
-    { type: 'text', value: ' → omito ' },
-    { type: 'note', value: n1 },
-    { type: 'text', value: ' → ' },
-    { type: 'note', value: n2 },
-    { type: 'text', value: ' → omito ' },
-    { type: 'note', value: n3 },
-    { type: 'text', value: ' → ' },
-    { type: 'note', value: n4 },
-    { type: 'text', value: '. La tríada de ' },
-    { type: 'note', value: root },
-    { type: 'text', value: ' es ' },
-    { type: 'note', value: root }, { type: 'text', value: ' ' },
-    { type: 'note', value: n2 }, { type: 'text', value: ' ' },
-    { type: 'note', value: n4 }, { type: 'text', value: '.' },
-  ];
-}
-
 export default function TriadasSection() {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
-  const tonic = useUIStore((s) => s.tonic);
-  // El ejemplo de tríada trabaja sobre letras naturales (el método las usa así).
-  // Tomamos la letra natural de la tónica activa.
-  const exampleRoot = tonic[0] as NaturalNote;
   const procedure = t('t1.s02.procedure', { returnObjects: true }) as string[];
-  const ejemplo = useMemo(() => buildEjemplo(exampleRoot, locale), [exampleRoot, locale]);
 
   return (
     <section id="s-triadas" className={styles.section}>
@@ -107,7 +52,7 @@ export default function TriadasSection() {
         ))}
       </ol>
 
-      <p className={styles.ejemplo}><Prose segment={ejemplo} /></p>
+      <TriadaProceso />
 
       <p className={styles.text}>{t('t1.s02.table_title')}</p>
 

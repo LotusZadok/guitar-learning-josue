@@ -62,17 +62,6 @@
   color: var(--text-body);
 }
 
-.ejemplo {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 13px;
-  color: var(--paper);
-  background: var(--surface);
-  border: 1px solid var(--rule);
-  padding: 14px 18px;
-  margin: 16px 0 24px;
-  line-height: 1.8;
-}
-
 .tableWrap {
   overflow-x: auto;
   margin: 20px 0 24px;
