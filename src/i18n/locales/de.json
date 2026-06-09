@@ -150,7 +150,7 @@
       "rule_flats": "Bei Tonarten mit Bs (♭): die Vorzeichen werden von rechts nach links in der Reihenfolge B E A D G C F hinzugefügt.",
       "exception_label": "Ausnahme:",
       "exception": "F-Dur hat 1 ♭ (B♭) — es folgt nicht dem Muster der Kreuztonarten.",
-      "tip": "Methodentipp: die Sequenz F C G D A E B auswendig lernen. Sie ist das Werkzeug zum Ableiten aller Vorzeichen aller 14 Durtonarten."
+      "tip": "Methodentipp: die Sequenz F C G D A E B und rückwärts B E A D G C F auswendig lernen. Sie ist das Werkzeug zum Ableiten aller Vorzeichen aller 14 Durtonarten."
     }
   },
 
@@ -223,7 +223,7 @@
       "degree_characters": {
         "I": "Ruhe",
         "ii": "Mittel",
-        "iii": "Mittel",
+        "iii": "Ruhe - Mittel",
         "IV": "Mittel-Spannend",
         "V": "Spannend",
         "vi": "Ruhe",

@@ -5,7 +5,7 @@ import Prose from '../../../shared/Prose/Prose';
 import IntervalsSection from '../../../primitives/Intervals/IntervalsSection';
 import { useUIStore } from '../../../../stores/useUIStore';
 import { ALL } from '../../../../data/notes';
-import { majorScaleSpelled, tonicChromatic } from '../../../../utils/noteCalculations';
+import { majorScaleSpelled, noteShort, tonicChromatic } from '../../../../utils/noteCalculations';
 import type { NoteSpelling } from '../../../../types/music';
 import type { ProseSegment, ProseFragment } from '../../../../types/prose';
 import {
@@ -107,6 +107,25 @@ function buildResultado(tonicIdx: number, letterIdx: number, tonicAscii: string,
   return seg;
 }
 
+// Mismas 13 notas que `buildResultado`, pero como strings de display para la
+// tabla comparativa (1.3): cada columna es un intervalo, cada celda su nota.
+function buildResultadoCells(tonicIdx: number, letterIdx: number): string[] {
+  const cells: string[] = [];
+  for (let i = 0; i <= 12; i++) {
+    const note = ALL[(tonicIdx + i) % 12];
+    const flat = SHARP_TO_FLAT_ASCII[note];
+    if (flat && i === 6) {
+      cells.push(`${noteShort(note)}/${noteShort(flat)}`);
+    } else if (flat) {
+      const expected = NATURAL_LETTERS_7[(letterIdx + LETTER_OFFSETS_13[i]) % 7];
+      cells.push(noteShort(flat[0] === expected ? flat : note));
+    } else {
+      cells.push(noteShort(note));
+    }
+  }
+  return cells;
+}
+
 function buildOctava(tonicAscii: string, locale: string): ProseSegment {
   const t = tonicAscii as NoteSpelling;
   if (locale === 'de') {
@@ -179,6 +198,10 @@ export default function IntervalosSection() {
     () => buildResultado(tonicIdx, tonicLetterIdx, tonicAscii, locale),
     [tonicIdx, tonicLetterIdx, tonicAscii, locale],
   );
+  const resultadoCells = useMemo(
+    () => buildResultadoCells(tonicIdx, tonicLetterIdx),
+    [tonicIdx, tonicLetterIdx],
+  );
   const octava = useMemo(
     () => buildOctava(tonicAscii, locale),
     [tonicAscii, locale],
@@ -243,6 +266,28 @@ export default function IntervalosSection() {
       </ol>
 
       <p className={styles.resultado}><Prose segment={resultadoG} /></p>
+
+      {/* Tabla comparativa (1.3): qué intervalo es cada nota del resultado. */}
+      <div className={styles.tableWrap}>
+        <table className={`${styles.table} ${styles.tableIntervals}`}>
+          <thead>
+            <tr>
+              {INTERVALOS_13_HEAD.map((h, i) => (
+                <th key={i} scope="col">{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">{locale === 'de' ? 'Ergebnis' : 'Resultado'}</th>
+              {resultadoCells.map((c, i) => (
+                <td key={i}>{c}</td>
+              ))}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
       <p className={styles.text}><Prose segment={octava} /></p>
 
       <IntervalsSection />

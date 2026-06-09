@@ -148,7 +148,7 @@
       "rule_flats": "En tonalidades con bemoles (♭): los bemoles se añaden de derecha a izquierda en el orden B E A D G C F.",
       "exception_label": "Excepción:",
       "exception": "Fa mayor tiene 1 bemol (B♭) — no sigue el patrón de las tonalidades con sostenidos.",
-      "tip": "Consejo del método: memorizar la secuencia F C G D A E B. Es la herramienta para derivar las armaduras de todas las tonalidades."
+      "tip": "Consejo del método: memorizar la secuencia F C G D A E B y al revés B E A D G C F. Es la herramienta para derivar las armaduras de todas las tonalidades."
     }
   },
 
@@ -221,7 +221,7 @@
       "degree_characters": {
         "I": "Reposo",
         "ii": "Medio",
-        "iii": "Medio",
+        "iii": "Reposo - Medio",
         "IV": "Medio-Tenso",
         "V": "Tenso",
         "vi": "Reposo",

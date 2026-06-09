@@ -24,6 +24,15 @@
   cursor: pointer;
   transition: transform 0.15s;
 }
+/* Reunión 6/7/26 (1.6): sin marco de foco al clickear con mouse en PC;
+   se conserva el anillo sólo para navegación por teclado (a11y). */
+.node:focus {
+  outline: none;
+}
+.node:focus-visible {
+  outline: 2px solid var(--paper);
+  outline-offset: 2px;
+}
 
 .node > * {
   pointer-events: none;
