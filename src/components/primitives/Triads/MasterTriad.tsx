@@ -1,7 +1,9 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAudioEngine } from '../../../hooks/useAudioEngine';
+import { useAudioEngine, stopAllNotes } from '../../../hooks/useAudioEngine';
 import { useUIStore } from '../../../stores/useUIStore';
 import { NATURALS, NOTE_COLORS, NOTE_ES } from '../../../data/notes';
+import { pitchClass } from '../../../utils/noteCalculations';
 import { ROLE_LABELS } from '../../../data/triads';
 import type { NaturalNote } from '../../../types/music';
 import styles from './Triads.module.css';
@@ -28,6 +30,30 @@ export default function MasterTriad() {
   const startIdx = NATURALS.indexOf(root);
   const totalNotes = 7 * CYCLES;
 
+  // Reunión 6/7/26: el audio de la cadena debe ascender — la raíz es la nota
+  // más grave y cada tercera apilada sube. Se reparte en ~2 octavas (la cadena
+  // sube por terceras desde la tónica). Los círculos ya cambiaban con la nota;
+  // ahora la altura también respeta el orden.
+  const chainNotes = useMemo(() => {
+    const result: { note: NaturalNote; octave: number }[] = [];
+    let prevPc = -1;
+    let octave = 4;
+    for (let i = 0; i < totalNotes; i++) {
+      const note = NATURALS[(startIdx + i * 2) % 7];
+      const pc = pitchClass(note);
+      if (pc <= prevPc) octave++;
+      result.push({ note, octave });
+      prevPc = pc;
+    }
+    return result;
+  }, [startIdx, totalNotes]);
+
+  // Cortar la nota anterior al pasar a la siguiente (scrub limpio, sin acumular).
+  const playChainNote = (octave: number, note: NaturalNote) => {
+    stopAllNotes();
+    playNote(note, octave, 2);
+  };
+
   return (
     <div className={styles.masterWrap}>
       <h3 className={styles.masterTitle}>
@@ -41,9 +67,7 @@ export default function MasterTriad() {
           : 'Seleccioná una nota raíz. La cadena apila terceras diatónicas en ciclo: T → 3ra → 5ta → 7ma → 9na → 11na → 13na → repite.'}
       </p>
       <div className={styles.chain}>
-        {Array.from({ length: totalNotes }, (_, i) => {
-          const ni = (startIdx + i * 2) % 7;
-          const note = NATURALS[ni];
+        {chainNotes.map(({ note, octave }, i) => {
           const roleIdx = i % 7;
           const isRoot = note === root;
           return (
@@ -51,16 +75,16 @@ export default function MasterTriad() {
               {i > 0 && <span className={styles.chainArrow}>→</span>}
               <div
                 className={styles.chainNote}
-                onMouseEnter={() => playNote(note, 4, 2)}
-                onClick={() => playNote(note, 4, 2)}
+                onMouseEnter={() => playChainNote(octave, note)}
+                onClick={() => playChainNote(octave, note)}
                 tabIndex={0}
                 role="button"
                 aria-label={isDe ? `Ton ${NOTE_DE[note]} in Position ${ROLE_LABELS[roleIdx]}` : `Nota ${NOTE_ES[note]} en posición ${ROLE_LABELS[roleIdx]}`}
-                onFocus={() => playNote(note, 4, 2)}
+                onFocus={() => playChainNote(octave, note)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    playNote(note, 4, 2);
+                    playChainNote(octave, note);
                   }
                 }}
               >

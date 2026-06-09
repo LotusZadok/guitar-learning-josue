@@ -11,8 +11,8 @@ import { perfectFifth, noteShort } from '../../../utils/noteCalculations';
 import type { ChromaticNote } from '../../../types/music';
 import styles from './ReglaQuinta.module.css';
 
-const ARPEGGIO_GAP_MS = 250;
-const NOTE_DURATION = 1.4;
+const ARPEGGIO_GAP_MS = 400;
+const NOTE_TAIL_MS = 380;
 
 const EXCEPTION_TONICS = new Set<ChromaticNote>(['B']);
 
@@ -33,7 +33,7 @@ interface PlayingState {
 export default function ReglaQuinta() {
   const { i18n } = useTranslation();
   const isDe = i18n.language === 'de';
-  const { playNote } = useAudioEngine();
+  const { playSequence } = useAudioEngine();
   const [playing, setPlaying] = useState<PlayingState | null>(null);
 
   const rows = useMemo<FifthRow[]>(
@@ -55,14 +55,18 @@ export default function ReglaQuinta() {
     (row: FifthRow) => {
       if (playing) return;
       setPlaying({ tonic: row.tonic, step: 'tonic' });
-      playNote(row.tonic, 4, NOTE_DURATION);
-      setTimeout(() => {
-        setPlaying({ tonic: row.tonic, step: 'fifth' });
-        playNote(row.fifthChromatic, row.fifthOctave, NOTE_DURATION);
-      }, ARPEGGIO_GAP_MS);
-      setTimeout(() => setPlaying(null), ARPEGGIO_GAP_MS + NOTE_DURATION * 1000);
+      playSequence(
+        [
+          { name: row.tonic, octave: 4 },
+          { name: row.fifthChromatic, octave: row.fifthOctave },
+        ],
+        ARPEGGIO_GAP_MS,
+        NOTE_TAIL_MS,
+      );
+      setTimeout(() => setPlaying({ tonic: row.tonic, step: 'fifth' }), ARPEGGIO_GAP_MS);
+      setTimeout(() => setPlaying(null), ARPEGGIO_GAP_MS + NOTE_TAIL_MS + 300);
     },
-    [playNote, playing],
+    [playSequence, playing],
   );
 
   return (

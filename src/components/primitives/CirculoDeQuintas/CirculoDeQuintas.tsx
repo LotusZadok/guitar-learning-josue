@@ -33,8 +33,10 @@ const noteLabel = (n: ChromaticNote) => {
 const EXCEPTION_NOTES: ReadonlySet<ChromaticNote> = new Set<ChromaticNote>(['B', 'A#']);
 
 const CX = 200, CY = 200, R = 140, NODE_R = 24;
-const ARPEGGIO_GAP_MS = 280;
-const NOTE_DURATION = 1.6;
+// Reunión 6/7/26: mismo corte/separación que la lista de la regla 5ª (ReglaQuinta),
+// para que la rueda del §1.8 y la lista suenen igual (principio de sonido).
+const ARPEGGIO_GAP_MS = 400;
+const NOTE_TAIL_MS = 380;
 
 interface NodeData {
   note: ChromaticNote;
@@ -51,7 +53,7 @@ export default function CirculoDeQuintas() {
   const isDe = i18n.language === 'de';
   const [hovered, setHovered] = useState<ChromaticNote | null>(null);
   const [playing, setPlaying] = useState(false);
-  const { playNote } = useAudioEngine();
+  const { playSequence } = useAudioEngine();
 
   const nodes = useMemo<NodeData[]>(() =>
     COF_ORDER.map((note, i) => {
@@ -83,12 +85,17 @@ export default function CirculoDeQuintas() {
   const handlePlay = useCallback((node: NodeData) => {
     if (playing) return;
     setPlaying(true);
-    playNote(node.note, 4, NOTE_DURATION);
-    setTimeout(() => {
-      playNote(node.fifthChromatic, node.fifthOctave, NOTE_DURATION);
-      setTimeout(() => setPlaying(false), NOTE_DURATION * 1000);
-    }, ARPEGGIO_GAP_MS);
-  }, [playing, playNote]);
+    // Tónica más grave → quinta ascendente, con corte (sin acumular voces).
+    playSequence(
+      [
+        { name: node.note, octave: 4 },
+        { name: node.fifthChromatic, octave: node.fifthOctave },
+      ],
+      ARPEGGIO_GAP_MS,
+      NOTE_TAIL_MS,
+    );
+    setTimeout(() => setPlaying(false), ARPEGGIO_GAP_MS + NOTE_TAIL_MS + 300);
+  }, [playing, playSequence]);
 
   const hoveredNode = hovered ? nodes.find((n) => n.note === hovered) : null;
   const fifthPos = hoveredNode ? fifthNodePos.get(hoveredNode.note) : null;

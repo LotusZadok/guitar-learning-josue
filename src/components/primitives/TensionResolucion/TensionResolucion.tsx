@@ -66,8 +66,10 @@ const RADIUS_STABLE = 18;
 const RADIUS_TENSE = 18;
 const ARC_BASELINE = NODE_Y - RADIUS_TONIC - 6; // top of node circle
 const ARC_RISE = 52;        // how far above baseline the arc peaks
-const ARPEGGIO_GAP_MS = 260;
-const NOTE_DURATION = 1.4;
+// Reunión 6/7/26: separar/alargar las 2 notas de cada flecha para que la
+// resolución se oiga clara (antes 260ms se encimaban demasiado).
+const ARPEGGIO_GAP_MS = 430;
+const NOTE_TAIL_MS = 420;
 const FIRE_DEBOUNCE_MS = 150;
 
 function nodeX(pos: number): number {
@@ -89,11 +91,11 @@ export default function TensionResolucion() {
   const isDe = i18n.language === 'de';
   const tonic = useUIStore((s) => s.tonic);
   const nodes = useMemo(() => buildNodes(tonic), [tonic]);
-  const { playNote } = useAudioEngine();
+  const { playSequence } = useAudioEngine();
   const lastFireRef = useRef<number>(0);
   const [playingArrow, setPlayingArrow] = useState<string | null>(null);
 
-  const playSequence = useCallback(
+  const playResolution = useCallback(
     (fromIdx: number, toIdx: number, arrowId: string) => {
       const now = performance.now();
       if (now - lastFireRef.current < FIRE_DEBOUNCE_MS) return;
@@ -102,14 +104,18 @@ export default function TensionResolucion() {
       setPlayingArrow(arrowId);
       const from = nodes[fromIdx];
       const to = nodes[toIdx];
-      playNote(from.note, 4 + from.octaveAdj, NOTE_DURATION);
-      setTimeout(
-        () => playNote(to.note, 4 + to.octaveAdj, NOTE_DURATION),
+      // Dirección melódica de la resolución (tensa → estable), no se reordena.
+      playSequence(
+        [
+          { name: from.note, octave: 4 + from.octaveAdj },
+          { name: to.note, octave: 4 + to.octaveAdj },
+        ],
         ARPEGGIO_GAP_MS,
+        NOTE_TAIL_MS,
       );
-      setTimeout(() => setPlayingArrow(null), ARPEGGIO_GAP_MS + NOTE_DURATION * 1000);
+      setTimeout(() => setPlayingArrow(null), ARPEGGIO_GAP_MS + NOTE_TAIL_MS + 400);
     },
-    [playNote, nodes],
+    [playSequence, nodes],
   );
 
   return (
@@ -157,7 +163,7 @@ export default function TensionResolucion() {
               ariaLabel={isDe
                 ? `Auflösung von ${NOTE_DE_LETTER[from.note] ?? from.note} nach ${NOTE_DE_LETTER[to.note] ?? to.note} spielen`
                 : `Reproducir resolución de ${NOTE_ES[from.note]} a ${NOTE_ES[to.note]}`}
-              onPlay={() => playSequence(a.fromIdx, a.toIdx, a.id)}
+              onPlay={() => playResolution(a.fromIdx, a.toIdx, a.id)}
               isPlaying={playingArrow === a.id}
               isDimmed={playingArrow !== null && playingArrow !== a.id}
             />

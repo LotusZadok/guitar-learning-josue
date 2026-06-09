@@ -131,6 +131,45 @@ export function ensureAscending(members: ChordMember[]): ChordMember[] {
   });
 }
 
+// === Ascending pitch sequences (principio "tónica = nota más grave") ===
+// Convierte nombres con grafía libre (F#, Bb, Cb, E#, B#, …) a su clase de
+// altura cromática 0–11, resolviendo enarmónicamente al equivalente sostenido
+// que el motor de audio entiende.
+export function pitchClass(spelled: string): number {
+  const letter = spelled[0] as keyof typeof NATURAL_SEMITONE;
+  let delta = 0;
+  for (const ch of spelled.slice(1)) {
+    if (ch === '#' || ch === '♯') delta += 1;
+    else if (ch === 'b' || ch === '♭') delta -= 1;
+    else if (ch === 'x') delta += 2;
+  }
+  return ((NATURAL_SEMITONE[letter] ?? 0) + delta + 24) % 12;
+}
+
+// Ordena una secuencia de notas (por nombre) en alturas ascendentes: la primera
+// es la más grave y cada nota siguiente sube de octava si su clase de altura no
+// es estrictamente mayor que la anterior. Devuelve nombres cromáticos (sharp)
+// listos para el motor de audio. `closeOctave` añade la tónica una octava arriba.
+export function spelledSequenceAscending(
+  names: string[],
+  baseOctave = 4,
+  closeOctave = false,
+): { name: ChromaticNote; octave: number }[] {
+  const result: { name: ChromaticNote; octave: number }[] = [];
+  let prevPc = -1;
+  let octave = baseOctave;
+  for (const n of names) {
+    const pc = pitchClass(n);
+    if (pc <= prevPc) octave++;
+    result.push({ name: ALL[pc], octave });
+    prevPc = pc;
+  }
+  if (closeOctave && names.length > 0) {
+    result.push({ name: ALL[pitchClass(names[0])], octave: octave + 1 });
+  }
+  return result;
+}
+
 // === Generalized enharmonic interval spelling (reunión 24/5/26) ===
 // Regla: el número del intervalo determina la LETRA; la calidad la alteración.
 // Una 3ra de G es siempre B (B♭ o B). Una 4ta de F es siempre B (B♭ o B), nunca A#.

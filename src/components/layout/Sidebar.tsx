@@ -8,6 +8,7 @@ import { useActiveSection } from '../../hooks/useActiveSection';
 import ThemeToggle from './ThemeToggle';
 import MuteToggle from './MuteToggle';
 import TonicSelector from './TonicSelector';
+import OctaveSelector from './OctaveSelector';
 import styles from './Sidebar.module.css';
 
 const SECTIONS = [
@@ -106,6 +107,7 @@ export default function Sidebar() {
             />
           </div>
           <TonicSelector />
+          <OctaveSelector />
           <div className={styles.langWrap}>
             <span className={styles.langLabel}>{isDe ? 'SPRACHE' : 'IDIOMA'}</span>
             <div className={styles.langChips}>

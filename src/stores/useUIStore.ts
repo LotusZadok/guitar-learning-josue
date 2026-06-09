@@ -9,6 +9,7 @@ interface UIState {
   audioMuted: boolean;
   volume: number;
   tonic: Tonic;
+  octave: number;
 
   setTheme: (theme: ThemeMode) => void;
   toggleTheme: () => void;
@@ -18,7 +19,15 @@ interface UIState {
   setAudioMuted: (muted: boolean) => void;
   setVolume: (v: number) => void;
   setTonic: (t: Tonic) => void;
+  setOctave: (o: number) => void;
 }
+
+// Registro base global del sonido. La octava elegida es la altura de la nota
+// más grave (la tónica); todo ejemplo orbita ascendiendo desde ahí. Rango de
+// 4 octavas centrado en C3 (decisión del método: default C3, grave↔agudo ±2).
+export const OCTAVE_MIN = 1;
+export const OCTAVE_MAX = 5;
+export const OCTAVE_DEFAULT = 3;
 
 export const useUIStore = create<UIState>()(
   persist(
@@ -29,6 +38,7 @@ export const useUIStore = create<UIState>()(
       audioMuted: true,
       volume: 0.8,
       tonic: 'C',
+      octave: OCTAVE_DEFAULT,
 
       setTheme: (theme) => set({ theme }),
       toggleTheme: () => set((s) => ({ theme: s.theme === 'dark' ? 'light' : 'dark' })),
@@ -38,6 +48,7 @@ export const useUIStore = create<UIState>()(
       setAudioMuted: (muted) => set({ audioMuted: muted }),
       setVolume: (v) => set({ volume: v }),
       setTonic: (t) => set({ tonic: t }),
+      setOctave: (o) => set({ octave: Math.min(OCTAVE_MAX, Math.max(OCTAVE_MIN, o)) }),
     }),
     { name: 'apuntes-ui', partialize: (state) => ({ theme: state.theme }) }
   )

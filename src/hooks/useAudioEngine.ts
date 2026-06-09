@@ -5,6 +5,10 @@ import { useUIStore } from '../stores/useUIStore';
 let audioCtx: AudioContext | null = null;
 let masterVolumeNode: GainNode | null = null;
 
+// Octava de referencia que asumen los consumidores al escribir sus alturas.
+// El selector global de octava desplaza todo respecto a esta base.
+const REFERENCE_OCTAVE = 4;
+
 // Reunión 24/5/26: poder cortar el sonido del acorde anterior cuando arranca el siguiente.
 // Tracking global de gains activos; cualquier consumidor puede llamar stopAllNotes() para cortar.
 const activeGains = new Set<GainNode>();
@@ -50,7 +54,11 @@ export const useAudioEngine = () => {
     for (const [f, s] of Object.entries(flatMap)) {
       if (key.startsWith(f)) { key = s + key.slice(2); break; }
     }
-    key = key + octave;
+    // Transpone global: la octava elegida en el selector es el registro base
+    // de TODOS los ejemplos. Los consumidores escriben sus octavas asumiendo
+    // base 4 (C4); aquí se desplaza todo al registro elegido (default C3 → −1).
+    const effectiveOctave = octave + (useUIStore.getState().octave - REFERENCE_OCTAVE);
+    key = key + effectiveOctave;
     const freq = NOTE_FREQS[key];
     if (!freq) return;
 
@@ -110,6 +118,21 @@ export const useAudioEngine = () => {
     nSrc.stop(now + noiseLen + 0.01);
   }, []);
 
+  // Reunión 6/7/26: secuencias melódicas (escala, resolución, regla de la 5ª,
+  // cadena de terceras) no deben acumular voces. Cada nota dura ~ el espacio
+  // hasta la siguiente más una cola muy corta → se cortan antes o "apenas se
+  // tocan" (traslape mínimo), sin ensuciar. Acordes/arpegios NO usan esto:
+  // ahí el traslape es deliberado para oír el acorde.
+  const playSequence = useCallback(
+    (notes: { name: string; octave: number }[], gapMs = 320, tailMs = 150) => {
+      const dur = (gapMs + tailMs) / 1000;
+      notes.forEach((n, i) => {
+        setTimeout(() => playNote(n.name, n.octave, dur), i * gapMs);
+      });
+    },
+    [playNote],
+  );
+
   const playClick = useCallback((freq: number, time: number) => {
     if (useUIStore.getState().audioMuted) return;
     const ctx = getCtx();
@@ -152,5 +175,5 @@ export const useAudioEngine = () => {
     lastPlayedRef.current = null;
   }, []);
 
-  return { playNote, playClick, playRhythm, playNoteIfNew, resetLastPlayed };
+  return { playNote, playSequence, playClick, playRhythm, playNoteIfNew, resetLastPlayed };
 };

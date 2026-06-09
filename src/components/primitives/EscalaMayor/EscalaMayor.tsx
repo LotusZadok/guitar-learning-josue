@@ -1,6 +1,6 @@
 import { useCallback, useMemo, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAudioEngine } from '../../../hooks/useAudioEngine';
+import { useAudioEngine, stopAllNotes } from '../../../hooks/useAudioEngine';
 import { useUIStore } from '../../../stores/useUIStore';
 import { ALL, NOTE_COLORS, NOTE_ES } from '../../../data/notes';
 
@@ -74,6 +74,8 @@ export default function EscalaMayor() {
 
   const handlePlay = useCallback(
     (chromatic: ChromaticNote, octaveAdj: number) => {
+      // Cortar la nota anterior para que al recorrer la escala no se acumulen.
+      stopAllNotes();
       playNote(chromatic, 4 + octaveAdj, 1.4);
     },
     [playNote],
@@ -126,6 +128,7 @@ function ScaleNode({ data, onPlay, isDe }: ScaleNodeProps) {
     'var(--diatonic-stable)'; // tonic + stable
 
   // Reunión 24/5/26: las notas fuera de escala (cromáticas tenues) no deben sonar.
+  // Reunión 6/7/26 (1.4): suena al entrar y también al salir del círculo.
   const handleEnter = useCallback(() => {
     if (isOnScale) onPlay(chromatic, octaveAdj);
   }, [chromatic, octaveAdj, onPlay, isOnScale]);
@@ -158,6 +161,7 @@ function ScaleNode({ data, onPlay, isDe }: ScaleNodeProps) {
           r={Math.max(radius + 6, 18)}
           fill="transparent"
           onMouseEnter={handleEnter}
+          onMouseLeave={handleEnter}
         />
       )}
 
