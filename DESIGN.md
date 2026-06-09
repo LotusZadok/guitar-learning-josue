@@ -357,7 +357,7 @@ Este componente es el que identifica la marca. Aparece en T1 (primitiva Chromati
 
 Esta sección lista deudas que las auditorías y pasadas de resolución identificaron pero **no** han sido resueltas. Son trabajo futuro explícito, no aprobaciones tácitas. Cada vez que una pasada resuelve una deuda, se remueve de esta lista; cada nueva deuda descubierta se añade.
 
-**Última actualización:** 2026-05-24 (14ª ola — reunión Josué: validador de enarmonía + fixes T1 §1.1–§1.8).
+**Última actualización:** 2026-07-06 (16ª ola — reunión Josué: §1.6 ejemplo de tríada como proceso ordenado animado).
 
 ### Doctrina activa (decisiones pendientes de diseño)
 
@@ -375,6 +375,23 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 ### Histórico (resueltas, conservar para contexto)
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
+
+**16ª ola — Reunión Josué (2026-07-06): §1.6 ejemplo de tríada como proceso animado:**
+- ✓ **Cierra la deuda "§1.6 caja de ejemplos como proceso ordenado"** abierta en la 15ª ola. Nueva primitiva `TriadaProceso` (`primitives/TriadaProceso/`) reemplaza el párrafo estático `Ejemplo: C → omito D → E → omito F → G…`. Presenta la construcción de la tríada como un **proceso paso-a-paso** (6 pasos: tomar tónica → saltar 2ª → tomar 3ra → saltar 4ta → tomar 5ta → resultado), con la misma "onda" que §2.3/§2.4: tira lineal SVG de 5 nodos (lenguaje visual de §1.4/§1.5), panel de pasos con estado activo/pasado, controles `◀ ▶/⏸ ▶▶` + velocidad. **Reutiliza `useProcessAnimation`** (hook de t2, lógica pura, ya respeta `prefers-reduced-motion`).
+- ✓ **Discriminación tomada/saltada sin hue falso:** los nodos *son* notas → usan `--note-*` (uso canónico). "Tomada" = hue + relleno + anillo (`var(--paper)` en la raíz); "saltada" = mismo hue al 22% + tachado + `×`; "pendiente" = `--surface-2` + `--rule`. El rol vive en opacity/tamaño/anillo/tachado, no en un color inventado (mismo precedente que EscalaMayor §6ª ola).
+- ✓ **Audio respeta el principio de la 15ª ola:** pasos 1/3/5 suenan la nota tomada en orden ascendente (tónica más grave, vía `spelledSequenceAscending`); el paso 6 suena la tríada en bloque (traslape deliberado, es acorde). El audio siempre tiene paralelo visual (estado del nodo + paso activo).
+- ✓ Dinámico según tónica global y locale (es/de, B→H en alemán). `TriadasSection` perdió `buildEjemplo`/`exampleRoot` (huérfanos del cambio) y la clase CSS `.ejemplo`.
+- ✓ Build + typecheck + lint (src) limpios. Verificado en browser a 375/768/1280: estados idle/tomada/saltada/resultado, sin errores de consola. Anti-checklist 14/14 (inline `style` solo en valores computados en render: opacity/fill del reveal por paso).
+
+**15ª ola — Reunión Josué (2026-07-06): principio de sonido + octava global:**
+- ✓ **Principio "tónica = nota más grave, ascendente":** las secuencias melódicas suenan con la tónica abajo y cada nota más aguda. `utils/noteCalculations.ts` gana `pitchClass()` + `spelledSequenceAscending()` (resuelve grafías libres Cb/Fb/E♯/B♯ a clase de altura y reparte octavas ascendentes). Corregidos: "Escuchar escala" de §2.3/§2.4 (antes todo en oct. 4 → C/D/E sonaban por debajo de la tónica) y la cadena de la Tríada Maestra (§1.6, antes plana en oct. 4 → ahora asciende ~2 octavas).
+- ✓ **Selector de octava global** (`OctaveSelector` junto a la TÓNICA en el Sidebar). Registro base de TODO el sonido; default **C3**, rango **C1–C5** (4 octavas). El desplazamiento se aplica una sola vez en el dispatcher (`useAudioEngine.playNote`), no en cada consumidor — `store.octave − REFERENCE_OCTAVE(4)`. Nuevo estado `octave` en `useUIStore` (no persistido, igual que `tonic`).
+- ✓ **Anti-traslape en secuencias** (decisión Josué: "que se corten antes o un traslape mínimo, apenas se toquen"). Nuevo helper `playSequence(notes, gapMs, tailMs)` en el dispatcher: cada nota dura ~gap+cola corta → no se acumulan voces. Aplicado a escala (§2.3/§2.4), resolución de tensión (§1.5, además separada/alargada), regla de la 5ª (§1.8: tanto la lista `ReglaQuinta` como la rueda `CirculoDeQuintas`). Scrub de notas sueltas (§1.4 escala, §1.6 cadena) corta la anterior vía `stopAllNotes()`. **Acordes/arpegios conservan el traslape a propósito** (Tríadas §1.6, Constructor §1.7, Grados §2.6) — ahí se busca oír el acorde.
+- ✓ **§1.4 escala suena al entrar y al salir** del círculo de cada nota (antes solo al entrar).
+- ✓ **§1.3 tabla comparativa de intervalos**: bajo "Resultado para X" se añadió una tabla (nombre de intervalo → nota resultante), espejo de la tabla de semitonos de arriba.
+- ✓ **§1.6 marco de foco** removido al clickear el círculo de tríadas con mouse en PC; se conserva el anillo `:focus-visible` para teclado (a11y).
+- ✓ **§1.8 consejo**: añadido "y al revés B E A D G C F" (orden de bemoles). **§2.6 grado iii**: carácter "Medio" → "Reposo - Medio" en la tabla comparativa (es/de).
+- ✓ Build + typecheck + lint (src) limpios. Verificado en browser: octava clampa C1–C5 / default C3, tabla §1.3 renderiza, §1.8 y §2.6 con el texto nuevo, rutas de audio sin errores de consola.
 
 **14ª ola — Reunión Josué (2026-05-24):**
 - ✓ **Validador de enarmonía generalizado** en `utils/noteCalculations.ts`: `spelledIntervalFromTonic(tonic, number, quality)` + `spelledChromaticCircle(tonic)`. Regla "el número del intervalo determina la letra; la calidad la alteración". El IntervalsSection primitive ahora computa las 3ras menores correctas para cualquier tónica (antes producía A♯ donde debía ser B♭).
