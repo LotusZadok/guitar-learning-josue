@@ -5,8 +5,7 @@ import RuleNote from '../../../shared/RuleNote';
 import Prose from '../../../shared/Prose/Prose';
 import TensionResolucion from '../../../primitives/TensionResolucion/TensionResolucion';
 import { useUIStore } from '../../../../stores/useUIStore';
-import { NOTE_ES } from '../../../../data/notes';
-import { majorScaleSpelled, tonicChromatic } from '../../../../utils/noteCalculations';
+import { majorScaleSpelled, spelledNameES, tonicChromatic } from '../../../../utils/noteCalculations';
 import type { NoteSpelling, Tonic } from '../../../../types/music';
 import type { ProseSegment } from '../../../../types/prose';
 import {
@@ -105,7 +104,7 @@ export default function TensionResolucionSection() {
 
       <h3 className={styles.subheading}>{locale === 'de'
         ? `Karte der Auflösungen in ${NOTE_DE_NAME[tonicChromatic(tonic)] ?? tonic} Dur`
-        : `Mapa de resoluciones en ${NOTE_ES[tonicChromatic(tonic)]} mayor`}</h3>
+        : `Mapa de resoluciones en ${spelledNameES(tonic)} mayor`}</h3>
       <p className={styles.text}>{locale === 'de' ? TENSION_PRIMITIVA_INSTRUCCION_DE : TENSION_PRIMITIVA_INSTRUCCION}</p>
       <TensionResolucion />
 

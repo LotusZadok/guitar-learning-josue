@@ -23,6 +23,18 @@ export function noteNameES(n: ChromaticNote): string {
   return NOTE_ES[n];
 }
 
+// Nombre en latín (solfeo) que RESPETA la grafía elegida: Db → "Re♭", no "Do♯".
+// `noteNameES`/`NOTE_ES` enarmonizan al sostenido (bueno para identidad cromática),
+// pero al nombrar la tónica/nota con su grafía hay que conservar el bemol.
+const LETTER_ES: Record<string, string> = {
+  C: 'Do', D: 'Re', E: 'Mi', F: 'Fa', G: 'Sol', A: 'La', B: 'Si',
+};
+export function spelledNameES(spelling: string): string {
+  const letter = spelling[0];
+  const acc = spelling.slice(1).replace(/#/g, '♯').replace(/b/g, '♭');
+  return (LETTER_ES[letter] ?? letter) + acc;
+}
+
 // === Major scale spelling (T1 §1.4 / §1.7) ===
 
 // La tónica lleva su propia grafía (sostenido o bemol). La altura cromática para
@@ -165,7 +177,11 @@ export function spelledSequenceAscending(
     prevPc = pc;
   }
   if (closeOctave && names.length > 0) {
-    result.push({ name: ALL[pitchClass(names[0])], octave: octave + 1 });
+    // La octava de cierre es exactamente UNA arriba de la tónica inicial
+    // (baseOctave + 1), no una arriba de la última nota: si la escala envolvió
+    // octava internamente (toda escala que cruza C), `octave` ya subió y cerrar
+    // con `octave + 1` saltaba 2 octavas. La 8va justa siempre es base + 1.
+    result.push({ name: ALL[pitchClass(names[0])], octave: baseOctave + 1 });
   }
   return result;
 }

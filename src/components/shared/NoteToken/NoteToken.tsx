@@ -44,37 +44,33 @@ interface NoteTokenProps {
   /** When provided, overrides the per-note chromatic color with the diatonic function color. */
   diatonicRole?: DiatonicRole;
   /**
-   * Si es `false`, hacer clic solo reproduce la nota y NO cambia la tónica global.
-   * Úsalo en tablas-resultado (grados, progresiones) donde las notas son derivadas
-   * de la tónica activa y seleccionarlas transpondría la propia tabla. Default: true.
+   * Octava en la que suena la nota. Default 4. Permite que notas apiladas (p.ej.
+   * la fila de tríada en §2.6) suenen en orden ascendente pasando octavas crecientes.
    */
-  selectable?: boolean;
+  octave?: number;
 }
 
-export default function NoteToken({ note, diatonicRole, selectable = true }: NoteTokenProps) {
+// Reunión 9/6/26: hacer clic en una nota SOLO la reproduce; ya no cambia la
+// tónica global (eso confundía en prosa y tablas). La tónica se cambia únicamente
+// desde el selector del sidebar. Se conserva el resaltado de la tónica activa.
+export default function NoteToken({ note, diatonicRole, octave = 4 }: NoteTokenProps) {
   const { i18n } = useTranslation();
   const isDe = i18n.language === 'de';
   const { playNote } = useAudioEngine();
   const tonic = useUIStore((s) => s.tonic);
-  const setTonic = useUIStore((s) => s.setTonic);
   const display = noteShort(note);
   const dataNote = DATA_NOTE[note];
   const chromatic = SPELLING_TO_CHROMATIC[note];
   const isTonic = chromatic === tonicChromatic(tonic);
 
   const handlePlay = () => {
-    playNote(note, 4);
-  };
-
-  const handleClick = () => {
-    if (selectable) setTonic(note);
-    playNote(note, 4);
+    playNote(note, octave);
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLSpanElement>) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      handleClick();
+      handlePlay();
     }
   };
 
@@ -85,13 +81,10 @@ export default function NoteToken({ note, diatonicRole, selectable = true }: Not
       data-diatonic={diatonicRole}
       role="button"
       tabIndex={0}
-      aria-label={selectable
-        ? (isDe ? `${display} als Tonika auswählen` : `Seleccionar ${display} como tónica`)
-        : (isDe ? `${display} anhören` : `Escuchar ${display}`)}
-      aria-pressed={selectable ? isTonic : undefined}
+      aria-label={isDe ? `${display} anhören` : `Escuchar ${display}`}
       onMouseEnter={handlePlay}
       onFocus={handlePlay}
-      onClick={handleClick}
+      onClick={handlePlay}
       onKeyDown={handleKeyDown}
     >
       {display}

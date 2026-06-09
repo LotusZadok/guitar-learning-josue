@@ -2,7 +2,7 @@ import { useCallback, useMemo, useRef, useState, type KeyboardEvent } from 'reac
 import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { ALL } from '../../../data/notes';
-import { majorScaleSpelled, tonicChromatic } from '../../../utils/noteCalculations';
+import { majorScaleSpelled, spelledSequenceAscending, tonicChromatic } from '../../../utils/noteCalculations';
 import NoteToken, { type DiatonicRole } from '../../shared/NoteToken/NoteToken';
 import type { ChromaticNote, NoteSpelling, Tonic } from '../../../types/music';
 import styles from './GradosArmonicos.module.css';
@@ -264,7 +264,7 @@ function Row({ label, cells, ascii, roles }: RowProps) {
         return (
           <td key={i} className={styles.noteCell}>
             {tokenizable ? (
-              <NoteToken note={a as NoteSpelling} diatonicRole={roles?.[i]} selectable={false} />
+              <NoteToken note={a as NoteSpelling} diatonicRole={roles?.[i]} />
             ) : (
               <span className={styles.rawNote}>{display}</span>
             )}
@@ -315,13 +315,16 @@ function TriadaRow({ tonicaRow, tonicaAscii, terceraRow, terceraAscii, quintaRow
         if (withSept) {
           members.push({ display: septRow[i], ascii: septAscii![i] });
         }
+        // Octavas ascendentes para que el acorde apilado suene de grave a agudo
+        // (la raíz abajo), igual que el arpegio de la fila de acordes (§2.6).
+        const octaves = spelledSequenceAscending(members.map((m) => m.ascii), 4).map((x) => x.octave);
         return (
           <td key={i} className={styles.triadaCell}>
             <div className={styles.triadStack}>
               {members.map((m, j) => {
                 const degree = (i + j * 2) % 7;
                 return VALID_SPELLINGS.has(m.ascii) ? (
-                  <NoteToken key={j} note={m.ascii as NoteSpelling} diatonicRole={DEGREE_ROLE[degree]} selectable={false} />
+                  <NoteToken key={j} note={m.ascii as NoteSpelling} diatonicRole={DEGREE_ROLE[degree]} octave={octaves[j]} />
                 ) : (
                   <span key={j} className={styles.rawNote}>{m.display}</span>
                 );

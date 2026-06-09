@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { useUIStore } from '../../../stores/useUIStore';
 import { ALL, NOTE_ES } from '../../../data/notes';
-import { majorScaleSpelled, tonicChromatic } from '../../../utils/noteCalculations';
+import { majorScaleSpelled, spelledNameES, tonicChromatic } from '../../../utils/noteCalculations';
 
 const NOTE_DE_LETTER: Record<string, string> = {
   C: 'C', 'C#': 'Cis', D: 'D', 'D#': 'Dis', E: 'E', F: 'F',
@@ -126,7 +126,7 @@ export default function TensionResolucion() {
         role="img"
         aria-label={isDe
           ? `Karte der Spannungsauflösungen in ${NOTE_DE_LETTER[tonicChromatic(tonic)] ?? tonic}-Dur`
-          : `Mapa de resoluciones de tensión en ${NOTE_ES[tonicChromatic(tonic)]} mayor`}
+          : `Mapa de resoluciones de tensión en ${spelledNameES(tonic)} mayor`}
       >
         <defs>
           <marker

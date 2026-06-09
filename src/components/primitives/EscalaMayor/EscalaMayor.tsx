@@ -8,7 +8,7 @@ const NOTE_DE_LETTER: Record<string, string> = {
   C: 'C', 'C#': 'Cis', D: 'D', 'D#': 'Dis', E: 'E', F: 'F',
   'F#': 'Fis', G: 'G', 'G#': 'Gis', A: 'A', 'A#': 'B', B: 'H',
 };
-import { majorScaleSpelled, tonicChromatic } from '../../../utils/noteCalculations';
+import { majorScaleSpelled, spelledNameES, tonicChromatic } from '../../../utils/noteCalculations';
 import type { ChromaticNote } from '../../../types/music';
 import styles from './EscalaMayor.module.css';
 
@@ -87,7 +87,7 @@ export default function EscalaMayor() {
         className={styles.svg}
         viewBox={`0 0 ${SVG_W} ${SVG_H}`}
         role="img"
-        aria-label={isDe ? `Dur-Tonleiter von ${NOTE_DE_LETTER[tonicChromatic(tonic)] ?? tonic}` : `Escala mayor de ${NOTE_ES[tonicChromatic(tonic)]}`}
+        aria-label={isDe ? `Dur-Tonleiter von ${NOTE_DE_LETTER[tonicChromatic(tonic)] ?? tonic}` : `Escala mayor de ${spelledNameES(tonic)}`}
       >
         {/* Subtle baseline rule between nodes */}
         <line
@@ -128,7 +128,7 @@ function ScaleNode({ data, onPlay, isDe }: ScaleNodeProps) {
     'var(--diatonic-stable)'; // tonic + stable
 
   // Reunión 24/5/26: las notas fuera de escala (cromáticas tenues) no deben sonar.
-  // Reunión 6/7/26 (1.4): suena al entrar y también al salir del círculo.
+  // Reunión 9/6/26 (1.4): suena solo al ENTRAR al círculo (no al salir).
   const handleEnter = useCallback(() => {
     if (isOnScale) onPlay(chromatic, octaveAdj);
   }, [chromatic, octaveAdj, onPlay, isOnScale]);
@@ -161,7 +161,6 @@ function ScaleNode({ data, onPlay, isDe }: ScaleNodeProps) {
           r={Math.max(radius + 6, 18)}
           fill="transparent"
           onMouseEnter={handleEnter}
-          onMouseLeave={handleEnter}
         />
       )}
 
