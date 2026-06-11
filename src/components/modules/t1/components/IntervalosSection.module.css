@@ -86,14 +86,6 @@
   color: var(--text-body);
 }
 
-.resultado {
-  font-size: 13px;
-  line-height: 1.8;
-  color: var(--paper);
-  font-weight: 600;
-  margin: 16px 0;
-}
-
 @media (max-width: 900px) {
   .section {
     padding: 36px 24px;

@@ -82,33 +82,9 @@ function buildStep2(tonicIdx: number, locale: string): StepWithBreak {
   return { prefix, notes };
 }
 
-function buildResultado(tonicIdx: number, letterIdx: number, tonicAscii: string, locale: string): ProseSegment {
-  const prefix = locale === 'de' ? 'Ergebnis für ' : 'Resultado para ';
-  const seg: ProseFragment[] = [
-    { type: 'text', value: prefix },
-    { type: 'note', value: tonicAscii as NoteSpelling },
-    { type: 'text', value: ': ' },
-  ];
-  for (let i = 0; i <= 12; i++) {
-    const note = ALL[(tonicIdx + i) % 12];
-    const flat = SHARP_TO_FLAT_ASCII[note];
-    if (flat && i === 6) {
-      // Tritone: show both enharmonic forms.
-      seg.push({ type: 'note', value: note }, { type: 'text', value: '/' }, { type: 'note', value: flat as NoteSpelling });
-    } else if (flat) {
-      // Pick the enharmonic whose first letter matches the expected letter.
-      const expected = NATURAL_LETTERS_7[(letterIdx + LETTER_OFFSETS_13[i]) % 7];
-      seg.push({ type: 'note', value: (flat[0] === expected ? flat : note) as NoteSpelling });
-    } else {
-      seg.push({ type: 'note', value: note });
-    }
-    seg.push({ type: 'text', value: i < 12 ? ' ' : '.' });
-  }
-  return seg;
-}
-
-// Mismas 13 notas que `buildResultado`, pero como strings de display para la
-// tabla comparativa (1.3): cada columna es un intervalo, cada celda su nota.
+// Las 13 notas del resultado como strings de display para la tabla comparativa
+// (1.3): cada columna es un intervalo, cada celda su nota. Reunión 9/6/26: el
+// párrafo "Resultado para X: ..." se eliminó; la tabla es el único resultado.
 function buildResultadoCells(tonicIdx: number, letterIdx: number): string[] {
   const cells: string[] = [];
   for (let i = 0; i <= 12; i++) {
@@ -194,10 +170,6 @@ export default function IntervalosSection() {
     ],
     [tonicLetterIdx, tonicIdx, locale, staticPasos],
   );
-  const resultadoG = useMemo(
-    () => buildResultado(tonicIdx, tonicLetterIdx, tonicAscii, locale),
-    [tonicIdx, tonicLetterIdx, tonicAscii, locale],
-  );
   const resultadoCells = useMemo(
     () => buildResultadoCells(tonicIdx, tonicLetterIdx),
     [tonicIdx, tonicLetterIdx],
@@ -225,8 +197,10 @@ export default function IntervalosSection() {
           </thead>
           <tbody>
             <tr>
+              {/* Reunión 9/6/26: solo letras naturales. A esta altura del método
+                  aún no se explicó por qué algunas notas llevan ♯/♭. */}
               {spelledScale.map((n, i) => (
-                <td key={i}>{n}</td>
+                <td key={i}>{n[0]}</td>
               ))}
             </tr>
           </tbody>
@@ -264,8 +238,6 @@ export default function IntervalosSection() {
           <li key={i}>{renderStep(p)}</li>
         ))}
       </ol>
-
-      <p className={styles.resultado}><Prose segment={resultadoG} /></p>
 
       {/* Tabla comparativa (1.3): qué intervalo es cada nota del resultado. */}
       <div className={styles.tableWrap}>
