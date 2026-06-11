@@ -92,11 +92,37 @@
   dominant-baseline: middle;
 }
 
+/* Fila de números de grado (reunión 9/6/26): coloreada por estabilidad.
+   Tokens diatónicos: uso sancionado, EscalaMayor representa grados dentro de
+   la tonalidad activa (DESIGN.md §2, sub-sistema diatónico). */
+.gradeNumber {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.gradeNumberStable {
+  fill: var(--diatonic-stable);
+}
+
+.gradeNumberMedium {
+  fill: var(--diatonic-medium);
+}
+
+.gradeNumberTense {
+  fill: var(--diatonic-tense);
+}
+
 @media (max-width: 900px) {
   .patternLabel {
     font-size: 12px;
   }
   .gradeLabel {
     font-size: 11px;
+  }
+  .gradeNumber {
+    font-size: 14px;
   }
 }

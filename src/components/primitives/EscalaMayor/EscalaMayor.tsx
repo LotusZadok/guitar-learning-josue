@@ -19,6 +19,9 @@ import styles from './EscalaMayor.module.css';
 const SCALE_POSITIONS = [0, 2, 4, 5, 7, 9, 11, 12] as const;
 // Reunión 24/5/26: calidades en lugar de romanos en el visualizador.
 const GRADE_LABELS = ['T', '2M', '3M', '4J', '5J', '6M', '7M', '8J'] as const;
+// Reunión 9/6/26 (1.4): fila de números de grado bajo la tira, coloreados por
+// estabilidad (estable verde / intermedia / tensa, tokens diatónicos).
+const GRADE_NUMBERS = ['1', '2', '3', '4', '5', '6', '7', '8'] as const;
 const STABLE_POSITIONS = new Set<number>([4, 7]);
 const INTERMEDIATE_POSITIONS = new Set<number>([2, 9]);
 const TENSE_POSITIONS = new Set<number>([5, 11]);
@@ -29,6 +32,8 @@ const SVG_H = 200;
 const PAD_X = 32;
 const STEP_X = (SVG_W - 2 * PAD_X) / (NODE_COUNT - 1);
 const NODE_Y = 100;
+// Fila de números de grado: y fija para que la fila se lea como tira propia.
+const NUMBER_Y = NODE_Y + 62;
 
 interface NodeData {
   position: number;
@@ -38,6 +43,7 @@ interface NodeData {
   scaleIdx: number | null;
   spelled: string | null;
   grade: string | null;
+  gradeNumber: string | null;
   role: 'tonic' | 'stable' | 'intermediate' | 'tense' | 'chromatic';
 }
 
@@ -61,6 +67,7 @@ export default function EscalaMayor() {
       const scaleIdx = scaleByPos.get(p) ?? null;
       const spelled = scaleIdx !== null ? spelledScale[scaleIdx % 7] : null;
       const grade = scaleIdx !== null ? GRADE_LABELS[scaleIdx] : null;
+      const gradeNumber = scaleIdx !== null ? GRADE_NUMBERS[scaleIdx] : null;
 
       let role: NodeData['role'] = 'chromatic';
       if (p === 0 || p === 12) role = 'tonic';
@@ -68,7 +75,7 @@ export default function EscalaMayor() {
       else if (INTERMEDIATE_POSITIONS.has(p)) role = 'intermediate';
       else if (TENSE_POSITIONS.has(p)) role = 'tense';
 
-      return { position: p, cx, chromatic, octaveAdj, scaleIdx, spelled, grade, role };
+      return { position: p, cx, chromatic, octaveAdj, scaleIdx, spelled, grade, gradeNumber, role };
     });
   }, [tonic]);
 
@@ -113,8 +120,12 @@ interface ScaleNodeProps {
 }
 
 function ScaleNode({ data, onPlay, isDe }: ScaleNodeProps) {
-  const { cx, chromatic, octaveAdj, role, spelled, grade } = data;
+  const { cx, chromatic, octaveAdj, role, spelled, grade, gradeNumber } = data;
   const isOnScale = role !== 'chromatic';
+  const numberClass =
+    role === 'intermediate' ? styles.gradeNumberMedium :
+    role === 'tense' ? styles.gradeNumberTense :
+    styles.gradeNumberStable; // tónica + estables (1, 3, 5, 8)
 
   const radius =
     role === 'tonic' ? 22 :
@@ -197,6 +208,13 @@ function ScaleNode({ data, onPlay, isDe }: ScaleNodeProps) {
       {grade && (
         <text x={cx} y={NODE_Y + radius + 22} className={styles.gradeLabel}>
           {grade}
+        </text>
+      )}
+
+      {/* Grade number row (scale notes only), colored by stability */}
+      {gradeNumber && (
+        <text x={cx} y={NUMBER_Y} className={`${styles.gradeNumber} ${numberClass}`}>
+          {gradeNumber}
         </text>
       )}
     </g>
