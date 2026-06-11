@@ -90,6 +90,14 @@
   color: var(--text-body);
 }
 
+.cardEjemplo {
+  /* Línea propia: el ejemplo se separa de la idea (reunión 9/6/26). */
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+}
+
 @media (max-width: 900px) {
   .section {
     padding: 36px 24px;

@@ -38,7 +38,8 @@ export default function ReglaQuintaSection() {
       <ul className={styles.bullets}>
         {bullets.map((b, i) => (
           <li key={i}>
-            <strong>{b.regla}</strong> · {b.desc}{' '}
+            <strong>{b.regla}</strong> · {b.desc}
+            {/* Reunión 9/6/26: el ejemplo baja a una línea propia, separada de la idea. */}
             <span className={styles.ejemplo}>{locale === 'de' ? 'Beispiel' : 'Ejemplo'}: <Prose segment={b.ejemplo} /></span>
           </li>
         ))}

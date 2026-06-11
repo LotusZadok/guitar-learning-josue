@@ -25,6 +25,18 @@ function toFlat(s: string): string {
   return s.replace(/([A-G])b/g, '$1♭');
 }
 
+// Reunión 9/6/26: los bloques "Ejemplo: ..." bajan a una línea propia, separada
+// de la idea. El split es solo de render; el texto literal del método queda
+// intacto en literalContent (el separador " — " entre ejemplos lo absorbe el
+// salto de línea, igual que hacía el <br/> anterior).
+function splitEjemplos(text: string): { idea: string; ejemplos: string[] } {
+  const parts = text.split(/(?=Ejemplo:|Beispiel:)/g);
+  return {
+    idea: parts[0].replace(/\s*—\s*$/, '').trim(),
+    ejemplos: parts.slice(1).map((p) => p.replace(/\s*—\s*$/, '').trim()),
+  };
+}
+
 export default function HerramientaSection() {
   const { i18n } = useTranslation();
   const isDe = i18n.language === 'de';
@@ -42,7 +54,11 @@ export default function HerramientaSection() {
   const titleAcumulativo = isDe ? 'Kumulativ' : 'Acumulativo';
   const titleMultitonal = 'Multitonal';
 
-  const especificoParts = propEspecifico.split(' — ');
+  const cards = [
+    { titulo: titleEspecifico, ...splitEjemplos(propEspecifico) },
+    { titulo: titleAcumulativo, ...splitEjemplos(propAcumulativo) },
+    { titulo: titleMultitonal, ...splitEjemplos(propMultitonal) },
+  ];
 
   return (
     <section id="s-t2-herramienta" className={styles.section}>
@@ -70,22 +86,17 @@ export default function HerramientaSection() {
       <p className={styles.text}>{flatsExp}</p>
 
       <div className={styles.cards}>
-        <div className={styles.card}>
-          <h3 className={styles.cardTitle}>{titleEspecifico}</h3>
-          <p className={styles.cardText}>
-            {especificoParts[0]}
-            <br />
-            {toFlat(especificoParts[1])}
-          </p>
-        </div>
-        <div className={styles.card}>
-          <h3 className={styles.cardTitle}>{titleAcumulativo}</h3>
-          <p className={styles.cardText}>{propAcumulativo}</p>
-        </div>
-        <div className={styles.card}>
-          <h3 className={styles.cardTitle}>{titleMultitonal}</h3>
-          <p className={styles.cardText}>{propMultitonal}</p>
-        </div>
+        {cards.map(({ titulo, idea, ejemplos }) => (
+          <div key={titulo} className={styles.card}>
+            <h3 className={styles.cardTitle}>{titulo}</h3>
+            <p className={styles.cardText}>
+              {idea}
+              {ejemplos.map((e) => (
+                <span key={e} className={styles.cardEjemplo}>{toFlat(e)}</span>
+              ))}
+            </p>
+          </div>
+        ))}
       </div>
 
       <RuleNote>

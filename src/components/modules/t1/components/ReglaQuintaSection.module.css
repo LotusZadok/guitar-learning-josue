@@ -41,6 +41,9 @@
 }
 
 .ejemplo {
+  /* Línea propia: el ejemplo se separa de la idea (reunión 9/6/26). */
+  display: block;
+  margin-top: 4px;
   font-family: 'IBM Plex Mono', monospace;
   color: var(--muted);
   font-size: 12px;
