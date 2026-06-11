@@ -2,7 +2,7 @@ import type { KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { useUIStore } from '../../../stores/useUIStore';
-import { noteShort, tonicChromatic } from '../../../utils/noteCalculations';
+import { noteShort, octaveAboveTonic, tonicChromatic } from '../../../utils/noteCalculations';
 import type { NoteSpelling, ChromaticNote } from '../../../types/music';
 import styles from './NoteToken.module.css';
 
@@ -44,8 +44,10 @@ interface NoteTokenProps {
   /** When provided, overrides the per-note chromatic color with the diatonic function color. */
   diatonicRole?: DiatonicRole;
   /**
-   * Octava en la que suena la nota. Default 4. Permite que notas apiladas (p.ej.
-   * la fila de tríada en §2.6) suenen en orden ascendente pasando octavas crecientes.
+   * Octava en la que suena la nota. Sin este prop, la nota se ancla a la tónica
+   * global: suena en la octava que la deja igual o por encima de la tónica
+   * (principio "tónica = piso", reunión 9/6/26). Pasar octavas explícitas permite
+   * que notas apiladas (p.ej. la fila de tríada en §2.6) suenen ascendentes.
    */
   octave?: number;
 }
@@ -53,7 +55,7 @@ interface NoteTokenProps {
 // Reunión 9/6/26: hacer clic en una nota SOLO la reproduce; ya no cambia la
 // tónica global (eso confundía en prosa y tablas). La tónica se cambia únicamente
 // desde el selector del sidebar. Se conserva el resaltado de la tónica activa.
-export default function NoteToken({ note, diatonicRole, octave = 4 }: NoteTokenProps) {
+export default function NoteToken({ note, diatonicRole, octave }: NoteTokenProps) {
   const { i18n } = useTranslation();
   const isDe = i18n.language === 'de';
   const { playNote } = useAudioEngine();
@@ -64,7 +66,7 @@ export default function NoteToken({ note, diatonicRole, octave = 4 }: NoteTokenP
   const isTonic = chromatic === tonicChromatic(tonic);
 
   const handlePlay = () => {
-    playNote(note, octave);
+    playNote(note, octave ?? octaveAboveTonic(tonic, note));
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLSpanElement>) => {

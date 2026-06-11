@@ -186,6 +186,18 @@ export function spelledSequenceAscending(
   return result;
 }
 
+// Reunión 9/6/26 (principio "tónica = piso"): octava que coloca una nota suelta
+// EN o POR ENCIMA de la tónica activa. Cuando un componente reproduce notas
+// individuales ancladas a una tonalidad (prosa, tablas), la tónica es la nota
+// más grave posible y todo lo demás orbita ascendiendo desde ella dentro de
+// [tónica, tónica + 8va). `base` es la octava de referencia de la tónica (4,
+// la base que asume el motor antes del transpositor global de octava).
+// Los contextos de identidad absoluta (círculo cromático, rueda de quintas)
+// NO usan este helper: presentan las 12 notas a octava fija a propósito.
+export function octaveAboveTonic(tonic: Tonic, note: string, base = 4): number {
+  return pitchClass(note) >= pitchClass(tonic) ? base : base + 1;
+}
+
 // === Generalized enharmonic interval spelling (reunión 24/5/26) ===
 // Regla: el número del intervalo determina la LETRA; la calidad la alteración.
 // Una 3ra de G es siempre B (B♭ o B). Una 4ta de F es siempre B (B♭ o B), nunca A#.

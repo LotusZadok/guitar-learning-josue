@@ -37,7 +37,11 @@ function buildNodes(tonic: Tonic): TensionNode[] {
     pos,
     note: ALL[(tonicIdx + pos) % 12],
     spelled: spelledScale[i % 7],
-    octaveAdj: pos === 12 ? 1 : 0,
+    // Reunión 9/6/26 (piso-tónica): la octava sube donde la escala envuelve el
+    // índice cromático, no solo en la 8va de cierre. Con `pos === 12 ? 1 : 0`
+    // toda tonalidad que cruza C (es decir, todas menos Do) tocaba grados por
+    // DEBAJO de la tónica (en Sol mayor, C4 bajo G4).
+    octaveAdj: Math.floor((tonicIdx + pos) / 12),
     grade: GRADE_NAMES[i],
     role: NODE_ROLES[i],
   }));
