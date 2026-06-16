@@ -1,33 +1,60 @@
-import { useCallback, useMemo, useRef, useState, type KeyboardEvent } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useAudioEngine } from '../../../hooks/useAudioEngine';
-import { useUIStore } from '../../../stores/useUIStore';
-import { ALL, NOTE_ES } from '../../../data/notes';
-import { majorScaleSpelled, spelledNameES, tonicChromatic } from '../../../utils/noteCalculations';
+import {
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  type KeyboardEvent,
+} from "react";
+import { useTranslation } from "react-i18next";
+import { useAudioEngine } from "../../../hooks/useAudioEngine";
+import { useUIStore } from "../../../stores/useUIStore";
+import { ALL, NOTE_ES } from "../../../data/notes";
+import {
+  majorScaleSpelled,
+  spelledNameES,
+  tonicChromatic,
+} from "../../../utils/noteCalculations";
 
 const NOTE_DE_LETTER: Record<string, string> = {
-  C: 'C', 'C#': 'Cis', D: 'D', 'D#': 'Dis', E: 'E', F: 'F',
-  'F#': 'Fis', G: 'G', 'G#': 'Gis', A: 'A', 'A#': 'B', B: 'H',
+  C: "C",
+  "C#": "Cis",
+  D: "D",
+  "D#": "Dis",
+  E: "E",
+  F: "F",
+  "F#": "Fis",
+  G: "G",
+  "G#": "Gis",
+  A: "A",
+  "A#": "B",
+  B: "H",
 };
-import type { ChromaticNote, Tonic } from '../../../types/music';
-import styles from './TensionResolucion.module.css';
+import type { ChromaticNote, Tonic } from "../../../types/music";
+import styles from "./TensionResolucion.module.css";
 
 // Reunión 24/5/26: la ortografía respeta la escala mayor (B♭ en F mayor, no A#).
 // El audio sigue usando ChromaticNote; el display usa la versión spelled.
 
 interface TensionNode {
   pos: number;
-  note: ChromaticNote;       // para audio
-  spelled: string;           // para display (con ♯/♭ correcto según escala mayor)
+  note: ChromaticNote; // para audio
+  spelled: string; // para display (con ♯/♭ correcto según escala mayor)
   octaveAdj: number;
   grade: string;
-  role: 'tonic' | 'stable' | 'intermediate' | 'tense';
+  role: "tonic" | "stable" | "intermediate" | "tense";
 }
 
-const SCALE_POS   = [0, 2, 4, 5, 7, 9, 11, 12] as const;
-const GRADE_NAMES = ['T', '2', '3', '4', '5', '6', '7', 'T'] as const;
-const NODE_ROLES: TensionNode['role'][] = [
-  'tonic', 'intermediate', 'stable', 'tense', 'stable', 'intermediate', 'tense', 'tonic',
+const SCALE_POS = [0, 2, 4, 5, 7, 9, 11, 12] as const;
+const GRADE_NAMES = ["T", "2", "3", "4", "5", "6", "7", "T"] as const;
+const NODE_ROLES: TensionNode["role"][] = [
+  "tonic",
+  "intermediate",
+  "stable",
+  "tense",
+  "stable",
+  "intermediate",
+  "tense",
+  "tonic",
 ];
 
 function buildNodes(tonic: Tonic): TensionNode[] {
@@ -51,12 +78,12 @@ function buildNodes(tonic: Tonic): TensionNode[] {
 // (antes eran rectas y aparentaban una línea continua III—V que cruzaba el IV).
 // 'curve' = arco amplio; 'shortCurve' = arco corto (1 s.t. de distancia).
 const ARROWS = [
-  { id: 'd-c',  fromIdx: 1, toIdx: 0, width: 1.5, kind: 'curve'      },
-  { id: 'd-e',  fromIdx: 1, toIdx: 2, width: 1.5, kind: 'curve'      },
-  { id: 'f-e',  fromIdx: 3, toIdx: 2, width: 1.5, kind: 'shortCurve' },
-  { id: 'f-g',  fromIdx: 3, toIdx: 4, width: 1.5, kind: 'shortCurve' },
-  { id: 'a-g',  fromIdx: 5, toIdx: 4, width: 1.5, kind: 'curve'      },
-  { id: 'b-c8', fromIdx: 6, toIdx: 7, width: 1.5, kind: 'shortCurve' },
+  { id: "d-c", fromIdx: 1, toIdx: 0, width: 1.5, kind: "curve" },
+  { id: "d-e", fromIdx: 1, toIdx: 2, width: 1.5, kind: "curve" },
+  { id: "f-e", fromIdx: 3, toIdx: 2, width: 1.5, kind: "shortCurve" },
+  { id: "f-g", fromIdx: 3, toIdx: 4, width: 1.5, kind: "shortCurve" },
+  { id: "a-g", fromIdx: 5, toIdx: 4, width: 1.5, kind: "curve" },
+  { id: "b-c8", fromIdx: 6, toIdx: 7, width: 1.5, kind: "shortCurve" },
 ] as const;
 
 const SVG_W = 560;
@@ -69,7 +96,7 @@ const RADIUS_TONIC = 22;
 const RADIUS_STABLE = 18;
 const RADIUS_TENSE = 18;
 const ARC_BASELINE = NODE_Y - RADIUS_TONIC - 6; // top of node circle
-const ARC_RISE = 52;        // how far above baseline the arc peaks
+const ARC_RISE = 52; // how far above baseline the arc peaks
 // Reunión 6/7/26: separar/alargar las 2 notas de cada flecha para que la
 // resolución se oiga clara (antes 260ms se encimaban demasiado).
 const ARPEGGIO_GAP_MS = 430;
@@ -80,19 +107,23 @@ function nodeX(pos: number): number {
   return PAD_X + pos * STEP_X;
 }
 
-function arrowPath(originX: number, destX: number, kind: 'shortCurve' | 'curve'): string {
+function arrowPath(
+  originX: number,
+  destX: number,
+  kind: "shortCurve" | "curve",
+): string {
   const startY = ARC_BASELINE;
   const midX = (originX + destX) / 2;
   // 'shortCurve' = arco menor para resoluciones de 1 s.t. — sigue saliendo visiblemente
   // del nodo origen (no como recta que cruza nodos intermedios).
-  const rise = kind === 'shortCurve' ? ARC_RISE * 0.4 : ARC_RISE;
+  const rise = kind === "shortCurve" ? ARC_RISE * 0.4 : ARC_RISE;
   const peakY = startY - rise;
   return `M ${originX} ${startY} Q ${midX} ${peakY} ${destX} ${startY}`;
 }
 
 export default function TensionResolucion() {
   const { i18n } = useTranslation();
-  const isDe = i18n.language === 'de';
+  const isDe = i18n.language === "de";
   const tonic = useUIStore((s) => s.tonic);
   const nodes = useMemo(() => buildNodes(tonic), [tonic]);
   const { playSequence } = useAudioEngine();
@@ -117,7 +148,10 @@ export default function TensionResolucion() {
         ARPEGGIO_GAP_MS,
         NOTE_TAIL_MS,
       );
-      setTimeout(() => setPlayingArrow(null), ARPEGGIO_GAP_MS + NOTE_TAIL_MS + 400);
+      setTimeout(
+        () => setPlayingArrow(null),
+        ARPEGGIO_GAP_MS + NOTE_TAIL_MS + 400,
+      );
     },
     [playSequence, nodes],
   );
@@ -128,9 +162,11 @@ export default function TensionResolucion() {
         className={styles.svg}
         viewBox={`0 0 ${SVG_W} ${SVG_H}`}
         role="img"
-        aria-label={isDe
-          ? `Karte der Spannungsauflösungen in ${NOTE_DE_LETTER[tonicChromatic(tonic)] ?? tonic}-Dur`
-          : `Mapa de resoluciones de tensión en ${spelledNameES(tonic)} mayor`}
+        aria-label={
+          isDe
+            ? `Karte der Spannungsauflösungen in ${NOTE_DE_LETTER[tonicChromatic(tonic)] ?? tonic}-Dur`
+            : `Mapa de resoluciones de tensión en ${spelledNameES(tonic)} mayor`
+        }
       >
         <defs>
           <marker
@@ -164,9 +200,11 @@ export default function TensionResolucion() {
               key={a.id}
               d={arrowPath(nodeX(from.pos), nodeX(to.pos), a.kind)}
               width={a.width}
-              ariaLabel={isDe
-                ? `Auflösung von ${NOTE_DE_LETTER[from.note] ?? from.note} nach ${NOTE_DE_LETTER[to.note] ?? to.note} spielen`
-                : `Reproducir resolución de ${NOTE_ES[from.note]} a ${NOTE_ES[to.note]}`}
+              ariaLabel={
+                isDe
+                  ? `Auflösung von ${NOTE_DE_LETTER[from.note] ?? from.note} nach ${NOTE_DE_LETTER[to.note] ?? to.note} spielen`
+                  : `Reproducir resolución de ${NOTE_ES[from.note]} a ${NOTE_ES[to.note]}`
+              }
               onPlay={() => playResolution(a.fromIdx, a.toIdx, a.id)}
               isPlaying={playingArrow === a.id}
               isDimmed={playingArrow !== null && playingArrow !== a.id}
@@ -182,18 +220,21 @@ export default function TensionResolucion() {
 
       {/* Reunión 24/5/26: removidas las entradas "4ª/7ª tensos" y "2ª/6ª intermedios"
           del legend (la información ya está implícita en el strip y se duplica). */}
-      <ul className={styles.legend} aria-label={isDe ? 'Kartenkonventionen' : 'Convenciones del mapa'}>
+      <ul
+        className={styles.legend}
+        aria-label={isDe ? "Kartenkonventionen" : "Convenciones del mapa"}
+      >
         <li>
           <span className={styles.swatchStable} />
-          {isDe ? 'Stabil' : 'Estable'}
+          {isDe ? "Stabil" : "Estable"}
         </li>
         <li>
           <span className={styles.swatchIntermediate} />
-          {isDe ? 'Mittel' : 'Intermedia'}
+          {isDe ? "Mittel" : "Intermedia"}
         </li>
         <li>
           <span className={styles.swatchTense} />
-          {isDe ? 'Spannend' : 'Tensa'}
+          {isDe ? "Spannend" : "Tensa"}
         </li>
       </ul>
     </div>
@@ -209,10 +250,17 @@ interface ArrowPathProps {
   isDimmed?: boolean;
 }
 
-function ArrowPath({ d, width, ariaLabel, onPlay, isPlaying, isDimmed }: ArrowPathProps) {
+function ArrowPath({
+  d,
+  width,
+  ariaLabel,
+  onPlay,
+  isPlaying,
+  isDimmed,
+}: ArrowPathProps) {
   const handleKey = useCallback(
     (e: KeyboardEvent<SVGPathElement>) => {
-      if (e.key === 'Enter' || e.key === ' ') {
+      if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         onPlay();
       }
@@ -220,26 +268,39 @@ function ArrowPath({ d, width, ariaLabel, onPlay, isPlaying, isDimmed }: ArrowPa
     [onPlay],
   );
 
-  const strokeColor = isPlaying ? 'var(--amber)' : undefined;
+  const strokeColor = isPlaying ? "var(--amber)" : undefined;
   const strokeWidth = isPlaying ? width + 1 : width;
   const opacity = isDimmed ? 0.25 : 1;
 
   return (
-    <path
-      d={d}
-      className={styles.arrow}
-      strokeWidth={strokeWidth}
-      stroke={strokeColor}
-      opacity={opacity}
-      markerEnd="url(#tension-arrowhead)"
-      tabIndex={0}
-      role="button"
-      aria-label={ariaLabel}
-      onClick={onPlay}
-      onFocus={onPlay}
-      onKeyDown={handleKey}
-      style={{ transition: 'opacity 0.2s, stroke 0.15s' }}
-    />
+    <g>
+      {/* Invisible hit box overlay with expanded stroke width for better accessibility */}
+      <path
+        d={d}
+        strokeWidth={24}
+        stroke="transparent"
+        fill="none"
+        pointerEvents="stroke"
+        tabIndex={0}
+        role="button"
+        aria-label={ariaLabel}
+        onClick={onPlay}
+        onFocus={onPlay}
+        onKeyDown={handleKey}
+        style={{ cursor: "pointer" }}
+      />
+      {/* Visual arrow path */}
+      <path
+        d={d}
+        className={styles.arrow}
+        strokeWidth={strokeWidth}
+        stroke={strokeColor}
+        opacity={opacity}
+        markerEnd="url(#tension-arrowhead)"
+        pointerEvents="none"
+        style={{ transition: "opacity 0.2s, stroke 0.15s" }}
+      />
+    </g>
   );
 }
 
@@ -251,14 +312,18 @@ function ScaleNode({ data }: ScaleNodeProps) {
   const { pos, spelled, role } = data;
   const cx = nodeX(pos);
   const radius =
-    role === 'tonic' ? RADIUS_TONIC :
-    role === 'tense' ? RADIUS_TENSE :
-    RADIUS_STABLE;
+    role === "tonic"
+      ? RADIUS_TONIC
+      : role === "tense"
+        ? RADIUS_TENSE
+        : RADIUS_STABLE;
   const fill =
-    role === 'tonic' || role === 'stable' ? 'var(--diatonic-stable)' :
-    role === 'intermediate' ? 'var(--diatonic-medium)' :
-    'var(--diatonic-tense)';
-  const isLargeLetter = role === 'tonic';
+    role === "tonic" || role === "stable"
+      ? "var(--diatonic-stable)"
+      : role === "intermediate"
+        ? "var(--diatonic-medium)"
+        : "var(--diatonic-tense)";
+  const isLargeLetter = role === "tonic";
 
   return (
     <g className={styles.node} aria-hidden="true">
@@ -267,8 +332,8 @@ function ScaleNode({ data }: ScaleNodeProps) {
         cy={NODE_Y}
         r={radius}
         fill={fill}
-        stroke={role === 'tonic' ? 'var(--paper)' : 'none'}
-        strokeWidth={role === 'tonic' ? 2 : 0}
+        stroke={role === "tonic" ? "var(--paper)" : "none"}
+        strokeWidth={role === "tonic" ? 2 : 0}
       />
       <text
         x={cx}

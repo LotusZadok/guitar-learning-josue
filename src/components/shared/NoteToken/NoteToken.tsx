@@ -1,43 +1,61 @@
-import type { KeyboardEvent } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useAudioEngine } from '../../../hooks/useAudioEngine';
-import { useUIStore } from '../../../stores/useUIStore';
-import { noteShort, octaveAboveTonic, tonicChromatic } from '../../../utils/noteCalculations';
-import type { NoteSpelling, ChromaticNote } from '../../../types/music';
-import styles from './NoteToken.module.css';
+import type { KeyboardEvent } from "react";
+import { useTranslation } from "react-i18next";
+import { useAudioEngine } from "../../../hooks/useAudioEngine";
+import { useUIStore } from "../../../stores/useUIStore";
+import {
+  noteShort,
+  noteShortDE,
+  octaveAboveTonic,
+  tonicChromatic,
+} from "../../../utils/noteCalculations";
+import type { NoteSpelling, ChromaticNote } from "../../../types/music";
+import styles from "./NoteToken.module.css";
 
 // Mapea cada spelling al `data-note` que selecciona el `--note-X` correcto.
 // Bemoles enarmonizan al sostenido (Bb → a-sharp) porque el sistema sólo
 // tiene 12 hues y `--note-a-sharp` cubre la nota cromática A♯/B♭.
 const DATA_NOTE: Record<NoteSpelling, string> = {
-  C: 'c',
-  'C#': 'c-sharp',
-  D: 'd',
-  'D#': 'd-sharp',
-  E: 'e',
-  F: 'f',
-  'F#': 'f-sharp',
-  G: 'g',
-  'G#': 'g-sharp',
-  A: 'a',
-  'A#': 'a-sharp',
-  B: 'b',
-  Db: 'c-sharp',
-  Eb: 'd-sharp',
-  Gb: 'f-sharp',
-  Ab: 'g-sharp',
-  Bb: 'a-sharp',
+  C: "c",
+  "C#": "c-sharp",
+  D: "d",
+  "D#": "d-sharp",
+  E: "e",
+  F: "f",
+  "F#": "f-sharp",
+  G: "g",
+  "G#": "g-sharp",
+  A: "a",
+  "A#": "a-sharp",
+  B: "b",
+  Db: "c-sharp",
+  Eb: "d-sharp",
+  Gb: "f-sharp",
+  Ab: "g-sharp",
+  Bb: "a-sharp",
 };
 
 // Maps every NoteSpelling to its ChromaticNote (flat spellings → sharp enharmonic)
 const SPELLING_TO_CHROMATIC: Record<NoteSpelling, ChromaticNote> = {
-  C: 'C',   'C#': 'C#', D: 'D',   'D#': 'D#', E: 'E',
-  F: 'F',   'F#': 'F#', G: 'G',   'G#': 'G#', A: 'A',
-  'A#': 'A#', B: 'B',
-  Db: 'C#', Eb: 'D#', Gb: 'F#', Ab: 'G#', Bb: 'A#',
+  C: "C",
+  "C#": "C#",
+  D: "D",
+  "D#": "D#",
+  E: "E",
+  F: "F",
+  "F#": "F#",
+  G: "G",
+  "G#": "G#",
+  A: "A",
+  "A#": "A#",
+  B: "B",
+  Db: "C#",
+  Eb: "D#",
+  Gb: "F#",
+  Ab: "G#",
+  Bb: "A#",
 };
 
-export type DiatonicRole = 'stable' | 'medium' | 'mediumTense' | 'tense';
+export type DiatonicRole = "stable" | "medium" | "mediumTense" | "tense";
 
 interface NoteTokenProps {
   note: NoteSpelling;
@@ -55,12 +73,16 @@ interface NoteTokenProps {
 // Reunión 9/6/26: hacer clic en una nota SOLO la reproduce; ya no cambia la
 // tónica global (eso confundía en prosa y tablas). La tónica se cambia únicamente
 // desde el selector del sidebar. Se conserva el resaltado de la tónica activa.
-export default function NoteToken({ note, diatonicRole, octave }: NoteTokenProps) {
+export default function NoteToken({
+  note,
+  diatonicRole,
+  octave,
+}: NoteTokenProps) {
   const { i18n } = useTranslation();
-  const isDe = i18n.language === 'de';
+  const isDe = i18n.language === "de";
   const { playNote } = useAudioEngine();
   const tonic = useUIStore((s) => s.tonic);
-  const display = noteShort(note);
+  const display = isDe ? noteShortDE(note) : noteShort(note);
   const dataNote = DATA_NOTE[note];
   const chromatic = SPELLING_TO_CHROMATIC[note];
   const isTonic = chromatic === tonicChromatic(tonic);
@@ -70,7 +92,7 @@ export default function NoteToken({ note, diatonicRole, octave }: NoteTokenProps
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLSpanElement>) => {
-    if (e.key === 'Enter' || e.key === ' ') {
+    if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       handlePlay();
     }
@@ -78,7 +100,7 @@ export default function NoteToken({ note, diatonicRole, octave }: NoteTokenProps
 
   return (
     <span
-      className={`${styles.token}${isTonic ? ` ${styles.tokenTonic}` : ''}`}
+      className={`${styles.token}${isTonic ? ` ${styles.tokenTonic}` : ""}`}
       data-note={dataNote}
       data-diatonic={diatonicRole}
       role="button"
