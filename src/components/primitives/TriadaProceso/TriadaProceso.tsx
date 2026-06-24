@@ -1,17 +1,23 @@
-import { useEffect, useMemo, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useAudioEngine } from '../../../hooks/useAudioEngine';
-import { useUIStore } from '../../../stores/useUIStore';
-import { NATURALS, NOTE_COLORS, NOTE_ES } from '../../../data/notes';
-import { spelledSequenceAscending } from '../../../utils/noteCalculations';
+import { useEffect, useMemo, useRef } from "react";
+import { useTranslation } from "react-i18next";
+import { useAudioEngine, stopAllNotes } from "../../../hooks/useAudioEngine";
+import { useUIStore } from "../../../stores/useUIStore";
+import { NATURALS, NOTE_COLORS, NOTE_ES } from "../../../data/notes";
+import { spelledSequenceAscending } from "../../../utils/noteCalculations";
 // Reutiliza la máquina de pasos de los procesos de §2.3/§2.4 (lógica pura,
 // respeta prefers-reduced-motion). Misma "onda" que pidió el método.
-import { useProcessAnimation } from '../../modules/t2/hooks/useProcessAnimation';
-import type { NaturalNote } from '../../../types/music';
-import styles from './TriadaProceso.module.css';
+import { useProcessAnimation } from "../../modules/t2/hooks/useProcessAnimation";
+import type { NaturalNote } from "../../../types/music";
+import styles from "./TriadaProceso.module.css";
 
 const NOTE_DE: Record<NaturalNote, string> = {
-  C: 'C', D: 'D', E: 'E', F: 'F', G: 'G', A: 'A', B: 'H',
+  C: "C",
+  D: "D",
+  E: "E",
+  F: "F",
+  G: "G",
+  A: "A",
+  B: "H",
 };
 
 // 5 nodos: tónica → 2ª → 3ª → 4ª → 5ª. Tomadas las pares (0,2,4), saltadas las
@@ -24,7 +30,10 @@ const SVG_H = 168;
 const PAD_X = 44;
 const STEP_X = (SVG_W - 2 * PAD_X) / 4;
 const NODE_Y = 96;
-const BRACKET_Y = NODE_Y - 44;
+// Subido respecto a los nodos para no traslapar las etiquetas de nota
+// (noteName) que aparecen sobre el círculo de la raíz y la quinta.
+const BRACKET_Y = NODE_Y - 64;
+const BRACKET_BOTTOM = NODE_Y - 46;
 
 function nodeX(i: number): number {
   return PAD_X + i * STEP_X;
@@ -32,12 +41,12 @@ function nodeX(i: number): number {
 
 interface StepLine {
   text: string;
-  kind: 'take' | 'skip' | 'result';
+  kind: "take" | "skip" | "result";
 }
 
 export default function TriadaProceso() {
   const { i18n } = useTranslation();
-  const isDe = i18n.language === 'de';
+  const isDe = i18n.language === "de";
   const tonic = useUIStore((s) => s.tonic);
   // El método construye la tríada con letras naturales (las alteraciones llegan
   // en §1.7/§2.6). Tomamos la letra natural de la tónica activa.
@@ -48,7 +57,10 @@ export default function TriadaProceso() {
 
   const notes = useMemo(() => {
     const i = NATURALS.indexOf(root);
-    return Array.from({ length: 5 }, (_, k) => NATURALS[(i + k) % 7] as NaturalNote);
+    return Array.from(
+      { length: 5 },
+      (_, k) => NATURALS[(i + k) % 7] as NaturalNote,
+    );
   }, [root]);
 
   // Notas tomadas (raíz, 3ra, 5ta) con octavas ascendentes: la tónica es la más
@@ -57,26 +69,41 @@ export default function TriadaProceso() {
     () => spelledSequenceAscending([notes[0], notes[2], notes[4]], 4),
     [notes],
   );
+  // Refs para leer los valores más recientes sin que su cambio de referencia
+  // (p. ej. takenAsc al cambiar la tónica) dispare el efecto de audio de abajo:
+  // ese efecto solo debe sonar cuando cambia el número de paso, no cuando
+  // cambia takenAsc por otro motivo (evita re-disparos con currentStep stale).
+  const takenAscRef = useRef(takenAsc);
+  const playNoteRef = useRef(playNote);
+  takenAscRef.current = takenAsc;
+  playNoteRef.current = playNote;
 
   const steps = useMemo<StepLine[]>(() => {
-    const n = (i: number) => (isDe ? NOTE_DE[notes[i]] : `${NOTE_ES[notes[i]]} (${notes[i]})`);
+    const n = (i: number) =>
+      isDe ? NOTE_DE[notes[i]] : `${NOTE_ES[notes[i]]} (${notes[i]})`;
     if (isDe) {
       return [
-        { kind: 'take',   text: `Nehme ${n(0)} · Tonika` },
-        { kind: 'skip',   text: `Überspringe ${n(1)}` },
-        { kind: 'take',   text: `Nehme ${n(2)} · Terz` },
-        { kind: 'skip',   text: `Überspringe ${n(3)}` },
-        { kind: 'take',   text: `Nehme ${n(4)} · Quinte` },
-        { kind: 'result', text: `Ergebnis: ${NOTE_DE[notes[0]]} ${NOTE_DE[notes[2]]} ${NOTE_DE[notes[4]]} · der Dreiklang` },
+        { kind: "take", text: `Nehme ${n(0)} · Tonika` },
+        { kind: "skip", text: `Überspringe ${n(1)}` },
+        { kind: "take", text: `Nehme ${n(2)} · Terz` },
+        { kind: "skip", text: `Überspringe ${n(3)}` },
+        { kind: "take", text: `Nehme ${n(4)} · Quinte` },
+        {
+          kind: "result",
+          text: `Ergebnis: ${NOTE_DE[notes[0]]} ${NOTE_DE[notes[2]]} ${NOTE_DE[notes[4]]} · der Dreiklang`,
+        },
       ];
     }
     return [
-      { kind: 'take',   text: `Tomo ${n(0)} · tónica` },
-      { kind: 'skip',   text: `Salto ${n(1)}` },
-      { kind: 'take',   text: `Tomo ${n(2)} · tercera` },
-      { kind: 'skip',   text: `Salto ${n(3)}` },
-      { kind: 'take',   text: `Tomo ${n(4)} · quinta` },
-      { kind: 'result', text: `Resultado: ${notes[0]} ${notes[2]} ${notes[4]} · la tríada` },
+      { kind: "take", text: `Tomo ${n(0)} · tónica` },
+      { kind: "skip", text: `Salto ${n(1)}` },
+      { kind: "take", text: `Tomo ${n(2)} · tercera` },
+      { kind: "skip", text: `Salto ${n(3)}` },
+      { kind: "take", text: `Tomo ${n(4)} · quinta` },
+      {
+        kind: "result",
+        text: `Resultado: ${notes[0]} ${notes[2]} ${notes[4]} · la tríada`,
+      },
     ];
   }, [notes, isDe]);
 
@@ -84,6 +111,7 @@ export default function TriadaProceso() {
   useEffect(() => {
     anim.reset();
     lastAudioStep.current = 0;
+    stopAllNotes();
   }, [root]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Audio atado al paso visible (nunca audio sin estado visual paralelo).
@@ -93,22 +121,31 @@ export default function TriadaProceso() {
     const s = anim.currentStep;
     if (s === 0 || s === lastAudioStep.current) return;
     lastAudioStep.current = s;
-    if (s === 1) playNote(takenAsc[0].name, takenAsc[0].octave, 1.6);
-    else if (s === 3) playNote(takenAsc[1].name, takenAsc[1].octave, 1.6);
-    else if (s === 5) playNote(takenAsc[2].name, takenAsc[2].octave, 1.6);
-    else if (s === 6) takenAsc.forEach((nt) => playNote(nt.name, nt.octave, 2.2));
-  }, [anim.currentStep, takenAsc, playNote]);
+    const ta = takenAscRef.current;
+    const pn = playNoteRef.current;
+    if (s === 1) pn(ta[0].name, ta[0].octave, 1.6);
+    else if (s === 3) pn(ta[1].name, ta[1].octave, 1.6);
+    else if (s === 5) pn(ta[2].name, ta[2].octave, 1.6);
+    else if (s === 6) ta.forEach((nt) => pn(nt.name, nt.octave, 2.2));
+  }, [anim.currentStep]);
 
   const current = anim.currentStep;
   const isResult = current >= TOTAL_STEPS;
-  const playLabel = anim.mode === 'playing'
-    ? (isDe ? 'Pausieren' : 'Pausar')
-    : (isDe ? 'Abspielen' : 'Reproducir');
+  const playLabel =
+    anim.mode === "playing"
+      ? isDe
+        ? "Pausieren"
+        : "Pausar"
+      : isDe
+        ? "Abspielen"
+        : "Reproducir";
 
   return (
     <div className={styles.wrap}>
       <span className={styles.eyebrow}>
-        {isDe ? 'Eine nehmen, die nächste überspringen' : 'Tomo una, salto la siguiente'}
+        {isDe
+          ? "Eine nehmen, die nächste überspringen"
+          : "Tomo una, salto la siguiente"}
       </span>
 
       <div className={styles.layout}>
@@ -117,33 +154,42 @@ export default function TriadaProceso() {
           className={styles.svg}
           viewBox={`0 0 ${SVG_W} ${SVG_H}`}
           role="img"
-          aria-label={isDe
-            ? `Aufbau des Dreiklangs von ${NOTE_DE[root]}`
-            : `Construcción de la tríada de ${NOTE_ES[root]}`}
+          aria-label={
+            isDe
+              ? `Aufbau des Dreiklangs von ${NOTE_DE[root]}`
+              : `Construcción de la tríada de ${NOTE_ES[root]}`
+          }
         >
           <line
-            x1={PAD_X} y1={NODE_Y} x2={SVG_W - PAD_X} y2={NODE_Y}
+            x1={PAD_X}
+            y1={NODE_Y}
+            x2={SVG_W - PAD_X}
+            y2={NODE_Y}
             className={styles.baseline}
           />
 
           {/* Bracket que ata la tríada (raíz · 3ra · 5ta) al llegar al resultado */}
           <path
-            d={`M ${nodeX(0)} ${NODE_Y - 26} L ${nodeX(0)} ${BRACKET_Y} L ${nodeX(4)} ${BRACKET_Y} L ${nodeX(4)} ${NODE_Y - 26}`}
+            d={`M ${nodeX(0)} ${BRACKET_BOTTOM} L ${nodeX(0)} ${BRACKET_Y} L ${nodeX(4)} ${BRACKET_Y} L ${nodeX(4)} ${BRACKET_BOTTOM}`}
             className={styles.bracket}
             style={{ opacity: isResult ? 1 : 0 }}
             fill="none"
           />
           <line
-            x1={nodeX(2)} y1={BRACKET_Y} x2={nodeX(2)} y2={NODE_Y - 26}
+            x1={nodeX(2)}
+            y1={BRACKET_Y}
+            x2={nodeX(2)}
+            y2={BRACKET_BOTTOM}
             className={styles.bracket}
             style={{ opacity: isResult ? 1 : 0 }}
           />
           <text
-            x={nodeX(2)} y={BRACKET_Y - 8}
+            x={nodeX(2)}
+            y={BRACKET_Y - 8}
             className={styles.bracketLabel}
             style={{ opacity: isResult ? 1 : 0 }}
           >
-            {isDe ? 'DREIKLANG' : 'TRÍADA'}
+            {isDe ? "DREIKLANG" : "TRÍADA"}
           </text>
 
           {notes.map((note, i) => {
@@ -155,52 +201,74 @@ export default function TriadaProceso() {
 
             // pendiente · tomada · saltada (color de nota = uso canónico; el rol
             // se discrimina por opacity + tamaño + anillo + tachado, no por hue falso).
-            let fill = 'var(--surface-2)';
+            let fill = "var(--surface-2)";
             let opacity = 0.5;
-            let stroke = 'var(--rule)';
+            let stroke = "var(--rule)";
             let strokeWidth = 1;
             let letterClass = styles.letterPending;
             if (revealed && taken) {
               fill = NOTE_COLORS[note];
               opacity = 1;
-              stroke = isRoot ? 'var(--paper)' : 'none';
+              stroke = isRoot ? "var(--paper)" : "none";
               strokeWidth = isRoot ? 2 : 0;
-              letterClass = isRoot ? styles.letterTakenLarge : styles.letterTaken;
+              letterClass = isRoot
+                ? styles.letterTakenLarge
+                : styles.letterTaken;
             } else if (revealed && !taken) {
               fill = NOTE_COLORS[note];
               opacity = 0.22;
-              stroke = 'none';
+              stroke = "none";
               strokeWidth = 0;
               letterClass = styles.letterSkipped;
             }
 
             return (
               <g key={i} className={styles.node}>
-                <text x={cx} y={NODE_Y - radius - 14} className={styles.noteName}>
+                <text
+                  x={cx}
+                  y={NODE_Y - radius - 14}
+                  className={styles.noteName}
+                >
                   {isDe ? NOTE_DE[note] : note}
                 </text>
                 <circle
-                  cx={cx} cy={NODE_Y} r={radius}
-                  fill={fill} opacity={opacity}
-                  stroke={stroke} strokeWidth={strokeWidth}
+                  cx={cx}
+                  cy={NODE_Y}
+                  r={radius}
+                  fill={fill}
+                  opacity={opacity}
+                  stroke={stroke}
+                  strokeWidth={strokeWidth}
                 />
                 {/* Tachado de "salto" sobre las notas omitidas */}
                 {revealed && !taken && (
                   <line
-                    x1={cx - radius} y1={NODE_Y - radius}
-                    x2={cx + radius} y2={NODE_Y + radius}
+                    x1={cx - radius}
+                    y1={NODE_Y - radius}
+                    x2={cx + radius}
+                    y2={NODE_Y + radius}
                     className={styles.skipSlash}
                   />
                 )}
                 <text x={cx} y={NODE_Y + 1} className={letterClass}>
                   {isDe ? NOTE_DE[note] : note}
                 </text>
-                <text x={cx} y={NODE_Y + radius + 20} className={styles.roleLabel}>
+                <text
+                  x={cx}
+                  y={NODE_Y + radius + 20}
+                  className={styles.roleLabel}
+                >
                   {revealed
-                    ? (taken
-                        ? (isRoot ? 'T' : i === 2 ? '3' : '5')
-                        : (isDe ? '×' : '×'))
-                    : ''}
+                    ? taken
+                      ? isRoot
+                        ? "T"
+                        : i === 2
+                          ? "3"
+                          : "5"
+                      : isDe
+                        ? "×"
+                        : "×"
+                    : ""}
                 </text>
               </g>
             );
@@ -216,8 +284,8 @@ export default function TriadaProceso() {
             return (
               <li
                 key={i}
-                className={`${styles.step} ${active ? styles.stepActive : ''} ${past ? styles.stepPast : ''} ${step.kind === 'result' ? styles.stepResult : ''}`}
-                aria-current={active ? 'step' : undefined}
+                className={`${styles.step} ${active ? styles.stepActive : ""} ${past ? styles.stepPast : ""} ${step.kind === "result" ? styles.stepResult : ""}`}
+                aria-current={active ? "step" : undefined}
               >
                 <span className={styles.stepNum}>{stepNum}</span>
                 {step.text}
@@ -234,37 +302,39 @@ export default function TriadaProceso() {
           className={styles.ctrl}
           onClick={anim.prev}
           disabled={current <= 0}
-          aria-label={isDe ? 'Vorheriger Schritt' : 'Paso anterior'}
+          aria-label={isDe ? "Vorheriger Schritt" : "Paso anterior"}
         >
           ◀
         </button>
         <button
           type="button"
           className={styles.ctrl}
-          onClick={anim.mode === 'playing' ? anim.pause : anim.play}
+          onClick={anim.mode === "playing" ? anim.pause : anim.play}
           aria-label={playLabel}
         >
-          {anim.mode === 'playing' ? '⏸' : '▶'}
+          {anim.mode === "playing" ? "⏸" : "▶"}
         </button>
         <button
           type="button"
           className={styles.ctrl}
           onClick={anim.next}
           disabled={current >= TOTAL_STEPS}
-          aria-label={isDe ? 'Nächster Schritt' : 'Paso siguiente'}
+          aria-label={isDe ? "Nächster Schritt" : "Paso siguiente"}
         >
           ▶▶
         </button>
         <span className={styles.spacer} />
         <label className={styles.speedWrap}>
-          <span className={styles.speedLabel}>{isDe ? 'Tempo' : 'Velocidad'}</span>
+          <span className={styles.speedLabel}>
+            {isDe ? "Tempo" : "Velocidad"}
+          </span>
           <select
             className={styles.speedSelect}
             value={anim.speed}
-            onChange={(e) => anim.setSpeed(e.target.value as 'normal' | 'slow')}
+            onChange={(e) => anim.setSpeed(e.target.value as "normal" | "slow")}
           >
-            <option value="normal">{isDe ? 'normal' : 'normal'}</option>
-            <option value="slow">{isDe ? 'langsam' : 'lento'}</option>
+            <option value="normal">{isDe ? "normal" : "normal"}</option>
+            <option value="slow">{isDe ? "langsam" : "lento"}</option>
           </select>
         </label>
       </div>

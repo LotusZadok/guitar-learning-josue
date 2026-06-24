@@ -1,6 +1,7 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import type { ThemeMode, Tonic } from '../types/music';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import type { ThemeMode, Tonic } from "../types/music";
+import { stopAllNotes } from "../hooks/audioEngineShared";
 
 interface UIState {
   theme: ThemeMode;
@@ -32,24 +33,29 @@ export const OCTAVE_DEFAULT = 3;
 export const useUIStore = create<UIState>()(
   persist(
     (set) => ({
-      theme: 'dark',
+      theme: "dark",
       sidebarOpen: false,
-      activeSection: 'cuerdas',
+      activeSection: "cuerdas",
       audioMuted: true,
       volume: 0.8,
-      tonic: 'C',
+      tonic: "C",
       octave: OCTAVE_DEFAULT,
 
       setTheme: (theme) => set({ theme }),
-      toggleTheme: () => set((s) => ({ theme: s.theme === 'dark' ? 'light' : 'dark' })),
+      toggleTheme: () =>
+        set((s) => ({ theme: s.theme === "dark" ? "light" : "dark" })),
       setSidebarOpen: (open) => set({ sidebarOpen: open }),
       setActiveSection: (section) => set({ activeSection: section }),
       toggleAudioMute: () => set((s) => ({ audioMuted: !s.audioMuted })),
       setAudioMuted: (muted) => set({ audioMuted: muted }),
       setVolume: (v) => set({ volume: v }),
-      setTonic: (t) => set({ tonic: t }),
-      setOctave: (o) => set({ octave: Math.min(OCTAVE_MAX, Math.max(OCTAVE_MIN, o)) }),
+      setTonic: (t) => {
+        stopAllNotes();
+        set({ tonic: t });
+      },
+      setOctave: (o) =>
+        set({ octave: Math.min(OCTAVE_MAX, Math.max(OCTAVE_MIN, o)) }),
     }),
-    { name: 'apuntes-ui', partialize: (state) => ({ theme: state.theme }) }
-  )
+    { name: "apuntes-ui", partialize: (state) => ({ theme: state.theme }) },
+  ),
 );
