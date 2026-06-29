@@ -2,7 +2,22 @@
   "site": { "title": "Guitarra didáctica · Prof. Josué Barquero" },
   "nav": {
     "t1": "T1 · Fundamentos musicales",
-    "t2": "T2 · Tonalidades y armonía diatónica"
+    "t2": "T2 · Tonalidades y armonía diatónica",
+    "t3": "T3 · Enriqueciendo la armonía"
+  },
+  "t3": {
+    "s311": {
+      "label": "3.1.1 · Séptimas",
+      "title": "Las nuevas séptimas",
+      "intro": "Recordando la tabla de intervalos de T1, hay tres calidades de séptima a la hora de armar acordes. La séptima mayor (7M) y la séptima menor (7m) ya las conocías; la novedad es la séptima disminuida (7d).",
+      "table_headers": {
+        "interval": "Intervalo",
+        "chord": "Cifrado típico",
+        "semitones": "Semitonos",
+        "enharmonic": "Enarmonía"
+      },
+      "new_seventh": "La séptima disminuida (7d) es un semitono menor que la 7m, lo que la vuelve enarmónicamente igual a una 6M; pero se trata como séptima porque ese es el rol que cumple dentro del acorde dim7."
+    }
   },
   "lock": {
     "prompt": "Ingrese la contraseña",

@@ -1,0 +1,87 @@
+.wrap {
+  margin-top: 24px;
+}
+
+.ruler {
+  display: block;
+  width: 100%;
+  max-width: 620px;
+  height: auto;
+  margin: 0 auto;
+}
+
+.axis {
+  stroke: var(--rule);
+  stroke-width: 1.5;
+}
+
+.tick {
+  stroke: var(--rule);
+  stroke-width: 1;
+}
+
+/* Un solo receptor de eventos por nodo (evita doble mouseenter al cruzar). */
+.node {
+  cursor: pointer;
+  outline: none;
+}
+
+.node > * {
+  pointer-events: none;
+}
+
+.hit {
+  pointer-events: all !important;
+}
+
+.node:focus-visible .hit {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+.role {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.glyph {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.name {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.semis {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.legend {
+  margin: 18px auto 0;
+  max-width: 560px;
+  text-align: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.legend strong {
+  color: var(--text-body);
+  font-weight: 600;
+}

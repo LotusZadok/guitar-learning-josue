@@ -4,7 +4,22 @@
   },
   "nav": {
     "t1": "T1 · Musikalische Grundlagen",
-    "t2": "T2 · Tonarten und diatonische Harmonik"
+    "t2": "T2 · Tonarten und diatonische Harmonik",
+    "t3": "T3 · Anreicherung der Harmonik"
+  },
+  "t3": {
+    "s311": {
+      "label": "3.1.1 · Septimen",
+      "title": "Die neuen Septimen",
+      "intro": "Aus der Intervalltabelle von T1 gibt es drei Septim-Qualitäten zum Bau von Akkorden. Die große Septime (7M) und die kleine Septime (7m) kennst du bereits; neu ist die verminderte Septime (7d).",
+      "table_headers": {
+        "interval": "Intervall",
+        "chord": "Typische Chiffre",
+        "semitones": "Halbtöne",
+        "enharmonic": "Enharmonik"
+      },
+      "new_seventh": "Die verminderte Septime (7d) ist einen Halbton kleiner als die 7m, wodurch sie enharmonisch einer 6M gleicht; sie wird aber als Septime behandelt, weil sie diese Rolle im dim7-Akkord erfüllt."
+    }
   },
   "lock": {
     "prompt": "Passwort eingeben",

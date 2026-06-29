@@ -2,18 +2,19 @@ import { useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useUIStore } from '../../stores/useUIStore';
-import { setMasterVolume } from '../../hooks/useAudioEngine';
 import { TOC_SECTIONS } from '../../config/tocConfig';
 import { useActiveSection } from '../../hooks/useActiveSection';
 import ThemeToggle from './ThemeToggle';
 import MuteToggle from './MuteToggle';
 import TonicSelector from './TonicSelector';
 import OctaveSelector from './OctaveSelector';
+import DynamicsSelector from './DynamicsSelector';
 import styles from './Sidebar.module.css';
 
 const SECTIONS = [
   { id: 't1', path: '/t1', labelKey: 'nav.t1' },
   { id: 't2', path: '/t2', labelKey: 'nav.t2' },
+  { id: 't3', path: '/t3', labelKey: 'nav.t3' },
 ] as const;
 
 export default function Sidebar() {
@@ -22,17 +23,11 @@ export default function Sidebar() {
   const { t, i18n } = useTranslation();
   const lang = i18n.language.startsWith('de') ? 'de' : 'es';
   const isDe = lang === 'de';
-  const { sidebarOpen, setSidebarOpen, volume, setVolume } = useUIStore();
+  const { sidebarOpen, setSidebarOpen } = useUIStore();
 
   const tocItems = TOC_SECTIONS[location.pathname] ?? [];
   const tocIds = useMemo(() => tocItems.map((s) => s.id), [location.pathname]); // eslint-disable-line react-hooks/exhaustive-deps
   const activeId = useActiveSection(tocIds);
-
-  const handleVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const v = Number(e.target.value);
-    setVolume(v);
-    setMasterVolume(v);
-  };
 
   const handleNav = (path: string) => {
     navigate(path);
@@ -93,19 +88,7 @@ export default function Sidebar() {
         <div className={styles.themeArea}>
           <ThemeToggle />
           <MuteToggle />
-          <div className={styles.volumeWrap}>
-            <span className={styles.volumeLabel}>{isDe ? 'LAUTSTÄRKE' : 'VOLUMEN'}</span>
-            <input
-              type="range"
-              className={styles.volumeSlider}
-              min={0.05}
-              max={1}
-              step={0.05}
-              value={volume}
-              onChange={handleVolume}
-              aria-label={isDe ? 'Audio-Lautstärke' : 'Volumen de audio'}
-            />
-          </div>
+          <DynamicsSelector />
           <TonicSelector />
           <OctaveSelector />
           <div className={styles.langWrap}>

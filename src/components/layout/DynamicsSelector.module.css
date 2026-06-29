@@ -1,0 +1,59 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  user-select: none;
+  text-transform: uppercase;
+}
+
+.row {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--rule);
+  background: var(--surface-2);
+}
+
+/* Las dinámicas se escriben en serif negrita itálica, como en una partitura.
+   Excepción sancionada a la regla Playfair (notación musical, no UI copy). */
+.dyn {
+  flex: 1;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1;
+  color: var(--muted);
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--rule);
+  padding: 6px 0;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+
+.dyn:last-child {
+  border-right: none;
+}
+
+.dyn:hover {
+  color: var(--paper);
+}
+
+.dyn:focus-visible {
+  outline: 1px solid var(--red);
+  outline-offset: -1px;
+}
+
+.dynActive {
+  composes: dyn;
+  color: var(--paper);
+  background: color-mix(in srgb, var(--red) 14%, transparent);
+}

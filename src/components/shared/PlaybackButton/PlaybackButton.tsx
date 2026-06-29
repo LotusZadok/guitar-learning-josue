@@ -49,15 +49,14 @@ export default function PlaybackButton({ mode, onClick, pressed, playing, disabl
 }
 
 // === Glifos de notación musical ===
-// Bloque: noteheads apiladas (sonido simultáneo). Arpegio: las mismas noteheads
-// con la línea ondulada vertical y la flecha ascendente de la notación estándar.
+// Bloque: tres noteheads alineadas verticalmente (sonido simultáneo). Arpegio:
+// las mismas noteheads desplazadas en diagonal ascendente (sonido sucesivo).
 export function BlockGlyph() {
   return (
     <svg className={styles.glyph} viewBox="0 0 28 44" aria-hidden="true">
-      <path className={styles.glyphStroke} d="M2,4 L2,40 M2,4 L8,4 M2,40 L8,40" />
-      <ellipse className={styles.glyphFill} cx="18" cy="10" rx="7" ry="5" transform="rotate(-20 18 10)" />
-      <ellipse className={styles.glyphFill} cx="18" cy="22" rx="7" ry="5" transform="rotate(-20 18 22)" />
-      <ellipse className={styles.glyphFill} cx="18" cy="34" rx="7" ry="5" transform="rotate(-20 18 34)" />
+      <ellipse className={styles.glyphFill} cx="14" cy="10" rx="7" ry="5" transform="rotate(-20 14 10)" />
+      <ellipse className={styles.glyphFill} cx="14" cy="22" rx="7" ry="5" transform="rotate(-20 14 22)" />
+      <ellipse className={styles.glyphFill} cx="14" cy="34" rx="7" ry="5" transform="rotate(-20 14 34)" />
     </svg>
   );
 }
@@ -65,11 +64,9 @@ export function BlockGlyph() {
 export function ArpeggioGlyph() {
   return (
     <svg className={styles.glyph} viewBox="0 0 28 44" aria-hidden="true">
-      <path className={styles.glyphStroke} d="M4,40 q-6,-6 0,-12 q6,-6 0,-12 q-6,-6 0,-12" />
-      <path className={styles.glyphFill} d="M4,4 l-3,6 l6,0 z" />
-      <ellipse className={styles.glyphFill} cx="18" cy="10" rx="7" ry="5" transform="rotate(-20 18 10)" />
-      <ellipse className={styles.glyphFill} cx="18" cy="22" rx="7" ry="5" transform="rotate(-20 18 22)" />
-      <ellipse className={styles.glyphFill} cx="18" cy="34" rx="7" ry="5" transform="rotate(-20 18 34)" />
+      <ellipse className={styles.glyphFill} cx="20" cy="10" rx="7" ry="5" transform="rotate(-20 20 10)" />
+      <ellipse className={styles.glyphFill} cx="14" cy="22" rx="7" ry="5" transform="rotate(-20 14 22)" />
+      <ellipse className={styles.glyphFill} cx="8" cy="34" rx="7" ry="5" transform="rotate(-20 8 34)" />
     </svg>
   );
 }

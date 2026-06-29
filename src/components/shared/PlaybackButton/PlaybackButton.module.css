@@ -47,13 +47,6 @@
   display: block;
 }
 
-.glyphStroke {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.6;
-  stroke-linecap: round;
-}
-
 .glyphFill {
   fill: currentColor;
 }
