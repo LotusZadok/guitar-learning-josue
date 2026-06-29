@@ -167,6 +167,7 @@ function ScaleNode({ data, onPlay, isDe }: ScaleNodeProps) {
       {/* Hit area: solo en notas de la escala (las cromáticas son silenciosas) */}
       {isOnScale && (
         <circle
+          className={styles.hit}
           cx={cx}
           cy={NODE_Y}
           r={Math.max(radius + 6, 18)}

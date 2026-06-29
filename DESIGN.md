@@ -234,7 +234,7 @@ La **Note-Color Quarantine Rule se extiende** en ambas direcciones: (a) los 12 h
 - **Display** (Bebas Neue 400, `clamp(48px, 8vw, 96px)`, line-height 0.9, letter-spacing 2px): título del header global. Una vez por pantalla, jamás dos.
 - **Headline** (Bebas Neue 400, 32px, line-height 1.1, letter-spacing 1px): títulos de sección dentro de un módulo (`<h2>`). Ej: "Tríadas", "Círculo Cromático".
 - **Title** (Bebas Neue 400, 24px, line-height 1.2, letter-spacing 1px): subsections, panel headers, MasterTriad title.
-- **Body** (IBM Plex Mono 400, 13px, line-height 1.8): párrafos del método, descripciones de intervalos, listas. **El line-height 1.8 es alto a propósito** — el método tiene párrafos densos y necesita aire entre líneas para no parecer compilado. Cap line length 65–75ch.
+- **Body** (IBM Plex Mono 400, 13px, line-height 1.8): párrafos del método, descripciones de intervalos, listas. **El line-height 1.8 es alto a propósito** — el método tiene párrafos densos y necesita aire entre líneas para no parecer compilado. Cap line length 90ch.
 - **Label** (IBM Plex Mono 500, 11px, letter-spacing 1px, uppercase): SectionLabel ("03 · Notas"), nav links, captions, role chips, footer copy. El separador estándar es `·` (U+00B7, middle dot), nunca em/en dash.
 - **Quote** (Playfair Display 400 italic, 12px, line-height 1.6): la cita del header global. Reservada exclusivamente para citas literales (eslogan, frases de Josué). Nunca decorativa.
 
@@ -242,7 +242,9 @@ La **Note-Color Quarantine Rule se extiende** en ambas direcciones: (a) los 12 h
 
 **The Editorial Trio Rule.** Bebas Neue solo en mayúsculas, Plex Mono solo en cuerpo y labels, Playfair solo en italic para citas literales de Josué. Ninguna combinación cruzada (ej: Bebas en lowercase, Playfair como título o subtítulo). Las tres fuentes mantienen su rol o no aparecen. Si una fuente tiene una Named Rule fijando su único caso de uso, **cualquier otro uso es una falla del diseño** — no una "interpretación creativa".
 
-**The 65ch Rule.** Cualquier párrafo de cuerpo respeta `max-width: 65–75ch`. La tipografía mono es legible solo cuando la línea no es un viaje horizontal. En el módulo T2 esto significa que las explicaciones del método viven dentro de un container con max-width acotado, no llenando viewport.
+**The 90ch Rule.** Cualquier párrafo de cuerpo respeta `max-width: 90ch`. La tipografía mono es legible solo cuando la línea no es un viaje horizontal. En el módulo T2 esto significa que las explicaciones del método viven dentro de un container con max-width acotado, no llenando viewport.
+
+Revisado el 19/6/26: el cap original de 70ch (heredado de la convención editorial genérica de 65-75ch) dejaba un gutter vacío de hasta 368px a la derecha de cada párrafo en pantallas anchas con sidebar visible (`.main` cap 1100px, medido en sección 1.1 a 1920px de viewport real) — y frases de cuerpo de 72-80 caracteres (comunes en la redacción del método) quedaban partidas en dos líneas aunque sobraba espacio horizontal de sobra para que entraran completas. El problema no era de un breakpoint puntual: aparece en cualquier ancho donde 70ch deja de ser el límite real (`.main`/`.section` lo es, no la pantalla angosta). Subir el cap a 90ch reduce el gutter a ~176px en ese mismo caso y deja entrar frases más largas sin partirse. Se evaluó centrar la columna en vez de ensancharla (reparte el gutter en partes iguales sin tocar el cap) — descartado por el usuario en favor de aprovechar el ancho liberado directamente.
 
 **The Middle-Dot Separator Rule.** El separador estándar para SectionLabel, nav labels, metadatos en línea ("EADGBE · 12 Notas · Sistema CAGED") y cualquier label con prefijo numerado ("01 · Introducción") es `·` (U+00B7, middle dot). Em dashes (`—`) están prohibidos en UI generada por agente; quedan reservados exclusivamente para citas literales del método de Josué (contenido). En/En dashes (`–`) no aparecen.
 
@@ -311,6 +313,18 @@ Anti-patrones cubiertos por esta regla:
 
 La pregunta antes de añadir cualquier shell de módulo: **¿esta superficie necesita un header, o estoy heredando uno porque todo producto tiene uno?** En esta app, la respuesta por defecto es no.
 
+### NoteToken en Tablas
+
+**Regla:** cualquier celda de `<table>` (o grid tabular con `role`/semántica equivalente) cuyo contenido sea **una grafía de nota individual** (no un acorde completo, no un número romano, no un nombre de intervalo) debe envolverse en `<NoteToken>` en vez de renderizarse como texto plano. Auditoría del 25/6/26 sobre las 7+ tablas de T1/T2 confirmó 4 ya conformes (`EscalaMayorSection`, `TriadasSection`, `RelativasMenoresSection`, `GradosArmonicos`) y 2 gaps reales, corregidos: `TablaMaestraSection` (columnas armadura/tonalidad) e `IntervalosSection` (fila "Resultado", incluyendo la celda de tritono con dos grafías enarmónicas separadas por `/`).
+
+**Por qué:** `NoteToken` es la única superficie que conecta una grafía con su hue cromático (Note-Color Quarantine) y con audio al click/hover/focus. Una nota en texto plano dentro de una tabla rompe esa asociación pedagógica sin razón — el usuario pierde la posibilidad de "escuchar" la celda y el refuerzo visual de color.
+
+**Excepciones documentadas (no tokenizar):**
+1. **Tablas pedagógicamente deliberadas que ocultan alteraciones.** La primera tabla de `IntervalosSection` muestra solo letras naturales (`n[0]`) porque el método aún no explicó por qué ciertas notas llevan ♯/♭ en ese punto de la lección. Tokenizar reproduciría audio de la nota equivocada.
+2. **Grafías no canónicas fuera del set de 17 que `NoteSpelling` soporta** (`Cb`, `Fb`, `E#`/`E♯`, `B#`/`B♯` — tonalidades de 6-7 alteraciones). Caen a `<span>` con texto plano formateado con glifo unicode (`♭`/`♯`), nunca ASCII (`b`/`#`). Patrón: guard `VALID_NOTE_SPELLINGS.has(spelling) ? <NoteToken .../> : <span>{glifo}</span>`, establecido en `EscalaMayorSection.tsx` y replicado en `TablaMaestraSection.tsx`.
+3. **Tablas de números romanos / calidad de acorde / nombres de función** (`GradosArmonicosSection`, fila Grado/Acorde de `GradosArmonicos`): usan discriminación tipográfica (bold/lowercase/italic), no color — la celda no representa una nota individual sino un rol armónico. Ver Note-Color Quarantine Corolario (Roles y estados).
+4. **Tablas de nombres de intervalo o conteo de semitonos** (`INTERVALOS_13_HEAD`/`INTERVALOS_13_ROW`): el contenido es metadata del intervalo, no una nota.
+
 ### Signature: Chromatic Note Node (SVG)
 
 El componente firma. Cada nota cromática se renderiza como un círculo SVG con:
@@ -331,7 +345,7 @@ Este componente es el que identifica la marca. Aparece en T1 (primitiva Chromati
 - **Do** construir profundidad con borders 1px y tonal layering (`surface-near` sobre `bg`), nunca con sombras.
 - **Do** usar `radius 0` por defecto. Las únicas excepciones son: tracks de toggle (10px), pills de acción flotante (14px), círculos puros (50%), y radios sutiles 4-6px solo dentro del POC para controles.
 - **Do** respetar `prefers-reduced-motion`: todas las animaciones de armadura deben saltar a estado final cuando el usuario lo tiene activado.
-- **Do** mantener `max-width: 65-75ch` en cualquier párrafo de cuerpo. El método tiene texto largo y necesita columnas legibles.
+- **Do** mantener `max-width: 90ch` en cualquier párrafo de cuerpo. El método tiene texto largo y necesita columnas legibles sin dejar gutter vacío en pantallas anchas (ver §3 Named Rules, The 90ch Rule).
 - **Do** tintar `#000` y `#fff` siempre hacia los neutros del sistema (Ink Deep / Paper Cream). Los neutros puros están prohibidos.
 
 ### Don't:
@@ -357,7 +371,7 @@ Este componente es el que identifica la marca. Aparece en T1 (primitiva Chromati
 
 Esta sección lista deudas que las auditorías y pasadas de resolución identificaron pero **no** han sido resueltas. Son trabajo futuro explícito, no aprobaciones tácitas. Cada vez que una pasada resuelve una deuda, se remueve de esta lista; cada nueva deuda descubierta se añade.
 
-**Última actualización:** 2026-06-11 (18ª ola — reunión 9/6: piso-tónica de raíz en todo el audio, §1.3 tabla natural y resultado único, §1.4 fila de números de grado, ejemplos en línea propia).
+**Última actualización:** 2026-06-25 (19ª ola — auditoría NoteToken-en-tablas, regla 90ch universal).
 
 ### Doctrina activa (decisiones pendientes de diseño)
 
@@ -378,6 +392,12 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 ### Histórico (resueltas, conservar para contexto)
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
+
+**19ª ola (2026-06-25): regla 90ch universal + auditoría NoteToken-en-tablas:**
+- ✓ **The 90ch Rule reemplaza el cap de 70ch** (heredado de la convención editorial 65-75ch). Medido a 1920px real (laptop del usuario, sidebar visible): el cap viejo dejaba 368px de gutter vacío y partía frases de 72-80 caracteres en dos líneas con sobra de espacio horizontal. Se evaluó centrar la columna (`margin-inline: auto`) en vez de ensancharla — implementado, luego revertido por decisión del usuario en favor de aprovechar el ancho liberado. Regla aplicada como base global en `p, li` (`global.css`), sin scoping a breakpoint (un intento inicial de scopear a `≤900px` fue descartado tras confirmar `window.innerWidth=1920` en la laptop real del usuario — el gutter aparece en cualquier ancho donde el container, no la pantalla, es el límite real).
+- ✓ **Migración de la capa matemática a Tonal.js** (`utils/noteCalculations.ts`, `hooks/useAudioEngine.ts`, `data/notes.ts`): pitch class, intervalos, enarmonías y frecuencia (`Note.freq`, 12-TET estándar) ahora delegan a la librería; la lógica pedagógica específica del método (letter-spelling, piso de octava, naming alemán) se conserva intacta. Verificado por paridad exhaustiva (script de baseline antes/después, 17 tónicas × tipos de acorde × intervalos) — output byte-idéntico. `NOTE_FREQS` (tabla hand-rolled de 12×9 frecuencias) eliminada, sin consumidores restantes.
+- ✓ **Auditoría completa de NoteToken-en-tablas** (nueva regla documentada arriba, §5): 4/7 tablas de T1/T2 ya conformes; 2 gaps reales corregidos (`TablaMaestraSection` columnas armadura/tonalidad, `IntervalosSection` fila Resultado con celda de tritono de doble grafía). Bug encontrado y corregido en el mismo pase: el fallback a texto plano para grafías no-canónicas (`E#`, `B#`) renderizaba el `#` ASCII en vez del glifo `♯` unicode — inconsistente con el resto de la fila tokenizada. `toFlat()` renombrado a `toGlyph()`, ahora convierte ambos acentos.
+- ✓ Build + typecheck limpios. Verificado en browser: tabla maestra renderiza NoteToken con audio/color para las 12 grafías canónicas y fallback de texto con glifo correcto para `Cb`/`Fb`/`E♯`/`B♯` en las tonalidades de 6-7 alteraciones.
 
 **18ª ola — Reunión 9/6 (2026-06-11): piso-tónica de raíz + correcciones puntuales:**
 - ✓ **Piso-tónica resuelto de raíz, no por parche.** El bug reportado ("con tónica A, C suena más grave que A") venía de `playNote(note, 4)` con octava fija en notas sueltas ancladas a tonalidad. Nuevo helper puro `octaveAboveTonic(tonic, note, base)` en `noteCalculations.ts`; `NoteToken` (el call-site masivo: toda la prosa y tablas de T1/T2) ancla su octava default a la tónica global. El prop `octave` explícito sigue ganando (filas apiladas de §2.6).

@@ -42,6 +42,19 @@
   outline-offset: 2px;
 }
 
+/* La nota visible se pinta encima del área de hit (orden de documento SVG) y
+   por defecto también captura el puntero: el mouse entra/sale del hit circle
+   al cruzar hacia el disco visible, disparando un segundo mouseenter al salir.
+   Único receptor de pointer events: el hit circle (mismo patrón que
+   ChromaticCircle.module.css). */
+.node > * {
+  pointer-events: none;
+}
+
+.hit {
+  pointer-events: all !important;
+}
+
 .patternLabel {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;

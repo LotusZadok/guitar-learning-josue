@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
+import NoteToken from '../../../shared/NoteToken/NoteToken';
+import type { NoteSpelling } from '../../../../types/music';
 import {
   TABLA_MAESTRA_INTRO,
   TABLA_MAESTRA_INTRO_DE,
@@ -9,9 +11,25 @@ import {
 import { TONALIDADES } from '../data/tonalidades';
 import ProcesoView from '../components/ProcesoView';
 
-function toFlat(s: string): string {
-  return s.replace(/([A-G])b/g, '$1♭');
+function toGlyph(s: string): string {
+  return s.replace(/([A-G])b/g, '$1♭').replace(/([A-G])#/g, '$1♯');
 }
+
+// Las 17 grafías que NoteToken sabe colorear/reproducir (12 sostenidos + 5
+// bemoles canónicos). Cb/Fb/E♯/B♯ (tonalidades de 6-7 alteraciones) quedan
+// como texto plano: son teóricamente correctas pero fuera del set que el
+// motor de audio/color soporta (ver lessons-learned.md, "Spellings inválidos").
+const VALID_NOTE_SPELLINGS = new Set([
+  'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B',
+  'Db', 'Eb', 'Gb', 'Ab', 'Bb',
+]);
+
+function NoteOrText({ spelling }: { spelling: string }) {
+  return VALID_NOTE_SPELLINGS.has(spelling)
+    ? <NoteToken note={spelling as NoteSpelling} />
+    : <span>{toGlyph(spelling)}</span>;
+}
+
 import styles from './TablaMaestraSection.module.css';
 
 export default function TablaMaestraSection() {
@@ -48,8 +66,15 @@ export default function TablaMaestraSection() {
               onClick={() => toggle(ton.id)}
             >
               <span className={styles.colNum}>{ton.numAlteraciones}</span>
-              <span className={styles.colArm}>{ton.armadura.map(toFlat).join(' ')}</span>
-              <span className={styles.colTon}>{toFlat(ton.tonica)} {t('common.major')}</span>
+              <span className={styles.colArm}>
+                {ton.armadura.map((n, i) => (
+                  <Fragment key={i}>
+                    {i > 0 && ' '}
+                    <NoteOrText spelling={n} />
+                  </Fragment>
+                ))}
+              </span>
+              <span className={styles.colTon}><NoteOrText spelling={ton.tonica} /> {t('common.major')}</span>
               <span className={styles.chevron}>{expandedId === ton.id ? '▾' : '▸'}</span>
             </div>
             {expandedId === ton.id && (
@@ -75,8 +100,15 @@ export default function TablaMaestraSection() {
               onClick={() => toggle(ton.id)}
             >
               <span className={styles.colNum}>{ton.numAlteraciones}</span>
-              <span className={styles.colArm}>{ton.armadura.map(toFlat).join(' ')}</span>
-              <span className={styles.colTon}>{toFlat(ton.tonica)} {t('common.major')}</span>
+              <span className={styles.colArm}>
+                {ton.armadura.map((n, i) => (
+                  <Fragment key={i}>
+                    {i > 0 && ' '}
+                    <NoteOrText spelling={n} />
+                  </Fragment>
+                ))}
+              </span>
+              <span className={styles.colTon}><NoteOrText spelling={ton.tonica} /> {t('common.major')}</span>
               <span className={styles.chevron}>{expandedId === ton.id ? '▾' : '▸'}</span>
             </div>
             {expandedId === ton.id && (

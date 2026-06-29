@@ -1,4 +1,5 @@
-import { ALL, NOTE_ES, NOTE_FREQS } from "../data/notes";
+import { Note, Interval, Scale } from "tonal";
+import { ALL, NOTE_ES } from "../data/notes";
 import type { ChromaticNote, NoteInfo, Tonic } from "../types/music";
 
 export function noteAtFret(
@@ -67,39 +68,23 @@ export function spelledNameES(spelling: string): string {
 // La tónica lleva su propia grafía (sostenido o bemol). La altura cromática para
 // audio e índices se deriva con `tonicChromatic`; la ortografía de escalas/acordes
 // respeta la grafía elegida (C♯ mayor usa sostenidos; D♭ mayor usa bemoles).
-const FLAT_TO_SHARP: Record<string, ChromaticNote> = {
-  Db: "C#",
-  Eb: "D#",
-  Gb: "F#",
-  Ab: "G#",
-  Bb: "A#",
-};
-
+// Las 5 tónicas bemol del tipo `Tonic` siempre tienen un sostenido enarmónico
+// equivalente (Tonal.js lo resuelve); las naturales/sostenidos pasan intactos.
 export function tonicChromatic(tonic: Tonic): ChromaticNote {
-  return (FLAT_TO_SHARP[tonic] ?? tonic) as ChromaticNote;
+  return (tonic.includes("b") ? Note.enharmonic(tonic) : tonic) as ChromaticNote;
 }
 
 const LETTERS = ["C", "D", "E", "F", "G", "A", "B"] as const;
-const NATURAL_SEMITONE: Record<string, number> = {
-  C: 0,
-  D: 2,
-  E: 4,
-  F: 5,
-  G: 7,
-  A: 9,
-  B: 11,
-};
-const MAJOR_INTERVALS = [0, 2, 4, 5, 7, 9, 11] as const;
+const MAJOR_INTERVALS = Scale.get("major").intervals.map(
+  (iv) => Interval.semitones(iv) ?? 0,
+);
 
 function tonicSemitone(tonic: Tonic): number {
-  const letter = tonic[0];
-  const acc = tonic[1];
-  const delta = acc === "#" ? 1 : acc === "b" ? -1 : 0;
-  return (NATURAL_SEMITONE[letter] + delta + 12) % 12;
+  return Note.chroma(tonic) ?? 0;
 }
 
 function spelledFromLetterAndSemi(letter: string, targetSemi: number): string {
-  const naturalSemi = NATURAL_SEMITONE[letter];
+  const naturalSemi = Note.chroma(letter) ?? 0;
   let diff = (targetSemi - naturalSemi + 12) % 12;
   if (diff > 6) diff -= 12;
 
@@ -174,8 +159,8 @@ export function chordSpelled(tonic: Tonic, type: ChordType): ChordMember[] {
 // Prevents arpeggio from playing a descending leap when octave wraps backward.
 export function ensureAscending(members: ChordMember[]): ChordMember[] {
   return [...members].sort((a, b) => {
-    const fa = NOTE_FREQS[`${a.chromatic}${a.octave}`] ?? 0;
-    const fb = NOTE_FREQS[`${b.chromatic}${b.octave}`] ?? 0;
+    const fa = Note.freq(`${a.chromatic}${a.octave}`) ?? 0;
+    const fb = Note.freq(`${b.chromatic}${b.octave}`) ?? 0;
     return fa - fb;
   });
 }
@@ -185,14 +170,8 @@ export function ensureAscending(members: ChordMember[]): ChordMember[] {
 // altura cromática 0–11, resolviendo enarmónicamente al equivalente sostenido
 // que el motor de audio entiende.
 export function pitchClass(spelled: string): number {
-  const letter = spelled[0] as keyof typeof NATURAL_SEMITONE;
-  let delta = 0;
-  for (const ch of spelled.slice(1)) {
-    if (ch === "#" || ch === "♯") delta += 1;
-    else if (ch === "b" || ch === "♭") delta -= 1;
-    else if (ch === "x") delta += 2;
-  }
-  return ((NATURAL_SEMITONE[letter] ?? 0) + delta + 24) % 12;
+  const ascii = spelled.replace(/♯/g, "#").replace(/♭/g, "b");
+  return Note.chroma(ascii) ?? 0;
 }
 
 // Ordena una secuencia de notas (por nombre) en alturas ascendentes: la primera
@@ -242,38 +221,33 @@ export function octaveAboveTonic(tonic: Tonic, note: string, base = 4): number {
 export type IntervalNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 export type IntervalQuality = "P" | "M" | "m" | "aug" | "dim";
 
-const DIATONIC_MAJOR_SEMITONES: Record<IntervalNumber, number> = {
-  1: 0,
-  2: 2,
-  3: 4,
-  4: 5,
-  5: 7,
-  6: 9,
-  7: 11,
-  8: 12,
-};
 const PERFECTABLE: Set<IntervalNumber> = new Set([1, 4, 5, 8]);
+// Tonal.js usa códigos de calidad de una letra ('A' aumentada, 'd' disminuida)
+// en vez de las palabras 'aug'/'dim' que usa la API pública de este módulo.
+const TONAL_QUALITY: Record<IntervalQuality, string> = {
+  P: "P",
+  M: "M",
+  m: "m",
+  aug: "A",
+  dim: "d",
+};
 
 function intervalSemitones(
   number: IntervalNumber,
   quality: IntervalQuality,
 ): number {
-  const base = DIATONIC_MAJOR_SEMITONES[number];
-  if (PERFECTABLE.has(number)) {
-    if (quality === "P") return base;
-    if (quality === "aug") return base + 1;
-    if (quality === "dim") return base - 1;
+  const perfectable = PERFECTABLE.has(number);
+  const allowed = perfectable
+    ? quality === "P" || quality === "aug" || quality === "dim"
+    : quality === "M" || quality === "m" || quality === "aug" || quality === "dim";
+  if (!allowed) {
     throw new Error(
-      `Intervalo ${number} no acepta calidad ${quality} (solo P/aug/dim)`,
+      perfectable
+        ? `Intervalo ${number} no acepta calidad ${quality} (solo P/aug/dim)`
+        : `Intervalo ${number} no acepta calidad ${quality} (solo M/m/aug/dim)`,
     );
   }
-  if (quality === "M") return base;
-  if (quality === "m") return base - 1;
-  if (quality === "aug") return base + 1;
-  if (quality === "dim") return base - 2;
-  throw new Error(
-    `Intervalo ${number} no acepta calidad ${quality} (solo M/m/aug/dim)`,
-  );
+  return Interval.semitones(`${number}${TONAL_QUALITY[quality]}`) ?? 0;
 }
 
 // Devuelve la ortografía del intervalo desde la tónica (con la letra correcta y alteración).

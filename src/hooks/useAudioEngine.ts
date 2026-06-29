@@ -1,5 +1,5 @@
 import { useCallback, useRef } from "react";
-import { NOTE_FREQS } from "../data/notes";
+import { Note } from "tonal";
 import { useUIStore } from "../stores/useUIStore";
 import {
   getMasterVolumeNode,
@@ -44,27 +44,13 @@ export const useAudioEngine = () => {
     (noteName: string, octave: number, duration = 2.0) => {
       if (useUIStore.getState().audioMuted) return;
       const ctx = getCtx();
-      let key = noteName.replace("♯", "#").replace("♭", "b");
-      const flatMap: Record<string, string> = {
-        Db: "C#",
-        Eb: "D#",
-        Gb: "F#",
-        Ab: "G#",
-        Bb: "A#",
-      };
-      for (const [f, s] of Object.entries(flatMap)) {
-        if (key.startsWith(f)) {
-          key = s + key.slice(2);
-          break;
-        }
-      }
+      const ascii = noteName.replace(/♯/g, "#").replace(/♭/g, "b");
       // Transpone global: la octava elegida en el selector es el registro base
       // de TODOS los ejemplos. Los consumidores escriben sus octavas asumiendo
       // base 4 (C4); aquí se desplaza todo al registro elegido (default C3 → −1).
       const effectiveOctave =
         octave + (useUIStore.getState().octave - REFERENCE_OCTAVE);
-      key = key + effectiveOctave;
-      const freq = NOTE_FREQS[key];
+      const freq = Note.freq(`${ascii}${effectiveOctave}`);
       if (!freq) return;
 
       const now = ctx.currentTime;

@@ -14,15 +14,3 @@ export const NOTE_ES: Record<ChromaticNote, NoteNameES> = {
   'F#':'Fa♯','G':'Sol','G#':'Sol♯','A':'La','A#':'La♯','B':'Si',
 };
 
-export const NOTE_FREQS: Record<string, number> = {};
-(function buildFreqs() {
-  const base: Record<string, number> = {
-    'C':16.35,'C#':17.32,'D':18.35,'D#':19.45,'E':20.60,'F':21.83,
-    'F#':23.12,'G':24.50,'G#':25.96,'A':27.50,'A#':29.14,'B':30.87,
-  };
-  for (let oct = 0; oct <= 8; oct++) {
-    for (const [n, f] of Object.entries(base)) {
-      NOTE_FREQS[n + oct] = f * Math.pow(2, oct);
-    }
-  }
-})();

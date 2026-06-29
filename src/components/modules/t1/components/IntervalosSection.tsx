@@ -1,13 +1,13 @@
-import { useMemo } from "react";
+import { Fragment, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import SectionLabel from "../../../shared/SectionLabel";
 import Prose from "../../../shared/Prose/Prose";
+import NoteToken from "../../../shared/NoteToken/NoteToken";
 import IntervalsSection from "../../../primitives/Intervals/IntervalsSection";
 import { useUIStore } from "../../../../stores/useUIStore";
 import { ALL } from "../../../../data/notes";
 import {
   majorScaleSpelled,
-  noteShort,
   tonicChromatic,
 } from "../../../../utils/noteCalculations";
 import type { NoteSpelling } from "../../../../types/music";
@@ -108,23 +108,28 @@ function buildStep2(tonicIdx: number, locale: string): StepWithBreak {
   return { prefix, notes };
 }
 
-// Las 13 notas del resultado como strings de display para la tabla comparativa
-// (1.3): cada columna es un intervalo, cada celda su nota. Reunión 9/6/26: el
-// párrafo "Resultado para X: ..." se eliminó; la tabla es el único resultado.
-function buildResultadoCells(tonicIdx: number, letterIdx: number): string[] {
-  const cells: string[] = [];
+// Las 13 notas del resultado como spellings ASCII para la tabla comparativa
+// (1.3): cada columna es un intervalo, cada celda su(s) nota(s) — el tritono
+// es la única celda con dos grafías (ambas tokenizadas, separadas por " / ").
+// Reunión 9/6/26: el párrafo "Resultado para X: ..." se eliminó; la tabla es
+// el único resultado.
+function buildResultadoCells(
+  tonicIdx: number,
+  letterIdx: number,
+): NoteSpelling[][] {
+  const cells: NoteSpelling[][] = [];
   for (let i = 0; i <= 12; i++) {
     const note = ALL[(tonicIdx + i) % 12];
     const flat = SHARP_TO_FLAT_ASCII[note];
     if (flat && i === 6) {
-      // Tritone always shows both enharmonic spellings with spacing
-      cells.push(`${noteShort(note)} / ${noteShort(flat)}`);
+      // Tritone always shows both enharmonic spellings
+      cells.push([note, flat as NoteSpelling]);
     } else if (flat) {
       const expected =
         NATURAL_LETTERS_7[(letterIdx + LETTER_OFFSETS_13[i]) % 7];
-      cells.push(noteShort(flat[0] === expected ? flat : note));
+      cells.push([flat[0] === expected ? (flat as NoteSpelling) : note]);
     } else {
-      cells.push(noteShort(note));
+      cells.push([note]);
     }
   }
   return cells;
@@ -304,8 +309,15 @@ export default function IntervalosSection() {
           <tbody>
             <tr>
               <th scope="row">{locale === "de" ? "Ergebnis" : "Resultado"}</th>
-              {resultadoCells.map((c, i) => (
-                <td key={i}>{c}</td>
+              {resultadoCells.map((spellings, i) => (
+                <td key={i}>
+                  {spellings.map((s, j) => (
+                    <Fragment key={j}>
+                      {j > 0 && " / "}
+                      <NoteToken note={s} />
+                    </Fragment>
+                  ))}
+                </td>
               ))}
             </tr>
           </tbody>
