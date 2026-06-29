@@ -2,149 +2,142 @@
   margin-top: 24px;
 }
 
-.qualityRow {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 28px;
+.tree {
+  display: block;
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  margin: 0 auto;
 }
 
-.quality {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 16px;
-  letter-spacing: 1px;
-  padding: 4px 14px;
-  border: 1px solid var(--rule);
-  background: none;
-  color: var(--paper);
-  cursor: pointer;
-  transition: border-color 0.15s, background 0.15s, color 0.15s;
+/* === aristas === */
+.edge {
+  stroke: var(--rule);
+  stroke-width: 1.5;
+  fill: none;
 }
 
-.quality:hover {
-  border-color: var(--amber);
+.edgeActive {
+  composes: edge;
+  stroke: var(--text-body);
+  stroke-width: 2.5;
 }
 
-.quality:focus-visible {
-  outline: 2px solid var(--amber);
-  outline-offset: 2px;
-}
-
-.qualityActive {
-  composes: quality;
-  background: var(--red);
-  border-color: var(--red);
-  color: var(--paper);
-}
-
-.chordRow {
-  display: flex;
-  gap: 28px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin: 24px 0 28px;
-}
-
-.card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
+/* === nodos === */
+/* Un solo receptor de eventos por nodo: el contenido visual no intercepta el
+   puntero, sólo el círculo .hit (evita el doble mouseenter al cruzar el disco). */
+.node {
   cursor: pointer;
   outline: none;
-  padding: 8px;
-  border: 1px solid transparent;
-  transition: border-color 0.15s, transform 0.15s ease;
 }
 
-.card:hover,
-.card:focus-visible {
-  transform: translateY(-2px);
-}
-
-.card:focus-visible {
-  border-color: var(--amber);
-}
-
-.nodeSvg {
-  width: 80px;
-  height: 80px;
-  display: block;
-}
-
-.nodeLetter {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  /* Signature Component: letra blanca sobre nota saturada, no tokenizar */
-  fill: #fff;
-  text-anchor: middle;
-  dominant-baseline: middle;
+.node > * {
   pointer-events: none;
 }
 
-.cardLabel {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 2px;
-  color: var(--paper);
-  text-transform: uppercase;
+.hit {
+  pointer-events: all !important;
 }
 
-.cardName {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 1px;
-  color: var(--muted);
+.node[role='img'] {
+  cursor: default;
 }
 
-.audioRow {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+.nodeDisabled {
+  cursor: default;
+  opacity: 0.3;
 }
 
-.audioBtn {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px;
-  padding: 8px 16px;
-  border: 1px solid var(--rule);
-  background: none;
-  color: var(--paper);
-  cursor: pointer;
-  border-radius: 4px;
-  transition: border-color 0.2s, color 0.2s;
-}
-
-.audioBtn:hover:not(:disabled) {
-  border-color: var(--red);
-  color: var(--red);
-}
-
-.audioBtn:focus-visible {
+.node:focus-visible .hit {
+  /* feedback de teclado sin animar layout: anillo punteado vía outline del hit */
   outline: 2px solid var(--amber);
   outline-offset: 2px;
 }
 
-.audioBtn:disabled {
-  opacity: 0.35;
-  cursor: default;
+.nodeGlyph {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 0.5px;
+  text-anchor: middle;
+  dominant-baseline: middle;
 }
 
-@media (max-width: 900px) {
-  .chordRow {
-    gap: 16px;
+.nodeRole {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+/* Carril de calidad: doble señal (peso + estilo) para que mayor ≠ menor sin
+   depender sólo del caso m/M, ilegible de un vistazo en monoespaciado. */
+.roleMajor {
+  font-weight: 600;
+  font-style: normal;
+}
+
+.roleMinor {
+  font-weight: 400;
+  font-style: italic;
+}
+
+.nodeName {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+/* === readout del acorde === */
+.readout {
+  margin-top: 20px;
+  min-height: 92px;
+  text-align: center;
+}
+
+.chordName {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px;
+  letter-spacing: 1px;
+  color: var(--paper);
+  margin: 0;
+}
+
+.cifrado {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  letter-spacing: 1px;
+  color: var(--muted);
+  margin-left: 12px;
+}
+
+.chordNotes {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  letter-spacing: 2px;
+  color: var(--text-body);
+  margin: 6px 0 16px;
+}
+
+.hint {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  margin: 28px 0;
+}
+
+/* === controles de audio === */
+.audioRow {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+@media (max-width: 600px) {
+  .chordName {
+    font-size: 22px;
   }
-}
-
-.cardPlaying {
-  border-color: var(--amber);
-  box-shadow: 0 0 0 1px var(--amber);
-  transition: border-color 0.15s, box-shadow 0.15s, opacity 0.2s;
-}
-
-.cardDimmed {
-  opacity: 0.35;
-  transition: opacity 0.2s;
 }

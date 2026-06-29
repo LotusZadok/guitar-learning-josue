@@ -6,6 +6,7 @@ import { majorScaleSpelled, tonicChromatic } from '../../../utils/noteCalculatio
 import type { DiatonicRole } from '../../shared/NoteToken/NoteToken';
 import type { ChromaticNote, DiatonicDegree, Tonic } from '../../../types/music';
 import { PROGRESIONES_DATA } from '../../modules/t2/data/literalContent';
+import PlaybackButton from '../../shared/PlaybackButton/PlaybackButton';
 import styles from './ProgresionesArmonicas.module.css';
 
 // Reunión 24/5/26: formato armónico para los chips de grado y acorde.
@@ -68,9 +69,6 @@ function chordLabel(diatonic: DiatonicNote[], gradeIdx: number): string {
 export default function ProgresionesArmonicas({ tonalidad }: Props) {
   const { i18n } = useTranslation();
   const isDe = i18n.language === 'de';
-  const modeLabels: Record<PlayMode, string> = isDe
-    ? { arpegio: 'Arpeggiert', bloque: 'Block' }
-    : { arpegio: 'Arpegiado', bloque: 'Bloque' };
   const reproduccionLabel = isDe ? 'Wiedergabe:' : 'Reproducción:';
   const reproductionAria = isDe ? 'Wiedergabemodus' : 'Modo de reproducción';
   const [playMode, setPlayMode] = useState<PlayMode>('arpegio');
@@ -193,14 +191,12 @@ export default function ProgresionesArmonicas({ tonalidad }: Props) {
       <div className={styles.modeRow} role="group" aria-label={reproductionAria}>
         <span className={styles.modeLabel}>{reproduccionLabel}</span>
         {(['arpegio', 'bloque'] as PlayMode[]).map((m) => (
-          <button
+          <PlaybackButton
             key={m}
-            className={playMode === m ? styles.modeActive : styles.modeBtn}
+            mode={m}
+            pressed={playMode === m}
             onClick={() => setPlayMode(m)}
-            aria-pressed={playMode === m}
-          >
-            {modeLabels[m]}
-          </button>
+          />
         ))}
       </div>
 

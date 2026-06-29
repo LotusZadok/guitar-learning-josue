@@ -325,6 +325,14 @@ La pregunta antes de añadir cualquier shell de módulo: **¿esta superficie nec
 3. **Tablas de números romanos / calidad de acorde / nombres de función** (`GradosArmonicosSection`, fila Grado/Acorde de `GradosArmonicos`): usan discriminación tipográfica (bold/lowercase/italic), no color — la celda no representa una nota individual sino un rol armónico. Ver Note-Color Quarantine Corolario (Roles y estados).
 4. **Tablas de nombres de intervalo o conteo de semitonos** (`INTERVALOS_13_HEAD`/`INTERVALOS_13_ROW`): el contenido es metadata del intervalo, no una nota.
 
+### Playback Buttons (Bloque / Arpegio)
+
+**Regla (20ª ola):** todo control de reproducción Bloque/Arpegio en la app usa el componente compartido `shared/PlaybackButton`. Es **icono-only**: se ve sólo el glifo de notación (bloque = noteheads apiladas con corchete; arpegio = noteheads con onda vertical + flecha) y la etiqueta de texto aparece sólo en hover/focus como tooltip absoluto (sin layout shift). El nombre del modo siempre está disponible para AT vía `aria-label`. Etiquetas estándar centralizadas (es: Bloque/Arpegio · de: Block/Arpeggio) — antes divergían entre consumidores (Arpegio/Arpegiado/Arpeggio).
+
+**Dos modos de uso:** prop `pressed` definido → es un **toggle de modo** (`aria-pressed`, estado de selección persistente, tint Active rojo 8%); `pressed` ausente → es un **botón de acción** (dispara la reproducción al click). Consumidores: `AcordesBuilder` (acción), `TriadsSection` y `ProgresionesArmonicas` (toggle). `prop playing` añade el anillo ámbar mientras suena.
+
+**Por qué icono-only:** el glifo de notación musical es autoexplicativo para el dominio (guitarra/teoría) y mantiene los controles compactos junto a la visualización; el texto en hover cubre al usuario que aún no asocia el glifo, sin gastar espacio permanente ni romper el ritmo del cuaderno.
+
 ### Signature: Chromatic Note Node (SVG)
 
 El componente firma. Cada nota cromática se renderiza como un círculo SVG con:
@@ -371,7 +379,7 @@ Este componente es el que identifica la marca. Aparece en T1 (primitiva Chromati
 
 Esta sección lista deudas que las auditorías y pasadas de resolución identificaron pero **no** han sido resueltas. Son trabajo futuro explícito, no aprobaciones tácitas. Cada vez que una pasada resuelve una deuda, se remueve de esta lista; cada nueva deuda descubierta se añade.
 
-**Última actualización:** 2026-06-25 (19ª ola — auditoría NoteToken-en-tablas, regla 90ch universal).
+**Última actualización:** 2026-06-29 (20ª ola — §1.7 árbol-constructor de acordes, inicio de T3).
 
 ### Doctrina activa (decisiones pendientes de diseño)
 
@@ -392,6 +400,14 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 ### Histórico (resueltas, conservar para contexto)
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
+
+**20ª ola (2026-06-29): §1.7 árbol-constructor de acordes (inicio de T3, reunión del plan):**
+- ✓ **`AcordesBuilder` reescrito de fila-de-tarjetas a árbol-DAG interactivo.** El toggle Mayor/Menor/Dis. + 3 tarjetas se reemplazó por un árbol SVG izquierda→derecha con **doble codificación posicional** (corrección del profesor): el eje **vertical** = distancia interválica (menos semitonos → más cerca de la línea de la tónica) y el eje **horizontal** = calidad (menor/disminuida a la izquierda, mayor/justa a la derecha). T (raíz) ramifica a 3m (arriba-izquierda) y 3M (abajo-derecha); 3m llega a 5J y 5d, 3M sólo a 5J; 5d queda izquierda-arriba, 5 derecha-abajo. Las **aristas codifican validez de acorde** — los caminos posibles dan exactamente m (T·3m·5), dim (T·3m·5d) y M (T·3M·5). **sus2/sus4 (los nodos 2 y 4) NO aparecen todavía**: se introducen en T3 (§3.3). Recorte hasta la quinta (el árbol completo con séptimas va en 3.4). Interacción "construir por camino": clic en tercera → quintas alcanzables se habilitan, clic en quinta → acorde nombrado + audio.
+- ✓ **Glifos de notación reemplazan los botones de texto "Bloque"/"Arpegiado".** Bloque = noteheads apiladas con corchete; Arpegio = noteheads con línea ondulada vertical y flecha ascendente (notación estándar).
+- ✓ **`PlaybackButton` compartido (corrección de consistencia del profesor):** los controles Bloque/Arpegio de TODA la app pasaron a un solo componente `shared/PlaybackButton` icono-only, con la etiqueta revelada en hover/focus (tooltip absoluto, sin layout shift) y `aria-label` siempre presente. Consolidó tres consumidores con etiquetas y estilos divergentes (`AcordesBuilder` como acción; `TriadsSection` §1.6 y `ProgresionesArmonicas` §2.7 como toggle `aria-pressed`). Glifos extraídos al componente compartido; CSS huérfano (`.playToggle*`, `.modeBtn*`, `.audioBtn`, `.glyph*`) eliminado de los tres módulos. Ver Named Rule en §5 "Playback Buttons". `ChromaticCircleSection` ya no tiene toggle (removido en 14ª ola), no aplica.
+- ✓ **Doble bug/feedback de legibilidad de calidad resuelto:** (a) Bebas Neue es all-caps, así que `3m`/`3M` y `5d`/`5` renderizaban idénticos → las etiquetas de **rol** pasaron a Plex Mono (preserva caso, precedente de `GradosArmonicos`); Bebas se conserva sólo para el **glifo de la nota** activa. (b) Aun en Plex Mono, `m` vs `M` en monoespaciado es demasiado sutil de un vistazo (proyección en clase) → se añadió un **carril tipográfico de calidad**: mayor/justa = bold recto (`.roleMajor`), menor/disminuida = regular itálica (`.roleMinor`). Sumado al eje horizontal izquierda/derecha, la calidad queda redundante e inequívoca. Nodo en reposo: rol (con carril) + nombre ES; nodo activo: nota en Bebas blanca sobre círculo saturado (excepción Signature).
+- ✓ **Nuevo helper matemático centralizado** `intervalMemberFromTonic(tonic, number, quality)` en `noteCalculations.ts` (grafía + cromática + octava ascendente). Los nodos 2/4/5d no son tríadas y no salían de `chordSpelled`; el helper reutiliza `spelledIntervalFromTonic` + `intervalSemitones`. Audio respeta el piso-tónica (octava ascendente desde la tónica). `AcordesBuilder` sigue en el inventario tónica-relativo (§7 Doctrina activa, sin cambio).
+- ✓ Estados verificados en browser (desktop + 375px, tema claro y oscuro): idle, tercera seleccionada con quintas no-alcanzables atenuadas (opacity 0.3) y fuera del tab order (`role=img`, `tabindex=-1`), camino completo, sin errores de consola. A11y: nodos `role=button` + `tabIndex` + `aria-label` + `aria-pressed` + `onKeyDown(Enter|Space)` + `onFocus` (audio). Patrón hit-area `.node > * { pointer-events: none } / .hit { pointer-events: all }` para un solo receptor de eventos por nodo. Build + typecheck limpios. Anti-checklist 14/14.
 
 **19ª ola (2026-06-25): regla 90ch universal + auditoría NoteToken-en-tablas:**
 - ✓ **The 90ch Rule reemplaza el cap de 70ch** (heredado de la convención editorial 65-75ch). Medido a 1920px real (laptop del usuario, sidebar visible): el cap viejo dejaba 368px de gutter vacío y partía frases de 72-80 caracteres en dos líneas con sobra de espacio horizontal. Se evaluó centrar la columna (`margin-inline: auto`) en vez de ensancharla — implementado, luego revertido por decisión del usuario en favor de aprovechar el ancho liberado. Regla aplicada como base global en `p, li` (`global.css`), sin scoping a breakpoint (un intento inicial de scopear a `≤900px` fue descartado tras confirmar `window.innerWidth=1920` en la laptop real del usuario — el gutter aparece en cualquier ancho donde el container, no la pantalla, es el límite real).

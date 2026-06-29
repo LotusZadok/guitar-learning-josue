@@ -266,6 +266,29 @@ export function spelledIntervalFromTonic(
   return spelledFromLetterAndSemi(letter, targetSemi);
 }
 
+// Construye una nota suelta desde la tónica para un intervalo dado: grafía + nota
+// cromática (para audio) + octava ascendente (principio "tónica = piso"). Lo usa el
+// árbol-constructor de acordes (§1.7) para los nodos 2 / 3m / 3M / 4 / 5J / 5d, que
+// no son tríadas completas y por eso no salen de `chordSpelled`.
+export interface IntervalMember {
+  spelled: string;
+  chromatic: ChromaticNote;
+  octave: number;
+}
+
+export function intervalMemberFromTonic(
+  tonic: Tonic,
+  number: IntervalNumber,
+  quality: IntervalQuality,
+): IntervalMember {
+  const semis = intervalSemitones(number, quality);
+  const tonicIdx = ALL.indexOf(tonicChromatic(tonic));
+  const spelled = spelledIntervalFromTonic(tonic, number, quality);
+  const chromatic = ALL[(tonicIdx + semis) % 12];
+  const octave = 4 + Math.floor((tonicIdx + semis) / 12);
+  return { spelled, chromatic, octave };
+}
+
 // Devuelve las 13 posiciones del círculo cromático desde la tónica, cada una con su
 // ortografía estándar. Posiciones naturales tienen solo `sharp` (la nota natural);
 // posiciones alteradas exponen ambas enarmonías estándar (C♯/D♭, etc.).

@@ -5,6 +5,7 @@ import MasterTriad from './MasterTriad';
 import { NATURALS, NOTE_COLORS, NOTE_ES } from '../../../data/notes';
 import { TRIADS } from '../../../data/triads';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
+import PlaybackButton from '../../shared/PlaybackButton/PlaybackButton';
 import type { NaturalNote } from '../../../types/music';
 import styles from './Triads.module.css';
 
@@ -89,16 +90,12 @@ export default function TriadsSection() {
       <div className={styles.playToggleRow}>
         <span className={styles.toggleLabel}>{isDe ? 'Wiedergabe:' : 'Reproducción:'}</span>
         {(['arpegio', 'bloque'] as PlayMode[]).map((m) => (
-          <button
+          <PlaybackButton
             key={m}
-            className={playMode === m ? styles.playToggleActive : styles.playToggle}
+            mode={m}
+            pressed={playMode === m}
             onClick={() => setPlayMode(m)}
-            aria-pressed={playMode === m}
-          >
-            {isDe
-              ? (m === 'arpegio' ? 'Arpeggio' : 'Block')
-              : m.charAt(0).toUpperCase() + m.slice(1)}
-          </button>
+          />
         ))}
       </div>
       <div className={styles.circleWrap}>
