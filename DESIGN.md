@@ -381,7 +381,7 @@ Este componente es el que identifica la marca. Aparece en T1 (primitiva Chromati
 
 Esta sección lista deudas que las auditorías y pasadas de resolución identificaron pero **no** han sido resueltas. Son trabajo futuro explícito, no aprobaciones tácitas. Cada vez que una pasada resuelve una deuda, se remueve de esta lista; cada nueva deuda descubierta se añade.
 
-**Última actualización:** 2026-06-29 (25ª ola — constructor config-driven: versiones progresivas en 3.1.2 y 3.2).
+**Última actualización:** 2026-06-29 (26ª ola — §3.3.1 Segunda y cuarta + `IntervalRuler` reutilizable).
 
 ### Doctrina activa (decisiones pendientes de diseño)
 
@@ -402,6 +402,11 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 ### Histórico (resueltas, conservar para contexto)
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
+
+**26ª ola (2026-06-29): §3.3.1 Segunda y cuarta + `IntervalRuler` reutilizable:**
+- ✓ **Primitiva `Septimas` generalizada a `IntervalRuler`** (segundo consumidor del concepto "regla de semitonos" → extracción, como con `ChordStacks`). Acepta `stops: RulerStop[]` + `ariaLabel` + `maxSemis` por prop; cada parada tiene `showSemis` (muestra distancia) y `reference` (nodo atenuado de contexto). La leyenda se movió de la primitiva (antes Spanish-only) a la sección con i18n es/de — cierra el gap de idioma. El folder `Septimas` se eliminó; §3.1.1 ahora consume `IntervalRuler`.
+- ✓ **§3.3.1 `SegundaCuartaSection`** (recap de intervalos, sin constructor: los acordes sus llegan en 3.3, igual que 3.1.1 no tenía constructor). Tabla (2M/4J → sus2/sus4) + `IntervalRuler` con T → **2 (2 s.t.)** → 3m/3M *de referencia atenuada* → **4 (5 s.t.)** → 5J: la 2ª y la 4ª flanquean la tercera que van a reemplazar. Verificado en C: 2=Re, 4=Fa, terceras E♭/E atenuadas.
+- ✓ T3 compone 3.1.1 + 3.1.2 + 3.2 + 3.3.1. Build + typecheck + consola limpios. Anti-checklist 14/14.
 
 **25ª ola (2026-06-29): constructor de acordes config-driven (versiones progresivas):**
 - ✓ **Regla de producto (profesor):** cada sección que introduce acordes nuevos debe incluir una **versión del constructor de acordes** extendida con esos acordes/notas, además de su otra presentación (tablas, `ChordStacks`). El constructor crece de §1.7 (hasta la quinta) hacia §3.4 (completo).

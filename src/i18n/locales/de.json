@@ -18,7 +18,9 @@
         "semitones": "Halbtöne",
         "enharmonic": "Enharmonik"
       },
-      "new_seventh": "Die verminderte Septime (7d) ist einen Halbton kleiner als die 7m, wodurch sie enharmonisch einer 6M gleicht; sie wird aber als Septime behandelt, weil sie diese Rolle im dim7-Akkord erfüllt."
+      "new_seventh": "Die verminderte Septime (7d) ist einen Halbton kleiner als die 7m, wodurch sie enharmonisch einer 6M gleicht; sie wird aber als Septime behandelt, weil sie diese Rolle im dim7-Akkord erfüllt.",
+      "ruler_aria": "Septimen-Lineal: Abstand in Halbtönen von der Tonika bis zur Oktave",
+      "legend": "Fahre über oder tippe jeden Knoten: die 7d liegt einen Halbton unter der 7m, und die 7m einen unter der 7M."
     },
     "s312": {
       "label": "3.1.2 · Septakkorde",
@@ -51,6 +53,18 @@
       "function": "Seine häufigste Rolle ist die des chromatischen Durchgangsakkords zwischen zwei diatonischen Akkorden. Zum Beispiel in C-Dur: C, C♯°, Dm.",
       "builder_title": "Konstruktor: verminderter Zweig",
       "builder_intro": "Die 3m geht zur 5d, und von dort wählst du die Septime: 7d für den voll verminderten (dim7) oder 7m für den halbverminderten (m7♭5). Halte bei der 5d für den verminderten Dreiklang."
+    },
+    "s331": {
+      "label": "3.3.1 · Sekunde und Quarte",
+      "title": "Große Sekunde und reine Quarte",
+      "intro": "Zwei Intervalle aus T1, jetzt als Baustein für Akkorde (nicht nur als Töne innerhalb einer Tonleiter). Die große Sekunde (2M) liegt 2 Halbtöne von der Tonika entfernt; die reine Quarte (4J) 5. Beide ersetzen die Terz, um die Sus-Akkorde zu bilden (3.3).",
+      "table_headers": {
+        "interval": "Intervall",
+        "semitones": "Halbtöne",
+        "use": "Bildet"
+      },
+      "ruler_aria": "Intervall-Lineal: Sekunde und Quarte rund um die Terz",
+      "legend": "Die 2. (2 HT) liegt direkt unter der Terz, die 4. (5 HT) direkt darüber. Die Terzen, abgeblendet, sind die Referenz, die sie ersetzen werden."
     }
   },
   "lock": {

@@ -16,7 +16,9 @@
         "semitones": "Semitonos",
         "enharmonic": "Enarmonía"
       },
-      "new_seventh": "La séptima disminuida (7d) es un semitono menor que la 7m, lo que la vuelve enarmónicamente igual a una 6M; pero se trata como séptima porque ese es el rol que cumple dentro del acorde dim7."
+      "new_seventh": "La séptima disminuida (7d) es un semitono menor que la 7m, lo que la vuelve enarmónicamente igual a una 6M; pero se trata como séptima porque ese es el rol que cumple dentro del acorde dim7.",
+      "ruler_aria": "Regla de séptimas: distancia en semitonos desde la tónica hasta la octava",
+      "legend": "Pasá o tocá cada nodo: la 7d está un semitono por debajo de la 7m, y la 7m uno por debajo de la 7M."
     },
     "s312": {
       "label": "3.1.2 · Acordes con séptimas",
@@ -49,6 +51,18 @@
       "function": "Su rol más común es el de acorde de paso cromático entre dos acordes diatónicos. Por ejemplo, en C mayor: C, C♯°, Dm.",
       "builder_title": "Constructor: rama disminuida",
       "builder_intro": "La 3m baja a la 5d, y desde ahí elegís la séptima: 7d para el disminuido completo (dim7) o 7m para el semidisminuido (m7♭5). Pará en la 5d para la tríada disminuida."
+    },
+    "s331": {
+      "label": "3.3.1 · Segunda y cuarta",
+      "title": "Segunda mayor y cuarta justa",
+      "intro": "Dos intervalos que ya viste en T1, ahora como material para construir acordes (no solo como notas dentro de una escala). La segunda mayor (2M) está a 2 semitonos de la tónica; la cuarta justa (4J), a 5. Ambas van a reemplazar la tercera para formar los acordes suspendidos (3.3).",
+      "table_headers": {
+        "interval": "Intervalo",
+        "semitones": "Semitonos",
+        "use": "Forma"
+      },
+      "ruler_aria": "Regla de intervalos: la segunda y la cuarta alrededor de la tercera",
+      "legend": "La 2ª (2 s.t.) queda justo debajo de la tercera, y la 4ª (5 s.t.) justo arriba. Las terceras, atenuadas, son la referencia que van a reemplazar."
     }
   },
   "lock": {

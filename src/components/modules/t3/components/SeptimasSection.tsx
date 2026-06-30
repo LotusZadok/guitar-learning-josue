@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
-import Septimas from '../../../primitives/Septimas/Septimas';
+import IntervalRuler, { type RulerStop } from '../../../primitives/IntervalRuler/IntervalRuler';
 import styles from './SeptimasSection.module.css';
 
 // 3.1.1 · Las nuevas séptimas. Las tres calidades de séptima que se usan para
@@ -10,6 +10,15 @@ const SEVENTHS = [
   { role: '7m', chord: '7', semis: 10, enh: '' },
   { role: '7d', chord: 'dim7', semis: 9, enh: '6M' },
 ] as const;
+
+// Regla: tónica → las tres séptimas (agrupadas junto a la octava).
+const RULER_STOPS: RulerStop[] = [
+  { role: 'T', number: 1, quality: 'P', semis: 0 },
+  { role: '7d', number: 7, quality: 'dim', semis: 9, showSemis: true },
+  { role: '7m', number: 7, quality: 'm', semis: 10, showSemis: true },
+  { role: '7M', number: 7, quality: 'M', semis: 11, showSemis: true },
+  { role: '8', number: 8, quality: 'P', semis: 12 },
+];
 
 export default function SeptimasSection() {
   const { t } = useTranslation();
@@ -47,7 +56,8 @@ export default function SeptimasSection() {
 
       <p className={styles.text}>{t('t3.s311.new_seventh')}</p>
 
-      <Septimas />
+      <IntervalRuler stops={RULER_STOPS} maxSemis={12} ariaLabel={t('t3.s311.ruler_aria')} />
+      <p className={styles.caption}>{t('t3.s311.legend')}</p>
     </section>
   );
 }
