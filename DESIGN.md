@@ -381,7 +381,7 @@ Este componente es el que identifica la marca. Aparece en T1 (primitiva Chromati
 
 Esta sección lista deudas que las auditorías y pasadas de resolución identificaron pero **no** han sido resueltas. Son trabajo futuro explícito, no aprobaciones tácitas. Cada vez que una pasada resuelve una deuda, se remueve de esta lista; cada nueva deuda descubierta se añade.
 
-**Última actualización:** 2026-06-29 (22ª ola — dinámicas musicales reemplazan el slider de volumen).
+**Última actualización:** 2026-06-29 (25ª ola — constructor config-driven: versiones progresivas en 3.1.2 y 3.2).
 
 ### Doctrina activa (decisiones pendientes de diseño)
 
@@ -402,6 +402,23 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 ### Histórico (resueltas, conservar para contexto)
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
+
+**25ª ola (2026-06-29): constructor de acordes config-driven (versiones progresivas):**
+- ✓ **Regla de producto (profesor):** cada sección que introduce acordes nuevos debe incluir una **versión del constructor de acordes** extendida con esos acordes/notas, además de su otra presentación (tablas, `ChordStacks`). El constructor crece de §1.7 (hasta la quinta) hacia §3.4 (completo).
+- ✓ **`AcordesBuilder` generalizado a config-driven.** La topología hardcodeada (2 niveles) se reemplazó por un `BuilderConfig` (`configs.ts`): nodos con `role/number/quality/x/y/level` + acordes como **caminos de roles**; aristas, alcanzabilidad y readout se derivan genéricamente, soportando **N niveles** (tercera → quinta → séptima). `<AcordesBuilder>` sin props usa `BUILDER_17` (idéntico al de §1.7, sin regresión verificada).
+- ✓ **Tres configs:** `BUILDER_17` (m/°/M), `BUILDER_312` (agrega 5J → 7M/7m: maj7/m7/dominante 7) en §3.1.2, `BUILDER_32` (rama 3m → 5d → 7d/7m: dim7/m7♭5) en §3.2. Se mantiene la doble codificación posicional (vertical = distancia interválica, horizontal = calidad) en todas las versiones. Pará en la quinta = tríada; seguí a la séptima = acorde de 7ª.
+- ✓ **Fix de UX en la generalización:** la alcanzabilidad usa `selected.length >= L-1` (no `===`), para poder **re-elegir un nivel ya pasado** (cambiar de tercera con una quinta ya elegida) — al re-elegir, la selección se trunca. Sin esto, los hermanos de un nivel ya elegido quedaban deshabilitados (regresión vs el §1.7 original).
+- ✓ Verificado en browser: §1.7 (CM), §3.1.2 (C7 vía 3M·5·7m, Cmaj7 vía 3M·5·7M), §3.2 (Cdim7 vía 3m·5d·7d); 3m y 7M siguen conmutables tras seleccionar. Build + typecheck + consola limpios. Anti-checklist 14/14.
+
+**24ª ola (2026-06-29): §3.2 Acordes disminuidos + `ChordStacks` reutilizable:**
+- ✓ **Primitiva `SeptimaAcordes` generalizada a `ChordStacks`** (acepta `chords: ChordDef[]` por prop; exporta los tipos `ChordDef`/`Tone`). El stack-comparison de 3.1.2 (maj7/m7/7) y 3.2 (m7♭5/dim7) es la misma UI con datos distintos → una sola primitiva. El folder `SeptimaAcordes` se eliminó; las defs de acorde viven en cada sección consumidora. Hecho antes de commitear 3.1.2, sin churn de historia.
+- ✓ **§3.2 `DisminuidosSection`:** recap de la 5d + tabla (m7♭5/dim7) + `ChordStacks` (comparación: comparten T·3m·5d, solo difiere la 7ª, resaltada) + subsección de **simetría** (terceras menores apiladas, dim7 simétrico) con las **3 familias absolutas de dim7** (`C°=E♭°=G♭°=A°`, …) como lista de cifrados fijos (no dependen de la tónica) + función de paso cromático. Verificado: m7♭5=B♭ G♭ E♭ C, dim7=B♭♭ G♭ E♭ C.
+- ✓ T3 compone 3.1.1 + 3.1.2 + 3.2. Build + typecheck limpios; consola limpia tras reinicio del dev server (los errores de HMR eran artefactos del archivo `SeptimaAcordes` borrado, no del código vigente). Anti-checklist 14/14.
+
+**23ª ola (2026-06-29): §3.1.2 Acordes con séptimas:**
+- ✓ **Sección `SeptimaAcordesSection`** (label/h2/intro/tabla maj7·m7·7/diferencia/caption) + primitiva net-new `SeptimaAcordes`: comparación lado a lado de los tres acordes con séptima como **stacks** verticales (7ª arriba → tónica abajo, como en partitura). Cada tono es un nodo SVG (grafía + hue en hover/playing, Quarantine + Signature); la 3ª y la 7ª (los tonos que cambian) llevan la etiqueta de rol en `--text-body` y el resto en `--muted`. Reusa `intervalMemberFromTonic` y `PlaybackButton` (bloque/arpegio por columna). Verificado: maj7=B G E C, m7=B♭ G E♭ C, 7=B♭ G E C; hover colorea (`var(--note-b)` en la 7ª de Cmaj7).
+- ✓ **Split primitiva/sección correcto:** el caption explicativo y los nombres de acorde (Mayor 7 / Dur 7…) viven en la sección (i18n es/de); la primitiva sólo renderiza símbolos universales (cifrado `Cmaj7`, notas, glifos de playback), sin texto language-specific. Evita el gap de i18n que tienen las leyendas Spanish-only de primitivas previas (`Septimas`, `AcordesBuilder`).
+- ✓ T3 ahora compone 3.1.1 + 3.1.2; `tocConfig` y `T3Module` actualizados. Build + typecheck limpios, sin errores de consola. Anti-checklist 14/14.
 
 **22ª ola (2026-06-29): dinámicas musicales en lugar del slider de volumen:**
 - ✓ **`DynamicsSelector` reemplaza el slider de volumen** (idea del profesor). Selector de 6 dinámicas `pp · p · mp · mf · f · ff`, cada una mapeada a una ganancia del master gain (0.12 / 0.28 / 0.45 / 0.62 / 0.80 / 1.0). El default histórico (`volume: 0.8`) cae en **f**, así que el arranque no cambia; la dinámica activa se deriva del preset más cercano al volumen actual (tolera valores heredados). Mantiene `setMasterVolume`; `aria-pressed` + `aria-label` con el término italiano completo (pianissimo…fortissimo); `role="group"`.

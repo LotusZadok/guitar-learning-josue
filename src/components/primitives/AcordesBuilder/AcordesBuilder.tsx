@@ -1,20 +1,13 @@
-import {
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-  type KeyboardEvent,
-} from 'react';
+import { useCallback, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { useAudioEngine, stopAllNotes } from '../../../hooks/useAudioEngine';
 import { useUIStore } from '../../../stores/useUIStore';
 import { NOTE_COLORS } from '../../../data/notes';
 import {
   intervalMemberFromTonic,
   type IntervalMember,
-  type IntervalNumber,
-  type IntervalQuality,
 } from '../../../utils/noteCalculations';
 import PlaybackButton from '../../shared/PlaybackButton/PlaybackButton';
+import { BUILDER_17, type BuilderConfig, type BuilderNode } from './configs';
 import styles from './AcordesBuilder.module.css';
 
 // El "Nombre en latino" deriva del spelled (no del chromatic) para coincidir con
@@ -31,87 +24,74 @@ const NOTE_DURATION = 1.4;
 const FIRE_DEBOUNCE_MS = 150;
 const R = 24; // radio de nodo
 
-// === Topología del árbol (§1.7, recorte hasta la quinta) ===
-// La tónica (raíz) ramifica a la tercera menor y la mayor; cada una llega a la
-// quinta justa, y sólo 3m alcanza además la quinta disminuida. Las aristas
-// codifican qué acordes son válidos (sus2/sus4 aún no aparecen: van en T3).
-// Doble codificación posicional: el eje VERTICAL = distancia interválica (menos
-// semitonos, más cerca de la línea de la tónica) y el eje HORIZONTAL = calidad
-// (menor/disminuida a la izquierda, mayor/justa a la derecha).
-type ThirdRole = '3m' | '3M';
-type FifthRole = '5' | '5d';
-
-interface NodeDef {
-  role: string;
-  number: IntervalNumber;
-  quality: IntervalQuality;
-  x: number;
-  y: number;
+interface Props {
+  config?: BuilderConfig;
 }
 
-const VB_W = 440;
-const VB_H = 300;
-
-const TONIC_NODE: NodeDef = { role: 'T', number: 1, quality: 'P', x: 46, y: 150 };
-
-const THIRD_NODES: Record<ThirdRole, NodeDef> = {
-  '3m': { role: '3m', number: 3, quality: 'm', x: 175, y: 92 },
-  '3M': { role: '3M', number: 3, quality: 'M', x: 225, y: 208 },
-};
-
-const FIFTH_NODES: Record<FifthRole, NodeDef> = {
-  '5d': { role: '5d', number: 5, quality: 'dim', x: 360, y: 78 },
-  '5': { role: '5', number: 5, quality: 'P', x: 410, y: 196 },
-};
-
-// Acordes válidos por camino tercera→quinta. La presencia de una clave define
-// la arista (y por ende la alcanzabilidad de cada quinta desde cada tercera).
-const CHORDS: Record<string, { nombre: string; cifrado: string }> = {
-  '3m-5': { nombre: 'menor', cifrado: 'm' },
-  '3m-5d': { nombre: 'disminuido', cifrado: '°' },
-  '3M-5': { nombre: 'mayor', cifrado: 'M' },
-};
-
-function pathKey(third: ThirdRole, fifth: FifthRole): string {
-  return `${third}-${fifth}`;
-}
-function reaches(third: ThirdRole, fifth: FifthRole): boolean {
-  return pathKey(third, fifth) in CHORDS;
-}
-
-export default function AcordesBuilder() {
+// Constructor de acordes como árbol de nodos, construido por camino (tercera →
+// quinta → [séptima]). Config-driven: la topología (nodos, posiciones, caminos
+// válidos) viene de `config`, así crece de §1.7 (hasta la quinta) hacia §3.4
+// (completo) sin duplicar el componente.
+export default function AcordesBuilder({ config = BUILDER_17 }: Props) {
   const tonic = useUIStore((s) => s.tonic);
   const { playNote } = useAudioEngine();
 
-  const [third, setThird] = useState<ThirdRole | null>(null);
-  const [fifth, setFifth] = useState<FifthRole | null>(null);
+  // Camino seleccionado: roles en orden de nivel (sin 'T'). Ej: ['3M','5','7M'].
+  const [selected, setSelected] = useState<string[]>([]);
   const [playing, setPlaying] = useState(false);
-  // null = idle; -1 = bloque (todos); 0..2 = índice arpegiado [T, 3ª, 5ª]
-  const [playIdx, setPlayIdx] = useState<number | null>(null);
+  const [playIdx, setPlayIdx] = useState<number | null>(null); // -1 bloque; 0..n arpegio
   const lastFire = useRef(0);
 
-  // Notas (grafía + cromática + octava) de cada posición, según la tónica activa.
+  const nodeByRole = useMemo(() => {
+    const map = new Map<string, BuilderNode>();
+    config.nodes.forEach((n) => map.set(n.role, n));
+    return map;
+  }, [config]);
+
+  // Nota (grafía + cromática + octava) de la tónica y de cada nodo.
   const members = useMemo(() => {
-    const m = (n: NodeDef) => intervalMemberFromTonic(tonic, n.number, n.quality);
-    return {
-      T: m(TONIC_NODE),
-      thirds: Object.fromEntries(
-        (Object.keys(THIRD_NODES) as ThirdRole[]).map((k) => [k, m(THIRD_NODES[k])]),
-      ) as Record<ThirdRole, IntervalMember>,
-      fifths: Object.fromEntries(
-        (Object.keys(FIFTH_NODES) as FifthRole[]).map((k) => [k, m(FIFTH_NODES[k])]),
-      ) as Record<FifthRole, IntervalMember>,
-    };
-  }, [tonic]);
+    const map = new Map<string, IntervalMember>();
+    map.set('T', intervalMemberFromTonic(tonic, 1, 'P'));
+    config.nodes.forEach((n) => map.set(n.role, intervalMemberFromTonic(tonic, n.number, n.quality)));
+    return map;
+  }, [config, tonic]);
 
-  const chord = third && fifth && reaches(third, fifth) ? CHORDS[pathKey(third, fifth)] : null;
-  const chordMembers: IntervalMember[] | null =
-    third && fifth && chord
-      ? [members.T, members.thirds[third], members.fifths[fifth]]
-      : null;
+  const arraysEqual = (a: string[], b: string[]) =>
+    a.length === b.length && a.every((v, i) => v === b[i]);
 
-  // Audio reversible (hover/focus/click de nodo): suena la nota sola. Debounce
-  // compartido para no duplicar el disparo entre mouse-click y focus.
+  const currentChord = useMemo(
+    () => config.chords.find((c) => arraysEqual(c.path, selected)) ?? null,
+    [config, selected],
+  );
+
+  const chordMembers: IntervalMember[] | null = useMemo(() => {
+    if (!currentChord) return null;
+    return ['T', ...selected].map((r) => members.get(r)!);
+  }, [currentChord, selected, members]);
+
+  // Un nodo de nivel L es alcanzable si la selección llega AL MENOS al nivel
+  // anterior (L-1) y existe un acorde cuyo prefijo coincide y continúa con él.
+  // `>= L-1` (no `===`) deja re-elegir un nivel ya pasado (p.ej. cambiar de
+  // tercera con una quinta ya elegida); al re-elegir, la selección se trunca.
+  const isReachable = useCallback(
+    (node: BuilderNode) => {
+      const L = node.level;
+      if (selected.length < L - 1) return false;
+      return config.chords.some(
+        (c) =>
+          c.path.length >= L &&
+          c.path.slice(0, L - 1).every((r, i) => r === selected[i]) &&
+          c.path[L - 1] === node.role,
+      );
+    },
+    [config, selected],
+  );
+
+  const isSelected = useCallback(
+    (node: BuilderNode) => selected[node.level - 1] === node.role,
+    [selected],
+  );
+
   const scrub = useCallback(
     (mem: IntervalMember) => {
       const now = Date.now();
@@ -122,22 +102,15 @@ export default function AcordesBuilder() {
     [playNote],
   );
 
-  // Selección de camino (decisión persistente). Elegir tercera resetea la quinta
-  // si dejara de ser alcanzable; re-clic deselecciona.
-  const pickThird = useCallback((role: ThirdRole) => {
-    setThird((prev) => {
-      const next = prev === role ? null : role;
-      setFifth((f) => (next && f && reaches(next, f) ? f : null));
-      return next;
-    });
-  }, []);
-
-  const pickFifth = useCallback(
-    (role: FifthRole) => {
-      if (!third || !reaches(third, role)) return;
-      setFifth((prev) => (prev === role ? null : role));
+  const pickNode = useCallback(
+    (node: BuilderNode) => {
+      const L = node.level;
+      setSelected((prev) => {
+        if (prev[L - 1] === node.role) return prev.slice(0, L - 1); // re-clic deselecciona
+        return [...prev.slice(0, L - 1), node.role];
+      });
     },
-    [third],
+    [],
   );
 
   const playBlock = useCallback(() => {
@@ -170,106 +143,106 @@ export default function AcordesBuilder() {
     );
   }, [chordMembers, playNote, playing]);
 
-  // Estado visual de cada nodo, en orden [T, 3ª, 5ª] para el highlight arpegiado.
-  const activeChordIdx = (role: 'T' | ThirdRole | FifthRole): number => {
-    if (role === 'T') return 0;
-    if (role === third) return 1;
-    if (role === fifth) return 2;
-    return -1;
+  // Cadena activa (incluye la tónica) para el highlight arpegiado y las aristas.
+  const chain = useMemo(() => ['T', ...selected], [selected]);
+  const nodePlaying = (role: string) =>
+    playIdx === -1 || (playIdx != null && chain[playIdx] === role);
+
+  // Aristas: pares consecutivos de cada camino (T→path[0], path[i]→path[i+1]).
+  const edges = useMemo(() => {
+    const set = new Map<string, { from: string; to: string }>();
+    config.chords.forEach((c) => {
+      let prev = 'T';
+      c.path.forEach((role) => {
+        set.set(`${prev}->${role}`, { from: prev, to: role });
+        prev = role;
+      });
+    });
+    return [...set.values()];
+  }, [config]);
+
+  const isActiveEdge = (from: string, to: string) => {
+    for (let i = 0; i < chain.length - 1; i++) {
+      if (chain[i] === from && chain[i + 1] === to) return true;
+    }
+    return false;
   };
+
+  const pos = (role: string): { x: number; y: number } =>
+    role === 'T' ? config.tonic : nodeByRole.get(role)!;
+
+  const tonicMember = members.get('T')!;
 
   return (
     <div className={styles.wrap}>
       <svg
         className={styles.tree}
-        viewBox={`0 0 ${VB_W} ${VB_H}`}
+        viewBox={`0 0 ${config.width} ${config.height}`}
         role="group"
-        aria-label="Árbol constructor de acordes: elegí una tercera y luego una quinta"
+        aria-label={config.ariaLabel}
       >
         {/* === aristas === */}
-        {(Object.keys(THIRD_NODES) as ThirdRole[]).map((k) => {
-          const n = THIRD_NODES[k];
-          const active = third === k;
+        {edges.map(({ from, to }) => {
+          const a = pos(from);
+          const b = pos(to);
           return (
             <line
-              key={`e-t-${k}`}
-              className={active ? styles.edgeActive : styles.edge}
-              x1={TONIC_NODE.x + R}
-              y1={TONIC_NODE.y}
-              x2={n.x - R}
-              y2={n.y}
-            />
-          );
-        })}
-        {(Object.keys(CHORDS) as string[]).map((key) => {
-          const [t, f] = key.split('-') as [ThirdRole, FifthRole];
-          const tn = THIRD_NODES[t];
-          const fn = FIFTH_NODES[f];
-          const active = third === t && fifth === f;
-          return (
-            <line
-              key={`e-${key}`}
-              className={active ? styles.edgeActive : styles.edge}
-              x1={tn.x + R}
-              y1={tn.y}
-              x2={fn.x - R}
-              y2={fn.y}
+              key={`${from}->${to}`}
+              className={isActiveEdge(from, to) ? styles.edgeActive : styles.edge}
+              x1={a.x + R}
+              y1={a.y}
+              x2={b.x - R}
+              y2={b.y}
             />
           );
         })}
 
         {/* === tónica (raíz, siempre activa) === */}
         <Node
-          def={TONIC_NODE}
-          member={members.T}
+          role="T"
+          x={config.tonic.x}
+          y={config.tonic.y}
+          quality="P"
+          member={tonicMember}
           state="tonic"
-          playing={playIdx === -1 || playIdx === activeChordIdx('T')}
+          playing={nodePlaying('T')}
           onScrub={scrub}
         />
 
-        {/* === terceras === */}
-        {(Object.keys(THIRD_NODES) as ThirdRole[]).map((k) => (
-          <Node
-            key={k}
-            def={THIRD_NODES[k]}
-            member={members.thirds[k]}
-            state={third === k ? 'selected' : 'idle'}
-            playing={third === k && (playIdx === -1 || playIdx === activeChordIdx(k))}
-            onSelect={() => pickThird(k)}
-            onScrub={scrub}
-          />
-        ))}
-
-        {/* === quintas === */}
-        {(Object.keys(FIFTH_NODES) as FifthRole[]).map((k) => {
-          const reachable = third != null && reaches(third, k);
+        {/* === nodos === */}
+        {config.nodes.map((node) => {
+          const selectedNode = isSelected(node);
+          const reachable = isReachable(node);
+          const state = selectedNode ? 'selected' : reachable ? 'idle' : 'disabled';
+          const interactive = selectedNode || reachable;
           return (
             <Node
-              key={k}
-              def={FIFTH_NODES[k]}
-              member={members.fifths[k]}
-              state={fifth === k ? 'selected' : reachable ? 'idle' : 'disabled'}
-              playing={fifth === k && (playIdx === -1 || playIdx === activeChordIdx(k))}
-              onSelect={reachable ? () => pickFifth(k) : undefined}
-              onScrub={reachable ? scrub : undefined}
+              key={node.role}
+              role={node.role}
+              x={node.x}
+              y={node.y}
+              quality={node.quality}
+              member={members.get(node.role)!}
+              state={state}
+              playing={selectedNode && nodePlaying(node.role)}
+              onSelect={interactive ? () => pickNode(node) : undefined}
+              onScrub={interactive ? scrub : undefined}
             />
           );
         })}
       </svg>
 
       <div className={styles.readout} role="status" aria-live="polite">
-        {chord && chordMembers ? (
+        {currentChord && chordMembers ? (
           <>
             <p className={styles.chordName}>
-              {spelledES(chordMembers[0].spelled)} {chord.nombre}
+              {spelledES(tonicMember.spelled)} {currentChord.nombre}
               <span className={styles.cifrado}>
-                {chordMembers[0].spelled}
-                {chord.cifrado}
+                {tonicMember.spelled}
+                {currentChord.cifrado}
               </span>
             </p>
-            <p className={styles.chordNotes}>
-              {chordMembers.map((m) => m.spelled).join('  ')}
-            </p>
+            <p className={styles.chordNotes}>{chordMembers.map((m) => m.spelled).join('  ')}</p>
             <div className={styles.audioRow}>
               <PlaybackButton
                 mode="bloque"
@@ -287,9 +260,9 @@ export default function AcordesBuilder() {
           </>
         ) : (
           <p className={styles.hint}>
-            {third
-              ? 'Elegí una quinta para completar el acorde.'
-              : 'Elegí una tercera para empezar a construir.'}
+            {selected.length === 0
+              ? 'Elegí una tercera para empezar a construir.'
+              : 'Seguí eligiendo notas para completar un acorde.'}
           </p>
         )}
       </div>
@@ -301,7 +274,10 @@ export default function AcordesBuilder() {
 type NodeState = 'tonic' | 'selected' | 'idle' | 'disabled';
 
 interface NodeProps {
-  def: NodeDef;
+  role: string;
+  x: number;
+  y: number;
+  quality: BuilderNode['quality'];
   member: IntervalMember;
   state: NodeState;
   playing?: boolean;
@@ -309,7 +285,7 @@ interface NodeProps {
   onScrub?: (m: IntervalMember) => void;
 }
 
-function Node({ def, member, state, playing, onSelect, onScrub }: NodeProps) {
+function Node({ role, x, y, quality, member, state, playing, onSelect, onScrub }: NodeProps) {
   const [hovered, setHovered] = useState(false);
   const interactive = state !== 'disabled' && (onSelect != null || state === 'tonic');
 
@@ -342,16 +318,16 @@ function Node({ def, member, state, playing, onSelect, onScrub }: NodeProps) {
   // Carril tipográfico de calidad: mayor/justa = bold recto; menor/disminuida =
   // regular itálica. Da una segunda señal (peso + estilo) además del caso m/M,
   // que en monoespaciado es demasiado sutil para leerse de un vistazo.
-  const major = def.quality === 'M' || def.quality === 'P';
+  const major = quality === 'M' || quality === 'P';
   const roleClass = `${styles.nodeRole} ${major ? styles.roleMajor : styles.roleMinor}`;
 
   return (
     <g
       className={`${styles.node} ${state === 'disabled' ? styles.nodeDisabled : ''}`}
-      transform={`translate(${def.x},${def.y})`}
+      transform={`translate(${x},${y})`}
       role={onSelect ? 'button' : 'img'}
       aria-pressed={onSelect ? state === 'selected' : undefined}
-      aria-label={`${def.role} · ${nameES}${ariaSelected}`}
+      aria-label={`${role} · ${nameES}${ariaSelected}`}
       tabIndex={interactive ? 0 : -1}
       onMouseEnter={enter}
       onMouseLeave={leave}
@@ -375,7 +351,7 @@ function Node({ def, member, state, playing, onSelect, onScrub }: NodeProps) {
         fill={colored ? '#fff' : 'var(--text-body)'}
         style={colored && member.spelled.length > 2 ? { fontSize: '13px' } : undefined}
       >
-        {colored ? member.spelled : def.role}
+        {colored ? member.spelled : role}
       </text>
       <text
         className={
@@ -385,7 +361,7 @@ function Node({ def, member, state, playing, onSelect, onScrub }: NodeProps) {
         y={R + 18}
         fill="var(--muted)"
       >
-        {colored ? def.role : nameES}
+        {colored ? role : nameES}
       </text>
     </g>
   );

@@ -17,6 +17,38 @@
         "enharmonic": "Enarmonía"
       },
       "new_seventh": "La séptima disminuida (7d) es un semitono menor que la 7m, lo que la vuelve enarmónicamente igual a una 6M; pero se trata como séptima porque ese es el rol que cumple dentro del acorde dim7."
+    },
+    "s312": {
+      "label": "3.1.2 · Acordes con séptimas",
+      "title": "Acordes con séptimas",
+      "intro": "Un acorde con séptima agrega una cuarta nota a la tríada, a un intervalo de séptima de la tónica. Combinando las dos terceras (3m, 3M) con las dos séptimas útiles (7m, 7M) salen los tres acordes con séptima más comunes:",
+      "table_headers": {
+        "chord": "Acorde",
+        "formula": "Fórmula",
+        "code": "Cifrado"
+      },
+      "chords": ["Mayor 7", "Menor 7", "Dominante 7"],
+      "difference": "La diferencia entre maj7 y dominante 7 es solo la séptima (7M vs 7m); entre m7 y dominante 7 es solo la tercera (3m vs 3M). El dominante 7 combina la 3M con la 7m, y esa combinación es la que le da su rol funcional como dominante (se desarrolla en 3.6).",
+      "caption": "La tónica y la 5ª son iguales en los tres acordes. La 3ª define mayor o menor; la 7ª define maj7 frente a dominante.",
+      "builder_title": "Constructor: con séptimas",
+      "builder_intro": "El árbol crece: ahora la 5J ramifica a la 7M y la 7m. Pará en la quinta para una tríada, o seguí hasta la séptima para armar maj7, m7 o dominante 7."
+    },
+    "s32": {
+      "label": "3.2 · Acordes disminuidos",
+      "title": "Acordes disminuidos: m7♭5 y dim7",
+      "intro": "La quinta disminuida (5d, 6 semitonos) pasa ahora a primer plano: es la que altera la quinta del acorde para producir las dos familias disminuidas. Es el intervalo más característico de la tensión tonal: la única distancia de la escala mayor que aparece una sola vez, entre el 4to y el 7mo grado.",
+      "table_headers": {
+        "chord": "Acorde",
+        "formula": "Fórmula",
+        "code": "Cifrado"
+      },
+      "chords": ["Semidisminuido", "Disminuido completo"],
+      "difference": "Las dos familias comparten la tónica, la 3m y la 5d. Solo se diferencian en la séptima: el semidisminuido lleva 7m; el disminuido completo lleva 7d, un semitono más abajo.",
+      "symmetry_title": "Disminuido completo: simetría",
+      "symmetry": "Todas las distancias internas del dim7 son de 3 semitonos (terceras menores apiladas). Eso lo vuelve simétrico: cualquier inversión suena igual. Por eso solo existen tres acordes disminuidos completos distintos en toda la música tonal:",
+      "function": "Su rol más común es el de acorde de paso cromático entre dos acordes diatónicos. Por ejemplo, en C mayor: C, C♯°, Dm.",
+      "builder_title": "Constructor: rama disminuida",
+      "builder_intro": "La 3m baja a la 5d, y desde ahí elegís la séptima: 7d para el disminuido completo (dim7) o 7m para el semidisminuido (m7♭5). Pará en la 5d para la tríada disminuida."
     }
   },
   "lock": {

@@ -19,6 +19,38 @@
         "enharmonic": "Enharmonik"
       },
       "new_seventh": "Die verminderte Septime (7d) ist einen Halbton kleiner als die 7m, wodurch sie enharmonisch einer 6M gleicht; sie wird aber als Septime behandelt, weil sie diese Rolle im dim7-Akkord erfüllt."
+    },
+    "s312": {
+      "label": "3.1.2 · Septakkorde",
+      "title": "Akkorde mit Septime",
+      "intro": "Ein Septakkord fügt der Dreiklang eine vierte Note im Septimabstand zur Tonika hinzu. Kombiniert man die beiden Terzen (3m, 3M) mit den beiden nützlichen Septimen (7m, 7M), ergeben sich die drei häufigsten Septakkorde:",
+      "table_headers": {
+        "chord": "Akkord",
+        "formula": "Formel",
+        "code": "Chiffre"
+      },
+      "chords": ["Dur 7", "Moll 7", "Dominant 7"],
+      "difference": "Der Unterschied zwischen maj7 und Dominant 7 ist nur die Septime (7M vs 7m); zwischen m7 und Dominant 7 nur die Terz (3m vs 3M). Der Dominant 7 verbindet die 3M mit der 7m, und genau diese Kombination gibt ihm seine Funktion als Dominante (wird in 3.6 behandelt).",
+      "caption": "Tonika und Quinte sind in allen drei Akkorden gleich. Die 3. bestimmt Dur oder Moll; die 7. bestimmt maj7 gegenüber Dominante.",
+      "builder_title": "Konstruktor: mit Septimen",
+      "builder_intro": "Der Baum wächst: jetzt verzweigt die r. Quinte zur 7M und 7m. Halte bei der Quinte für einen Dreiklang, oder geh weiter bis zur Septime für maj7, m7 oder Dominant 7."
+    },
+    "s32": {
+      "label": "3.2 · Verminderte Akkorde",
+      "title": "Verminderte Akkorde: m7♭5 und dim7",
+      "intro": "Die verminderte Quinte (5d, 6 Halbtöne) rückt nun in den Vordergrund: sie verändert die Quinte des Akkords und erzeugt die beiden verminderten Familien. Sie ist das charakteristischste Intervall tonaler Spannung: der einzige Abstand der Dur-Tonleiter, der nur einmal vorkommt, zwischen der 4. und der 7. Stufe.",
+      "table_headers": {
+        "chord": "Akkord",
+        "formula": "Formel",
+        "code": "Chiffre"
+      },
+      "chords": ["Halbvermindert", "Voll vermindert"],
+      "difference": "Beide Familien teilen Tonika, 3m und 5d. Sie unterscheiden sich nur in der Septime: der halbverminderte hat 7m; der voll verminderte hat 7d, einen Halbton tiefer.",
+      "symmetry_title": "Voll vermindert: Symmetrie",
+      "symmetry": "Alle inneren Abstände des dim7 betragen 3 Halbtöne (gestapelte kleine Terzen). Das macht ihn symmetrisch: jede Umkehrung klingt gleich. Deshalb gibt es in der gesamten tonalen Musik nur drei verschiedene voll verminderte Akkorde:",
+      "function": "Seine häufigste Rolle ist die des chromatischen Durchgangsakkords zwischen zwei diatonischen Akkorden. Zum Beispiel in C-Dur: C, C♯°, Dm.",
+      "builder_title": "Konstruktor: verminderter Zweig",
+      "builder_intro": "Die 3m geht zur 5d, und von dort wählst du die Septime: 7d für den voll verminderten (dim7) oder 7m für den halbverminderten (m7♭5). Halte bei der 5d für den verminderten Dreiklang."
     }
   },
   "lock": {
