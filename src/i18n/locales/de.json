@@ -81,6 +81,12 @@
       "resolution": "Die Spannung des Sus-Akkords löst sich meist, indem diese Note zur Terz geführt wird: sus4 senkt die 4. zur 3. (Csus4 → C, F → E) und sus2 hebt die 2. zur 3. (Csus2 → C, D → E). Sie kann auch unaufgelöst als Klangfarbe bleiben.",
       "builder_title": "Konstruktor: Sus-Akkorde",
       "builder_intro": "Statt einer Terz wähle die 2. oder die 4., danach die Quinte. Die 2. liegt näher an der Tonika, die 4. weiter entfernt."
+    },
+    "s34": {
+      "label": "3.4 · Vollständiger Konstruktor",
+      "title": "Vollständiger Akkord-Konstruktor",
+      "intro": "Der ganze Baum, mit allem aus T3. Von der Tonika aus wähle eine Sekunde, eine Terz oder eine Quarte; dann eine Quinte (rein oder vermindert); und, wenn du willst, eine Septime. Jeder gültige Pfad bildet einen der zehn Akkorde der Methode. Die Position codiert weiterhin dasselbe: weiter oben, näher an der Tonika; weiter links, tiefer die Qualität.",
+      "caption": "Zehn Akkorde, ein Baum. Halte bei der Quinte für einen Dreiklang oder Sus-Akkord; geh weiter bis zur Septime für die vierstimmigen Akkorde."
     }
   },
   "lock": {

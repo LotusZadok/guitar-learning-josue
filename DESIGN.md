@@ -381,7 +381,7 @@ Este componente es el que identifica la marca. Aparece en T1 (primitiva Chromati
 
 Esta sección lista deudas que las auditorías y pasadas de resolución identificaron pero **no** han sido resueltas. Son trabajo futuro explícito, no aprobaciones tácitas. Cada vez que una pasada resuelve una deuda, se remueve de esta lista; cada nueva deuda descubierta se añade.
 
-**Última actualización:** 2026-06-29 (27ª ola — §3.3 Acordes suspendidos).
+**Última actualización:** 2026-06-29 (28ª ola — §3.4 Constructor de acordes completo).
 
 ### Doctrina activa (decisiones pendientes de diseño)
 
@@ -402,6 +402,11 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 ### Histórico (resueltas, conservar para contexto)
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
+
+**28ª ola (2026-06-29): §3.4 Constructor de acordes completo (los 10 acordes):**
+- ✓ **`ConstructorCompletoSection`:** intro + `AcordesBuilder` con `BUILDER_34` (el árbol completo: 9 nodos + tónica, 13 aristas, los 10 acordes del método) + caption + lista de referencia de los 10 cifrados con su fórmula. Cierra el arco del constructor config-driven: §1.7 (hasta quinta) → 3.1.2 (séptimas) → 3.2 (dim) → 3.3 (sus) → **3.4 (todos)**. La topología `BUILDER_34` valida: 5J → 7m/7M, 5d → 7m/7d, **7m compartida** (m7 vía 3m·5, X7 vía 3M·5, m7♭5 vía 3m·5d). Verificado en browser: dim7 (3m·5d·7d) y C7 (3M·5·7m, séptima compartida).
+- ✓ **Bebas-all-caps cazado de nuevo** (3ª vez en el proyecto): la lista de cifrados renderizaba `m` (menor) idéntico a `M` (mayor) y colapsaba `m7`/`maj7`/`m7♭5` en Bebas. Fix: `.code` → Plex Mono (preserva el caso semántico del cifrado). Confirma el corolario de la 20ª ola: **cualquier texto con caso significativo va en Plex Mono, nunca Bebas** — el cifrado de acorde es exactamente eso.
+- ✓ T3 compone 3.1.1 + 3.1.2 + 3.2 + 3.3.1 + 3.3 + 3.4. Build + typecheck + consola limpios. Anti-checklist 14/14.
 
 **27ª ola (2026-06-29): §3.3 Acordes suspendidos (sus2, sus4):**
 - ✓ **`SuspendidosSection`:** intro + tabla (sus2/sus4) + `ChordStacks` (comparación: comparten T·5J, cambia la nota del medio 2ª/4ª en lugar de la tercera) + prosa de resolución (sus4→3 baja la 4ª, sus2→3 sube la 2ª) + **constructor** `BUILDER_33` (T → {2, 4} → 5J → sus2/sus4). Es la tercera versión progresiva del constructor (regla del profesor: la sección que presenta los acordes lleva su constructor; ver memoria `feedback-constructor-por-seccion`). Verificado: stacks C·D·G / C·F·G; constructor arma Csus2 (2·5) y Csus4 (4·5).

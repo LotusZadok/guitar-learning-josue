@@ -79,6 +79,12 @@
       "resolution": "La tensión del suspendido suele resolver moviendo esa nota a la tercera: el sus4 baja la 4ª a la 3ª (Csus4 → C, F → E) y el sus2 sube la 2ª a la 3ª (Csus2 → C, D → E). También puede quedarse sin resolver, como color.",
       "builder_title": "Constructor: suspendidos",
       "builder_intro": "En vez de una tercera, elegí la 2ª o la 4ª, y luego la quinta. La 2ª queda más cerca de la tónica; la 4ª, más lejos."
+    },
+    "s34": {
+      "label": "3.4 · Constructor completo",
+      "title": "Constructor de acordes completo",
+      "intro": "El árbol entero, con todo lo que viste en T3. Desde la tónica, elegí una segunda, una tercera o una cuarta; luego una quinta (justa o disminuida); y, si querés, una séptima. Cada camino válido arma uno de los diez acordes del método. La posición sigue codificando lo mismo: más arriba, más cerca de la tónica; más a la izquierda, más grave la calidad.",
+      "caption": "Diez acordes, un solo árbol. Pará en la quinta para una tríada o un suspendido; seguí a la séptima para los acordes de cuatro notas."
     }
   },
   "lock": {
