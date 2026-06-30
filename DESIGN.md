@@ -381,7 +381,7 @@ Este componente es el que identifica la marca. Aparece en T1 (primitiva Chromati
 
 Esta sección lista deudas que las auditorías y pasadas de resolución identificaron pero **no** han sido resueltas. Son trabajo futuro explícito, no aprobaciones tácitas. Cada vez que una pasada resuelve una deuda, se remueve de esta lista; cada nueva deuda descubierta se añade.
 
-**Última actualización:** 2026-06-29 (26ª ola — §3.3.1 Segunda y cuarta + `IntervalRuler` reutilizable).
+**Última actualización:** 2026-06-29 (27ª ola — §3.3 Acordes suspendidos).
 
 ### Doctrina activa (decisiones pendientes de diseño)
 
@@ -402,6 +402,11 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 ### Histórico (resueltas, conservar para contexto)
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
+
+**27ª ola (2026-06-29): §3.3 Acordes suspendidos (sus2, sus4):**
+- ✓ **`SuspendidosSection`:** intro + tabla (sus2/sus4) + `ChordStacks` (comparación: comparten T·5J, cambia la nota del medio 2ª/4ª en lugar de la tercera) + prosa de resolución (sus4→3 baja la 4ª, sus2→3 sube la 2ª) + **constructor** `BUILDER_33` (T → {2, 4} → 5J → sus2/sus4). Es la tercera versión progresiva del constructor (regla del profesor: la sección que presenta los acordes lleva su constructor; ver memoria `feedback-constructor-por-seccion`). Verificado: stacks C·D·G / C·F·G; constructor arma Csus2 (2·5) y Csus4 (4·5).
+- ✓ T3 compone 3.1.1 + 3.1.2 + 3.2 + 3.3.1 + 3.3. Build + typecheck + consola limpios. Anti-checklist 14/14.
+- ⚠ **Nota de tooling (no es deuda de código):** el preview a veces navega a `chrome-error://` durante scroll programático en páginas T3 largas, y entonces los screenshots salen negros. No es un bug de render — el DOM (grafías, nodos, readout) se verifica aparte y, al re-navegar, el screenshot sale correcto. Patrón de verificación: si un screenshot sale negro, comprobar `location.href` antes de asumir un fallo visual.
 
 **26ª ola (2026-06-29): §3.3.1 Segunda y cuarta + `IntervalRuler` reutilizable:**
 - ✓ **Primitiva `Septimas` generalizada a `IntervalRuler`** (segundo consumidor del concepto "regla de semitonos" → extracción, como con `ChordStacks`). Acepta `stops: RulerStop[]` + `ariaLabel` + `maxSemis` por prop; cada parada tiene `showSemis` (muestra distancia) y `reference` (nodo atenuado de contexto). La leyenda se movió de la primitiva (antes Spanish-only) a la sección con i18n es/de — cierra el gap de idioma. El folder `Septimas` se eliminó; §3.1.1 ahora consume `IntervalRuler`.

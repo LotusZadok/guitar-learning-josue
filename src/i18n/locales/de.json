@@ -65,6 +65,22 @@
       },
       "ruler_aria": "Intervall-Lineal: Sekunde und Quarte rund um die Terz",
       "legend": "Die 2. (2 HT) liegt direkt unter der Terz, die 4. (5 HT) direkt darüber. Die Terzen, abgeblendet, sind die Referenz, die sie ersetzen werden."
+    },
+    "s33": {
+      "label": "3.3 · Sus-Akkorde",
+      "title": "Sus-Akkorde: sus2 und sus4",
+      "intro": "Sus-Akkorde ersetzen die Terz durch ein anderes Intervall: die große Sekunde (sus2) oder die reine Quarte (sus4). Ohne Terz ist der Akkord weder Dur noch Moll; es bleibt ein offener Klang ohne tonales Geschlecht, der nach Auflösung verlangt oder schwebend bleibt.",
+      "table_headers": {
+        "chord": "Akkord",
+        "formula": "Formel",
+        "code": "Chiffre"
+      },
+      "chords": ["Sus 2", "Sus 4"],
+      "caption": "sus2 und sus4 teilen Tonika und Quinte; statt der Terz ändert sich die mittlere Note (2. oder 4.). Ohne Terz gibt es weder Dur noch Moll.",
+      "resolution_title": "Auflösung",
+      "resolution": "Die Spannung des Sus-Akkords löst sich meist, indem diese Note zur Terz geführt wird: sus4 senkt die 4. zur 3. (Csus4 → C, F → E) und sus2 hebt die 2. zur 3. (Csus2 → C, D → E). Sie kann auch unaufgelöst als Klangfarbe bleiben.",
+      "builder_title": "Konstruktor: Sus-Akkorde",
+      "builder_intro": "Statt einer Terz wähle die 2. oder die 4., danach die Quinte. Die 2. liegt näher an der Tonika, die 4. weiter entfernt."
     }
   },
   "lock": {

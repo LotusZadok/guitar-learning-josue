@@ -63,6 +63,22 @@
       },
       "ruler_aria": "Regla de intervalos: la segunda y la cuarta alrededor de la tercera",
       "legend": "La 2ª (2 s.t.) queda justo debajo de la tercera, y la 4ª (5 s.t.) justo arriba. Las terceras, atenuadas, son la referencia que van a reemplazar."
+    },
+    "s33": {
+      "label": "3.3 · Acordes suspendidos",
+      "title": "Acordes suspendidos: sus2 y sus4",
+      "intro": "Los suspendidos reemplazan la tercera por otro intervalo: la segunda mayor (sus2) o la cuarta justa (sus4). Sin la tercera, el acorde no es ni mayor ni menor; queda un sonido abierto, sin género tonal, que pide resolución o se deja flotando.",
+      "table_headers": {
+        "chord": "Acorde",
+        "formula": "Fórmula",
+        "code": "Cifrado"
+      },
+      "chords": ["Suspendido 2", "Suspendido 4"],
+      "caption": "El sus2 y el sus4 comparten la tónica y la 5ª; cambia la nota del medio (2ª o 4ª) en lugar de la tercera. Sin tercera, no hay mayor ni menor.",
+      "resolution_title": "Resolución",
+      "resolution": "La tensión del suspendido suele resolver moviendo esa nota a la tercera: el sus4 baja la 4ª a la 3ª (Csus4 → C, F → E) y el sus2 sube la 2ª a la 3ª (Csus2 → C, D → E). También puede quedarse sin resolver, como color.",
+      "builder_title": "Constructor: suspendidos",
+      "builder_intro": "En vez de una tercera, elegí la 2ª o la 4ª, y luego la quinta. La 2ª queda más cerca de la tónica; la 4ª, más lejos."
     }
   },
   "lock": {

@@ -28,5 +28,6 @@ export const TOC_SECTIONS: Record<string, TocItem[]> = {
     { id: 's-t3-acordes-septima', labelKey: 't3.s312.label' },
     { id: 's-t3-disminuidos', labelKey: 't3.s32.label' },
     { id: 's-t3-segunda-cuarta', labelKey: 't3.s331.label' },
+    { id: 's-t3-suspendidos', labelKey: 't3.s33.label' },
   ],
 };

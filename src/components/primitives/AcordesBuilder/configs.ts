@@ -72,6 +72,24 @@ export const BUILDER_312: BuilderConfig = {
   ],
 };
 
+// §3.3 · suspendidos: la tercera se reemplaza por la 2M o la 4J. T → {2, 4} → 5J.
+// La 2 (2 s.t.) está más cerca de la tónica que la 4 (5 s.t.): va más arriba.
+export const BUILDER_33: BuilderConfig = {
+  width: 440,
+  height: 300,
+  ariaLabel: 'Constructor de acordes suspendidos: elegí la 2ª o la 4ª y luego la quinta',
+  tonic: { x: 46, y: 150 },
+  nodes: [
+    { role: '2', number: 2, quality: 'M', x: 175, y: 92, level: 1 },
+    { role: '4', number: 4, quality: 'P', x: 215, y: 208, level: 1 },
+    { role: '5', number: 5, quality: 'P', x: 405, y: 150, level: 2 },
+  ],
+  chords: [
+    { path: ['2', '5'], nombre: 'suspendido 2', cifrado: 'sus2' },
+    { path: ['4', '5'], nombre: 'suspendido 4', cifrado: 'sus4' },
+  ],
+};
+
 // §3.2 · la rama disminuida: 3m → 5d → {7d, 7m} (dim7, m7♭5) + la tríada dim.
 // La 7d (9 s.t.) está más cerca de la tónica que la 7m (10 s.t.): va más arriba.
 export const BUILDER_32: BuilderConfig = {
