@@ -87,6 +87,12 @@
       "title": "Vollständiger Akkord-Konstruktor",
       "intro": "Der ganze Baum, mit allem aus T3. Von der Tonika aus wähle eine Sekunde, eine Terz oder eine Quarte; dann eine Quinte (rein oder vermindert); und, wenn du willst, eine Septime. Jeder gültige Pfad bildet einen der zehn Akkorde der Methode. Die Position codiert weiterhin dasselbe: weiter oben, näher an der Tonika; weiter links, tiefer die Qualität.",
       "caption": "Zehn Akkorde, ein Baum. Halte bei der Quinte für einen Dreiklang oder Sus-Akkord; geh weiter bis zur Septime für die vierstimmigen Akkorde."
+    },
+    "s35": {
+      "label": "3.5 · Stufe 7",
+      "title": "Die 7. Stufe und die diatonische Harmonik mit Septimen",
+      "intro": "Harmonisierst du jede Stufe der Dur-Tonleiter mit ihrer diatonischen Septime (Terzen innerhalb der Tonart gestapelt), erhält jede Stufe eine feste Septim-Qualität. Das Muster ist in jeder Tonart dasselbe:",
+      "grado7": "Die 7. Stufe (vii) ist der neue Fall: ihr Dreiklang war vermindert (°), und mit der diatonischen Septime wird sie zum halbverminderten (m7♭5), dem Akkord aus 3.2. Es ist der einzige m7♭5 der Tonart und entsteht auf dem Leitton."
     }
   },
   "lock": {

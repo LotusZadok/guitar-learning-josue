@@ -4,6 +4,7 @@ import DisminuidosSection from './components/DisminuidosSection';
 import SegundaCuartaSection from './components/SegundaCuartaSection';
 import SuspendidosSection from './components/SuspendidosSection';
 import ConstructorCompletoSection from './components/ConstructorCompletoSection';
+import GradoSeptimoSection from './components/GradoSeptimoSection';
 import styles from './T3Module.module.css';
 
 export default function T3Module() {
@@ -15,6 +16,7 @@ export default function T3Module() {
       <SegundaCuartaSection />
       <SuspendidosSection />
       <ConstructorCompletoSection />
+      <GradoSeptimoSection />
     </main>
   );
 }

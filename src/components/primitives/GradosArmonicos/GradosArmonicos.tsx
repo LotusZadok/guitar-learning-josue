@@ -7,16 +7,18 @@ import NoteToken, { type DiatonicRole } from '../../shared/NoteToken/NoteToken';
 import type { ChromaticNote, NoteSpelling, Tonic } from '../../../types/music';
 import styles from './GradosArmonicos.module.css';
 
+type Step = 1 | 2 | 3 | 4;
+
 interface Props {
   tonalidad: Tonic;
+  /** Paso inicial del stepper. T3 §3.5 arranca en 4 (Séptimas); T2 en 1. */
+  initialStep?: Step;
 }
-
-type Step = 1 | 2 | 3 | 4;
 
 const NATURAL_LETTERS = ['C', 'D', 'E', 'F', 'G', 'A', 'B'] as const;
 const MAJOR_INTERVALS = [0, 2, 4, 5, 7, 9, 11] as const;
 const QUALITIES = ['M', 'm', 'm', 'M', 'M', 'm', 'dim'] as const;
-const SEVENTH_QUALITIES = ['maj7', 'm7', 'm7', 'maj7', '7', 'm7', 'm7b5'] as const;
+const SEVENTH_QUALITIES = ['maj7', 'm7', 'm7', 'maj7', '7', 'm7', 'm7♭5'] as const;
 const ROMANS = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'] as const;
 
 /** Maps diatonic degree (0-based) → diatonic role color (formato diatónico,
@@ -87,10 +89,10 @@ function chordMemberOctave(diatonic: DiatonicNote[], gradeIdx: number, offset: n
   return diatonic[idx].octave + wraps;
 }
 
-export default function GradosArmonicos({ tonalidad }: Props) {
+export default function GradosArmonicos({ tonalidad, initialStep = 1 }: Props) {
   const { i18n } = useTranslation();
   const isDe = i18n.language === 'de';
-  const [step, setStep] = useState<Step>(1);
+  const [step, setStep] = useState<Step>(initialStep);
   const [playingCell, setPlayingCell] = useState<number | null>(null);
   const { playNote } = useAudioEngine();
   const lastFireRef = useRef<number>(0);

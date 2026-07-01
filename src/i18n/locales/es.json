@@ -85,6 +85,12 @@
       "title": "Constructor de acordes completo",
       "intro": "El árbol entero, con todo lo que viste en T3. Desde la tónica, elegí una segunda, una tercera o una cuarta; luego una quinta (justa o disminuida); y, si querés, una séptima. Cada camino válido arma uno de los diez acordes del método. La posición sigue codificando lo mismo: más arriba, más cerca de la tónica; más a la izquierda, más grave la calidad.",
       "caption": "Diez acordes, un solo árbol. Pará en la quinta para una tríada o un suspendido; seguí a la séptima para los acordes de cuatro notas."
+    },
+    "s35": {
+      "label": "3.5 · Grado 7",
+      "title": "El grado 7 y la armonía diatónica con séptimas",
+      "intro": "Si armonizás cada grado de la escala mayor con su séptima diatónica (apilando terceras dentro de la tonalidad), cada grado recibe una calidad de séptima fija. El patrón es siempre el mismo, en cualquier tonalidad:",
+      "grado7": "El grado 7 (vii) es el caso nuevo: su tríada era disminuida (°), y al agregarle la séptima diatónica se convierte en un semidisminuido (m7♭5), el acorde que viste en 3.2. Es el único m7♭5 de la tonalidad y nace sobre la sensible."
     }
   },
   "lock": {

@@ -381,7 +381,7 @@ Este componente es el que identifica la marca. Aparece en T1 (primitiva Chromati
 
 Esta sección lista deudas que las auditorías y pasadas de resolución identificaron pero **no** han sido resueltas. Son trabajo futuro explícito, no aprobaciones tácitas. Cada vez que una pasada resuelve una deuda, se remueve de esta lista; cada nueva deuda descubierta se añade.
 
-**Última actualización:** 2026-06-29 (28ª ola — §3.4 Constructor de acordes completo).
+**Última actualización:** 2026-06-29 (29ª ola — §3.5 Grado 7 + reúso de `GradosArmonicos`).
 
 ### Doctrina activa (decisiones pendientes de diseño)
 
@@ -402,6 +402,11 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 ### Histórico (resueltas, conservar para contexto)
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
+
+**29ª ola (2026-06-29): §3.5 Grado 7 (armonía diatónica con séptimas):**
+- ✓ **Reúso de `GradosArmonicos`** (T2 §2.6) en T3 §3.5: su paso 4 "Séptimas" ya arma los acordes diatónicos con 7ª (`maj7/m7/m7/maj7/7/m7/m7♭5`). Se le añadió un prop opcional `initialStep` (default 1, T2 intacto) para que §3.5 arranque en el paso de séptimas. `GradoSeptimoSection` lo enmarca en T3: intro + caja del patrón + el primitivo + prosa que conecta el **grado 7 (vii) = m7♭5** con §3.2. Reúso correcto: la lógica diatónica (raíz desde `majorScaleSpelled`, terceras apiladas, tonal-derivado) ya existía; sólo cambió el encuadre y el paso inicial.
+- ✓ **`m7b5` → `m7♭5` (♭ integral)** en `SEVENTH_QUALITIES`: el cifrado mostraba la 5ª bemol con `b` ASCII en vez del glifo `♭`, violando la regla ♭-integral (12ª ola) e inconsistente con el resto de T3. Corregido en la primitiva (alinea T2 y T3). Grep `m7b5` = 0.
+- ✓ T3 compone 3.1.1 … 3.5. Build + typecheck + consola limpios; T2 sin regresión (`GradosArmonicos` default step 1). Anti-checklist 14/14.
 
 **28ª ola (2026-06-29): §3.4 Constructor de acordes completo (los 10 acordes):**
 - ✓ **`ConstructorCompletoSection`:** intro + `AcordesBuilder` con `BUILDER_34` (el árbol completo: 9 nodos + tónica, 13 aristas, los 10 acordes del método) + caption + lista de referencia de los 10 cifrados con su fórmula. Cierra el arco del constructor config-driven: §1.7 (hasta quinta) → 3.1.2 (séptimas) → 3.2 (dim) → 3.3 (sus) → **3.4 (todos)**. La topología `BUILDER_34` valida: 5J → 7m/7M, 5d → 7m/7d, **7m compartida** (m7 vía 3m·5, X7 vía 3M·5, m7♭5 vía 3m·5d). Verificado en browser: dim7 (3m·5d·7d) y C7 (3M·5·7m, séptima compartida).
