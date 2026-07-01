@@ -93,6 +93,12 @@
       "title": "Die 7. Stufe und die diatonische Harmonik mit Septimen",
       "intro": "Harmonisierst du jede Stufe der Dur-Tonleiter mit ihrer diatonischen Septime (Terzen innerhalb der Tonart gestapelt), erhält jede Stufe eine feste Septim-Qualität. Das Muster ist in jeder Tonart dasselbe:",
       "grado7": "Die 7. Stufe (vii) ist der neue Fall: ihr Dreiklang war vermindert (°), und mit der diatonischen Septime wird sie zum halbverminderten (m7♭5), dem Akkord aus 3.2. Es ist der einzige m7♭5 der Tonart und entsteht auf dem Leitton."
+    },
+    "s36": {
+      "label": "3.6 · Dominant 7",
+      "title": "Der Dominant 7 (V7)",
+      "intro": "Der Dominant 7 ist der Septakkord auf der 5. Stufe: er verbindet die große Terz mit der kleinen Septime. In sich birgt er einen Tritonus (zwischen seiner 3. und seiner 7.), das instabilste Intervall, und diese Spannung treibt ihn zur Auflösung nach I.",
+      "resolution": "Die beiden Tritonus-Töne (hervorgehoben) lösen sich per Halbton auf: der Leitton (die 3. des V7) steigt zur Tonika, und die 7. des V7 sinkt zur 3. des I. Diese doppelte Halbtonbewegung macht V7 → I zur stärksten Auflösung der tonalen Musik. Drücke die Taste, um sie zu hören."
     }
   },
   "lock": {

@@ -91,6 +91,12 @@
       "title": "El grado 7 y la armonía diatónica con séptimas",
       "intro": "Si armonizás cada grado de la escala mayor con su séptima diatónica (apilando terceras dentro de la tonalidad), cada grado recibe una calidad de séptima fija. El patrón es siempre el mismo, en cualquier tonalidad:",
       "grado7": "El grado 7 (vii) es el caso nuevo: su tríada era disminuida (°), y al agregarle la séptima diatónica se convierte en un semidisminuido (m7♭5), el acorde que viste en 3.2. Es el único m7♭5 de la tonalidad y nace sobre la sensible."
+    },
+    "s36": {
+      "label": "3.6 · Dominante 7",
+      "title": "El dominante 7 (V7)",
+      "intro": "El dominante 7 es el acorde con séptima que se arma sobre el 5º grado: combina la 3ª mayor con la 7ª menor. Adentro esconde un tritono (entre su 3ª y su 7ª), el intervalo más inestable, y esa tensión es la que lo empuja a resolver al I.",
+      "resolution": "Las dos notas del tritono (resaltadas) resuelven por semitono: la sensible (la 3ª del V7) sube a la tónica, y la 7ª del V7 baja a la 3ª del I. Ese doble movimiento de medio tono es lo que hace del V7 → I la resolución más fuerte de la música tonal. Tocá el botón para escucharla."
     }
   },
   "lock": {

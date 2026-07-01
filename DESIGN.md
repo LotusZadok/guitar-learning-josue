@@ -381,7 +381,7 @@ Este componente es el que identifica la marca. Aparece en T1 (primitiva Chromati
 
 Esta sección lista deudas que las auditorías y pasadas de resolución identificaron pero **no** han sido resueltas. Son trabajo futuro explícito, no aprobaciones tácitas. Cada vez que una pasada resuelve una deuda, se remueve de esta lista; cada nueva deuda descubierta se añade.
 
-**Última actualización:** 2026-06-29 (29ª ola — §3.5 Grado 7 + reúso de `GradosArmonicos`).
+**Última actualización:** 2026-06-29 (30ª ola — §3.6 Dominante 7 + diagrama de resolución V7→I).
 
 ### Doctrina activa (decisiones pendientes de diseño)
 
@@ -402,6 +402,11 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 ### Histórico (resueltas, conservar para contexto)
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
+
+**30ª ola (2026-06-29): §3.6 Dominante 7 (V7) + diagrama de resolución:**
+- ✓ **`DominanteResolucion`** (primitiva net-new): diagrama V7 → I. Deriva ambos acordes de `majorScaleSpelled` (V7 = grados 5·7·2·4, I = 1·3·5), marca el **tritono** (3ª/sensible + 7ª del V7) con anillo ámbar, y dibuja **flechas de resolución** ámbar (marker SVG, patrón de §1.5). Botón "V7 → I" reproduce la resolución (V7 en bloque, luego I). Verificado en C: G7 (G B D F) → C (C E G), tritono Si/Fa.
+- ✓ **Dirección visual = dirección musical (voice leading).** Bug cazado por geometría DOM (screenshots caídos esta sesión): apilar el I con la raíz abajo hacía que la flecha de la sensible (Si→Do) apuntara hacia ABAJO, contradiciendo "la sensible sube". Fix: el I se coloca **compacto en el centro** para que el tritono (Si abajo-medio, Fa arriba) **converja** hacia él — Si→Do sube, Fa→Mi baja (movimiento contrario). Regla: en un diagrama de resolución/conducción de voces, la posición vertical DEBE mapear la altura real; si una flecha apunta al revés de lo que dice la prosa, el layout está mal.
+- ✓ T3 compone 3.1.1 … 3.6. Build + typecheck + consola limpios. Anti-checklist 14/14.
 
 **29ª ola (2026-06-29): §3.5 Grado 7 (armonía diatónica con séptimas):**
 - ✓ **Reúso de `GradosArmonicos`** (T2 §2.6) en T3 §3.5: su paso 4 "Séptimas" ya arma los acordes diatónicos con 7ª (`maj7/m7/m7/maj7/7/m7/m7♭5`). Se le añadió un prop opcional `initialStep` (default 1, T2 intacto) para que §3.5 arranque en el paso de séptimas. `GradoSeptimoSection` lo enmarca en T3: intro + caja del patrón + el primitivo + prosa que conecta el **grado 7 (vii) = m7♭5** con §3.2. Reúso correcto: la lógica diatónica (raíz desde `majorScaleSpelled`, terceras apiladas, tonal-derivado) ya existía; sólo cambió el encuadre y el paso inicial.

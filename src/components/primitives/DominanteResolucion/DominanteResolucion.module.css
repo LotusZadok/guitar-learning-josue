@@ -1,0 +1,91 @@
+.wrap {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.diagram {
+  display: block;
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+}
+
+.cifrado {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: 1px;
+  fill: var(--paper);
+  text-anchor: middle;
+}
+
+.roman {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  fill: var(--muted);
+  text-anchor: middle;
+}
+
+.arrow {
+  fill: none;
+  stroke: var(--amber);
+  stroke-width: 2;
+}
+
+/* Un solo receptor de eventos por nodo. */
+.node {
+  cursor: pointer;
+  outline: none;
+}
+
+.node > * {
+  pointer-events: none;
+}
+
+.hit {
+  pointer-events: all !important;
+}
+
+.node:focus-visible .hit {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+.glyph {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 0.5px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.playBtn {
+  margin-top: 20px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 1px;
+  padding: 8px 18px;
+  border: 1px solid var(--rule);
+  background: none;
+  color: var(--paper);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.playBtn:hover:not(:disabled) {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.playBtn:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+.playBtn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
