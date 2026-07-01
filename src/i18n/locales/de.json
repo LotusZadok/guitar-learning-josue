@@ -99,6 +99,18 @@
       "title": "Der Dominant 7 (V7)",
       "intro": "Der Dominant 7 ist der Septakkord auf der 5. Stufe: er verbindet die große Terz mit der kleinen Septime. In sich birgt er einen Tritonus (zwischen seiner 3. und seiner 7.), das instabilste Intervall, und diese Spannung treibt ihn zur Auflösung nach I.",
       "resolution": "Die beiden Tritonus-Töne (hervorgehoben) lösen sich per Halbton auf: der Leitton (die 3. des V7) steigt zur Tonika, und die 7. des V7 sinkt zur 3. des I. Diese doppelte Halbtonbewegung macht V7 → I zur stärksten Auflösung der tonalen Musik. Drücke die Taste, um sie zu hören."
+    },
+    "s37": {
+      "label": "3.7 · ii-V-I",
+      "title": "Die ii-V-I-Verbindung",
+      "intro": "Es ist die charakteristischste harmonische Bewegung der tonalen Musik (vor allem in Jazz und Bossa). Sie verkettet drei Septakkorde, die einen vollständigen Spannungsbogen durchlaufen: weg von der Tonika, maximale Spannung und Auflösung.",
+      "functions": [
+        "Subdominante · mittlere Spannung",
+        "Dominante · hohe Spannung",
+        "Tonika · Auflösung"
+      ],
+      "play": "ii-V-I hören",
+      "explain": "Das ii bereitet vor, das V7 spannt (mit seinem Tritonus), und das I löst auf. Da du V7 → I schon in 3.6 gesehen hast, fügt das ii nur einen vorbereitenden Schritt hinzu, der die Ankunft befriedigender macht. Tippe jeden Akkord an oder höre die ganze Verbindung."
     }
   },
   "lock": {

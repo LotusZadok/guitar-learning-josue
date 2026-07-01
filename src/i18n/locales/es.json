@@ -97,6 +97,18 @@
       "title": "El dominante 7 (V7)",
       "intro": "El dominante 7 es el acorde con séptima que se arma sobre el 5º grado: combina la 3ª mayor con la 7ª menor. Adentro esconde un tritono (entre su 3ª y su 7ª), el intervalo más inestable, y esa tensión es la que lo empuja a resolver al I.",
       "resolution": "Las dos notas del tritono (resaltadas) resuelven por semitono: la sensible (la 3ª del V7) sube a la tónica, y la 7ª del V7 baja a la 3ª del I. Ese doble movimiento de medio tono es lo que hace del V7 → I la resolución más fuerte de la música tonal. Tocá el botón para escucharla."
+    },
+    "s37": {
+      "label": "3.7 · ii-V-I",
+      "title": "La progresión ii-V-I",
+      "intro": "Es el movimiento armónico más característico de la música tonal (sobre todo en jazz y bossa). Encadena tres acordes con séptima que recorren un arco de tensión completo: se aleja de la tónica, tensa al máximo y resuelve.",
+      "functions": [
+        "Subdominante · tensión media",
+        "Dominante · tensión alta",
+        "Tónica · resolución"
+      ],
+      "play": "Escuchar ii-V-I",
+      "explain": "El ii prepara, el V7 tensa (con su tritono), y el I resuelve. Como el V7 → I ya lo viste en 3.6, el ii solo agrega un paso previo que hace la llegada más satisfactoria. Tocá cada acorde o escuchá la progresión entera."
     }
   },
   "lock": {

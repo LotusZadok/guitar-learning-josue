@@ -1,0 +1,123 @@
+.wrap {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.row {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 120px;
+  padding: 16px 20px;
+  border: 1px solid var(--rule);
+  background: none;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.card:hover:not(:disabled) {
+  border-color: var(--paper);
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+.card:disabled {
+  cursor: default;
+}
+
+/* Pico de tensión: el V7 (dominante) lleva el acento ámbar. */
+.card[data-role='tense'] {
+  border-color: color-mix(in srgb, var(--amber) 55%, var(--rule));
+}
+
+.cardActive {
+  border-color: var(--amber);
+  background: color-mix(in srgb, var(--amber) 10%, transparent);
+}
+
+.roman {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+
+.cifrado {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--paper);
+}
+
+.function {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+}
+
+.arrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 16px;
+  color: var(--muted);
+}
+
+.playBtn {
+  margin-top: 24px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 1px;
+  padding: 8px 18px;
+  border: 1px solid var(--rule);
+  background: none;
+  color: var(--paper);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.playBtn:hover:not(:disabled) {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.playBtn:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+.playBtn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+@media (max-width: 600px) {
+  .card {
+    min-width: 96px;
+    padding: 12px 14px;
+  }
+}

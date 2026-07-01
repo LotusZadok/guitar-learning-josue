@@ -381,7 +381,7 @@ Este componente es el que identifica la marca. Aparece en T1 (primitiva Chromati
 
 Esta sección lista deudas que las auditorías y pasadas de resolución identificaron pero **no** han sido resueltas. Son trabajo futuro explícito, no aprobaciones tácitas. Cada vez que una pasada resuelve una deuda, se remueve de esta lista; cada nueva deuda descubierta se añade.
 
-**Última actualización:** 2026-06-29 (30ª ola — §3.6 Dominante 7 + diagrama de resolución V7→I).
+**Última actualización:** 2026-06-29 (31ª ola — §3.7 ii-V-I).
 
 ### Doctrina activa (decisiones pendientes de diseño)
 
@@ -402,6 +402,10 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 ### Histórico (resueltas, conservar para contexto)
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
+
+**31ª ola (2026-06-29): §3.7 ii-V-I (mayor):**
+- ✓ **`ProgresionIIVI`** (primitiva net-new): fila de 3 tarjetas de acorde (ii → V7 → I) con roman + cifrado + función, derivadas de `majorScaleSpelled` (ii=Dm7, V7=G7, I=Cmaj7 en C). Cada tarjeta reproduce su acorde en arpegio; botón "Escuchar ii-V-I" toca la progresión completa. El **V7 (pico de tensión)** lleva acento de borde ámbar (`color-mix`); ii/I bordes neutros. Cifrados en Plex Mono (caso preservado). Función-labels pasadas por prop desde la sección (i18n es/de); separadores en la copy con `·` y la progresión con guiones (`ii-V-I`), no en-dash.
+- ✓ Verificado por DOM/computed-styles (screenshot del preview caído toda la sesión): las 3 tarjetas, el acento ámbar en el V7, arrows `→`, cifrados case-correctos. T3 compone 3.1.1 … 3.7. Build + typecheck + consola limpios. Anti-checklist 14/14.
 
 **30ª ola (2026-06-29): §3.6 Dominante 7 (V7) + diagrama de resolución:**
 - ✓ **`DominanteResolucion`** (primitiva net-new): diagrama V7 → I. Deriva ambos acordes de `majorScaleSpelled` (V7 = grados 5·7·2·4, I = 1·3·5), marca el **tritono** (3ª/sensible + 7ª del V7) con anillo ámbar, y dibuja **flechas de resolución** ámbar (marker SVG, patrón de §1.5). Botón "V7 → I" reproduce la resolución (V7 en bloque, luego I). Verificado en C: G7 (G B D F) → C (C E G), tritono Si/Fa.
