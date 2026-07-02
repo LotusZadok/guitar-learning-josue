@@ -111,6 +111,13 @@
       ],
       "play": "ii-V-I hören",
       "explain": "Das ii bereitet vor, das V7 spannt (mit seinem Tritonus), und das I löst auf. Da du V7 → I schon in 3.6 gesehen hast, fügt das ii nur einen vorbereitenden Schritt hinzu, der die Ankunft befriedigender macht. Tippe jeden Akkord an oder höre die ganze Verbindung."
+    },
+    "s38": {
+      "label": "3.8 · Tonikalisierung",
+      "title": "Tonikalisierung und Zwischendominanten",
+      "intro": "Jeder Akkord der Tonart (außer dem I) kann tonikalisiert werden: ihn für einen Moment wie die Tonika behandeln. Der Akkord, der das leistet, ist seine Zwischendominante, geschrieben V/x, wobei x die tonikalisierte Stufe ist.",
+      "construction": "Sie wird wie das V7 gebildet, zielt aber auf eine andere Stufe: der Dominant 7 eine reine Quinte über dieser Stufe. Fast immer bringt er einen leiterfremden Ton mit (den Leitton der tonikalisierten Stufe), und der erzeugt die chromatische Farbe. Tippe jede Zeile an, um die Dominante zu ihrer Stufe auflösen zu hören.",
+      "generalization": "Die Idee erweitert sich, indem man das ganze ii-V-Paar vor jede Stufe einfügt, nicht nur das V allein. Zum Beispiel statt I, ii, V, I: I, V/ii, ii, V, I (Cmaj7, A7, Dm7, G7, Cmaj7): das A7 tonikalisiert das Dm7, bevor es weitergeht."
     }
   },
   "lock": {

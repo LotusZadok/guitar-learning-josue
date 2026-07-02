@@ -109,6 +109,13 @@
       ],
       "play": "Escuchar ii-V-I",
       "explain": "El ii prepara, el V7 tensa (con su tritono), y el I resuelve. Como el V7 → I ya lo viste en 3.6, el ii solo agrega un paso previo que hace la llegada más satisfactoria. Tocá cada acorde o escuchá la progresión entera."
+    },
+    "s38": {
+      "label": "3.8 · Tonización",
+      "title": "Tonización y dominantes secundarias",
+      "intro": "Cualquier acorde de la tonalidad (menos el I) puede tonizarse: tratarlo por un momento como si fuera la tónica. El acorde que hace ese trabajo es su dominante secundaria, y se escribe V/x, donde x es el grado tonizado.",
+      "construction": "Se construye igual que el V7, pero apuntando a otro grado: es el dominante 7 que está una quinta justa por encima de ese grado. Casi siempre trae una nota de afuera de la tonalidad (la sensible del grado tonizado), y esa es la que crea el color cromático. Tocá cada fila para oír la dominante resolver a su grado.",
+      "generalization": "La idea se amplía insertando el par completo ii-V antes de cualquier grado, no solo el V solo. Por ejemplo, en vez de I, ii, V, I podés hacer I, V/ii, ii, V, I (Cmaj7, A7, Dm7, G7, Cmaj7): el A7 toniza al Dm7 antes de seguir."
     }
   },
   "lock": {

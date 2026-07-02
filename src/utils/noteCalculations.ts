@@ -1,4 +1,4 @@
-import { Note, Interval, Scale } from "tonal";
+import { Note, Interval, Scale, Key, Chord } from "tonal";
 import { ALL, NOTE_ES } from "../data/notes";
 import type { ChromaticNote, NoteInfo, Tonic } from "../types/music";
 
@@ -339,4 +339,45 @@ export function perfectFifth(tonic: ChromaticNote): ChordMember {
   const absChromIdx = (tonicIdx + 7) % 12;
   const octave = 4 + Math.floor((tonicIdx + 7) / 12);
   return { spelled, chromatic: ALL[absChromIdx], octave, role: "5J" };
+}
+
+// === Dominantes secundarias (§3.8), vía Tonal.js ===
+// Convierte un cifrado ASCII de Tonal (A7, Bbmaj7, m7b5) a glifos ♯/♭ para la
+// regla ♭-integral. En un cifrado, todo '#' es ♯ y toda 'b' minúscula es ♭
+// (alteración de nota o de la 5ª); las palabras de calidad no usan 'b'.
+function toGlyphCifrado(c: string): string {
+  return c.replace(/#/g, "♯").replace(/b/g, "♭");
+}
+
+export interface ChordAudio {
+  cifrado: string; // con glifos ♯/♭
+  members: { chromatic: ChromaticNote; octave: number }[];
+}
+
+function chordAudio(chordName: string): ChordAudio {
+  const notes = Chord.get(chordName).notes; // ej. ["A","C#","E","G"]
+  const seq = spelledSequenceAscending(notes, 4);
+  return {
+    cifrado: toGlyphCifrado(chordName),
+    members: seq.map((s) => ({ chromatic: s.name, octave: s.octave })),
+  };
+}
+
+export interface SecondaryDominant {
+  notation: string; // "V/ii"
+  dom: ChordAudio; // la dominante secundaria (ej. A7)
+  target: ChordAudio; // el grado tonizado (ej. Dm7)
+}
+
+// Las 5 dominantes secundarias de una tonalidad mayor (grados ii..vi; el I es la
+// tónica y el vii° no se toniza). Tonal ya las provee: `secondaryDominants` da
+// el cifrado del acorde dominante y `chords` el grado diatónico destino.
+export function secondaryDominants(tonic: Tonic): SecondaryDominant[] {
+  const key = Key.majorKey(tonic);
+  const romans = ["ii", "iii", "IV", "V", "vi"];
+  return [1, 2, 3, 4, 5].map((i, k) => ({
+    notation: `V/${romans[k]}`,
+    dom: chordAudio(key.secondaryDominants[i]),
+    target: chordAudio(key.chords[i]),
+  }));
 }

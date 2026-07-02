@@ -381,7 +381,7 @@ Este componente es el que identifica la marca. Aparece en T1 (primitiva Chromati
 
 Esta sección lista deudas que las auditorías y pasadas de resolución identificaron pero **no** han sido resueltas. Son trabajo futuro explícito, no aprobaciones tácitas. Cada vez que una pasada resuelve una deuda, se remueve de esta lista; cada nueva deuda descubierta se añade.
 
-**Última actualización:** 2026-06-29 (31ª ola — §3.7 ii-V-I).
+**Última actualización:** 2026-06-29 (32ª ola — §3.8 Tonización; cierra las secciones 🟢 de T3).
 
 ### Doctrina activa (decisiones pendientes de diseño)
 
@@ -402,6 +402,11 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 ### Histórico (resueltas, conservar para contexto)
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
+
+**32ª ola (2026-06-29): §3.8 Tonización (dominantes secundarias):**
+- ✓ **`DominantesSecundarias`** (primitiva net-new): lista de 5 filas V/x → grado tonizado (V/ii=A7→Dm7 … V/vi=E7→Am7 en C), cada fila reproduce la dominante en arpegio y su resolución al grado. El cifrado de la dominante lleva el acento ámbar (tensión); el destino, neutro.
+- ✓ **Palanca Tonal.js explotada:** nuevo helper `secondaryDominants(tonic)` en `noteCalculations` usa `Key.majorKey(t).secondaryDominants` + `.chords` (Tonal ya las computa) — es el uso de módulos de alto nivel que se venía difiriendo. Helper `chordAudio(name)` deriva miembros audibles (`Chord.get().notes` + `spelledSequenceAscending`). **`toGlyphCifrado`** convierte el cifrado ASCII de Tonal (`Bbmaj7`, `C#7`) a glifos `♯/♭` (regla ♭-integral) — verificado en F (B♭maj7) y D♭ (B♭7/E♭m7/G♭maj7).
+- ✓ **Cierra las secciones 🟢 confirmadas de T3** (3.1.1 … 3.8). Quedan 3.9 y 3.10 (tonalidad menor) marcadas 🟡 pendientes de revisión del profesor en `docs/source_of_truth_T3.md`. Build + typecheck + consola limpios. Anti-checklist 14/14.
 
 **31ª ola (2026-06-29): §3.7 ii-V-I (mayor):**
 - ✓ **`ProgresionIIVI`** (primitiva net-new): fila de 3 tarjetas de acorde (ii → V7 → I) con roman + cifrado + función, derivadas de `majorScaleSpelled` (ii=Dm7, V7=G7, I=Cmaj7 en C). Cada tarjeta reproduce su acorde en arpegio; botón "Escuchar ii-V-I" toca la progresión completa. El **V7 (pico de tensión)** lleva acento de borde ámbar (`color-mix`); ii/I bordes neutros. Cifrados en Plex Mono (caso preservado). Función-labels pasadas por prop desde la sección (i18n es/de); separadores en la copy con `·` y la progresión con guiones (`ii-V-I`), no en-dash.

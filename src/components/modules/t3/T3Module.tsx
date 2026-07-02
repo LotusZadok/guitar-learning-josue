@@ -7,6 +7,7 @@ import ConstructorCompletoSection from './components/ConstructorCompletoSection'
 import GradoSeptimoSection from './components/GradoSeptimoSection';
 import DominanteSection from './components/DominanteSection';
 import ProgresionIIVISection from './components/ProgresionIIVISection';
+import TonizacionSection from './components/TonizacionSection';
 import styles from './T3Module.module.css';
 
 export default function T3Module() {
@@ -21,6 +22,7 @@ export default function T3Module() {
       <GradoSeptimoSection />
       <DominanteSection />
       <ProgresionIIVISection />
+      <TonizacionSection />
     </main>
   );
 }
