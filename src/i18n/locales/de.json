@@ -118,6 +118,24 @@
       "intro": "Jeder Akkord der Tonart (außer dem I) kann tonikalisiert werden: ihn für einen Moment wie die Tonika behandeln. Der Akkord, der das leistet, ist seine Zwischendominante, geschrieben V/x, wobei x die tonikalisierte Stufe ist.",
       "construction": "Sie wird wie das V7 gebildet, zielt aber auf eine andere Stufe: der Dominant 7 eine reine Quinte über dieser Stufe. Fast immer bringt er einen leiterfremden Ton mit (den Leitton der tonikalisierten Stufe), und der erzeugt die chromatische Farbe. Tippe jede Zeile an, um die Dominante zu ihrer Stufe auflösen zu hören.",
       "generalization": "Die Idee erweitert sich, indem man das ganze ii-V-Paar vor jede Stufe einfügt, nicht nur das V allein. Zum Beispiel statt I, ii, V, I: I, V/ii, ii, V, I (Cmaj7, A7, Dm7, G7, Cmaj7): das A7 tonikalisiert das Dm7, bevor es weitergeht."
+    },
+    "s39": {
+      "label": "3.9 · Moll-Tonleiter",
+      "title": "Die Moll-Tonleiter mit Septimen (Paralleltonart)",
+      "intro": "Jede Dur-Tonart hat eine parallele Molltonart: gleiche Töne, andere Tonika (die 6. Stufe). Harmonisiert man diese natürliche Molltonleiter mit Septimen, ergibt sich dasselbe feste Muster wie in 3.5, jetzt von Moll aus gelesen:",
+      "harmonic": "Damit die Molltonart eine funktionale Dominante bekommt (die wirklich zur Tonika drängt), muss die 7. Stufe um einen Halbton angehoben werden: dieser veränderte Ton ist der Leitton der harmonischen Moll und macht aus dem natürlichen v ein V7. Damit stehen die zwei Bausteine für 3.10 bereit: das V7 und das ii° (der Halbverminderte aus 3.2)."
+    },
+    "s310": {
+      "label": "3.10 · ii°-V7-i (Moll)",
+      "title": "Harmonische Verbindungen in Moll",
+      "intro": "Die reale Molltonart mischt die natürliche Moll (3.9) mit der harmonischen: sie nutzt das natürliche ii als Halbverminderten (ii°) und hebt den Leitton nur bei der Dominante an (V7). Diese beiden Bausteine bilden das ii°-V7-i in Moll, das genaue Gegenstück zum ii-V-I aus 3.7:",
+      "functions": [
+        "Veränderte Subdominante",
+        "Dominante · mit angehobenem Leitton",
+        "Tonika in Moll"
+      ],
+      "play": "ii°-V7-i hören",
+      "explain": "Das ii° bereitet wie das Dur-ii vor, ist aber von Anfang an gespannt (ein Halbverminderter). Das V7 spannt nach derselben Tritonus-Logik aus 3.6, nur ist dieser Leitton ein Ton, der aus der harmonischen Moll entlehnt ist. Das i löst in Moll auf. Typische Verbindungen aus Folklore und Bolero (i-♭VI-♭VII-i, i-iv-V7-i) nutzen genau diese Bausteine."
     }
   },
   "lock": {

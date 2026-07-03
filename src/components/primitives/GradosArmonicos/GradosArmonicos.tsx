@@ -2,7 +2,7 @@ import { useCallback, useMemo, useRef, useState, type KeyboardEvent } from 'reac
 import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { ALL } from '../../../data/notes';
-import { majorScaleSpelled, spelledSequenceAscending, tonicChromatic } from '../../../utils/noteCalculations';
+import { majorScaleSpelled, relativeMinorScaleSpelled, spelledSequenceAscending, tonicChromatic } from '../../../utils/noteCalculations';
 import NoteToken, { type DiatonicRole } from '../../shared/NoteToken/NoteToken';
 import type { ChromaticNote, NoteSpelling, Tonic } from '../../../types/music';
 import styles from './GradosArmonicos.module.css';
@@ -13,6 +13,9 @@ interface Props {
   tonalidad: Tonic;
   /** Paso inicial del stepper. T3 §3.5 arranca en 4 (Séptimas); T2 en 1. */
   initialStep?: Step;
+  /** T3 §3.9: re-ancla la tabla en la relativa menor natural de `tonalidad`
+   *  (comparten armadura; misma escala rotada al 6to grado — sin teoría nueva). */
+  relativeMinor?: boolean;
 }
 
 const NATURAL_LETTERS = ['C', 'D', 'E', 'F', 'G', 'A', 'B'] as const;
@@ -20,6 +23,12 @@ const MAJOR_INTERVALS = [0, 2, 4, 5, 7, 9, 11] as const;
 const QUALITIES = ['M', 'm', 'm', 'M', 'M', 'm', 'dim'] as const;
 const SEVENTH_QUALITIES = ['maj7', 'm7', 'm7', 'maj7', '7', 'm7', 'm7♭5'] as const;
 const ROMANS = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'] as const;
+
+// Menor natural relativa (§3.9): mismas 7 tríadas/séptimas que la mayor, leídas
+// desde el 6to grado — ver `relativeMinorScaleSpelled` para la rotación de notas.
+const QUALITIES_MINOR = ['m', 'dim', 'M', 'm', 'm', 'M', 'M'] as const;
+const SEVENTH_QUALITIES_MINOR = ['m7', 'm7♭5', 'maj7', 'm7', 'm7', 'maj7', '7'] as const;
+const ROMANS_MINOR = ['i', 'ii°', '♭III', 'iv', 'v', '♭VI', '♭VII'] as const;
 
 /** Maps diatonic degree (0-based) → diatonic role color (formato diatónico,
  *  para la fila Escala donde se ve la estabilidad nota-a-nota). */
@@ -65,7 +74,21 @@ interface DiatonicNote {
   octave: number;
 }
 
-function buildDiatonic(tonic: Tonic): DiatonicNote[] {
+function buildDiatonic(tonic: Tonic, relativeMinor: boolean): DiatonicNote[] {
+  if (relativeMinor) {
+    // Misma armadura, notas rotadas al 6to grado; el piso (tónica=nota más
+    // grave) se recalcula con `spelledSequenceAscending` porque la rotación
+    // por sí sola no preserva el ascenso (ver noteCalculations.ts).
+    const spelled = relativeMinorScaleSpelled(tonic);
+    const ascii = spelled.map((s) => s.replace('♯', '#').replace('♭', 'b'));
+    const seq = spelledSequenceAscending(ascii, 4);
+    return spelled.map((sp, i) => ({
+      spelled: sp,
+      ascii: ascii[i],
+      chromatic: seq[i].name,
+      octave: seq[i].octave,
+    }));
+  }
   const tIdx = ALL.indexOf(tonicChromatic(tonic));
   const spelled = majorScaleSpelled(tonic);
   return MAJOR_INTERVALS.map((semis, i) => ({
@@ -89,7 +112,7 @@ function chordMemberOctave(diatonic: DiatonicNote[], gradeIdx: number, offset: n
   return diatonic[idx].octave + wraps;
 }
 
-export default function GradosArmonicos({ tonalidad, initialStep = 1 }: Props) {
+export default function GradosArmonicos({ tonalidad, initialStep = 1, relativeMinor = false }: Props) {
   const { i18n } = useTranslation();
   const isDe = i18n.language === 'de';
   const [step, setStep] = useState<Step>(initialStep);
@@ -97,8 +120,14 @@ export default function GradosArmonicos({ tonalidad, initialStep = 1 }: Props) {
   const { playNote } = useAudioEngine();
   const lastFireRef = useRef<number>(0);
 
-  const diatonic = useMemo(() => buildDiatonic(tonalidad), [tonalidad]);
-  const naturals = useMemo(() => naturalRoots(tonalidad), [tonalidad]);
+  const diatonic = useMemo(() => buildDiatonic(tonalidad, relativeMinor), [tonalidad, relativeMinor]);
+  // Step 1 (letras solas) parte de la tónica que se muestra en pantalla: la
+  // global en mayor, o la relativa menor (1er elemento ya rotado) en menor.
+  const displayTonic = relativeMinor ? (diatonic[0].spelled.replace('♯', '#').replace('♭', 'b') as Tonic) : tonalidad;
+  const naturals = useMemo(() => naturalRoots(displayTonic), [displayTonic]);
+  const QUALITIES_ACTIVE = relativeMinor ? QUALITIES_MINOR : QUALITIES;
+  const SEVENTH_QUALITIES_ACTIVE = relativeMinor ? SEVENTH_QUALITIES_MINOR : SEVENTH_QUALITIES;
+  const ROMANS_ACTIVE = relativeMinor ? ROMANS_MINOR : ROMANS;
 
   const playTriad = useCallback(
     (gradeIdx: number) => {
@@ -167,8 +196,8 @@ export default function GradosArmonicos({ tonalidad, initialStep = 1 }: Props) {
   const escalaAscii = diatonic.map((d) => d.ascii);
 
   const chordSymbols = diatonic.map((d, i) => {
-    if (step >= 4) return d.spelled + SEVENTH_QUALITIES[i];
-    const q = QUALITIES[i];
+    if (step >= 4) return d.spelled + SEVENTH_QUALITIES_ACTIVE[i];
+    const q = QUALITIES_ACTIVE[i];
     if (q === 'M') return d.spelled;
     if (q === 'm') return d.spelled + 'm';
     return d.spelled + '°';
@@ -213,7 +242,7 @@ export default function GradosArmonicos({ tonalidad, initialStep = 1 }: Props) {
 
             <tr className={`${styles.revealRow} ${step >= 3 ? styles.revealOn : ''}`}>
               <th scope="row" className={styles.rowLabel}>{isDe ? 'Stufe' : 'Grado'}</th>
-              {ROMANS.map((roman, i) => (
+              {ROMANS_ACTIVE.map((roman, i) => (
                 <td key={i} className={styles.gradoCell} data-harmonic={HARMONIC_ROLE[i]}>
                   <RomanGlyph roman={roman} role={HARMONIC_ROLE[i]} />
                 </td>
@@ -277,10 +306,12 @@ function Row({ label, cells, ascii, roles }: RowProps) {
   );
 }
 
-function RomanGlyph({ roman, role }: { roman: typeof ROMANS[number]; role: DiatonicRole }) {
+function RomanGlyph({ roman, role }: { roman: string; role: DiatonicRole }) {
   // Reunión 24/5/26: color por formato armónico (no por mayor/menor visual).
-  const isMajor = roman === roman.toUpperCase() && roman !== 'vii°';
-  const isDim = roman === 'vii°';
+  // Generalizado en §3.9 para 'ii°' (menor) además de 'vii°' (mayor): cualquier
+  // grado disminuido termina en '°', sin importar el modo.
+  const isDim = roman.endsWith('°');
+  const isMajor = !isDim && roman === roman.toUpperCase();
   return (
     <span
       className={isDim ? styles.romanDim : (isMajor ? styles.romanMajor : styles.romanMinor)}

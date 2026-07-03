@@ -381,7 +381,7 @@ Este componente es el que identifica la marca. Aparece en T1 (primitiva Chromati
 
 Esta sección lista deudas que las auditorías y pasadas de resolución identificaron pero **no** han sido resueltas. Son trabajo futuro explícito, no aprobaciones tácitas. Cada vez que una pasada resuelve una deuda, se remueve de esta lista; cada nueva deuda descubierta se añade.
 
-**Última actualización:** 2026-06-29 (32ª ola — §3.8 Tonización; cierra las secciones 🟢 de T3).
+**Última actualización:** 2026-07-03 (33ª ola — §3.9/§3.10 Escala y progresiones menores; cierra T3 completo, 3.1.1…3.10).
 
 ### Doctrina activa (decisiones pendientes de diseño)
 
@@ -402,6 +402,13 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 ### Histórico (resueltas, conservar para contexto)
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
+
+**33ª ola (2026-07-03): §3.9 Escala menor con séptimas + §3.10 Progresiones armónicas en escala menor:**
+- ✓ **Reúso sin teoría nueva:** `relativeMinorScaleSpelled(majorTonic)` (nueva, `utils/noteCalculations.ts`) rota el array ya existente de `majorScaleSpelled` al 6to grado — la menor natural relativa ES la mayor relativa leída desde otra tónica, mismas 7 notas. El piso (tónica-menor-más-grave) se recalcula con `spelledSequenceAscending` porque la rotación por sí sola no preserva el ascenso (verificado a mano: sin esto, C4 sonaba más grave que A4 en A menor).
+- ✓ **`GradosArmonicos` extendida** (`relativeMinor?: boolean`, default `false`, T2 y 3.1-3.8 sin cambios de comportamiento): nuevos `QUALITIES_MINOR`/`SEVENTH_QUALITIES_MINOR`/`ROMANS_MINOR` (i, ii°, ♭III, iv, v, ♭VI, ♭VII — verificados a mano contra la rotación de los arrays mayores, coinciden dígito a dígito). `DEGREE_ROLE`/`HARMONIC_ROLE` (color de estabilidad/función) se **reutilizan sin rotar**: son un mapeo genérico por índice de grado (tónica=reposo, supertónica=medio, etc.), no atado a mayor/menor — aplicárselo al mismo índice en modo menor es la lectura literal de la doctrina existente, pero es una analogía nueva que nadie validó visualmente con el profesor (el contenido teórico de 3.9/3.10 sí está validado; el mapeo de color a la nueva tabla es inferencia de esta ola). `RomanGlyph` generalizada: el chequeo de disminuido pasa de `roman === 'vii°'` (string literal) a `roman.endsWith('°')`, para cubrir también 'ii°' sin tocar el resultado en mayor.
+- ✓ **`ProgresionIIVI` extendida** (`relativeMinor?: boolean`, default `false`): `DEFS_MINOR` arma ii°-V7-i sobre la misma escala rotada; el **V7 es la única pieza que se aparta de la menor natural** (necesita la sensible elevada, la menor armónica) — resuelto reutilizando `spelledIntervalFromTonic(tónicaMenor, 7, 'M')` (ya existía para T1/T3, sin math nueva) en vez de una escala armónica dedicada. El `i` se cifra como tríada (`Am`, no `Am7`) siguiendo la tabla exacta de la fuente (a diferencia del `I`/`ii`/`V7` mayores, que sí llevan séptima).
+- ✓ **Cierra T3 completo** (3.1.1…3.10). Contenido de `docs/source_of_truth_T3.md` §3.9/§3.10 usado tal cual (profesor lo validó como suficiente); ya no quedan subsecciones 🟡 pendientes en T3.
+- ✓ Build + typecheck limpios; lint sin errores nuevos (los 50 preexistentes son de `scripts/*.js` de terceros, ya documentados en la 10ª ola de lessons-learned.md). Sin cambio de comportamiento en T1/T2/T3 mayor (`relativeMinor` default `false` en ambas primitivas). Anti-checklist 14/14.
 
 **32ª ola (2026-06-29): §3.8 Tonización (dominantes secundarias):**
 - ✓ **`DominantesSecundarias`** (primitiva net-new): lista de 5 filas V/x → grado tonizado (V/ii=A7→Dm7 … V/vi=E7→Am7 en C), cada fila reproduce la dominante en arpegio y su resolución al grado. El cifrado de la dominante lleva el acento ámbar (tensión); el destino, neutro.

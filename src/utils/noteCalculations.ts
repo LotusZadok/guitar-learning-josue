@@ -113,6 +113,17 @@ export function majorScaleSpelled(tonic: Tonic): string[] {
   return result;
 }
 
+// === Relativa menor natural (T3 §3.9/§3.10) ===
+
+// Grados de la menor natural relativa, re-anclados en su propia tónica. Es el
+// mismo array de `majorScaleSpelled(majorTonic)` (comparten armadura: mismas 7
+// notas), rotado para empezar en el 6to grado (vi) — sin teoría nueva, la menor
+// natural ES la mayor relativa leída desde otra tónica.
+export function relativeMinorScaleSpelled(majorTonic: Tonic): string[] {
+  const major = majorScaleSpelled(majorTonic);
+  return [...major.slice(5), ...major.slice(0, 5)];
+}
+
 export type ChordType = "M" | "m" | "aug" | "dim";
 
 export interface ChordMember {
