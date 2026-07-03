@@ -4,10 +4,6 @@ import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
 import NoteToken from '../../../shared/NoteToken/NoteToken';
 import type { NoteSpelling } from '../../../../types/music';
-import {
-  TABLA_MAESTRA_INTRO,
-  TABLA_MAESTRA_INTRO_DE,
-} from '../data/literalContent';
 import { TONALIDADES } from '../data/tonalidades';
 import ProcesoView from '../components/ProcesoView';
 
@@ -33,8 +29,7 @@ function NoteOrText({ spelling }: { spelling: string }) {
 import styles from './TablaMaestraSection.module.css';
 
 export default function TablaMaestraSection() {
-  const { t, i18n } = useTranslation();
-  const isDe = i18n.language === 'de';
+  const { t } = useTranslation();
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const toggle = (id: string) => {
@@ -50,7 +45,7 @@ export default function TablaMaestraSection() {
       <SectionLabel text={t('t2.s45.label')} />
       <h2>{t('t2.s45.title')}</h2>
 
-      <p className={styles.intro}>{isDe ? TABLA_MAESTRA_INTRO_DE : TABLA_MAESTRA_INTRO}</p>
+      <p className={styles.intro}>{t('t2.s45.intro')}</p>
 
       <h3 className={styles.subheading}>{t('t2.s45.sharps_section')}</h3>
       <div className={styles.table}>

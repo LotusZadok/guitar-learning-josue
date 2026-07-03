@@ -339,7 +339,7 @@ export function spelledChromaticCircle(tonic: Tonic): CircleStep[] {
 
 // Returns the perfect-fifth pair for a tonic, honoring the §1.8 alteration-mirror rule.
 // Most cases: 5J copies the alteration of the tonic. Exception: B → F♯ (not F).
-// Bb → F (not Fb) is a parallel exception when using flat spelling — see literalContent.
+// Bb → F (not Fb) is a parallel exception when using flat spelling — see t1.s08 in i18n locales.
 export function perfectFifth(tonic: ChromaticNote): ChordMember {
   const tonicIdx = ALL.indexOf(tonic);
   const startLetterIdx = LETTERS.indexOf(tonic[0] as (typeof LETTERS)[number]);

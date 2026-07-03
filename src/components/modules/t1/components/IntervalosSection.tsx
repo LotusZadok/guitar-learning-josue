@@ -12,13 +12,16 @@ import {
 } from "../../../../utils/noteCalculations";
 import type { NoteSpelling } from "../../../../types/music";
 import type { ProseSegment, ProseFragment } from "../../../../types/prose";
-import {
-  INTERVALOS_13_HEAD,
-  INTERVALOS_13_ROW,
-  INTERVALOS_PROCEDIMIENTO_PASOS,
-  INTERVALOS_PROCEDIMIENTO_PASOS_DE,
-} from "../data/literalContent";
 import styles from "./IntervalosSection.module.css";
+
+// Datos musicales (§1.3): los 13 intervalos dentro de una octava y sus
+// semitonos (cifrados universales, no UI copy).
+const INTERVALOS_13_CODES = [
+  "T", "2m", "2M", "3m", "3M", "4J", "4a/5d", "5J", "6m", "6M", "7m", "7M", "8J",
+] as const;
+const INTERVALOS_13_SEMIS = [
+  "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12",
+] as const;
 
 // ── Dynamic interval-procedure builders ─────────────────────────────────────
 // These replace the hardcoded G exports. Each function returns a ProseSegment
@@ -199,10 +202,11 @@ export default function IntervalosSection() {
     [tonicAscii],
   );
   const tonicIdx = useMemo(() => ALL.indexOf(tonicChromatic(tonic)), [tonic]);
-  const staticPasos =
-    locale === "de"
-      ? INTERVALOS_PROCEDIMIENTO_PASOS_DE
-      : INTERVALOS_PROCEDIMIENTO_PASOS;
+  // letter-rule explanation (generic, keeps B/Bb example) + closing step.
+  const letterRule = t("t1.s04.step_letter_rule", {
+    returnObjects: true,
+  }) as ProseSegment;
+  const stepUpdate = t("t1.s04.step_update");
 
   const procedimientoTitulo = useMemo(
     () => buildTitulo(tonicAscii, locale),
@@ -212,10 +216,10 @@ export default function IntervalosSection() {
     () => [
       buildStep1(tonicLetterIdx, locale),
       buildStep2(tonicIdx, locale),
-      staticPasos[2], // letter-rule explanation (generic, keeps B/Bb example)
-      staticPasos[3], // "Actualizar la escala con los intervalos correctos."
+      letterRule,
+      stepUpdate,
     ],
-    [tonicLetterIdx, tonicIdx, locale, staticPasos],
+    [tonicLetterIdx, tonicIdx, locale, letterRule, stepUpdate],
   );
   const resultadoCells = useMemo(
     () => buildResultadoCells(tonicIdx, tonicLetterIdx),
@@ -262,7 +266,8 @@ export default function IntervalosSection() {
         <table className={`${styles.table} ${styles.tableIntervals}`}>
           <thead>
             <tr>
-              {INTERVALOS_13_HEAD.map((h, i) => (
+              <th scope="col">{t("t1.s04.table_headers.name")}</th>
+              {INTERVALOS_13_CODES.map((h, i) => (
                 <th key={i} scope="col">
                   {h}
                 </th>
@@ -271,15 +276,10 @@ export default function IntervalosSection() {
           </thead>
           <tbody>
             <tr>
-              {INTERVALOS_13_ROW.map((c, i) =>
-                i === 0 ? (
-                  <th key={i} scope="row">
-                    {c}
-                  </th>
-                ) : (
-                  <td key={i}>{c}</td>
-                ),
-              )}
+              <th scope="row">{t("t1.s04.table_headers.semitone")}</th>
+              {INTERVALOS_13_SEMIS.map((c, i) => (
+                <td key={i}>{c}</td>
+              ))}
             </tr>
           </tbody>
         </table>
@@ -299,7 +299,8 @@ export default function IntervalosSection() {
         <table className={`${styles.table} ${styles.tableIntervals}`}>
           <thead>
             <tr>
-              {INTERVALOS_13_HEAD.map((h, i) => (
+              <th scope="col">{t("t1.s04.table_headers.name")}</th>
+              {INTERVALOS_13_CODES.map((h, i) => (
                 <th key={i} scope="col">
                   {h}
                 </th>

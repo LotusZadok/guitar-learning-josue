@@ -179,6 +179,17 @@
       "table_title": "Las 7 tríadas de las notas naturales:",
       "master_triad_label": "Tríada maestra",
       "master_triad_body": "Si seguimos el patrón sin pausa, hasta llegar a la misma nota, conseguimos la tríada maestra:",
+      "master_triad": [
+        { "type": "text", "value": "Si seguimos el patrón sin pausa, hasta llegar a la misma nota, conseguimos la tríada maestra: " },
+        { "type": "note", "value": "F" }, { "type": "text", "value": " " },
+        { "type": "note", "value": "A" }, { "type": "text", "value": " " },
+        { "type": "note", "value": "C" }, { "type": "text", "value": " " },
+        { "type": "note", "value": "E" }, { "type": "text", "value": " " },
+        { "type": "note", "value": "G" }, { "type": "text", "value": " " },
+        { "type": "note", "value": "B" }, { "type": "text", "value": " " },
+        { "type": "note", "value": "D" }, { "type": "text", "value": " " },
+        { "type": "note", "value": "F" }, { "type": "text", "value": "." }
+      ],
       "tip": "Consejo del método: memorizar las 7 tríadas. Son la estructura de todo acorde y el fundamento de la armonía. También son herramienta para leer partitura."
     },
 
@@ -189,7 +200,21 @@
       "sharp_def": "Sostenido (#) — cuando una nota natural sube un semitono (un traste).",
       "flat_def": "Bemol (♭) — cuando una nota natural baja un semitono (un traste).",
       "body": "Sumando las 7 naturales y las 5 alteradas resultan las 12 notas del círculo cromático (CC):",
-      "rule": "Importante: entre B–C y entre E–F no hay nota alterada (por el momento, se omiten B# y E# como alteraciones del círculo cromático; en este contexto son la misma nota que C y F respectivamente).",
+      "rule": [
+        { "type": "text", "value": "Importante: entre " },
+        { "type": "note", "value": "B" },
+        { "type": "text", "value": "–" },
+        { "type": "note", "value": "C" },
+        { "type": "text", "value": " y entre " },
+        { "type": "note", "value": "E" },
+        { "type": "text", "value": "–" },
+        { "type": "note", "value": "F" },
+        { "type": "text", "value": " no hay nota alterada (por el momento, se omiten B# y E# como alteraciones del círculo cromático; en este contexto son la misma nota que " },
+        { "type": "note", "value": "C" },
+        { "type": "text", "value": " y " },
+        { "type": "note", "value": "F" },
+        { "type": "text", "value": " respectivamente)." }
+      ],
       "tip": "Las 12 notas del círculo cromático conforman el sistema de sonidos completo."
     },
 
@@ -212,6 +237,16 @@
       ],
       "result": "Resultado para G: G A♭ A B♭ B C C#/D♭ D E♭ E F F# G.",
       "octave_rule": "La 8J (octava justa) es la misma nota más aguda o más grave. La 8J de G es G.",
+      "step_letter_rule": [
+        { "type": "text", "value": "Cuando hay dos notas alteradas, elegir según la letra del paso 1. Si en el paso 1 está \"" },
+        { "type": "note", "value": "B" },
+        { "type": "text", "value": "\", entonces se elige " },
+        { "type": "note", "value": "Bb" },
+        { "type": "text", "value": " antes que " },
+        { "type": "note", "value": "A#" },
+        { "type": "text", "value": "." }
+      ],
+      "step_update": "Actualizar la escala con los intervalos correctos.",
       "tip": "Los intervalos son la medida de la música: toda relación melódica y armónica se puede describir en términos de intervalos."
     },
 
@@ -231,6 +266,7 @@
         "6to grado → resuelve al 5to grado.",
         "7mo grado → resuelve a la tónica. Es la resolución más importante de la música tonal — está a 1 s.t. de la tónica, por eso es la más tensa. El 7mo se llama \"sensible tonal\"."
       ],
+      "map_instruction": "El strip muestra los 7 grados más la octava. Las flechas conectan cada nota tensa o intermedia con su(s) reposo(s). Haz clic sobre una flecha para escuchar la resolución (tensión → reposo).",
       "tip": "Consejo del método: tocar las notas tensas un poco más fuertes que las estables. A esto se le llama resolver."
     },
 
@@ -245,6 +281,8 @@
         "note": "Nota",
         "distance": "Distancia (s.t.)"
       },
+      "viz_title": "Visualizador de la escala mayor",
+      "viz_instruction": "Las notas en verde son estables. Las notas en naranja son intermedias. Las notas en rojo son tensas.",
       "tip": "El patrón T-T-S-T-T-T-S es el \"ADN\" de toda escala mayor. Se repite idéntico en las 12 tonalidades."
     },
 
@@ -280,6 +318,73 @@
       "rule_flats": "En tonalidades con bemoles (♭): los bemoles se añaden de derecha a izquierda en el orden B E A D G C F.",
       "exception_label": "Excepción:",
       "exception": "Fa mayor tiene 1 bemol (B♭) — no sigue el patrón de las tonalidades con sostenidos.",
+      "bullets": [
+        {
+          "regla": "T natural",
+          "desc": "la 5J también es natural.",
+          "ejemplo": [
+            { "type": "note", "value": "D" },
+            { "type": "text", "value": " → " },
+            { "type": "note", "value": "A" },
+            { "type": "text", "value": "." }
+          ]
+        },
+        {
+          "regla": "T con #",
+          "desc": "la 5J también lleva #.",
+          "ejemplo": [
+            { "type": "note", "value": "F#" },
+            { "type": "text", "value": " → " },
+            { "type": "note", "value": "C#" },
+            { "type": "text", "value": "." }
+          ]
+        },
+        {
+          "regla": "T con b",
+          "desc": "la 5J también lleva b.",
+          "ejemplo": [
+            { "type": "note", "value": "Eb" },
+            { "type": "text", "value": " → " },
+            { "type": "note", "value": "Bb" },
+            { "type": "text", "value": "." }
+          ]
+        }
+      ],
+      "exception_b": [
+        { "type": "text", "value": "Cuando " },
+        { "type": "note", "value": "B" },
+        { "type": "text", "value": " es la tónica, su 5J es " },
+        { "type": "note", "value": "F#" },
+        { "type": "text", "value": " (no " },
+        { "type": "note", "value": "F" },
+        { "type": "text", "value": ")." }
+      ],
+      "exception_bb": [
+        { "type": "text", "value": "Cuando " },
+        { "type": "note", "value": "Bb" },
+        { "type": "text", "value": " es la tónica, su 5J es " },
+        { "type": "note", "value": "F" },
+        { "type": "text", "value": " (no F♭)." }
+      ],
+      "fifths_title": "Las 12 quintas justas",
+      "fifths_instruction": [
+        { "type": "text", "value": "Cada fila reproduce su tónica y su 5J en secuencia. La excepción de " },
+        { "type": "note", "value": "B" },
+        { "type": "text", "value": " → " },
+        { "type": "note", "value": "F#" },
+        { "type": "text", "value": " queda enmarcada para destacarla del patrón." }
+      ],
+      "flats_note": [
+        { "type": "text", "value": "Si nombrás las notas alteradas con bemoles, surge una segunda excepción: " },
+        { "type": "note", "value": "Bb" },
+        { "type": "text", "value": " → " },
+        { "type": "note", "value": "F" },
+        { "type": "text", "value": " (no F♭). En el sistema con sostenidos, esa misma 5J aparece como " },
+        { "type": "note", "value": "A#" },
+        { "type": "text", "value": " → E# (enarmónica de " },
+        { "type": "note", "value": "F" },
+        { "type": "text", "value": ")." }
+      ],
       "tip": "Consejo del método: memorizar la secuencia F C G D A E B y al revés B E A D G C F. Es la herramienta para derivar las armaduras de todas las tonalidades."
     }
   },
@@ -289,7 +394,13 @@
 
     "s41": {
       "label": "2.1 · Tonalidades",
-      "title": "Tonalidades y Armaduras"
+      "title": "Tonalidades y Armaduras",
+      "intro_languages": "Para comprender este tema utilizaremos una analogía con las diferentes lenguas del mundo, existen numerosos y vastos lenguajes, unos similares entre sí, por ejemplo: Español, Portugués, Italiano estos tres si bien es cierto no son el mismo comparten entre sí fonética, vocabulario, incluso gramática, esto gracias a compartir la misma raíz romance. Este mismo ejemplo pasa con el Alemán, Holandés, Inglés al compartir la raíz germánica, etc.",
+      "intro_variety": "Todo esto nos hace entender que hay mucha variedad de lenguas algunas muy distintas entre sí otras muy similares donde cambian solo los detalles, esta misma idea la aplicamos a las TONALIDADES.",
+      "def_tonalities": "Las tonalidades/lenguajes son familias de notas, en donde algunas tonalidades guardan similitud con otras, pero a su vez encontramos tonalidades muy diferentes entre sí.",
+      "def_key_signature": "Cada familia/tonalidad contiene 7 notas (escala), a estas notas y sus variantes (ejemplo D♭-D-D#) les conocemos como ARMADURA, en otras palabras la armadura es la cantidad de # o ♭ que una tonalidad puede tener, a veces solo encontramos un # o puede que encontremos 5 #, de igual manera los bemoles.",
+      "rule_no_mix": "Cabe aclarar que los # no se combinan con los ♭, por lo que si la tonalidad cuenta con ♭ no encontraremos # y viceversa.",
+      "conclusion": "Podemos concluir que la armadura describe a la tonalidad, y la tonalidad cuenta con una armadura específica, o sea estos dos términos cohabitan y se referencian uno a otro."
     },
 
     "s42": {
@@ -299,12 +410,25 @@
 
     "s43": {
       "label": "2.4 · Proceso de bemoles",
-      "title": "Proceso de bemoles"
+      "title": "Proceso de bemoles",
+      "f_exception": "Existe una excepción a este proceso en donde no aplican los pasos anteriormente vistos, por lo que procederemos a memorizar dicha excepción. Para la tonalidad de F mayor, al no existir un \"penúltimo bemol\", no aplican los pasos anteriores, esta tonalidad solo cuenta con el primer ♭ de la herramienta, o sea B♭. En un contexto de música popular/rock, lo más común es trabajar únicamente con la columna izquierda (partiendo de la tonalidad) ya que es la información que tenemos más a la mano, dado que la columna de la derecha se emplea mayormente en la música académica (partitura), donde encontramos en el pentagrama al inicio de la obra, la armadura en cuestión, por lo que nosotros debemos descifrar la tonalidad en la que estamos tocando. Consejo: probar estos pasos con las 12 tónicas existentes. Podríamos concluir que la armadura de F mayor es solo B♭, y la escala es F G A B♭ C D E"
+    },
+
+    "s44": {
+      "label": "2.2 · Orden de las alteraciones",
+      "intro": "En esta caja podemos encontrar el orden específico, acumulativo y multitonal en el que podemos construir todas las armaduras.",
+      "sharps_explanation": "Si vamos de izquierda a derecha, a cada nota le añadimos el #. Podríamos decir también que todas las tonalidades con # utilizan la herramienta.",
+      "flats_explanation": "Si vamos de derecha a izquierda, a cada nota le añadimos el ♭. Podríamos decir también que todas las tonalidades con ♭ utilizan la herramienta.",
+      "prop_specific": "Específico porque siempre seguiremos el mismo orden. Ejemplo: F# C# G# — Ejemplo: B♭ E♭ A♭ D♭",
+      "prop_cumulative": "Acumulativo porque sumamos una alteración más, manteniendo la anterior. Ejemplo: una armadura con 4# siempre tendrá F# C# G# D#, dado que son los primeros 4# de la herramienta, y así mismo las tonalidades con ♭.",
+      "prop_multitonal": "Multitonal porque esta herramienta se aplica para todas las tonalidades existentes.",
+      "tip": "Consejo: memorizar en ambos sentidos, dado que utilizamos siempre esta herramienta."
     },
 
     "s45": {
       "label": "2.5 · Tabla maestra",
       "title": "Tabla maestra de las 14 tonalidades mayores",
+      "intro": "Para ayudar a comprobar si el proceso es correcto, acá una tabla con todas las tonalidades mayores existentes.",
       "table_headers": {
         "count": "Cantidad",
         "key_signature": "Armadura",
@@ -327,6 +451,12 @@
       "symmetry": "Simetría: la música funciona con fórmulas — 12 semitonos, 12 intervalos, escalas de 7 notas, tríadas de 3 notas. Los procesos son simétricos en todas las tonalidades. Por eso conviene memorizar el procedimiento, no el resultado.",
       "fractality": "Fractalidad: lo que sirve en lo micro sirve en lo macro. Si la escala tiene 7 notas, la armonía tiene 7 acordes (uno por cada nota). Cada nota se convierte en un acorde construyendo la tríada sobre ella.",
       "procedure_title": "Procedimiento para encontrar los grados armónicos en La mayor:",
+      "procedure": [
+        "Pensar cada nota de la escala como tríada. Por ahora solo escribimos las letras (sin armadura).",
+        "Actualizar las tríadas con la armadura de la tonalidad.",
+        "Tocar cada acorde y oír su carácter: brillante (mayor) u oscuro (menor)."
+      ],
+      "instruction": "Cambia de paso para ver cómo se transforma la tabla. En el último paso, haz clic sobre cada acorde para escucharlo.",
       "steps": {
         "s1_label": "Paso 1 — Pensar cada nota como tríada (solo letras):",
         "s2_label": "Paso 2 — Actualizar las tríadas con la armadura de la tonalidad (F# C# G#):",
@@ -389,6 +519,7 @@
         "degrees": "Grados",
         "play": "Tocar"
       },
+      "instruction": "Toca cada progresión sobre la tónica activa.",
       "tip": "Consejo: intente experimentar y crear progresiones más largas, siempre teniendo en cuenta la resolución hacia un acorde estable.",
       "play_button": "Tocar",
       "stop_button": "Detener",
@@ -401,6 +532,18 @@
       "title": "Relativas menores",
       "intro_p1": "Toda tonalidad mayor tiene una tonalidad menor relativa que comparte exactamente la misma armadura. La relativa menor se construye sobre el vi grado de la mayor.",
       "intro_p2": "La escala menor natural usa las mismas 7 notas, pero comienza en la 6ta. Los acordes son los mismos en ambos casos, solo cambia el orden:",
+      "intro_prose": [
+        [
+          { "type": "text", "value": "Toda tonalidad mayor tiene una tonalidad menor relativa que comparte exactamente la misma armadura. La relativa menor se construye sobre el vi grado de la mayor." }
+        ],
+        [
+          { "type": "text", "value": "La escala menor natural usa las mismas 7 notas, pero comienza en la 6ta. Los acordes son los mismos en ambos casos, solo cambia el orden: en " },
+          { "type": "note", "value": "C" },
+          { "type": "text", "value": " mayor → C Dm Em F G Am B°; en " },
+          { "type": "note", "value": "A" },
+          { "type": "text", "value": " menor → Am B° C Dm Em F G." }
+        ]
+      ],
       "scale_example_major": "Do mayor:",
       "scale_example_minor": "La menor:",
       "process_title": "Proceso rápido:",

@@ -1,11 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { EXCEPCION_F_COMPLETA, EXCEPCION_F_COMPLETA_DE } from '../data/literalContent';
 import styles from './FExceptionBanner.module.css';
 
 export default function FExceptionBanner() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const isDe = i18n.language === 'de';
-  const text = isDe ? EXCEPCION_F_COMPLETA_DE : EXCEPCION_F_COMPLETA;
+  const text = t('t2.s43.f_exception');
   const title = isDe ? 'Ausnahme' : 'Excepción';
 
   return (

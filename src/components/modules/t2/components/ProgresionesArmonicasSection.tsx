@@ -3,18 +3,13 @@ import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
 import ProgresionesArmonicas from '../../../primitives/ProgresionesArmonicas/ProgresionesArmonicas';
 import { useUIStore } from '../../../../stores/useUIStore';
-import {
-  PROGRESIONES_PRIMITIVA_INSTRUCCION,
-  PROGRESIONES_PRIMITIVA_INSTRUCCION_DE,
-} from '../data/literalContent';
 import styles from './ProgresionesArmonicasSection.module.css';
 
 export default function ProgresionesArmonicasSection() {
-  const { t, i18n } = useTranslation();
-  const isDe = i18n.language === 'de';
+  const { t } = useTranslation();
   const tonalidad = useUIStore((s) => s.tonic);
   const procedure = t('t2.s48.procedure', { returnObjects: true }) as string[];
-  const primitivaInstruccion = isDe ? PROGRESIONES_PRIMITIVA_INSTRUCCION_DE : PROGRESIONES_PRIMITIVA_INSTRUCCION;
+  const primitivaInstruccion = t('t2.s48.instruction');
 
   return (
     <section id="s-t2-progresiones" className={styles.section}>

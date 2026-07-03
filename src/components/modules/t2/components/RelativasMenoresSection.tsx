@@ -9,10 +9,7 @@ import { ALL } from '../../../../data/notes';
 import { tonicChromatic } from '../../../../utils/noteCalculations';
 import type { NoteSpelling, ChromaticNote } from '../../../../types/music';
 import { TONALIDADES } from '../data/tonalidades';
-import {
-  RELATIVAS_INTRO,
-  RELATIVAS_INTRO_DE,
-} from '../data/literalContent';
+import type { ProseSegment } from '../../../../types/prose';
 import styles from './RelativasMenoresSection.module.css';
 
 // Reunión 24/5/26: tabla con TODAS las tonalidades (estilo §2.5).
@@ -58,11 +55,10 @@ function renderNote(s: string) {
 }
 
 export default function RelativasMenoresSection() {
-  const { t, i18n } = useTranslation();
-  const locale = i18n.language;
+  const { t } = useTranslation();
   const tonic = useUIStore((s) => s.tonic);
 
-  const intro = locale === 'de' ? RELATIVAS_INTRO_DE : RELATIVAS_INTRO;
+  const intro = t('t2.s49.intro_prose', { returnObjects: true }) as ProseSegment[];
   const process = t('t2.s49.process', { returnObjects: true }) as string[];
 
   return (

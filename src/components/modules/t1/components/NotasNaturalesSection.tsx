@@ -3,11 +3,11 @@ import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
 import NoteToken from '../../../shared/NoteToken/NoteToken';
 import type { NoteSpelling } from '../../../../types/music';
-import {
-  NATURALES_TABLA_ES,
-  NATURALES_TABLA_EN,
-} from '../data/literalContent';
 import styles from './NotasNaturalesSection.module.css';
+
+// Datos musicales (§1.1): pares solfeo ↔ cifrado anglosajón, no UI copy.
+const NATURALES_TABLA_ES = ['Do', 'Re', 'Mi', 'Fa', 'Sol', 'La', 'Si'] as const;
+const NATURALES_TABLA_EN = ['C', 'D', 'E', 'F', 'G', 'A', 'B'] as const;
 
 // Reunión 24/5/26: tabla → círculo de 7 notas (refuerza la circularidad de la escala).
 const CX = 140, CY = 140, R = 100;

@@ -3,30 +3,24 @@ import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
 import Prose from '../../../shared/Prose/Prose';
 import CirculoDeQuintas from '../../../primitives/CirculoDeQuintas/CirculoDeQuintas';
-import {
-  REGLA_BULLETS,
-  REGLA_BULLETS_DE,
-  REGLA_EXCEPCION_B,
-  REGLA_EXCEPCION_B_DE,
-  REGLA_EXCEPCION_BB,
-  REGLA_EXCEPCION_BB_DE,
-  REGLA_PRIMITIVA_TITULO,
-  REGLA_PRIMITIVA_INSTRUCCION,
-  REGLA_PRIMITIVA_INSTRUCCION_DE,
-  REGLA_NOTA_BEMOLES,
-  REGLA_NOTA_BEMOLES_DE,
-} from '../data/literalContent';
+import type { ProseSegment } from '../../../../types/prose';
 import styles from './ReglaQuintaSection.module.css';
+
+interface ReglaBullet {
+  regla: string;
+  desc: string;
+  ejemplo: ProseSegment;
+}
 
 export default function ReglaQuintaSection() {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
 
-  const bullets = locale === 'de' ? REGLA_BULLETS_DE : REGLA_BULLETS;
-  const excepcionB = locale === 'de' ? REGLA_EXCEPCION_B_DE : REGLA_EXCEPCION_B;
-  const excepcionBb = locale === 'de' ? REGLA_EXCEPCION_BB_DE : REGLA_EXCEPCION_BB;
-  const primitiva = locale === 'de' ? REGLA_PRIMITIVA_INSTRUCCION_DE : REGLA_PRIMITIVA_INSTRUCCION;
-  const notaBemoles = locale === 'de' ? REGLA_NOTA_BEMOLES_DE : REGLA_NOTA_BEMOLES;
+  const bullets = t('t1.s08.bullets', { returnObjects: true }) as ReglaBullet[];
+  const excepcionB = t('t1.s08.exception_b', { returnObjects: true }) as ProseSegment;
+  const excepcionBb = t('t1.s08.exception_bb', { returnObjects: true }) as ProseSegment;
+  const primitiva = t('t1.s08.fifths_instruction', { returnObjects: true }) as ProseSegment;
+  const notaBemoles = t('t1.s08.flats_note', { returnObjects: true }) as ProseSegment;
 
   return (
     <section id="s-quinta" className={styles.section}>
@@ -51,7 +45,7 @@ export default function ReglaQuintaSection() {
         <li><Prose segment={excepcionBb} /></li>
       </ul>
 
-      <h3 className={styles.subheading}>{locale === 'de' ? 'Die 12 reinen Quinten' : REGLA_PRIMITIVA_TITULO}</h3>
+      <h3 className={styles.subheading}>{t('t1.s08.fifths_title')}</h3>
       <p className={styles.text}><Prose segment={primitiva} /></p>
       <CirculoDeQuintas />
 

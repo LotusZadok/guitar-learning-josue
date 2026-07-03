@@ -3,21 +3,17 @@ import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
 import GradosArmonicos from '../../../primitives/GradosArmonicos/GradosArmonicos';
 import { useUIStore } from '../../../../stores/useUIStore';
-import {
-  GRADOS_PROCEDIMIENTO_PASOS,
-  GRADOS_PROCEDIMIENTO_PASOS_DE,
-  GRADOS_PRIMITIVA_INSTRUCCION,
-  GRADOS_PRIMITIVA_INSTRUCCION_DE,
-  GRADOS_NOMBRE_CARACTER,
-} from '../data/literalContent';
 import styles from './GradosArmonicosSection.module.css';
 
+// Datos musicales (§2.6): los números romanos de los 7 grados, no UI copy.
+// Nombre y carácter de cada grado vienen de i18n (degree_names/degree_characters).
+const ROMANS = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'] as const;
+
 export default function GradosArmonicosSection() {
-  const { t, i18n } = useTranslation();
-  const isDe = i18n.language === 'de';
+  const { t } = useTranslation();
   const tonalidad = useUIStore((s) => s.tonic);
-  const pasos = isDe ? GRADOS_PROCEDIMIENTO_PASOS_DE : GRADOS_PROCEDIMIENTO_PASOS;
-  const primitivaInstruccion = isDe ? GRADOS_PRIMITIVA_INSTRUCCION_DE : GRADOS_PRIMITIVA_INSTRUCCION;
+  const pasos = t('t2.s47.procedure', { returnObjects: true }) as string[];
+  const primitivaInstruccion = t('t2.s47.instruction');
 
   return (
     <section id="s-t2-grados" className={styles.section}>
@@ -51,8 +47,8 @@ export default function GradosArmonicosSection() {
             </tr>
           </thead>
           <tbody>
-            {GRADOS_NOMBRE_CARACTER.map((g, idx) => {
-              const degreeKey = g.roman.replace('°', '');
+            {ROMANS.map((roman, idx) => {
+              const degreeKey = roman.replace('°', '');
               // Reunión 24/5/26: formato armónico (I/vi = reposo, ii/iii = medio,
               // IV = medio-tenso, V/vii = tenso).
               const harmonic =
@@ -61,8 +57,8 @@ export default function GradosArmonicosSection() {
                 idx === 3              ? 'mediumTense' :
                                          'tense';
               return (
-                <tr key={g.roman} data-harmonic={harmonic}>
-                  <td className={styles.romanCell}>{g.roman}</td>
+                <tr key={roman} data-harmonic={harmonic}>
+                  <td className={styles.romanCell}>{roman}</td>
                   <td>{t(`t2.s47.degree_names.${degreeKey}` as never)}</td>
                   <td className={styles.caracterCell}>{t(`t2.s47.degree_characters.${degreeKey}` as never)}</td>
                 </tr>

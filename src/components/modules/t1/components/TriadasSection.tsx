@@ -7,13 +7,12 @@ import Prose from '../../../shared/Prose/Prose';
 import TriadsSection from '../../../primitives/Triads/TriadsSection';
 import TriadaProceso from '../../../primitives/TriadaProceso/TriadaProceso';
 import type { NoteSpelling } from '../../../../types/music';
-import {
-  TRIADAS_TABLA_HEAD,
-  TRIADAS_TABLA_ROW,
-  TRIADAS_MAESTRA,
-  TRIADAS_MAESTRA_DE,
-} from '../data/literalContent';
+import type { ProseSegment } from '../../../../types/prose';
 import styles from './TriadasSection.module.css';
+
+// Datos musicales (§1.6): las 7 tríadas de las notas naturales, no UI copy.
+const TRIADAS_TABLA_HEAD = ['F', 'G', 'A', 'B', 'C', 'D', 'E'] as const;
+const TRIADAS_TABLA_ROW = ['F A C', 'G B D', 'A C E', 'B D F', 'C E G', 'D F A', 'E G B'] as const;
 
 function renderTriadCell(cell: string) {
   const parts = cell.split(' ') as NoteSpelling[];
@@ -29,6 +28,7 @@ export default function TriadasSection() {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
   const procedure = t('t1.s02.procedure', { returnObjects: true }) as string[];
+  const maestra = t('t1.s02.master_triad', { returnObjects: true }) as ProseSegment;
 
   return (
     <section id="s-triadas" className={styles.section}>
@@ -75,7 +75,7 @@ export default function TriadasSection() {
         </table>
       </div>
 
-      <p className={styles.maestra}><Prose segment={locale === 'de' ? TRIADAS_MAESTRA_DE : TRIADAS_MAESTRA} /></p>
+      <p className={styles.maestra}><Prose segment={maestra} /></p>
 
       <RuleNote>{t('t1.s02.tip')}</RuleNote>
 

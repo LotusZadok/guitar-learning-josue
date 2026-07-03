@@ -8,10 +8,6 @@ import { useUIStore } from '../../../../stores/useUIStore';
 import { majorScaleSpelled, spelledNameES, tonicChromatic } from '../../../../utils/noteCalculations';
 import type { NoteSpelling, Tonic } from '../../../../types/music';
 import type { ProseSegment } from '../../../../types/prose';
-import {
-  TENSION_PRIMITIVA_INSTRUCCION,
-  TENSION_PRIMITIVA_INSTRUCCION_DE,
-} from '../data/literalContent';
 
 const ASCII = (s: string) => s.replace('♯', '#').replace('♭', 'b') as NoteSpelling;
 
@@ -105,7 +101,7 @@ export default function TensionResolucionSection() {
       <h3 className={styles.subheading}>{locale === 'de'
         ? `Karte der Auflösungen in ${NOTE_DE_NAME[tonicChromatic(tonic)] ?? tonic} Dur`
         : `Mapa de resoluciones en ${spelledNameES(tonic)} mayor`}</h3>
-      <p className={styles.text}>{locale === 'de' ? TENSION_PRIMITIVA_INSTRUCCION_DE : TENSION_PRIMITIVA_INSTRUCCION}</p>
+      <p className={styles.text}>{t('t1.s05.map_instruction')}</p>
       <TensionResolucion />
 
       <RuleNote>{t('t1.s05.tip')}</RuleNote>

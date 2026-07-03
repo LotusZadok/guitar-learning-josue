@@ -181,6 +181,17 @@
       "table_title": "Die 7 Dreiklänge der natürlichen Töne:",
       "master_triad_label": "Meisterdreiklang",
       "master_triad_body": "Wenn man das Muster ohne Unterbrechung weiterführt, bis man wieder beim Ausgangston ankommt, erhält man den Meisterdreiklang:",
+      "master_triad": [
+        { "type": "text", "value": "Wenn wir das Muster ohne Pause weiterführen, bis wir wieder beim Ausgangston ankommen, erhalten wir den Meisterdreiklang: " },
+        { "type": "note", "value": "F" }, { "type": "text", "value": " " },
+        { "type": "note", "value": "A" }, { "type": "text", "value": " " },
+        { "type": "note", "value": "C" }, { "type": "text", "value": " " },
+        { "type": "note", "value": "E" }, { "type": "text", "value": " " },
+        { "type": "note", "value": "G" }, { "type": "text", "value": " " },
+        { "type": "note", "value": "B" }, { "type": "text", "value": " " },
+        { "type": "note", "value": "D" }, { "type": "text", "value": " " },
+        { "type": "note", "value": "F" }, { "type": "text", "value": "." }
+      ],
       "tip": "Methodentipp: die 7 Dreiklänge auswendig lernen. Sie sind die Struktur jedes Akkords und das Fundament der Harmonik. Außerdem sind sie ein Werkzeug zum Lesen von Partituren."
     },
 
@@ -191,7 +202,21 @@
       "sharp_def": "Kreuz (#) — wenn ein natürlicher Ton um einen Halbton (eine Bund) erhöht wird.",
       "flat_def": "♭ (b) — wenn ein natürlicher Ton um einen Halbton (eine Bund) erniedrigt wird.",
       "body": "Addiert man die 7 natürlichen und die 5 alterierten Töne, erhält man die 12 Töne des chromatischen Kreises (CK):",
-      "rule": "Wichtig: zwischen B–C und zwischen E–F gibt es keinen alterierten Ton (B# und E# existieren als Alterierungen im chromatischen Kreis in diesem Kontext nicht — sie entsprechen denselben Tönen wie C bzw. F).",
+      "rule": [
+        { "type": "text", "value": "Wichtig: zwischen " },
+        { "type": "note", "value": "B" },
+        { "type": "text", "value": "–" },
+        { "type": "note", "value": "C" },
+        { "type": "text", "value": " und zwischen " },
+        { "type": "note", "value": "E" },
+        { "type": "text", "value": "–" },
+        { "type": "note", "value": "F" },
+        { "type": "text", "value": " gibt es keinen alterierten Ton (B# und E# existieren als Alterierungen im chromatischen Kreis in diesem Kontext nicht — sie entsprechen denselben Tönen wie " },
+        { "type": "note", "value": "C" },
+        { "type": "text", "value": " bzw. " },
+        { "type": "note", "value": "F" },
+        { "type": "text", "value": ")." }
+      ],
       "tip": "Die 12 Töne des chromatischen Kreises bilden das vollständige Tonsystem."
     },
 
@@ -214,6 +239,16 @@
       ],
       "result": "Ergebnis für G: G A♭ A B♭ B C C#/D♭ D E♭ E F F# G.",
       "octave_rule": "Die reine Oktave (8r) ist derselbe Ton eine Oktave höher oder tiefer. Die 8r von G ist G.",
+      "step_letter_rule": [
+        { "type": "text", "value": "Wenn zwei alterierte Töne vorhanden sind, nach dem Buchstaben aus Schritt 1 wählen. Steht in Schritt 1 \"" },
+        { "type": "note", "value": "B" },
+        { "type": "text", "value": "\", wählt man " },
+        { "type": "note", "value": "Bb" },
+        { "type": "text", "value": " statt " },
+        { "type": "note", "value": "A#" },
+        { "type": "text", "value": "." }
+      ],
+      "step_update": "Die Tonleiter mit den richtigen Intervallen aktualisieren.",
       "tip": "Intervalle sind das Maß der Musik: jede melodische und harmonische Beziehung lässt sich in Intervallen beschreiben."
     },
 
@@ -233,6 +268,7 @@
         "6. Stufe → löst zur 5. Stufe auf.",
         "7. Stufe → löst zur Tonika auf. Das ist die wichtigste Auflösung der Tonalmusik — nur 1 Halbton entfernt, daher die stärkste Spannung. Die 7. Stufe heißt „Leitton\"."
       ],
+      "map_instruction": "Der Strip zeigt die 7 Stufen plus die Oktave. Die Pfeile verbinden jeden spannenden oder mittleren Ton mit seiner Auflösung. Klicke auf einen Pfeil, um die Auflösung zu hören (Spannung → Ruhe).",
       "tip": "Methodentipp: Spannungstöne etwas lauter spielen als stabile. Das nennt man Auflösung."
     },
 
@@ -247,6 +283,8 @@
         "note": "Ton",
         "distance": "Abstand (Halbton)"
       },
+      "viz_title": "Dur-Tonleiter Visualisierer",
+      "viz_instruction": "Töne in Grün sind stabil. Töne in Orange sind mittel. Töne in Rot sind spannend.",
       "tip": "Das Muster G-G-H-G-G-G-H ist das „DNS\" jeder Durtonleiter. Es wiederholt sich identisch in allen 12 Tonarten."
     },
 
@@ -282,6 +320,73 @@
       "rule_flats": "Bei Tonarten mit Bs (♭): die Vorzeichen werden von rechts nach links in der Reihenfolge B E A D G C F hinzugefügt.",
       "exception_label": "Ausnahme:",
       "exception": "F-Dur hat 1 ♭ (B♭) — es folgt nicht dem Muster der Kreuztonarten.",
+      "bullets": [
+        {
+          "regla": "T natürlich",
+          "desc": "die r. Quinte ist ebenfalls natürlich.",
+          "ejemplo": [
+            { "type": "note", "value": "D" },
+            { "type": "text", "value": " → " },
+            { "type": "note", "value": "A" },
+            { "type": "text", "value": "." }
+          ]
+        },
+        {
+          "regla": "T mit #",
+          "desc": "die r. Quinte hat ebenfalls #.",
+          "ejemplo": [
+            { "type": "note", "value": "F#" },
+            { "type": "text", "value": " → " },
+            { "type": "note", "value": "C#" },
+            { "type": "text", "value": "." }
+          ]
+        },
+        {
+          "regla": "T mit b",
+          "desc": "die r. Quinte hat ebenfalls b.",
+          "ejemplo": [
+            { "type": "note", "value": "Eb" },
+            { "type": "text", "value": " → " },
+            { "type": "note", "value": "Bb" },
+            { "type": "text", "value": "." }
+          ]
+        }
+      ],
+      "exception_b": [
+        { "type": "text", "value": "Wenn " },
+        { "type": "note", "value": "B" },
+        { "type": "text", "value": " die Tonika ist, ist ihre r. Quinte " },
+        { "type": "note", "value": "F#" },
+        { "type": "text", "value": " (nicht " },
+        { "type": "note", "value": "F" },
+        { "type": "text", "value": ")." }
+      ],
+      "exception_bb": [
+        { "type": "text", "value": "Wenn " },
+        { "type": "note", "value": "Bb" },
+        { "type": "text", "value": " die Tonika ist, ist ihre r. Quinte " },
+        { "type": "note", "value": "F" },
+        { "type": "text", "value": " (nicht F♭)." }
+      ],
+      "fifths_title": "Die 12 reinen Quinten",
+      "fifths_instruction": [
+        { "type": "text", "value": "Jede Zeile spielt ihre Tonika und ihre r. Quinte nacheinander ab. Die Ausnahme von " },
+        { "type": "note", "value": "B" },
+        { "type": "text", "value": " → " },
+        { "type": "note", "value": "F#" },
+        { "type": "text", "value": " ist eingerahmt, um sie vom Muster abzuheben." }
+      ],
+      "flats_note": [
+        { "type": "text", "value": "Wenn du die alterierten Töne mit Bs benennst, entsteht eine zweite Ausnahme: " },
+        { "type": "note", "value": "Bb" },
+        { "type": "text", "value": " → " },
+        { "type": "note", "value": "F" },
+        { "type": "text", "value": " (nicht F♭). Im System mit Kreuzen erscheint dieselbe r. Quinte als " },
+        { "type": "note", "value": "A#" },
+        { "type": "text", "value": " → E# (enharmonisch zu " },
+        { "type": "note", "value": "F" },
+        { "type": "text", "value": ")." }
+      ],
       "tip": "Methodentipp: die Sequenz F C G D A E B und rückwärts B E A D G C F auswendig lernen. Sie ist das Werkzeug zum Ableiten aller Vorzeichen aller 14 Durtonarten."
     }
   },
@@ -291,7 +396,13 @@
 
     "s41": {
       "label": "2.1 · Tonarten",
-      "title": "Tonarten und Vorzeichen"
+      "title": "Tonarten und Vorzeichen",
+      "intro_languages": "Um dieses Thema zu verstehen, verwenden wir eine Analogie zu den verschiedenen Sprachen der Welt. Es gibt zahlreiche und vielfältige Sprachen, einige einander ähnlich, zum Beispiel: Spanisch, Portugiesisch, Italienisch — diese drei sind zwar nicht dieselbe Sprache, teilen aber Phonetik, Wortschatz und sogar Grammatik, dank derselben romanischen Wurzel. Dasselbe Beispiel gilt für Deutsch, Niederländisch und Englisch, die die germanische Wurzel teilen, usw.",
+      "intro_variety": "All das lässt uns verstehen, dass es eine große Vielfalt an Sprachen gibt — einige sehr unterschiedlich, andere sehr ähnlich, bei denen sich nur die Details unterscheiden. Dieselbe Idee wenden wir auf die TONARTEN an.",
+      "def_tonalities": "Die Tonarten/Sprachen sind Tonfamilien, wobei einige Tonarten anderen ähnlich sind, andere wiederum sich stark voneinander unterscheiden.",
+      "def_key_signature": "Jede Familie/Tonart enthält 7 Töne (Tonleiter); diese Töne und ihre Varianten (Beispiel D♭-D-D#) nennen wir VORZEICHEN — anders gesagt, die Vorzeichen sind die Anzahl der # oder ♭, die eine Tonart haben kann; manchmal finden wir nur ein #, oder bis zu 5 #, ebenso bei den B-Vorzeichen.",
+      "rule_no_mix": "Es ist anzumerken, dass # und ♭ nicht kombiniert werden: hat die Tonart ♭, finden wir keine #, und umgekehrt.",
+      "conclusion": "Wir können schlussfolgern: die Vorzeichen beschreiben die Tonart, und die Tonart hat spezifische Vorzeichen — diese zwei Begriffe bedingen einander und verweisen aufeinander."
     },
 
     "s42": {
@@ -301,12 +412,25 @@
 
     "s43": {
       "label": "2.4 · Prozess der Bs",
-      "title": "Prozess der Bs"
+      "title": "Prozess der Bs",
+      "f_exception": "Es gibt eine Ausnahme zu diesem Verfahren, bei der die zuvor gesehenen Schritte nicht gelten — daher werden wir diese Ausnahme auswendig lernen. Für die Tonart F-Dur gibt es kein \"vorletztes B-Vorzeichen\", daher gelten die vorherigen Schritte nicht; diese Tonart hat nur das erste ♭ des Werkzeugs, nämlich B♭. Im Kontext der Popularmusik/des Rock arbeitet man üblicherweise nur mit der linken Spalte (ausgehend von der Tonart), da das die Information ist, die uns am ehesten zur Verfügung steht; die rechte Spalte wird vor allem in der akademischen Musik (Notenschrift) verwendet, wo wir am Anfang des Stücks im Notensystem die jeweiligen Vorzeichen finden — wir müssen dann die Tonart entschlüsseln, in der wir spielen. Methodentipp: diese Schritte mit allen 12 existierenden Tonika ausprobieren. Wir könnten schlussfolgern, dass die Vorzeichen von F-Dur nur B♭ sind und die Tonleiter F G A B♭ C D E ist."
+    },
+
+    "s44": {
+      "label": "2.2 · Reihenfolge der Vorzeichen",
+      "intro": "In diesem Kasten finden wir die spezifische, kumulative und multitonale Reihenfolge, mit der wir alle Vorzeichen aufbauen können.",
+      "sharps_explanation": "Gehen wir von links nach rechts, fügen wir jedem Ton ein # hinzu. Anders gesagt: alle Tonarten mit # nutzen dieses Werkzeug.",
+      "flats_explanation": "Gehen wir von rechts nach links, fügen wir jedem Ton ein ♭ hinzu. Anders gesagt: alle Tonarten mit ♭ nutzen dieses Werkzeug.",
+      "prop_specific": "Spezifisch, weil wir immer derselben Reihenfolge folgen. Beispiel: F# C# G# — Beispiel: B♭ E♭ A♭ D♭",
+      "prop_cumulative": "Kumulativ, weil wir eine weitere Alterierung hinzufügen und die vorherige beibehalten. Beispiel: ein Vorzeichensatz mit 4# wird immer F# C# G# D# enthalten, da das die ersten 4# des Werkzeugs sind — und ebenso für Tonarten mit ♭.",
+      "prop_multitonal": "Multitonal, weil dieses Werkzeug auf alle existierenden Tonarten anwendbar ist.",
+      "tip": "Methodentipp: in beide Richtungen auswendig lernen, da wir dieses Werkzeug ständig verwenden."
     },
 
     "s45": {
       "label": "2.5 · Meistertabelle",
       "title": "Meistertabelle der 14 Durtonarten",
+      "intro": "Zur Überprüfung des Verfahrens hier eine Tabelle mit allen existierenden Dur-Tonarten.",
       "table_headers": {
         "count": "Anzahl",
         "key_signature": "Vorzeichen",
@@ -329,6 +453,12 @@
       "symmetry": "Symmetrie: die Musik funktioniert mit Formeln — 12 Halbtöne, 12 Intervalle, Tonleitern mit 7 Tönen, Dreiklänge mit 3 Tönen. Die Prozesse sind in allen Tonarten symmetrisch. Das Verfahren auswendig lernen, nicht das Ergebnis.",
       "fractality": "Fraktalität: was im Kleinen gilt, gilt im Großen. Hat die Tonleiter 7 Töne, hat die Harmonik 7 Akkorde (einen pro Ton). Jeder Ton wird zu einem Akkord, indem man den Dreiklang darüber aufbaut.",
       "procedure_title": "Verfahren zum Finden der harmonischen Stufen in A-Dur:",
+      "procedure": [
+        "Jeden Ton der Tonleiter als Dreiklang denken. Vorerst schreiben wir nur die Buchstaben (ohne Vorzeichen).",
+        "Die Dreiklänge mit den Vorzeichen der Tonart aktualisieren.",
+        "Jeden Akkord spielen und seinen Charakter hören: hell (Dur) oder dunkel (Moll)."
+      ],
+      "instruction": "Wechsle den Schritt, um zu sehen, wie sich die Tabelle wandelt. Im letzten Schritt klicke auf jeden Akkord, um ihn zu hören.",
       "steps": {
         "s1_label": "Schritt 1 — Jeden Ton als Dreiklang denken (nur Buchstaben):",
         "s2_label": "Schritt 2 — Dreiklänge mit den Vorzeichen der Tonleiter aktualisieren (F# C# G#):",
@@ -391,6 +521,7 @@
         "degrees": "Stufen",
         "play": "Spielen"
       },
+      "instruction": "Spiele jede Progression über der aktiven Tonika.",
       "tip": "Methodentipp: mit längeren Progressionen experimentieren und dabei immer die Auflösung zu einem stabilen Akkord im Blick behalten.",
       "play_button": "Spielen",
       "stop_button": "Stopp",
@@ -403,6 +534,18 @@
       "title": "Moll-Paralleltonarten",
       "intro_p1": "Jede Durtonart hat eine Moll-Paralleltonart, die genau dieselben Vorzeichen teilt. Die Paralleltonart wird auf der 6. Stufe der Durtonart aufgebaut.",
       "intro_p2": "Die natürliche Molltonleiter wird mit denselben 7 Tönen der Durtonleiter gebildet, beginnt aber auf dem 6. Ton. Die sieben Akkorde sind in beiden Fällen dieselben — nur die Reihenfolge ändert sich:",
+      "intro_prose": [
+        [
+          { "type": "text", "value": "Jede Durtonart hat eine Moll-Paralleltonart, die genau dieselben Vorzeichen teilt. Die Paralleltonart wird auf der 6. Stufe der Durtonart aufgebaut." }
+        ],
+        [
+          { "type": "text", "value": "Die natürliche Molltonleiter wird mit denselben 7 Tönen der Durtonleiter gebildet, beginnt aber auf dem 6. Ton. Die sieben Akkorde sind in beiden Fällen dieselben — nur die Reihenfolge ändert sich: in " },
+          { "type": "note", "value": "C" },
+          { "type": "text", "value": " Dur → C Dm Em F G Am B°; in " },
+          { "type": "note", "value": "A" },
+          { "type": "text", "value": " Moll → Am B° C Dm Em F G." }
+        ]
+      ],
       "scale_example_major": "C-Dur:",
       "scale_example_minor": "A-Moll:",
       "process_title": "Schnellverfahren:",

@@ -1,25 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
-import {
-  HERRAMIENTA_INTRO,
-  HERRAMIENTA_INTRO_DE,
-  HERRAMIENTA_SOSTENIDOS,
-  HERRAMIENTA_BEMOLES,
-  HERRAMIENTA_SOSTENIDOS_EXPLICACION,
-  HERRAMIENTA_SOSTENIDOS_EXPLICACION_DE,
-  HERRAMIENTA_BEMOLES_EXPLICACION,
-  HERRAMIENTA_BEMOLES_EXPLICACION_DE,
-  PROPIEDAD_ESPECIFICO,
-  PROPIEDAD_ESPECIFICO_DE,
-  PROPIEDAD_ACUMULATIVO,
-  PROPIEDAD_ACUMULATIVO_DE,
-  PROPIEDAD_MULTITONAL,
-  PROPIEDAD_MULTITONAL_DE,
-  CONSEJO_MEMORIZAR,
-  CONSEJO_MEMORIZAR_DE,
-} from '../data/literalContent';
 import styles from './HerramientaSection.module.css';
+
+// Datos musicales (§2.2): la herramienta F C G D A E B con sus alteraciones,
+// no UI copy.
+const HERRAMIENTA_SOSTENIDOS = ['F#', 'C#', 'G#', 'D#', 'A#', 'E#', 'B#'] as const;
+const HERRAMIENTA_BEMOLES = ['Bb', 'Eb', 'Ab', 'Db', 'Gb', 'Cb', 'Fb'] as const;
 
 function toFlat(s: string): string {
   return s.replace(/([A-G])b/g, '$1♭');
@@ -27,7 +14,7 @@ function toFlat(s: string): string {
 
 // Reunión 9/6/26: los bloques "Ejemplo: ..." bajan a una línea propia, separada
 // de la idea. El split es solo de render; el texto literal del método queda
-// intacto en literalContent (el separador " — " entre ejemplos lo absorbe el
+// intacto en los locales i18n (el separador " — " entre ejemplos lo absorbe el
 // salto de línea, igual que hacía el <br/> anterior).
 function splitEjemplos(text: string): { idea: string; ejemplos: string[] } {
   const parts = text.split(/(?=Ejemplo:|Beispiel:)/g);
@@ -38,18 +25,18 @@ function splitEjemplos(text: string): { idea: string; ejemplos: string[] } {
 }
 
 export default function HerramientaSection() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const isDe = i18n.language === 'de';
 
-  const intro = isDe ? HERRAMIENTA_INTRO_DE : HERRAMIENTA_INTRO;
-  const sharpsExp = isDe ? HERRAMIENTA_SOSTENIDOS_EXPLICACION_DE : HERRAMIENTA_SOSTENIDOS_EXPLICACION;
-  const flatsExp = isDe ? HERRAMIENTA_BEMOLES_EXPLICACION_DE : HERRAMIENTA_BEMOLES_EXPLICACION;
-  const propEspecifico = isDe ? PROPIEDAD_ESPECIFICO_DE : PROPIEDAD_ESPECIFICO;
-  const propAcumulativo = isDe ? PROPIEDAD_ACUMULATIVO_DE : PROPIEDAD_ACUMULATIVO;
-  const propMultitonal = isDe ? PROPIEDAD_MULTITONAL_DE : PROPIEDAD_MULTITONAL;
-  const consejo = isDe ? CONSEJO_MEMORIZAR_DE : CONSEJO_MEMORIZAR;
+  const intro = t('t2.s44.intro');
+  const sharpsExp = t('t2.s44.sharps_explanation');
+  const flatsExp = t('t2.s44.flats_explanation');
+  const propEspecifico = t('t2.s44.prop_specific');
+  const propAcumulativo = t('t2.s44.prop_cumulative');
+  const propMultitonal = t('t2.s44.prop_multitonal');
+  const consejo = t('t2.s44.tip');
 
-  const sectionLabel = isDe ? '2.2 · Reihenfolge der Vorzeichen' : '2.2 · Orden de las alteraciones';
+  const sectionLabel = t('t2.s44.label');
   const titleEspecifico = isDe ? 'Spezifisch' : 'Específico';
   const titleAcumulativo = isDe ? 'Kumulativ' : 'Acumulativo';
   const titleMultitonal = 'Multitonal';

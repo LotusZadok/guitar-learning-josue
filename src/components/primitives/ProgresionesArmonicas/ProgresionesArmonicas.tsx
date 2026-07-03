@@ -5,9 +5,23 @@ import { ALL } from '../../../data/notes';
 import { majorScaleSpelled, tonicChromatic } from '../../../utils/noteCalculations';
 import type { DiatonicRole } from '../../shared/NoteToken/NoteToken';
 import type { ChromaticNote, DiatonicDegree, Tonic } from '../../../types/music';
-import { PROGRESIONES_DATA } from '../../modules/t2/data/literalContent';
 import PlaybackButton from '../../shared/PlaybackButton/PlaybackButton';
 import styles from './ProgresionesArmonicas.module.css';
+
+// Datos musicales (§2.7): las progresiones del método como secuencias de
+// grados, no UI copy.
+const PROGRESIONES_DATA: ReadonlyArray<{
+  id: string;
+  label: string;
+  grados: ReadonlyArray<DiatonicDegree>;
+}> = [
+  { id: 'p1',  label: '1',  grados: ['I', 'V', 'I'] },
+  { id: 'p2a', label: '2a', grados: ['IV', 'I'] },
+  { id: 'p2b', label: '2b', grados: ['IV', 'V', 'I'] },
+  { id: 'p3',  label: '3',  grados: ['ii', 'V', 'I'] },
+  { id: 'p4',  label: '4',  grados: ['I', 'V', 'vi', 'IV'] },
+  { id: 'p5',  label: '5',  grados: ['I', 'iii', 'vi', 'IV'] },
+];
 
 // Reunión 24/5/26: formato armónico para los chips de grado y acorde.
 const HARMONIC_ROLE: Record<DiatonicDegree, DiatonicRole> = {

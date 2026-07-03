@@ -9,12 +9,11 @@ import { majorScaleSpelled } from '../../../../utils/noteCalculations';
 import type { NoteSpelling } from '../../../../types/music';
 import type { ProseSegment } from '../../../../types/prose';
 // Cast tonicAscii (string) to NoteSpelling at the prose boundary.
-import {
-  ESCALA_TABLA_HEAD,
-  ESCALA_PRIMITIVA_TITULO,
-  ESCALA_PRIMITIVA_INSTRUCCION,
-} from '../data/literalContent';
 import styles from './EscalaMayorSection.module.css';
+
+// Datos musicales (§1.4): calidades de intervalo por grado (reunión 24/5/26),
+// cifrados universales; el encabezado "Grado" viene de i18n.
+const ESCALA_HEAD_CODES = ['T', '2M', '3M', '4J', '5J', '6M', '7M', '8J'] as const;
 
 const VALID_NOTE_SPELLINGS = new Set([
   'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B',
@@ -69,7 +68,8 @@ export default function EscalaMayorSection() {
         <table className={styles.table}>
           <thead>
             <tr>
-              {ESCALA_TABLA_HEAD.map((h, i) => (
+              <th scope="col">{t('t1.s06.table_headers.degree')}</th>
+              {ESCALA_HEAD_CODES.map((h, i) => (
                 <th key={i} scope="col">{h}</th>
               ))}
             </tr>
@@ -108,10 +108,8 @@ export default function EscalaMayorSection() {
         ))}
       </div>
 
-      <h3 className={styles.subheading}>{isDe ? 'Dur-Tonleiter Visualisierer' : ESCALA_PRIMITIVA_TITULO}</h3>
-      <p className={styles.text}>{isDe
-        ? 'Töne in Grün sind stabil. Töne in Orange sind mittel. Töne in Rot sind spannend.'
-        : ESCALA_PRIMITIVA_INSTRUCCION}</p>
+      <h3 className={styles.subheading}>{t('t1.s06.viz_title')}</h3>
+      <p className={styles.text}>{t('t1.s06.viz_instruction')}</p>
       <EscalaMayor />
     </section>
   );
