@@ -31,9 +31,13 @@ export interface BuilderConfig {
   chords: BuilderChord[];
 }
 
+// El `width`/`height` deben dejar al menos ~36px de holgura entre el centro de
+// cada nodo y el borde: el anillo de "sonando" (r = R+6, stroke 3) se escala
+// 1.12 al reproducirse, y el viewBox recorta por defecto.
+
 // §1.7 · hasta la quinta (tríadas: m, °, M).
 export const BUILDER_17: BuilderConfig = {
-  width: 440,
+  width: 460,
   height: 300,
   ariaLabel: 'Árbol constructor de acordes: elegí una tercera y luego una quinta',
   tonic: { x: 46, y: 150 },
@@ -75,7 +79,7 @@ export const BUILDER_312: BuilderConfig = {
 // §3.3 · suspendidos: la tercera se reemplaza por la 2M o la 4J. T → {2, 4} → 5J.
 // La 2 (2 s.t.) está más cerca de la tónica que la 4 (5 s.t.): va más arriba.
 export const BUILDER_33: BuilderConfig = {
-  width: 440,
+  width: 460,
   height: 300,
   ariaLabel: 'Constructor de acordes suspendidos: elegí la 2ª o la 4ª y luego la quinta',
   tonic: { x: 46, y: 150 },

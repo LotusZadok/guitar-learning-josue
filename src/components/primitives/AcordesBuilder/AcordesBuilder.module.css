@@ -155,6 +155,8 @@
   font-size: 13px;
   letter-spacing: 2px;
   color: var(--amber);
+  /* Reserva el alto de una línea aunque el texto esté vacío, para que el
+     readout no salte cuando pasa de silencio a sonando. */
   min-height: 19px;
   margin: 0 0 8px;
 }
