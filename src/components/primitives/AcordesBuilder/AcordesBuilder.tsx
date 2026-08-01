@@ -25,7 +25,10 @@ interface Props {
   path?: string[];
   /** Rol del nodo que suena ahora; `PLAYING_ALL` si suena el acorde entero. */
   playingRole?: string | null;
-  /** El estudiante tocó un nodo: el dueño del walkthrough debe soltar el control. */
+  /** El estudiante tocó un nodo: el dueño del walkthrough debe soltar el control.
+   *  Si no lo suelta, el clic no se refleja visualmente: `selected` sigue leyendo
+   *  `path` mientras `internalSelected` diverge por debajo, invisible, hasta que
+   *  `path` vuelva a `undefined`. */
   onUserPick?: () => void;
 }
 
@@ -108,17 +111,17 @@ export default function AcordesBuilder({ config = BUILDER_17, path, playingRole,
   const pickNode = useCallback(
     (node: BuilderNode) => {
       const L = node.level;
-      // Parte del camino visible (controlado o interno) para que soltar el control
-      // se sienta continuo: el clic edita lo que el estudiante está viendo.
-      const base = controlled ? path! : internalSelected;
-      const next =
-        base[L - 1] === node.role
+      setInternalSelected((prev) => {
+        // Parte del camino visible (controlado o interno) para que soltar el
+        // control se sienta continuo: el clic edita lo que el estudiante ve.
+        const base = controlled ? path! : prev;
+        return base[L - 1] === node.role
           ? base.slice(0, L - 1) // re-clic deselecciona
           : [...base.slice(0, L - 1), node.role];
-      setInternalSelected(next);
+      });
       onUserPick?.();
     },
-    [controlled, path, internalSelected, onUserPick],
+    [controlled, path, onUserPick],
   );
 
   const playBlock = useCallback(() => {
