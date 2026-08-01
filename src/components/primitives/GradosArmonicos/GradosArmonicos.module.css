@@ -124,7 +124,10 @@
   transition: background 0.15s, color 0.15s;
 }
 
-.gradoCellActive:hover {
+/* Calificado con [data-harmonic] a propósito: sin el atributo, esta regla empata
+   en especificidad con `.gradoCell[data-harmonic]` de más abajo y pierde por
+   orden de fuente, dejando la celda sin feedback de hover. No simplificar. */
+.gradoCellActive[data-harmonic]:hover {
   background: rgba(245, 240, 232, 0.04);
 }
 
@@ -191,7 +194,8 @@
   transition: background 0.15s, color 0.15s;
 }
 
-.chordCellActive:hover {
+/* Mismo defecto de especificidad que `.gradoCellActive:hover` arriba. */
+.chordCellActive[data-harmonic]:hover {
   background: rgba(245, 240, 232, 0.04);
   color: var(--paper);
 }
@@ -237,6 +241,7 @@
   .revealRow,
   .step,
   .stepActive,
+  .gradoCellActive,
   .chordCellActive,
   .noteCell {
     transition: none;

@@ -124,6 +124,7 @@ export default function GradosArmonicos({ tonalidad, initialStep = 1, relativeMi
   const [playingCell, setPlayingCell] = useState<number | null>(null);
   const { playNote } = useAudioEngine();
   const lastFireRef = useRef<number>(0);
+  const clearCellRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const diatonic = useMemo(() => buildDiatonic(tonalidad, relativeMinor), [tonalidad, relativeMinor]);
   // Step 1 (letras solas) parte de la tónica que se muestra en pantalla: la
@@ -162,7 +163,10 @@ export default function GradosArmonicos({ tonalidad, initialStep = 1, relativeMi
         setTimeout(() => playNote(seventh.chromatic, seventhOct, NOTE_DURATION), ARPEGGIO_GAP_MS * 3);
       }
 
-      setTimeout(() => setPlayingCell(null), totalMs);
+      // Un disparo nuevo cancela el apagado del anterior: si no, el timer viejo
+      // apaga el resaltado a mitad del acorde que está sonando ahora.
+      if (clearCellRef.current) clearTimeout(clearCellRef.current);
+      clearCellRef.current = setTimeout(() => setPlayingCell(null), totalMs);
     },
     [diatonic, playNote, step],
   );
