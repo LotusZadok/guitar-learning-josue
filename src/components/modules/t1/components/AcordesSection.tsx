@@ -114,6 +114,7 @@ export default function AcordesSection() {
   const tonic = useUIStore((s) => s.tonic);
   const chordM = useMemo(() => chordSpelled(tonic, "M"), [tonic]);
   const chordm = useMemo(() => chordSpelled(tonic, "m"), [tonic]);
+  const chordDim = useMemo(() => chordSpelled(tonic, "dim"), [tonic]);
 
   const ejemploPasos = useMemo<ProseSegment[]>(() => {
     const tercera = spelledIntervalFromTonic(tonic, 3, "M");
@@ -179,6 +180,10 @@ export default function AcordesSection() {
       <p className={styles.text}>
         {chordm[0].spelled} {t("common.minor")} ={" "}
         {chordm.map((m) => m.spelled).join("  ")}
+      </p>
+      <p className={styles.text}>
+        {chordDim[0].spelled} {t("common.diminished")} ={" "}
+        {chordDim.map((m) => m.spelled).join("  ")}
       </p>
 
       <h3 className={styles.subheading}>
