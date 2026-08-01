@@ -792,7 +792,7 @@ import styles from './AcordeProceso.module.css';
 // §1.7 · El ejemplo por pasos deja de ser una lista muerta: recorre el árbol
 // iluminando y sonando cada nota. Reutiliza la máquina de pasos de §2.3/§2.4
 // (respeta prefers-reduced-motion) y el árbol de AcordesBuilder en modo
-// controlado — un solo diagrama, no dos.
+// controlado · un solo diagrama, no dos.
 //
 // Construye SIEMPRE la tríada mayor (decisión del profesor, 31/7/26). Menor y
 // disminuido viven en el bloque de resultado de la sección, sin animación.
