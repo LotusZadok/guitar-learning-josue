@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState, type KeyboardEvent } from 'react';
+import { useCallback, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { ALL } from '../../../data/notes';
@@ -248,25 +248,38 @@ export default function GradosArmonicos({ tonalidad, initialStep = 1, relativeMi
             <tr className={`${styles.revealRow} ${step >= 3 ? styles.revealOn : ''}`}>
               <th scope="row" className={styles.rowLabel}>{isDe ? 'Stufe' : 'Grado'}</th>
               {ROMANS_ACTIVE.map((roman, i) => (
-                <td key={i} className={styles.gradoCell} data-harmonic={HARMONIC_ROLE[i]}>
+                <PlayableCell
+                  key={i}
+                  role={HARMONIC_ROLE[i]}
+                  active={step >= 3}
+                  onPlay={() => playTriad(i)}
+                  isPlaying={playingCell === i}
+                  isDimmed={playingCell !== null && playingCell !== i}
+                  ariaLabel={isDe ? `Akkord der Stufe ${roman} spielen` : `Reproducir acorde del grado ${roman}`}
+                  className={styles.gradoCell}
+                  activeClassName={styles.gradoCellActive}
+                >
                   <RomanGlyph roman={roman} role={HARMONIC_ROLE[i]} />
-                </td>
+                </PlayableCell>
               ))}
             </tr>
 
             <tr className={`${styles.revealRow} ${step >= 3 ? styles.revealOn : ''}`}>
               <th scope="row" className={styles.rowLabel}>{isDe ? 'Akkord' : 'Acorde'}</th>
               {displayChords.map((sym, i) => (
-                <ChordCell
+                <PlayableCell
                   key={i}
-                  symbol={sym}
                   role={HARMONIC_ROLE[i]}
                   active={step >= 3}
                   onPlay={() => playTriad(i)}
                   isPlaying={playingCell === i}
                   isDimmed={playingCell !== null && playingCell !== i}
-                  isDe={isDe}
-                />
+                  ariaLabel={isDe ? `Akkord ${sym} spielen` : `Reproducir acorde ${sym}`}
+                  className={styles.chordCell}
+                  activeClassName={styles.chordCellActive}
+                >
+                  <span className={styles.chordSymbol}>{sym}</span>
+                </PlayableCell>
               ))}
             </tr>
           </tbody>
@@ -375,17 +388,24 @@ function TriadaRow({ tonicaRow, tonicaAscii, terceraRow, terceraAscii, quintaRow
   );
 }
 
-interface ChordCellProps {
-  symbol: string;
+interface PlayableCellProps {
   role: DiatonicRole;
   active: boolean;
   onPlay: () => void;
-  isPlaying?: boolean;
-  isDimmed?: boolean;
-  isDe?: boolean;
+  isPlaying: boolean;
+  isDimmed: boolean;
+  ariaLabel: string;
+  className: string;
+  activeClassName: string;
+  children: ReactNode;
 }
 
-function ChordCell({ symbol, role, active, onPlay, isPlaying, isDimmed, isDe }: ChordCellProps) {
+// Chrome de interacción compartido por la fila Grado y la fila Acorde: ambas
+// reproducen el mismo acorde de la columna (§2.6), así que el estudiante ve que
+// "V" y "G" son la misma cosa nombrada de dos maneras.
+function PlayableCell({
+  role, active, onPlay, isPlaying, isDimmed, ariaLabel, className, activeClassName, children,
+}: PlayableCellProps) {
   const handleKey = useCallback(
     (e: KeyboardEvent<HTMLTableCellElement>) => {
       if (!active) return;
@@ -397,23 +417,23 @@ function ChordCell({ symbol, role, active, onPlay, isPlaying, isDimmed, isDe }: 
     [active, onPlay],
   );
 
-  let className = active ? styles.chordCellActive : styles.chordCell;
-  if (active && isPlaying) className = `${styles.chordCellActive} ${styles.chordCellPlaying}`;
-  else if (active && isDimmed) className = `${styles.chordCellActive} ${styles.chordCellDimmed}`;
+  let cls = active ? activeClassName : className;
+  if (active && isPlaying) cls = `${activeClassName} ${styles.cellPlaying}`;
+  else if (active && isDimmed) cls = `${activeClassName} ${styles.cellDimmed}`;
 
   return (
     <td
-      className={className}
+      className={cls}
       data-harmonic={role}
       role={active ? 'button' : undefined}
       tabIndex={active ? 0 : -1}
       aria-hidden={!active}
-      aria-label={active ? (isDe ? `Akkord ${symbol} spielen` : `Reproducir acorde ${symbol}`) : undefined}
+      aria-label={active ? ariaLabel : undefined}
       onClick={active ? onPlay : undefined}
       onFocus={active ? onPlay : undefined}
       onKeyDown={handleKey}
     >
-      <span className={styles.chordSymbol}>{symbol}</span>
+      {children}
     </td>
   );
 }
