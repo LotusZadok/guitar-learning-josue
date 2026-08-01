@@ -305,6 +305,7 @@
         "Contar cromáticamente a partir de la tónica, los semitonos hasta la quinta (5J = 7 s.t. o 5d = 6 s.t.).",
         "Combinar según la calidad deseada: mayor (3M + 5J), menor (3m + 5J), disminuido (3m + 5d)."
       ],
+      "process_eyebrow": "Cómo se construye, paso a paso",
       "tip": "La diferencia entre mayor y menor está solo en la tercera. El disminuido toma la tercera menor y además baja la quinta un semitono."
     },
 
