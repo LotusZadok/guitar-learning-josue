@@ -297,9 +297,9 @@
       "diminished_def": "Verminderter Akkord = T + kl. Terz + verm. Quinte (Tonika + kleine Terz + verminderte Quinte)",
       "comparison": "Zwischen Dur und Moll ändert sich nur die Terz; beim verminderten Akkord wird zusätzlich die Quinte um einen Halbton gesenkt.",
       "notation_title": "Schreibweise:",
-      "notation_major": "Durakkord → nur der Buchstabe. F = Fa Dur.",
-      "notation_minor": "Mollakkord → Buchstabe + kleines „m\". Fm = Fa Moll.",
-      "notation_diminished": "Verminderter Akkord → Buchstabe + „dim\". Fdim = Fa vermindert.",
+      "notation_major": "Durakkord → nur der Buchstabe. {{sym}} = {{name}} Dur.",
+      "notation_minor": "Mollakkord → Buchstabe + kleines „m\". {{sym}}m = {{name}} Moll.",
+      "notation_diminished": "Verminderter Akkord → Buchstabe + „dim\". {{sym}}dim = {{name}} vermindert.",
       "procedure_title": "Verfahren zum Finden des Dur-, Moll- oder verminderten Akkords für jeden Ton:",
       "procedure": [
         "Den Dreiklang ab der Tonika aufschreiben (nur Buchstaben, natürlich).",

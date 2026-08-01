@@ -14,3 +14,13 @@ export const NOTE_ES: Record<ChromaticNote, NoteNameES> = {
   'F#':'Fa♯','G':'Sol','G#':'Sol♯','A':'La','A#':'La♯','B':'Si',
 };
 
+// Nombre en solfeo derivado de la grafía (no de la cromática), para que coincida
+// con el glifo que se muestra. Mapea la letra y conserva ♭/♯.
+const LETTER_ES: Record<string, string> = {
+  C: 'Do', D: 'Re', E: 'Mi', F: 'Fa', G: 'Sol', A: 'La', B: 'Si',
+};
+
+export function spelledToES(spelled: string): string {
+  return (LETTER_ES[spelled[0]] ?? spelled[0]) + spelled.slice(1);
+}
+

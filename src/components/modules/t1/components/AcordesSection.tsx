@@ -11,6 +11,7 @@ import {
 } from "../../../../utils/noteCalculations";
 import type { NoteSpelling, Tonic } from "../../../../types/music";
 import type { ProseSegment, ProseFragment } from "../../../../types/prose";
+import { spelledToES } from "../../../../data/notes";
 import styles from "./AcordesSection.module.css";
 
 // Reunión 24/5/26 — el ejemplo se reconstruye según la tónica activa, no se hardcodea.
@@ -116,6 +117,12 @@ export default function AcordesSection() {
   const chordm = useMemo(() => chordSpelled(tonic, "m"), [tonic]);
   const chordDim = useMemo(() => chordSpelled(tonic, "dim"), [tonic]);
 
+  // §1.7: la nomenclatura se ancla a la tónica global, no a una nota fija.
+  const notation = useMemo(
+    () => ({ sym: chordM[0].spelled, name: spelledToES(chordM[0].spelled) }),
+    [chordM],
+  );
+
   const ejemploPasos = useMemo<ProseSegment[]>(() => {
     const tercera = spelledIntervalFromTonic(tonic, 3, "M");
     const terceraLetter = tercera[0];
@@ -150,9 +157,9 @@ export default function AcordesSection() {
 
       <h3 className={styles.subheading}>{t("t1.s07.notation_title")}</h3>
       <ul className={styles.nomList}>
-        <li>{t("t1.s07.notation_major")}</li>
-        <li>{t("t1.s07.notation_minor")}</li>
-        <li>{t("t1.s07.notation_diminished")}</li>
+        <li>{t("t1.s07.notation_major", notation)}</li>
+        <li>{t("t1.s07.notation_minor", notation)}</li>
+        <li>{t("t1.s07.notation_diminished", notation)}</li>
       </ul>
 
       <h3 className={styles.subheading}>{t("t1.s07.procedure_title")}</h3>

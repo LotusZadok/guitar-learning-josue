@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { useAudioEngine, stopAllNotes } from '../../../hooks/useAudioEngine';
 import { useUIStore } from '../../../stores/useUIStore';
-import { NOTE_COLORS } from '../../../data/notes';
+import { NOTE_COLORS, spelledToES } from '../../../data/notes';
 import {
   intervalMemberFromTonic,
   type IntervalMember,
@@ -9,15 +9,6 @@ import {
 import PlaybackButton from '../../shared/PlaybackButton/PlaybackButton';
 import { BUILDER_17, type BuilderConfig, type BuilderNode } from './configs';
 import styles from './AcordesBuilder.module.css';
-
-// El "Nombre en latino" deriva del spelled (no del chromatic) para coincidir con
-// el glifo del nodo. Mapea letra → solfeo, conservando ♭/♯.
-const LETTER_ES: Record<string, string> = {
-  C: 'Do', D: 'Re', E: 'Mi', F: 'Fa', G: 'Sol', A: 'La', B: 'Si',
-};
-function spelledES(spelled: string): string {
-  return (LETTER_ES[spelled[0]] ?? spelled[0]) + spelled.slice(1);
-}
 
 const ARPEGGIO_GAP_MS = 250;
 const NOTE_DURATION = 1.4;
@@ -236,7 +227,7 @@ export default function AcordesBuilder({ config = BUILDER_17 }: Props) {
         {currentChord && chordMembers ? (
           <>
             <p className={styles.chordName}>
-              {spelledES(tonicMember.spelled)} {currentChord.nombre}
+              {spelledToES(tonicMember.spelled)} {currentChord.nombre}
               <span className={styles.cifrado}>
                 {tonicMember.spelled}
                 {currentChord.cifrado}
@@ -313,7 +304,7 @@ function Node({ role, x, y, quality, member, state, playing, onSelect, onScrub }
   const fill = colored ? NOTE_COLORS[member.chromatic] : 'var(--surface)';
   const stroke = state === 'tonic' || colored ? 'none' : 'var(--rule)';
 
-  const nameES = spelledES(member.spelled);
+  const nameES = spelledToES(member.spelled);
   const ariaSelected = state === 'selected' ? ', seleccionado' : '';
   // Carril tipográfico de calidad: mayor/justa = bold recto; menor/disminuida =
   // regular itálica. Da una segunda señal (peso + estilo) además del caso m/M,

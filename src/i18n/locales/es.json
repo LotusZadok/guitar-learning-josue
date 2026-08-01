@@ -295,9 +295,9 @@
       "diminished_def": "Acorde disminuido = T + 3m + 5d (tónica + tercera menor + quinta disminuida)",
       "comparison": "Solo cambia la tercera entre mayor y menor; el disminuido baja también la quinta. Dos o tres de las cuatro notas se mantienen entre los tres tipos — son casi el mismo acorde.",
       "notation_title": "Nomenclatura:",
-      "notation_major": "Acorde mayor: solo la letra. F = Fa mayor.",
-      "notation_minor": "Acorde menor: letra + \"m\" minúscula. Fm = Fa menor.",
-      "notation_diminished": "Acorde disminuido: letra + \"dim\". Fdim = Fa disminuido.",
+      "notation_major": "Acorde mayor: solo la letra. {{sym}} = {{name}} mayor.",
+      "notation_minor": "Acorde menor: letra + \"m\" minúscula. {{sym}}m = {{name}} menor.",
+      "notation_diminished": "Acorde disminuido: letra + \"dim\". {{sym}}dim = {{name}} disminuido.",
       "procedure_title": "Procedimiento para encontrar la tríada mayor, menor o disminuida de cualquier nota:",
       "procedure": [
         "Escribir la tríada partiendo de la tónica (solo notas naturales).",
