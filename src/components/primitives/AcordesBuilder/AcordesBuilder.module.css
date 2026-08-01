@@ -136,6 +136,35 @@
   justify-content: center;
 }
 
+/* === destacado del arpegio ===
+   Bajo la Note-Color Quarantine el "está sonando" no puede ser un color nuevo:
+   se codifica con opacity (hermanos atenuados) + geometría (anillo y escala) +
+   el nombre de la nota en el readout. */
+.nodeDimmed {
+  opacity: 0.35;
+  transition: opacity 0.2s ease;
+}
+
+.nodePulse {
+  transform: scale(1.12);
+  transition: transform 0.18s ease;
+}
+
+.nowPlaying {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: var(--amber);
+  min-height: 19px;
+  margin: 0 0 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nodePulse {
+    transform: none;
+  }
+}
+
 @media (max-width: 600px) {
   .chordName {
     font-size: 22px;

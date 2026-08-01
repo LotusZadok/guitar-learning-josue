@@ -165,6 +165,21 @@ export default function AcordesBuilder({ config = BUILDER_17, path, playingRole,
     return false;
   };
 
+  // ¿Suena UNA nota concreta? (en bloque suenan todas: no se atenúa nada)
+  // Mismo orden de prioridad que nodePlaying: lo interno manda si está activo.
+  const soloPlaying =
+    playIdx != null
+      ? playIdx >= 0
+      : controlled && playingRole != null && playingRole !== PLAYING_ALL;
+
+  // Nota que suena ahora, para nombrarla en el readout (anti-checklist item 12:
+  // el audio nunca es el único portador de la información).
+  const playingSpelled = useMemo(() => {
+    if (!soloPlaying) return '';
+    const role = playIdx != null ? chain[playIdx] : playingRole!;
+    return members.get(role)?.spelled ?? '';
+  }, [soloPlaying, playingRole, chain, playIdx, members]);
+
   // Aristas: pares consecutivos de cada camino (T→path[0], path[i]→path[i+1]).
   const edges = useMemo(() => {
     const set = new Map<string, { from: string; to: string }>();
@@ -223,6 +238,7 @@ export default function AcordesBuilder({ config = BUILDER_17, path, playingRole,
           member={tonicMember}
           state="tonic"
           playing={nodePlaying('T')}
+          dimmed={soloPlaying && !nodePlaying('T')}
           onScrub={scrub}
         />
 
@@ -242,6 +258,7 @@ export default function AcordesBuilder({ config = BUILDER_17, path, playingRole,
               member={members.get(node.role)!}
               state={state}
               playing={selectedNode && nodePlaying(node.role)}
+              dimmed={soloPlaying && selectedNode && !nodePlaying(node.role)}
               onSelect={interactive ? () => pickNode(node) : undefined}
               onScrub={interactive ? scrub : undefined}
             />
@@ -260,6 +277,7 @@ export default function AcordesBuilder({ config = BUILDER_17, path, playingRole,
               </span>
             </p>
             <p className={styles.chordNotes}>{chordMembers.map((m) => m.spelled).join('  ')}</p>
+            <p className={styles.nowPlaying}>{playingSpelled}</p>
             <div className={styles.audioRow}>
               <PlaybackButton
                 mode="bloque"
@@ -298,11 +316,12 @@ interface NodeProps {
   member: IntervalMember;
   state: NodeState;
   playing?: boolean;
+  dimmed?: boolean;
   onSelect?: () => void;
   onScrub?: (m: IntervalMember) => void;
 }
 
-function Node({ role, x, y, quality, member, state, playing, onSelect, onScrub }: NodeProps) {
+function Node({ role, x, y, quality, member, state, playing, dimmed, onSelect, onScrub }: NodeProps) {
   const [hovered, setHovered] = useState(false);
   const interactive = state !== 'disabled' && (onSelect != null || state === 'tonic');
 
@@ -340,7 +359,7 @@ function Node({ role, x, y, quality, member, state, playing, onSelect, onScrub }
 
   return (
     <g
-      className={`${styles.node} ${state === 'disabled' ? styles.nodeDisabled : ''}`}
+      className={`${styles.node} ${state === 'disabled' ? styles.nodeDisabled : ''} ${dimmed ? styles.nodeDimmed : ''}`}
       transform={`translate(${x},${y})`}
       role={onSelect ? 'button' : 'img'}
       aria-pressed={onSelect ? state === 'selected' : undefined}
@@ -354,22 +373,26 @@ function Node({ role, x, y, quality, member, state, playing, onSelect, onScrub }
       onKeyDown={onSelect ? onKey : undefined}
     >
       <circle className={styles.hit} cx={0} cy={0} r={R + 6} fill="transparent" />
-      {playing && (
-        <circle cx={0} cy={0} r={R + 5} fill="none" stroke="var(--amber)" strokeWidth={2} />
-      )}
-      <circle cx={0} cy={0} r={R} fill={fill} stroke={stroke} strokeWidth={1.5} />
-      {/* Reposo: rol (función) en Plex Mono, que preserva mayús/minús (así 3m≠3M
-          y 5d≠5). Activo: glifo de la nota en Bebas, blanco sobre el círculo
-          saturado (excepción Signature). */}
-      <text
-        className={colored ? styles.nodeGlyph : roleClass}
-        x={0}
-        y={1}
-        fill={colored ? '#fff' : 'var(--text-body)'}
-        style={colored && member.spelled.length > 2 ? { fontSize: '13px' } : undefined}
-      >
-        {colored ? member.spelled : role}
-      </text>
+      {/* La escala va en un <g> interno: una regla CSS `transform` sobre el <g>
+          externo reemplazaría su atributo translate y movería el nodo al origen. */}
+      <g className={playing ? styles.nodePulse : undefined}>
+        {playing && (
+          <circle cx={0} cy={0} r={R + 6} fill="none" stroke="var(--amber)" strokeWidth={3} />
+        )}
+        <circle cx={0} cy={0} r={R} fill={fill} stroke={stroke} strokeWidth={1.5} />
+        {/* Reposo: rol (función) en Plex Mono, que preserva mayús/minús (así 3m≠3M
+            y 5d≠5). Activo: glifo de la nota en Bebas, blanco sobre el círculo
+            saturado (excepción Signature). */}
+        <text
+          className={colored ? styles.nodeGlyph : roleClass}
+          x={0}
+          y={1}
+          fill={colored ? '#fff' : 'var(--text-body)'}
+          style={colored && member.spelled.length > 2 ? { fontSize: '13px' } : undefined}
+        >
+          {colored ? member.spelled : role}
+        </text>
+      </g>
       <text
         className={
           colored ? `${styles.nodeName} ${major ? styles.roleMajor : styles.roleMinor}` : styles.nodeName
