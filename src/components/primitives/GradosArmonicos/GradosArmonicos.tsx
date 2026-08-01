@@ -16,6 +16,9 @@ interface Props {
   /** T3 §3.9: re-ancla la tabla en la relativa menor natural de `tonalidad`
    *  (comparten armadura; misma escala rotada al 6to grado — sin teoría nueva). */
   relativeMinor?: boolean;
+  /** Último paso disponible en el stepper. T2 §2.6 usa 3 (sin séptimas);
+   *  T3 §3.5/§3.9 usan el default 4, que es donde se enseñan. */
+  maxStep?: 3 | 4;
 }
 
 const NATURAL_LETTERS = ['C', 'D', 'E', 'F', 'G', 'A', 'B'] as const;
@@ -112,10 +115,12 @@ function chordMemberOctave(diatonic: DiatonicNote[], gradeIdx: number, offset: n
   return diatonic[idx].octave + wraps;
 }
 
-export default function GradosArmonicos({ tonalidad, initialStep = 1, relativeMinor = false }: Props) {
+export default function GradosArmonicos({ tonalidad, initialStep = 1, relativeMinor = false, maxStep = 4 }: Props) {
   const { i18n } = useTranslation();
   const isDe = i18n.language === 'de';
-  const [step, setStep] = useState<Step>(initialStep);
+  // Clamp: un initialStep por encima de maxStep dejaría la tabla en un estado sin
+  // pestaña que lo represente.
+  const [step, setStep] = useState<Step>(Math.min(initialStep, maxStep) as Step);
   const [playingCell, setPlayingCell] = useState<number | null>(null);
   const { playNote } = useAudioEngine();
   const lastFireRef = useRef<number>(0);
@@ -208,7 +213,7 @@ export default function GradosArmonicos({ tonalidad, initialStep = 1, relativeMi
   return (
     <div className={styles.wrap}>
       <div className={styles.stepperRow} role="tablist" aria-label={isDe ? 'Verfahrensschritt' : 'Paso del procedimiento'}>
-        {([1, 2, 3, 4] as Step[]).map((s) => (
+        {(Array.from({ length: maxStep }, (_, i) => (i + 1) as Step)).map((s) => (
           <button
             key={s}
             role="tab"

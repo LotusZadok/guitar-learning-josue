@@ -32,7 +32,7 @@ export default function GradosArmonicosSection() {
 
       <p className={styles.text}>{primitivaInstruccion}</p>
 
-      <GradosArmonicos tonalidad={tonalidad} />
+      <GradosArmonicos tonalidad={tonalidad} maxStep={3} />
 
       <p className={styles.patron}>{t('t2.s47.pattern')}</p>
 
