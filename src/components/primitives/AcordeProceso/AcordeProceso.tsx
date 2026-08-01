@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAudioEngine, stopAllNotes } from '../../../hooks/useAudioEngine';
 import { useUIStore } from '../../../stores/useUIStore';
@@ -10,6 +10,7 @@ import {
 import { useProcessAnimation } from '../../modules/t2/hooks/useProcessAnimation';
 import Prose from '../../shared/Prose/Prose';
 import AcordesBuilder, { PLAYING_ALL } from '../AcordesBuilder/AcordesBuilder';
+import { BUILDER_17 } from '../AcordesBuilder/configs';
 import type { NoteSpelling, Tonic } from '../../../types/music';
 import type { ProseSegment, ProseFragment } from '../../../types/prose';
 import styles from './AcordeProceso.module.css';
@@ -25,6 +26,11 @@ import styles from './AcordeProceso.module.css';
 const TOTAL_STEPS = 4;
 
 // Camino del acorde mayor en BUILDER_17: T → 3M → 5J.
+//
+// OJO · acoplamiento no verificable por el compilador: estos literales deben
+// coincidir con los `role` de los nodos de BUILDER_17 en configs.ts, y
+// `BuilderNode.role` está tipado `string`. Si alguien renombra '3M' o '5' allá,
+// el walkthrough deja de iluminar y de sonar sin que tsc diga nada.
 const PATH_BY_STEP: string[][] = [
   [], // paso 1 · sólo la tónica
   ['3M'], // paso 2 · tercera mayor
@@ -35,6 +41,11 @@ const PATH_BY_STEP: string[][] = [
 const PLAYING_BY_STEP: (string | null)[] = ['T', '3M', '5', PLAYING_ALL];
 
 const ASCII = (s: string) => s.replace('♯', '#').replace('♭', 'b');
+
+// Los ProseSegment se aplanan a texto para la región viva: aria-live necesita
+// un cambio de texto real, no un cambio de clase.
+const segmentText = (seg: ProseSegment): string =>
+  seg.map((f) => f.value).join('');
 
 function buildPasoLetras(tonic: Tonic, locale: string): ProseSegment {
   const [t1, t3, t5] = chordSpelled(tonic, 'M').map(
@@ -184,13 +195,27 @@ export default function AcordeProceso() {
   // acorde en bloque (traslape deliberado: es un acorde).
   useEffect(() => {
     const s = anim.currentStep;
-    if (s === 0 || s === lastAudioStep.current) return;
+    // Volver a 0 (◀ hasta el inicio, reset por tónica, o intervención del
+    // estudiante) rearma el ref: si no, el paso 1 se ilumina mudo al re-entrar.
+    if (s === 0) {
+      lastAudioStep.current = 0;
+      return;
+    }
+    if (s === lastAudioStep.current) return;
     lastAudioStep.current = s;
     const ms = chordRef.current;
     const pn = playNoteRef.current;
     if (s >= 1 && s <= 3) pn(ms[s - 1].chromatic, ms[s - 1].octave, 1.6);
     else if (s === 4) ms.forEach((m) => pn(m.chromatic, m.octave, 2.2));
   }, [anim.currentStep]);
+
+  // El estudiante tocó un nodo: soltamos el control y callamos las notas del
+  // paso en curso, que si no seguirían sonando sobre un árbol ya libre.
+  const { reset } = anim;
+  const releaseControl = useCallback(() => {
+    reset();
+    stopAllNotes();
+  }, [reset]);
 
   const current = anim.currentStep;
   const running = current > 0;
@@ -207,11 +232,20 @@ export default function AcordeProceso() {
     <div className={styles.wrap}>
       <span className={styles.eyebrow}>{t('t1.s07.process_eyebrow')}</span>
 
+      {/* El readout de AcordesBuilder es el único aria-live del subárbol, y en
+          modo controlado no renderiza nada hasta el paso 3 (los caminos [] y
+          ['3M'] no completan un acorde). Sin esto, los pasos 1 y 2 suenan sin
+          par textual anunciado. */}
+      <p className={styles.srOnly} role="status" aria-live="polite">
+        {running ? segmentText(steps[current - 1]) : ''}
+      </p>
+
       <div className={styles.layout}>
         <AcordesBuilder
+          config={BUILDER_17}
           path={running ? PATH_BY_STEP[current - 1] : undefined}
           playingRole={running ? PLAYING_BY_STEP[current - 1] : null}
-          onUserPick={anim.reset}
+          onUserPick={releaseControl}
         />
 
         <ol className={styles.steps}>
