@@ -15,20 +15,32 @@ const NOTE_DURATION = 1.4;
 const FIRE_DEBOUNCE_MS = 150;
 const R = 24; // radio de nodo
 
+/** Centinela para `playingRole`: el acorde suena en bloque, no hay una sola nota. */
+export const PLAYING_ALL = '*';
+
 interface Props {
   config?: BuilderConfig;
+  /** Camino forzado desde afuera (walkthrough). Si está presente, el árbol es
+   *  controlado y `selected` interno queda en pausa. `undefined` = modo libre. */
+  path?: string[];
+  /** Rol del nodo que suena ahora; `PLAYING_ALL` si suena el acorde entero. */
+  playingRole?: string | null;
+  /** El estudiante tocó un nodo: el dueño del walkthrough debe soltar el control. */
+  onUserPick?: () => void;
 }
 
 // Constructor de acordes como árbol de nodos, construido por camino (tercera →
 // quinta → [séptima]). Config-driven: la topología (nodos, posiciones, caminos
 // válidos) viene de `config`, así crece de §1.7 (hasta la quinta) hacia §3.4
 // (completo) sin duplicar el componente.
-export default function AcordesBuilder({ config = BUILDER_17 }: Props) {
+export default function AcordesBuilder({ config = BUILDER_17, path, playingRole, onUserPick }: Props) {
   const tonic = useUIStore((s) => s.tonic);
   const { playNote } = useAudioEngine();
 
   // Camino seleccionado: roles en orden de nivel (sin 'T'). Ej: ['3M','5','7M'].
-  const [selected, setSelected] = useState<string[]>([]);
+  const [internalSelected, setInternalSelected] = useState<string[]>([]);
+  const controlled = path !== undefined;
+  const selected = controlled ? path : internalSelected;
   const [playing, setPlaying] = useState(false);
   const [playIdx, setPlayIdx] = useState<number | null>(null); // -1 bloque; 0..n arpegio
   const lastFire = useRef(0);
@@ -96,12 +108,17 @@ export default function AcordesBuilder({ config = BUILDER_17 }: Props) {
   const pickNode = useCallback(
     (node: BuilderNode) => {
       const L = node.level;
-      setSelected((prev) => {
-        if (prev[L - 1] === node.role) return prev.slice(0, L - 1); // re-clic deselecciona
-        return [...prev.slice(0, L - 1), node.role];
-      });
+      // Parte del camino visible (controlado o interno) para que soltar el control
+      // se sienta continuo: el clic edita lo que el estudiante está viendo.
+      const base = controlled ? path! : internalSelected;
+      const next =
+        base[L - 1] === node.role
+          ? base.slice(0, L - 1) // re-clic deselecciona
+          : [...base.slice(0, L - 1), node.role];
+      setInternalSelected(next);
+      onUserPick?.();
     },
-    [],
+    [controlled, path, internalSelected, onUserPick],
   );
 
   const playBlock = useCallback(() => {
@@ -136,8 +153,14 @@ export default function AcordesBuilder({ config = BUILDER_17 }: Props) {
 
   // Cadena activa (incluye la tónica) para el highlight arpegiado y las aristas.
   const chain = useMemo(() => ['T', ...selected], [selected]);
-  const nodePlaying = (role: string) =>
-    playIdx === -1 || (playIdx != null && chain[playIdx] === role);
+  // La reproducción interna (los botones del readout) tiene prioridad: el
+  // estudiante puede pulsar arpegio aunque el walkthrough esté manejando el
+  // camino, y el destaque debe seguir a lo que realmente suena.
+  const nodePlaying = (role: string) => {
+    if (playIdx != null) return playIdx === -1 || chain[playIdx] === role;
+    if (controlled) return playingRole === role || playingRole === PLAYING_ALL;
+    return false;
+  };
 
   // Aristas: pares consecutivos de cada camino (T→path[0], path[i]→path[i+1]).
   const edges = useMemo(() => {
@@ -249,7 +272,7 @@ export default function AcordesBuilder({ config = BUILDER_17 }: Props) {
               />
             </div>
           </>
-        ) : (
+        ) : controlled ? null : (
           <p className={styles.hint}>
             {selected.length === 0
               ? 'Elegí una tercera para empezar a construir.'
