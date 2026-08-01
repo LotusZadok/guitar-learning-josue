@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
@@ -6,13 +6,24 @@ import NoteToken from '../../../shared/NoteToken/NoteToken';
 import Prose from '../../../shared/Prose/Prose';
 import TriadsSection from '../../../primitives/Triads/TriadsSection';
 import TriadaProceso from '../../../primitives/TriadaProceso/TriadaProceso';
-import type { NoteSpelling } from '../../../../types/music';
+import type { NaturalNote, NoteSpelling } from '../../../../types/music';
 import type { ProseSegment } from '../../../../types/prose';
+import { useUIStore } from '../../../../stores/useUIStore';
+import { NATURALS } from '../../../../data/notes';
 import styles from './TriadasSection.module.css';
 
-// Datos musicales (§1.6): las 7 tríadas de las notas naturales, no UI copy.
-const TRIADAS_TABLA_HEAD = ['F', 'G', 'A', 'B', 'C', 'D', 'E'] as const;
-const TRIADAS_TABLA_ROW = ['F A C', 'G B D', 'A C E', 'B D F', 'C E G', 'D F A', 'E G B'] as const;
+// Datos musicales (§1.6): las 7 tríadas de las notas naturales, rotadas desde la
+// letra de la tónica global. La etapa pedagógica es sin alteraciones, así que se
+// toma sólo la letra (igual que TriadaProceso).
+function buildTriadTable(root: NaturalNote): { head: NaturalNote[]; row: string[] } {
+  const start = NATURALS.indexOf(root);
+  const head = Array.from({ length: 7 }, (_, i) => NATURALS[(start + i) % 7]);
+  const row = head.map((letter) => {
+    const li = NATURALS.indexOf(letter);
+    return [0, 2, 4].map((o) => NATURALS[(li + o) % 7]).join(' ');
+  });
+  return { head, row };
+}
 
 function renderTriadCell(cell: string) {
   const parts = cell.split(' ') as NoteSpelling[];
@@ -29,6 +40,8 @@ export default function TriadasSection() {
   const locale = i18n.language;
   const procedure = t('t1.s02.procedure', { returnObjects: true }) as string[];
   const maestra = t('t1.s02.master_triad', { returnObjects: true }) as ProseSegment;
+  const tonic = useUIStore((s) => s.tonic);
+  const { head, row } = useMemo(() => buildTriadTable(tonic[0] as NaturalNote), [tonic]);
 
   return (
     <section id="s-triadas" className={styles.section}>
@@ -60,14 +73,14 @@ export default function TriadasSection() {
         <table className={styles.table}>
           <thead>
             <tr>
-              {TRIADAS_TABLA_HEAD.map((h) => (
+              {head.map((h) => (
                 <th key={h} scope="col"><NoteToken note={h} /></th>
               ))}
             </tr>
           </thead>
           <tbody>
             <tr>
-              {TRIADAS_TABLA_ROW.map((c, i) => (
+              {row.map((c, i) => (
                 <td key={i}>{renderTriadCell(c)}</td>
               ))}
             </tr>
