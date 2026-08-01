@@ -309,8 +309,8 @@
     },
 
     "s08": {
-      "label": "1.8 · La regla de la 5J el \"intervalo espejo\"",
-      "title": "Regla de la quinta justa con sus excepciones",
+      "label": "1.8 · Círculo de 5tas",
+      "title": "Círculo de 5tas",
       "intro": "La quinta justa siempre copia la alteración de la tónica.",
       "sequence_label": "La secuencia de tonalidades con sostenidos:",
       "sequence": "F C G D A E B",
