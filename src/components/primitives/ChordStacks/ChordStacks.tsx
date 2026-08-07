@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { useUIStore } from '../../../stores/useUIStore';
-import { NOTE_COLORS } from '../../../data/notes';
+import { NOTE_COLORS, spelledToES } from '../../../data/notes';
 import {
   intervalMemberFromTonic,
   type IntervalMember,
@@ -43,13 +43,6 @@ const TOP_Y = 30;
 const STEP_Y = 46;
 const NODE_X = 74;
 const ROLE_X = 24;
-
-const LETTER_ES: Record<string, string> = {
-  C: 'Do', D: 'Re', E: 'Mi', F: 'Fa', G: 'Sol', A: 'La', B: 'Si',
-};
-function spelledES(spelled: string): string {
-  return (LETTER_ES[spelled[0]] ?? spelled[0]) + spelled.slice(1);
-}
 
 export default function ChordStacks({ chords }: Props) {
   const tonic = useUIStore((s) => s.tonic);
@@ -143,7 +136,7 @@ function ChordColumn({ chord, tonic }: ChordColumnProps) {
               transform={`translate(0,${y})`}
               role="button"
               tabIndex={0}
-              aria-label={`${tone.role} · ${spelledES(m.spelled)}`}
+              aria-label={`${tone.role} · ${spelledToES(m.spelled)}`}
               onMouseEnter={() => {
                 setHovered(i);
                 scrub(m);

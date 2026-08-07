@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { useUIStore } from '../../../stores/useUIStore';
-import { NOTE_COLORS } from '../../../data/notes';
+import { NOTE_COLORS, spelledToES } from '../../../data/notes';
 import {
   intervalMemberFromTonic,
   type IntervalMember,
@@ -9,13 +9,6 @@ import {
   type IntervalQuality,
 } from '../../../utils/noteCalculations';
 import styles from './IntervalRuler.module.css';
-
-const LETTER_ES: Record<string, string> = {
-  C: 'Do', D: 'Re', E: 'Mi', F: 'Fa', G: 'Sol', A: 'La', B: 'Si',
-};
-function spelledES(spelled: string): string {
-  return (LETTER_ES[spelled[0]] ?? spelled[0]) + spelled.slice(1);
-}
 
 const NOTE_DURATION = 1.4;
 const STEP_MS = 240;
@@ -150,7 +143,7 @@ function Node({ stop, x, member, active, onEnter, onLeave, onActivate }: NodePro
   const colored = active;
   const fill = colored ? NOTE_COLORS[member.chromatic] : 'var(--surface)';
   const stroke = colored ? 'none' : 'var(--rule)';
-  const nameES = spelledES(member.spelled);
+  const nameES = spelledToES(member.spelled);
 
   return (
     <g

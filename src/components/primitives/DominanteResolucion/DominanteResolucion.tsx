@@ -1,17 +1,10 @@
 import { useCallback, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { useUIStore } from '../../../stores/useUIStore';
-import { NOTE_COLORS, ALL } from '../../../data/notes';
+import { NOTE_COLORS, ALL, spelledToES } from '../../../data/notes';
 import { majorScaleSpelled, pitchClass, spelledSequenceAscending } from '../../../utils/noteCalculations';
 import type { ChromaticNote } from '../../../types/music';
 import styles from './DominanteResolucion.module.css';
-
-const LETTER_ES: Record<string, string> = {
-  C: 'Do', D: 'Re', E: 'Mi', F: 'Fa', G: 'Sol', A: 'La', B: 'Si',
-};
-function spelledES(spelled: string): string {
-  return (LETTER_ES[spelled[0]] ?? spelled[0]) + spelled.slice(1);
-}
 
 const NOTE_DURATION = 1.4;
 const CHORD_GAP_MS = 900;
@@ -188,7 +181,7 @@ function NoteNode({ node, colored, onEnter, onLeave }: NoteNodeProps) {
   );
   const fill = colored ? NOTE_COLORS[node.chromatic] : 'var(--surface)';
   const stroke = colored ? 'none' : 'var(--rule)';
-  const nameES = spelledES(node.spelled);
+  const nameES = spelledToES(node.spelled);
 
   return (
     <g
