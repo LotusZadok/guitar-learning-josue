@@ -7,6 +7,7 @@ import { spelledSequenceAscending } from "../../../utils/noteCalculations";
 // Reutiliza la máquina de pasos de los procesos de §2.3/§2.4 (lógica pura,
 // respeta prefers-reduced-motion). Misma "onda" que pidió el método.
 import { useProcessAnimation } from "../../modules/t2/hooks/useProcessAnimation";
+import ProcessControls from "../../shared/ProcessControls/ProcessControls";
 import type { NaturalNote } from "../../../types/music";
 import styles from "./TriadaProceso.module.css";
 
@@ -137,14 +138,6 @@ export default function TriadaProceso() {
 
   const current = anim.currentStep;
   const isResult = current >= TOTAL_STEPS;
-  const playLabel =
-    anim.mode === "playing"
-      ? isDe
-        ? "Pausieren"
-        : "Pausar"
-      : isDe
-        ? "Abspielen"
-        : "Reproducir";
 
   return (
     <div className={styles.wrap}>
@@ -302,48 +295,17 @@ export default function TriadaProceso() {
       </div>
 
       {/* Controles del proceso */}
-      <div className={styles.controls}>
-        <button
-          type="button"
-          className={styles.ctrl}
-          onClick={anim.prev}
-          disabled={current <= 0}
-          aria-label={isDe ? "Vorheriger Schritt" : "Paso anterior"}
-        >
-          ◀
-        </button>
-        <button
-          type="button"
-          className={styles.ctrl}
-          onClick={anim.mode === "playing" ? anim.pause : anim.play}
-          aria-label={playLabel}
-        >
-          {anim.mode === "playing" ? "⏸" : "▶"}
-        </button>
-        <button
-          type="button"
-          className={styles.ctrl}
-          onClick={anim.next}
-          disabled={current >= TOTAL_STEPS}
-          aria-label={isDe ? "Nächster Schritt" : "Paso siguiente"}
-        >
-          ▶▶
-        </button>
-        <span className={styles.spacer} />
-        <label className={styles.speedWrap}>
-          <span className={styles.speedLabel}>
-            {isDe ? "Tempo" : "Velocidad"}
-          </span>
-          <select
-            className={styles.speedSelect}
-            value={anim.speed}
-            onChange={(e) => anim.setSpeed(e.target.value as "normal" | "slow")}
-          >
-            <option value="normal">{isDe ? "normal" : "normal"}</option>
-            <option value="slow">{isDe ? "langsam" : "lento"}</option>
-          </select>
-        </label>
-      </div>
+      <ProcessControls
+        currentStep={anim.currentStep}
+        maxSteps={TOTAL_STEPS}
+        mode={anim.mode}
+        speed={anim.speed}
+        onPlay={anim.play}
+        onPause={anim.pause}
+        onNext={anim.next}
+        onPrev={anim.prev}
+        onSpeedChange={anim.setSpeed}
+      />
     </div>
   );
 }

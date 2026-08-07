@@ -6,7 +6,7 @@ import { useProcessAnimation } from '../hooks/useProcessAnimation';
 import ToggleSwitch from '../../../shared/ToggleSwitch';
 import ChromaticCircleAnimated from './ChromaticCircleAnimated';
 import ProcessPanel from './ProcessPanel';
-import ProcessControls from './ProcessControls';
+import ProcessControls from '../../../shared/ProcessControls/ProcessControls';
 import AudioButtons from './AudioButtons';
 import FExceptionBanner from './FExceptionBanner';
 import styles from './ProcesoView.module.css';

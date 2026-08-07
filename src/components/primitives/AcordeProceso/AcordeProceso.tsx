@@ -8,6 +8,7 @@ import {
   spelledIntervalFromTonic,
 } from '../../../utils/noteCalculations';
 import { useProcessAnimation } from '../../modules/t2/hooks/useProcessAnimation';
+import ProcessControls from '../../shared/ProcessControls/ProcessControls';
 import Prose from '../../shared/Prose/Prose';
 import AcordesBuilder, { PLAYING_ALL } from '../AcordesBuilder/AcordesBuilder';
 import { BUILDER_17 } from '../AcordesBuilder/configs';
@@ -151,7 +152,6 @@ function buildPasoResultado(tonic: Tonic, locale: string): ProseSegment {
 export default function AcordeProceso() {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
-  const isDe = locale === 'de';
   const tonic = useUIStore((s) => s.tonic);
   const { playNote } = useAudioEngine();
   const anim = useProcessAnimation(TOTAL_STEPS);
@@ -219,14 +219,6 @@ export default function AcordeProceso() {
 
   const current = anim.currentStep;
   const running = current > 0;
-  const playLabel =
-    anim.mode === 'playing'
-      ? isDe
-        ? 'Pausieren'
-        : 'Pausar'
-      : isDe
-        ? 'Abspielen'
-        : 'Reproducir';
 
   return (
     <div className={styles.wrap}>
@@ -268,48 +260,17 @@ export default function AcordeProceso() {
         </ol>
       </div>
 
-      <div className={styles.controls}>
-        <button
-          type="button"
-          className={styles.ctrl}
-          onClick={anim.prev}
-          disabled={current <= 0}
-          aria-label={isDe ? 'Vorheriger Schritt' : 'Paso anterior'}
-        >
-          ◀
-        </button>
-        <button
-          type="button"
-          className={styles.ctrl}
-          onClick={anim.mode === 'playing' ? anim.pause : anim.play}
-          aria-label={playLabel}
-        >
-          {anim.mode === 'playing' ? '⏸' : '▶'}
-        </button>
-        <button
-          type="button"
-          className={styles.ctrl}
-          onClick={anim.next}
-          disabled={current >= TOTAL_STEPS}
-          aria-label={isDe ? 'Nächster Schritt' : 'Paso siguiente'}
-        >
-          ▶▶
-        </button>
-        <span className={styles.spacer} />
-        <label className={styles.speedWrap}>
-          <span className={styles.speedLabel}>
-            {isDe ? 'Tempo' : 'Velocidad'}
-          </span>
-          <select
-            className={styles.speedSelect}
-            value={anim.speed}
-            onChange={(e) => anim.setSpeed(e.target.value as 'normal' | 'slow')}
-          >
-            <option value="normal">normal</option>
-            <option value="slow">{isDe ? 'langsam' : 'lento'}</option>
-          </select>
-        </label>
-      </div>
+      <ProcessControls
+        currentStep={anim.currentStep}
+        maxSteps={TOTAL_STEPS}
+        mode={anim.mode}
+        speed={anim.speed}
+        onPlay={anim.play}
+        onPause={anim.pause}
+        onNext={anim.next}
+        onPrev={anim.prev}
+        onSpeedChange={anim.setSpeed}
+      />
     </div>
   );
 }

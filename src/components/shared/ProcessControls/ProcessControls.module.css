@@ -1,67 +1,67 @@
-.bar {
+/* ── Controles ─────────────────────────────────────────────── */
+.controls {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 8px;
   margin-top: 20px;
   flex-wrap: wrap;
 }
 
-.buttons {
-  display: flex;
-  gap: 8px;
-}
-
-.btn {
-  font-size: 14px;
+.ctrl {
+  font-size: 13px;
   padding: 6px 14px;
   border: 1px solid var(--rule);
   background: none;
   color: var(--paper);
   cursor: pointer;
-  border-radius: 4px;
-  transition: border-color 0.15s;
   font-family: inherit;
+  transition: border-color 0.15s ease;
 }
 
-.btn:hover:not(:disabled) {
+.ctrl:hover:not(:disabled) {
   border-color: var(--amber);
 }
 
-/* Los gemelos de T1 (TriadaProceso, AcordeProceso) ya tenían este indicador;
-   T2 quedó sin él al divergir las tres copias de los controles. */
-.btn:focus-visible {
+.ctrl:focus-visible {
   outline: 2px solid var(--amber);
   outline-offset: 2px;
 }
 
-.btn:disabled {
+.ctrl:disabled {
   opacity: 0.3;
   cursor: default;
 }
 
-.speed {
+.spacer {
+  flex: 1;
+}
+
+.speedWrap {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
 .speedLabel {
+  font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
   color: var(--muted);
+  text-transform: lowercase;
 }
 
-.select {
+.speedSelect {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
   padding: 4px 8px;
   border: 1px solid var(--rule);
   background: var(--surface);
   color: var(--paper);
-  border-radius: 4px;
   cursor: pointer;
 }
 
-.select:focus-visible {
+/* Venía de los controles de T2; las copias de T1 no lo tenían y no debe
+   perderse al unificar. */
+.speedSelect:focus-visible {
   outline: 2px solid var(--amber);
   outline-offset: 2px;
 }
