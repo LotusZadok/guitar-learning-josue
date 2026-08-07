@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
+import { useCallback, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { ALL } from '../../../data/notes';
@@ -249,7 +249,7 @@ export default function GradosArmonicos({ tonalidad, initialStep = 1, relativeMi
               isDe={isDe}
             />
 
-            <tr className={`${styles.revealRow} ${step >= 3 ? styles.revealOn : ''}`}>
+            <tr className={`${styles.revealRow} ${step >= 3 ? styles.revealOn : ''}`} aria-hidden={step < 3}>
               <th scope="row" className={styles.rowLabel}>{isDe ? 'Stufe' : 'Grado'}</th>
               {ROMANS_ACTIVE.map((roman, i) => (
                 <PlayableCell
@@ -268,7 +268,7 @@ export default function GradosArmonicos({ tonalidad, initialStep = 1, relativeMi
               ))}
             </tr>
 
-            <tr className={`${styles.revealRow} ${step >= 3 ? styles.revealOn : ''}`}>
+            <tr className={`${styles.revealRow} ${step >= 3 ? styles.revealOn : ''}`} aria-hidden={step < 3}>
               <th scope="row" className={styles.rowLabel}>{isDe ? 'Akkord' : 'Acorde'}</th>
               {displayChords.map((sym, i) => (
                 <PlayableCell
@@ -407,37 +407,31 @@ interface PlayableCellProps {
 // Chrome de interacción compartido por la fila Grado y la fila Acorde: ambas
 // reproducen el mismo acorde de la columna (§2.6), así que el estudiante ve que
 // "V" y "G" son la misma cosa nombrada de dos maneras.
+//
+// El disparador es un <button> real DENTRO del <td>, no el <td> con role="button":
+// ese role sobrescribe el role="cell" implícito y deja la fila sin celdas para un
+// lector de pantalla, perdiendo la lectura por columna. Como bonus, el <button>
+// nativo trae Enter/Espacio y el gating por `disabled`, así que no hace falta
+// handler de teclado ni condicionar los eventos por `active`.
 function PlayableCell({
   role, active, onPlay, isPlaying, isDimmed, ariaLabel, className, activeClassName, children,
 }: PlayableCellProps) {
-  const handleKey = useCallback(
-    (e: KeyboardEvent<HTMLTableCellElement>) => {
-      if (!active) return;
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        onPlay();
-      }
-    },
-    [active, onPlay],
-  );
-
   let cls = active ? activeClassName : className;
   if (active && isPlaying) cls = `${activeClassName} ${styles.cellPlaying}`;
   else if (active && isDimmed) cls = `${activeClassName} ${styles.cellDimmed}`;
 
   return (
-    <td
-      className={cls}
-      data-harmonic={role}
-      role={active ? 'button' : undefined}
-      tabIndex={active ? 0 : -1}
-      aria-hidden={!active}
-      aria-label={active ? ariaLabel : undefined}
-      onClick={active ? onPlay : undefined}
-      onFocus={active ? onPlay : undefined}
-      onKeyDown={handleKey}
-    >
-      {children}
+    <td className={cls} data-harmonic={role}>
+      <button
+        type="button"
+        className={styles.cellButton}
+        disabled={!active}
+        aria-label={ariaLabel}
+        onClick={onPlay}
+        onFocus={onPlay}
+      >
+        {children}
+      </button>
     </td>
   );
 }

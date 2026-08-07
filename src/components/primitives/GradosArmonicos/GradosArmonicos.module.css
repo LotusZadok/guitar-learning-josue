@@ -112,6 +112,34 @@
   opacity: 1;
 }
 
+/* El padding baja al <button> interno para que toda la celda sea clickeable.
+   Va calificado con `.table` para ganarle en especificidad a `.table td`. */
+.table .gradoCell,
+.table .chordCell {
+  padding: 0;
+}
+
+.cellButton {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  background: none;
+  border: 0;
+  font: inherit;
+  color: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+
+.cellButton:disabled {
+  cursor: default;
+}
+
+.cellButton:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: -2px;
+}
+
 .gradoCell {
   background: var(--surface);
   font-size: 14px;
@@ -120,7 +148,6 @@
 .gradoCellActive {
   composes: gradoCell;
   cursor: pointer;
-  outline: none;
   transition: background 0.15s, color 0.15s;
 }
 
@@ -129,11 +156,6 @@
    orden de fuente, dejando la celda sin feedback de hover. No simplificar. */
 .gradoCellActive[data-harmonic]:hover {
   background: rgba(245, 240, 232, 0.04);
-}
-
-.gradoCellActive:focus-visible {
-  outline: 2px solid var(--amber);
-  outline-offset: -2px;
 }
 
 /* Roman numerals: typography como único discriminador de calidad. */
@@ -185,7 +207,6 @@
 .chordCell {
   font-size: 14px;
   color: var(--text-body);
-  outline: none;
 }
 
 .chordCellActive {
@@ -198,11 +219,6 @@
 .chordCellActive[data-harmonic]:hover {
   background: rgba(245, 240, 232, 0.04);
   color: var(--paper);
-}
-
-.chordCellActive:focus-visible {
-  outline: 2px solid var(--amber);
-  outline-offset: -2px;
 }
 
 .chordSymbol {
@@ -227,15 +243,17 @@
 .chordCellActive[data-harmonic="mediumTense"] .chordSymbol { color: var(--diatonic-medium-tense); }
 .chordCellActive[data-harmonic="tense"]       .chordSymbol { color: var(--diatonic-tense); }
 
-[data-harmonic="stable"]      > .romanMajor,
-[data-harmonic="stable"]      > .romanMinor { color: var(--diatonic-stable); }
-[data-harmonic="medium"]      > .romanMajor,
-[data-harmonic="medium"]      > .romanMinor { color: var(--diatonic-medium); }
-[data-harmonic="mediumTense"] > .romanMajor,
-[data-harmonic="mediumTense"] > .romanMinor { color: var(--diatonic-medium-tense); }
-[data-harmonic="tense"]       > .romanMajor,
-[data-harmonic="tense"]       > .romanMinor,
-[data-harmonic="tense"]       > .romanDim   { color: var(--diatonic-tense); }
+/* Combinador de descendiente, no de hijo directo: el <button> interno de la
+   celda (§2.6) se interpone entre el <td data-harmonic> y el span del romano. */
+[data-harmonic="stable"]      .romanMajor,
+[data-harmonic="stable"]      .romanMinor { color: var(--diatonic-stable); }
+[data-harmonic="medium"]      .romanMajor,
+[data-harmonic="medium"]      .romanMinor { color: var(--diatonic-medium); }
+[data-harmonic="mediumTense"] .romanMajor,
+[data-harmonic="mediumTense"] .romanMinor { color: var(--diatonic-medium-tense); }
+[data-harmonic="tense"]       .romanMajor,
+[data-harmonic="tense"]       .romanMinor,
+[data-harmonic="tense"]       .romanDim   { color: var(--diatonic-tense); }
 
 @media (prefers-reduced-motion: reduce) {
   .revealRow,
@@ -254,6 +272,10 @@
     min-width: 44px;
     padding: 8px 10px;
     font-size: 12px;
+  }
+  /* El padding vive en el botón interno, así que sigue al de la celda. */
+  .cellButton {
+    padding: 8px 10px;
   }
   .rowLabel {
     min-width: 64px;
