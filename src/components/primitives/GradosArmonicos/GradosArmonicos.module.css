@@ -145,9 +145,11 @@
   font-size: 14px;
 }
 
+/* El cursor vive en `.cellButton`, no acá: el botón no llega a cubrir el alto
+   completo de la celda, así que un `cursor: pointer` en el <td> prometería un
+   objetivo clickeable donde no lo hay. */
 .gradoCellActive {
   composes: gradoCell;
-  cursor: pointer;
   transition: background 0.15s, color 0.15s;
 }
 
@@ -209,9 +211,9 @@
   color: var(--text-body);
 }
 
+/* Cursor en `.cellButton` por el mismo motivo que en `.gradoCellActive`. */
 .chordCellActive {
   composes: chordCell;
-  cursor: pointer;
   transition: background 0.15s, color 0.15s;
 }
 
