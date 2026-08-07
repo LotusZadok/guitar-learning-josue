@@ -27,6 +27,13 @@
   border-color: var(--amber);
 }
 
+/* Los gemelos de T1 (TriadaProceso, AcordeProceso) ya tenían este indicador;
+   T2 quedó sin él al divergir las tres copias de los controles. */
+.btn:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
 .btn:disabled {
   opacity: 0.3;
   cursor: default;
@@ -52,4 +59,9 @@
   color: var(--paper);
   border-radius: 4px;
   cursor: pointer;
+}
+
+.select:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
 }
