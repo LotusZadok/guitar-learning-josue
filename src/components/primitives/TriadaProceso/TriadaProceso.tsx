@@ -119,7 +119,13 @@ export default function TriadaProceso() {
   // (traslape deliberado: es un acorde).
   useEffect(() => {
     const s = anim.currentStep;
-    if (s === 0 || s === lastAudioStep.current) return;
+    // Volver a 0 (◀ hasta el inicio, o reset por tónica) rearma el ref: si no,
+    // el paso 1 se ilumina mudo al re-entrar.
+    if (s === 0) {
+      lastAudioStep.current = 0;
+      return;
+    }
+    if (s === lastAudioStep.current) return;
     lastAudioStep.current = s;
     const ta = takenAscRef.current;
     const pn = playNoteRef.current;
