@@ -73,7 +73,7 @@ export default function AcordesSection() {
         )}
       </p>
 
-      <AcordeProceso />
+      <AcordeProceso eyebrow={t("t1.s07.process_eyebrow")} />
 
       <p className={styles.resultado}>
         {chordM[0].spelled} {t("common.major")} ={" "}

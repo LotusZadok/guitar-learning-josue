@@ -150,8 +150,14 @@ function buildPasoResultado(tonic: Tonic, locale: string): ProseSegment {
   return seg;
 }
 
-export default function AcordeProceso() {
-  const { t, i18n } = useTranslation();
+interface Props {
+  /** Texto del eyebrow. Lo provee el consumer: una primitiva no debe alcanzar
+   *  dentro del contenido de una sección concreta. */
+  eyebrow: string;
+}
+
+export default function AcordeProceso({ eyebrow }: Props) {
+  const { i18n } = useTranslation();
   const locale = i18n.language;
   const tonic = useUIStore((s) => s.tonic);
   const { playNote } = useAudioEngine();
@@ -223,7 +229,7 @@ export default function AcordeProceso() {
 
   return (
     <div className={chrome.wrap}>
-      <span className={chrome.eyebrow}>{t('t1.s07.process_eyebrow')}</span>
+      <span className={chrome.eyebrow}>{eyebrow}</span>
 
       {/* El readout de AcordesBuilder es el único aria-live del subárbol, y en
           modo controlado no renderiza nada hasta el paso 3 (los caminos [] y
