@@ -9,6 +9,7 @@ import { spelledSequenceAscending } from "../../../utils/noteCalculations";
 import { useProcessAnimation } from "../../modules/t2/hooks/useProcessAnimation";
 import ProcessControls from "../../shared/ProcessControls/ProcessControls";
 import type { NaturalNote } from "../../../types/music";
+import chrome from "../../shared/processChrome.module.css";
 import styles from "./TriadaProceso.module.css";
 
 const NOTE_DE: Record<NaturalNote, string> = {
@@ -140,8 +141,8 @@ export default function TriadaProceso() {
   const isResult = current >= TOTAL_STEPS;
 
   return (
-    <div className={styles.wrap}>
-      <span className={styles.eyebrow}>
+    <div className={chrome.wrap}>
+      <span className={chrome.eyebrow}>
         {isDe
           ? "Eine nehmen, die nächste überspringen"
           : "Tomo una, salto la siguiente"}
@@ -275,7 +276,7 @@ export default function TriadaProceso() {
         </svg>
 
         {/* Panel de pasos */}
-        <ol className={styles.steps}>
+        <ol className={chrome.steps}>
           {steps.map((step, i) => {
             const stepNum = i + 1;
             const active = stepNum === current;
@@ -283,10 +284,10 @@ export default function TriadaProceso() {
             return (
               <li
                 key={i}
-                className={`${styles.step} ${active ? styles.stepActive : ""} ${past ? styles.stepPast : ""} ${step.kind === "result" ? styles.stepResult : ""}`}
+                className={`${chrome.step} ${active ? chrome.stepActive : ""} ${past ? chrome.stepPast : ""} ${step.kind === "result" ? chrome.stepResult : ""}`}
                 aria-current={active ? "step" : undefined}
               >
-                <span className={styles.stepNum}>{stepNum}</span>
+                <span className={chrome.stepNum}>{stepNum}</span>
                 {step.text}
               </li>
             );

@@ -14,6 +14,7 @@ import AcordesBuilder, { PLAYING_ALL } from '../AcordesBuilder/AcordesBuilder';
 import { BUILDER_17 } from '../AcordesBuilder/configs';
 import type { NoteSpelling, Tonic } from '../../../types/music';
 import type { ProseSegment, ProseFragment } from '../../../types/prose';
+import chrome from '../../shared/processChrome.module.css';
 import styles from './AcordeProceso.module.css';
 
 // §1.7 · El ejemplo por pasos deja de ser una lista muerta: recorre el árbol
@@ -221,8 +222,8 @@ export default function AcordeProceso() {
   const running = current > 0;
 
   return (
-    <div className={styles.wrap}>
-      <span className={styles.eyebrow}>{t('t1.s07.process_eyebrow')}</span>
+    <div className={chrome.wrap}>
+      <span className={chrome.eyebrow}>{t('t1.s07.process_eyebrow')}</span>
 
       {/* El readout de AcordesBuilder es el único aria-live del subárbol, y en
           modo controlado no renderiza nada hasta el paso 3 (los caminos [] y
@@ -240,7 +241,7 @@ export default function AcordeProceso() {
           onUserPick={releaseControl}
         />
 
-        <ol className={styles.steps}>
+        <ol className={chrome.steps}>
           {steps.map((seg, i) => {
             const stepNum = i + 1;
             const active = stepNum === current;
@@ -249,10 +250,10 @@ export default function AcordeProceso() {
             return (
               <li
                 key={i}
-                className={`${styles.step} ${active ? styles.stepActive : ''} ${past ? styles.stepPast : ''} ${isResult ? styles.stepResult : ''}`}
+                className={`${chrome.step} ${active ? chrome.stepActive : ''} ${past ? chrome.stepPast : ''} ${isResult ? chrome.stepResult : ''}`}
                 aria-current={active ? 'step' : undefined}
               >
-                <span className={styles.stepNum}>{stepNum}</span>
+                <span className={chrome.stepNum}>{stepNum}</span>
                 <Prose segment={seg} />
               </li>
             );

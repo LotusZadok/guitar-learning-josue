@@ -1,17 +1,5 @@
-.wrap {
-  margin: 20px 0 8px;
-}
-
-.eyebrow {
-  display: block;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 16px;
-}
+/* El contenedor, el eyebrow y el panel de pasos viven en
+   shared/processChrome.module.css. Acá queda sólo lo propio de §1.7. */
 
 /* El proyecto no tiene todavía una utilidad global de "visualmente oculto"
    (no hay sr-only / visually-hidden en global.css ni en los CSS modules), así
@@ -39,56 +27,6 @@
 .layout > :first-child {
   flex: 1 1 340px;
   min-width: 0;
-}
-
-/* ── Panel de pasos ────────────────────────────────────────── */
-.steps {
-  flex: 1 1 300px;
-  min-width: 260px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.step {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--muted);
-  padding: 8px 12px;
-  transition: background 0.3s ease, color 0.3s ease;
-}
-
-.stepNum {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--muted);
-  min-width: 14px;
-}
-
-.stepActive {
-  background: color-mix(in srgb, var(--red) 8%, transparent);
-  color: var(--paper);
-  font-weight: 500;
-}
-
-.stepActive .stepNum {
-  color: var(--red);
-}
-
-.stepPast {
-  color: var(--text-body);
-}
-
-.stepResult {
-  font-family: 'IBM Plex Mono', monospace;
-  letter-spacing: 0.3px;
 }
 
 @media (max-width: 720px) {
