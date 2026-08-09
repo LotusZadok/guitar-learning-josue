@@ -1,0 +1,12 @@
+Banco de sonidos: guitarra nylon (acoustic_guitar_nylon)
+========================================================
+
+Origen: Fluid (R3) General MIDI SoundFont, de Frank Wen.
+Renderizado a MP3 por nota en gleitz/midi-js-soundfonts:
+https://github.com/gleitz/midi-js-soundfonts  (carpeta FluidR3_GM)
+
+Licencia: Creative Commons Attribution 3.0 (CC BY 3.0)
+https://creativecommons.org/licenses/by/3.0/
+
+Archivos incluidos: 21 muestras (C1–C6, una cada 3 semitonos). Las notas
+intermedias se generan por resampleo en src/audio/guitarInstrument.ts.

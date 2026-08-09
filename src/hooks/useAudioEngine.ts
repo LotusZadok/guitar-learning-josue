@@ -1,6 +1,7 @@
 import { useCallback, useRef } from "react";
 import { Note } from "tonal";
 import { useUIStore } from "../stores/useUIStore";
+import { instrument } from "../audio";
 import {
   getMasterVolumeNode,
   getAudioContext,
@@ -24,6 +25,7 @@ const getCtx = (): AudioContext => {
     gainNode.gain.value = useUIStore.getState().volume;
     gainNode.connect(ctx.destination);
     setMasterVolumeNode(gainNode);
+    void instrument.preload?.(ctx);
   }
   ctx.resume();
   return ctx;
@@ -53,66 +55,14 @@ export const useAudioEngine = () => {
       const freq = Note.freq(`${ascii}${effectiveOctave}`);
       if (!freq) return;
 
-      const now = ctx.currentTime;
-      const masterGain = ctx.createGain();
-      masterGain.connect(getMasterVolumeNode() ?? ctx.destination);
-      registerActiveGain(masterGain);
-      setTimeout(
-        () => unregisterActiveGain(masterGain),
-        (duration + 0.1) * 1000,
-      );
+      // Nodo por voz: es lo que stopAllNotes() atenúa. El timbre lo pone el
+      // banco activo (ver src/audio), que cuelga su envelope debajo de aquí.
+      const voice = ctx.createGain();
+      voice.connect(getMasterVolumeNode() ?? ctx.destination);
+      registerActiveGain(voice);
+      setTimeout(() => unregisterActiveGain(voice), (duration + 0.1) * 1000);
 
-      masterGain.gain.setValueAtTime(0, now);
-      masterGain.gain.linearRampToValueAtTime(0.2, now + 0.006);
-      masterGain.gain.exponentialRampToValueAtTime(0.1, now + 0.12);
-      masterGain.gain.exponentialRampToValueAtTime(
-        0.035,
-        now + duration * 0.55,
-      );
-      masterGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-
-      const harmonics = [
-        { ratio: 1, amp: 1.0, type: "triangle" as OscillatorType },
-        { ratio: 2, amp: 0.45, type: "sine" as OscillatorType },
-        { ratio: 3, amp: 0.15, type: "sine" as OscillatorType },
-        { ratio: 4, amp: 0.06, type: "sine" as OscillatorType },
-        { ratio: 0.998, amp: 0.12, type: "sine" as OscillatorType },
-      ];
-
-      harmonics.forEach((h) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = h.type;
-        osc.frequency.setValueAtTime(freq * h.ratio, now);
-        gain.gain.setValueAtTime(h.amp, now);
-        if (h.ratio > 2) {
-          gain.gain.exponentialRampToValueAtTime(0.001, now + duration * 0.35);
-        }
-        osc.connect(gain);
-        gain.connect(masterGain);
-        osc.start(now);
-        osc.stop(now + duration + 0.05);
-      });
-
-      // Hammer transient
-      const noiseLen = 0.018;
-      const bufSize = ctx.sampleRate * noiseLen;
-      const noiseBuf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
-      const nd = noiseBuf.getChannelData(0);
-      for (let i = 0; i < bufSize; i++) nd[i] = (Math.random() * 2 - 1) * 0.25;
-      const nSrc = ctx.createBufferSource();
-      nSrc.buffer = noiseBuf;
-      const nGain = ctx.createGain();
-      nGain.gain.setValueAtTime(0.05, now);
-      nGain.gain.exponentialRampToValueAtTime(0.001, now + noiseLen);
-      const nFilt = ctx.createBiquadFilter();
-      nFilt.type = "highpass";
-      nFilt.frequency.setValueAtTime(3500, now);
-      nSrc.connect(nFilt);
-      nFilt.connect(nGain);
-      nGain.connect(masterGain);
-      nSrc.start(now);
-      nSrc.stop(now + noiseLen + 0.01);
+      instrument.playNote(ctx, freq, duration, voice);
     },
     [],
   );
