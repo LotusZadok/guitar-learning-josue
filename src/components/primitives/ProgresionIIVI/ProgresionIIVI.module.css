@@ -45,9 +45,17 @@
   cursor: default;
 }
 
-/* Pico de tensión: el V7 (dominante) lleva el acento ámbar. */
+/* Pico de tensión: el V7 (dominante) se marca con forma y peso, NO con color.
+ * El ámbar quedó reservado para "sonando ahora" (.cardActive), que es lo que
+ * significa en el resto de la app. Cap superior de 2px en neutro de marca:
+ * box-shadow inset en vez de border para no alterar la altura de la tarjeta. */
 .card[data-role='tense'] {
-  border-color: color-mix(in srgb, var(--amber) 55%, var(--rule));
+  box-shadow: inset 0 2px 0 var(--paper);
+}
+
+.card[data-role='tense'] .roman {
+  color: var(--paper);
+  font-weight: 700;
 }
 
 .cardActive {

@@ -48,12 +48,14 @@
   color: var(--muted);
 }
 
-/* La dominante secundaria (tensión) lleva el acento; el destino es neutro. */
+/* La dominante secundaria (tensión) es el sujeto de la fila: lo marca el peso,
+ * no el color — el ámbar quedó reservado para "sonando" (.rowActive). La
+ * dirección tensión→resolución ya la da la posición y la flecha. */
 .dom {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 16px;
-  font-weight: 600;
-  color: color-mix(in srgb, var(--amber) 70%, var(--paper));
+  font-weight: 700;
+  color: var(--paper);
 }
 
 .arrow {

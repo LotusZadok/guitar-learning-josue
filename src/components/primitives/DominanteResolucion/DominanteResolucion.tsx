@@ -197,8 +197,18 @@ function NoteNode({ node, colored, onEnter, onLeave }: NoteNodeProps) {
       onKeyDown={onKey}
     >
       <circle className={styles.hit} cx={0} cy={0} r={R + 6} fill="transparent" />
+      {/* Tritono: anillo punteado en neutro de marca. El punteado dice
+       *  "inestable, quiere moverse"; el ámbar quedó reservado para "sonando". */}
       {node.tritono && (
-        <circle cx={0} cy={0} r={R + 5} fill="none" stroke="var(--amber)" strokeWidth={2} />
+        <circle
+          cx={0}
+          cy={0}
+          r={R + 5}
+          fill="none"
+          stroke="var(--paper)"
+          strokeWidth={1.5}
+          strokeDasharray="3 3"
+        />
       )}
       <circle cx={0} cy={0} r={R} fill={fill} stroke={stroke} strokeWidth={1.5} />
       {/* Glifo de nota blanco sobre círculo saturado en hover: excepción Signature. */}
