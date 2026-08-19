@@ -691,11 +691,7 @@ Si algún cifrado del barrido falla en una tonalidad extrema, **no cambies el va
 npm run build
 ```
 
-```bash
-npx eslint src
-```
-
-Esperado: ambos sin errores.
+Esperado: sin errores de TypeScript. **No hay puerta de ESLint en este plan.** Verificado durante la ejecución: `eslint.config.js` solo declara `files: ['**/*.{js,jsx}']`, y `src/` tiene 110 archivos `.ts`/`.tsx` y cero `.js`/`.jsx`. ESLint no lintea **ni un solo archivo de la aplicación** — `npm run lint` solo alcanza bundles vendorizados de los skills (50 errores preexistentes) y `npx eslint src` falla con exit 2 ("all files matching the glob are ignored"). La verificación estática real es `tsc -b`, que corre en strict con `noUnusedLocals` y `noUnusedParameters`.
 
 - [ ] **Step 6: Commit**
 
@@ -815,10 +811,10 @@ En `src/components/primitives/GradosArmonicos/GradosArmonicos.module.css`, borra
 - [ ] **Step 4: Verificar que no quedaron referencias muertas**
 
 ```bash
-npx eslint src
+npm run build
 ```
 
-Esperado: sin errores. **Usar `npx eslint src`, no `npm run lint`**: `npm run lint` corre `eslint .` sobre todo el repo y arrastra 50 errores preexistentes en los scripts vendorizados de `.agents/skills/impeccable/` y `.claude/skills/impeccable/` (bundles minificados). Esos errores no son tuyos y no se arreglan acá; acotar a `src` es la única señal útil.
+Esperado: sin errores de TypeScript. **No hay puerta de ESLint en este plan.** Verificado durante la ejecución: `eslint.config.js` solo declara `files: ['**/*.{js,jsx}']`, y `src/` tiene 110 archivos `.ts`/`.tsx` y cero `.js`/`.jsx`. ESLint no lintea **ni un solo archivo de la aplicación** — `npm run lint` solo alcanza bundles vendorizados de los skills (50 errores preexistentes) y `npx eslint src` falla con exit 2 ("all files matching the glob are ignored"). La verificación estática real es `tsc -b`, que corre en strict con `noUnusedLocals` y `noUnusedParameters`.
 
 Si aparece `'DiatonicRole' is defined but never used` en `GradosArmonicos.tsx`, quitar `DiatonicRole` del import de `NoteToken` **solo si** ya no lo usan `DEGREE_ROLE`/`HARMONIC_ROLE` — sí lo usan, así que el import debe quedarse.
 
@@ -2395,16 +2391,14 @@ Con la progresión sonando, mover el slider de BPM. Esperado: la reproducción s
 
 Cambiar a tema claro. Verificar que los cuatro tintes diatónicos y el borde ámbar de "sonando" siguen legibles sobre el crema `#f5f0e8`. Si algún tinte al 12% desaparece, subirlo **solo en `[data-theme="light"]`** y anotarlo en `DESIGN.md`.
 
-- [ ] **Step 7: Correr la anti-checklist y el lint**
-
-```bash
-npx eslint src
-```
-
-(No `npm run lint`: arrastra 50 errores preexistentes de los bundles vendorizados del skill `impeccable`, fuera de `src`.)
+- [ ] **Step 7: Correr la anti-checklist y las verificaciones**
 
 ```bash
 npm run verify:constructor
+```
+
+```bash
+npm run verify:acordes
 ```
 
 ```bash
