@@ -99,6 +99,11 @@ export function tonizacionesDe(modo: Modo, indice: number): GradoId[] {
 
 // El rol de color de una tonización sale de su función, no de una tabla nueva:
 // V/x es un dominante (tenso), ii/x es una subdominante (medio).
+//
+// Precondición: `id` (cuando no es una tonización V/x o ii/x) debe pertenecer
+// al vocabulario de `modo` — p. ej. no llamar `rolDe('mayor', 'iv')`. La
+// función no valida esto; es responsabilidad del llamador mantener la grilla
+// coherente con el modo elegido.
 export function rolDe(modo: Modo, id: GradoId): RolArmonico {
   if (id.startsWith('V/')) return 'tense';
   if (id.startsWith('ii/')) return 'medium';
@@ -137,6 +142,8 @@ export function gridToEvents(grid: Grid, compas: Compas, bpm: number): EventoAco
   grid.forEach((slot, i) => {
     if (!slot) return;
     const previo = eventos[eventos.length - 1];
+    // El evento anterior se corrige acá: su duración provisional (hasta el
+    // final de la grilla) se recorta ahora que apareció el siguiente acorde.
     if (previo) previo.durMs = (i - previo.slotIndex) * paso;
     eventos.push({
       degree: slot.degree,
@@ -151,6 +158,10 @@ export function gridToEvents(grid: Grid, compas: Compas, bpm: number): EventoAco
 // Qué casilla está sonando en un instante dado. Devuelve -1 antes del primer
 // acorde. Lo usa el cabezal visual, que lee el reloj de audio.
 export function casillaEn(ms: number, compas: Compas, bpm: number, total: number): number {
-  const i = Math.floor(ms / msPorCasilla(compas, bpm));
+  // El epsilon absorbe la deriva de coma flotante: `gridToEvents` produce
+  // startMs = i * paso, y dividir de vuelta no siempre devuelve i exacto
+  // (6/8 @90 falla en las casillas 31 y 45 sin esto). Sin el epsilon el
+  // cabezal parpadea hacia atrás justo en el borde de casilla.
+  const i = Math.floor(ms / msPorCasilla(compas, bpm) + 1e-6);
   return i < 0 || i >= total ? -1 : i;
 }

@@ -16,6 +16,7 @@ import {
   rolDe,
   casillaEn,
   type Grid,
+  type Compas,
 } from '../src/utils/progresionArmonica.ts';
 
 let fallos = 0;
@@ -96,6 +97,16 @@ console.log('\n— Cabezal —');
 check('al arrancar suena la casilla 0', casillaEn(0, '4/4', 120, 4), 0);
 check('a 1200ms de 4/4@120 va por la casilla 2', casillaEn(1200, '4/4', 120, 4), 2);
 check('pasado el final devuelve -1', casillaEn(2500, '4/4', 120, 4), -1);
+
+function bordesMal(compas: Compas, bpm: number, total: number): number[] {
+  const paso = msPorCasilla(compas, bpm);
+  const malas: number[] = [];
+  for (let i = 0; i < total; i++) if (casillaEn(i * paso, compas, bpm, total) !== i) malas.push(i);
+  return malas;
+}
+check('6/8 @90: ningun borde de casilla cae en la casilla anterior', bordesMal('6/8', 90, 48), []);
+check('6/8 @58: ningun borde de casilla cae en la casilla anterior', bordesMal('6/8', 58, 48), []);
+check('3/4 @63: ningun borde de casilla cae en la casilla anterior', bordesMal('3/4', 63, 48), []);
 
 console.log('\n— Vocabulario de grados —');
 check('grados mayores', gradosDe('mayor'), ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°']);
