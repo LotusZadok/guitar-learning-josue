@@ -8,7 +8,7 @@ const NOTE_DURATION = 1.3;
 const ARPEGGIO_GAP_MS = 130;
 const CHORD_GAP_MS = 700;
 
-// §3.8 · Las 5 dominantes secundarias (V/x → grado tonizado). Cada fila reproduce
+// §3.8 · Las 5 dominantes secundarias (V/x → grado tonizado). Cada tarjeta reproduce
 // la dominante y su resolución al grado, mostrando que cualquier grado puede
 // tratarse como una tónica temporal. Datos vía Tonal.js (secondaryDominants).
 export default function DominantesSecundarias() {
@@ -56,10 +56,10 @@ export default function DominantesSecundarias() {
             disabled={active !== null}
             aria-label={`${r.dom.cifrado} resuelve a ${r.target.cifrado} (${r.notation})`}
           >
-            <span className={styles.notation}>{r.notation}</span>
-            <span className={styles.dom}>{r.dom.cifrado}</span>
-            <span className={styles.arrow} aria-hidden="true">→</span>
             <span className={styles.target}>{r.target.cifrado}</span>
+            <span className={styles.arrow} aria-hidden="true">↑</span>
+            <span className={styles.dom}>{r.dom.cifrado}</span>
+            <span className={styles.notation}>{r.notation}</span>
           </button>
         </li>
       ))}

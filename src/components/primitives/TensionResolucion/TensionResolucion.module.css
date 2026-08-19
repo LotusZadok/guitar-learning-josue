@@ -144,3 +144,18 @@
     font-size: 11px;
   }
 }
+
+/* §3.6.1 · vano del tritono entre la 4ª y la 7ª. Neutro de marca: el rojo ya lo
+   llevan los dos nodos tensos y repetirlo en el vano sería redundante. */
+.tritono line {
+  stroke: var(--muted);
+  stroke-width: 1.5;
+}
+
+.tritonoLabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-anchor: middle;
+  fill: var(--muted);
+}

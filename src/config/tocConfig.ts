@@ -31,6 +31,7 @@ export const TOC_SECTIONS: Record<string, TocItem[]> = {
     { id: 's-t3-suspendidos', labelKey: 't3.s33.label' },
     { id: 's-t3-constructor-completo', labelKey: 't3.s34.label' },
     { id: 's-t3-grado-7', labelKey: 't3.s35.label' },
+    { id: 's-t3-tritono', labelKey: 't3.s361.label' },
     { id: 's-t3-dominante', labelKey: 't3.s36.label' },
     { id: 's-t3-ii-v-i', labelKey: 't3.s37.label' },
     { id: 's-t3-tonizacion', labelKey: 't3.s38.label' },

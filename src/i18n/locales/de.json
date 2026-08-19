@@ -73,7 +73,11 @@
       "chords": ["Sus 2", "Sus 4"],
       "caption": "sus2 und sus4 teilen Tonika und Quinte; statt der Terz ändert sich die mittlere Note (2. oder 4.). Ohne Terz gibt es weder Dur noch Moll.",
       "resolution_title": "Auflösung",
-      "resolution": "Die Spannung des Sus-Akkords löst sich meist, indem diese Note zur Terz geführt wird: sus4 senkt die 4. zur 3. (Csus4 → C, F → E) und sus2 hebt die 2. zur 3. (Csus2 → C, D → E). Sie kann auch unaufgelöst als Klangfarbe bleiben.",
+      "resolution_parts": {
+        "lead": "Die Spannung des Sus-Akkords löst sich meist, indem diese Note zur Terz geführt wird: sus4 senkt die 4. zur 3. ({{sus4}} → {{tonic}}, ",
+        "mid": ") und sus2 hebt die 2. zur 3. ({{sus2}} → {{tonic}}, ",
+        "tail": "). Sie kann auch unaufgelöst als Klangfarbe bleiben."
+      },
       "builder_title": "Konstruktor: Sus-Akkorde",
       "builder_intro": "Statt einer Terz wähle die 2. oder die 4., danach die Quinte. Die 2. liegt näher an der Tonika, die 4. weiter entfernt."
     },
@@ -87,10 +91,16 @@
       "label": "3.5 · Stufe 7",
       "title": "Die 7. Stufe und die diatonische Harmonik mit Septimen",
       "intro": "Harmonisierst du jede Stufe der Dur-Tonleiter mit ihrer diatonischen Septime (Terzen innerhalb der Tonart gestapelt), erhält jede Stufe eine feste Septim-Qualität. Das Muster ist in jeder Tonart dasselbe:",
-      "grado7": "Die 7. Stufe (vii) ist der neue Fall: ihr Dreiklang war vermindert (°), und mit der diatonischen Septime wird sie zum halbverminderten (m7♭5), dem Akkord aus 3.2. Es ist der einzige m7♭5 der Tonart und entsteht auf dem Leitton."
+      "grado7": "Die 7. Stufe (vii) ist der neue Fall: ihr Dreiklang war vermindert (°), und mit der diatonischen Septime wird sie zum halbverminderten (m7♭5), dem Akkord aus 3.2. Es ist der einzige m7♭5 der Tonart und entsteht auf dem Leitton. Und der Tritonus gehört nicht allein dem V7: das vii trägt ihn ebenfalls in sich, zwischen seinem Grundton (dem Leitton) und seiner verminderten Quinte. Es sind genau dieselben zwei Töne wie im Tritonus des V7, und darum drängt das vii genauso zur Tonika."
+    },
+    "s361": {
+      "label": "3.6.1 · Der Tritonus",
+      "title": "Der Tritonus: die zwei Töne, die drängen",
+      "intro": "Bevor du ihn im Akkord siehst, schau dir den Tritonus allein an. In jeder Durtonart liegen die beiden gespannten Stufen — die 4. und die 7. — genau 6 Halbtöne auseinander: das ist ein Tritonus, das instabilste Intervall der Tonleiter. Es ist dieselbe Auflösungskarte aus 1.5, von diesen zwei Tönen aus gelesen.",
+      "caption": "Die beiden roten Töne sind der Tritonus. Jeder löst sich per Halbton zum nächsten stabilen Ton auf: die 7. steigt zur Tonika, die 4. sinkt zur 3. Tippe einen Bogen an, um die Auflösung zu hören."
     },
     "s36": {
-      "label": "3.6 · Dominant 7",
+      "label": "3.6.2 · Dominant 7",
       "title": "Der Dominant 7 (V7)",
       "intro": "Der Dominant 7 ist der Septakkord auf der 5. Stufe: er verbindet die große Terz mit der kleinen Septime. In sich birgt er einen Tritonus (zwischen seiner 3. und seiner 7.), das instabilste Intervall, und diese Spannung treibt ihn zur Auflösung nach I.",
       "resolution": "Die beiden Tritonus-Töne (hervorgehoben) lösen sich per Halbton auf: der Leitton (die 3. des V7) steigt zur Tonika, und die 7. des V7 sinkt zur 3. des I. Diese doppelte Halbtonbewegung macht V7 → I zur stärksten Auflösung der tonalen Musik. Drücke die Taste, um sie zu hören."
@@ -98,13 +108,12 @@
     "s37": {
       "label": "3.7 · ii-V-I",
       "title": "Die ii-V-I-Verbindung",
-      "intro": "Es ist die charakteristischste harmonische Bewegung der tonalen Musik (vor allem in Jazz und Bossa). Sie verkettet drei Septakkorde, die einen vollständigen Spannungsbogen durchlaufen: weg von der Tonika, maximale Spannung und Auflösung.",
+      "intro": "Es ist die charakteristischste harmonische Bewegung der tonalen Musik (vor allem in Jazz und populärer Musik). Sie verkettet drei Septakkorde, die einen vollständigen Spannungsbogen durchlaufen: leichte Spannung, maximale Spannung und Auflösung.",
       "functions": [
-        "Subdominante · mittlere Spannung",
-        "Dominante · hohe Spannung",
+        "Subdominante · leichte Spannung",
+        "Dominante · maximale Spannung",
         "Tonika · Auflösung"
       ],
-      "play": "ii-V-I hören",
       "explain": "Das ii bereitet vor, das V7 spannt (mit seinem Tritonus), und das I löst auf. Da du V7 → I schon in 3.6 gesehen hast, fügt das ii nur einen vorbereitenden Schritt hinzu, der die Ankunft befriedigender macht. Tippe jeden Akkord an oder höre die ganze Verbindung."
     },
     "s38": {
@@ -112,6 +121,10 @@
       "title": "Tonikalisierung und Zwischendominanten",
       "intro": "Jeder Akkord der Tonart (außer dem I) kann tonikalisiert werden: ihn für einen Moment wie die Tonika behandeln. Der Akkord, der das leistet, ist seine Zwischendominante, geschrieben V/x, wobei x die tonikalisierte Stufe ist.",
       "construction": "Sie wird wie das V7 gebildet, zielt aber auf eine andere Stufe: der Dominant 7 eine reine Quinte über dieser Stufe. Fast immer bringt er einen leiterfremden Ton mit (den Leitton der tonikalisierten Stufe), und der erzeugt die chromatische Farbe. Tippe jede Zeile an, um die Dominante zu ihrer Stufe auflösen zu hören.",
+      "scenarios_title": "Die zwei Szenarien",
+      "scenarios_mayor": "Dur-Szenario",
+      "scenarios_menor": "Moll-Szenario",
+      "scenarios_caption": "Im Dur-Szenario erscheinen alle drei Stufen verändert: die 2. wird zu Dur, die 5. zu Moll und die 1. zu Dur. Im Moll-Szenario sind es die natürlichen Qualitäten der Moll-Paralleltonart: 2. vermindert, 5. Moll und 1. Moll.",
       "generalization": "Die Idee erweitert sich, indem man das ganze ii-V-Paar vor jede Stufe einfügt, nicht nur das V allein. Zum Beispiel statt I, ii, V, I: I, V/ii, ii, V, I (Cmaj7, A7, Dm7, G7, Cmaj7): das A7 tonikalisiert das Dm7, bevor es weitergeht."
     },
     "s39": {
@@ -129,7 +142,6 @@
         "Dominante · mit angehobenem Leitton",
         "Tonika in Moll"
       ],
-      "play": "ii°-V7-i hören",
       "explain": "Das ii° bereitet wie das Dur-ii vor, ist aber von Anfang an gespannt (ein Halbverminderter). Das V7 spannt nach derselben Tritonus-Logik aus 3.6, nur ist dieser Leitton ein Ton, der aus der harmonischen Moll entlehnt ist. Das i löst in Moll auf. Typische Verbindungen aus Folklore und Bolero (i-♭VI-♭VII-i, i-iv-V7-i) nutzen genau diese Bausteine."
     }
   },

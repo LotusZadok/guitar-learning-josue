@@ -1,3 +1,4 @@
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
@@ -22,6 +23,16 @@ const CHORDS = [
 
 export default function ConstructorCompletoSection() {
   const { t } = useTranslation();
+  // Reunión 19/8/26: la tabla de referencia se enlaza con el árbol — la fila del
+  // acorde armado se enmarca, y mientras suena lleva el ámbar de "sonando".
+  const [active, setActive] = useState<{ cifrado: string | null; playing: boolean }>({
+    cifrado: null,
+    playing: false,
+  });
+  const onChordChange = useCallback(
+    (cifrado: string | null, playing: boolean) => setActive({ cifrado, playing }),
+    [],
+  );
 
   return (
     <section id="s-t3-constructor-completo" className={styles.section}>
@@ -30,17 +41,26 @@ export default function ConstructorCompletoSection() {
 
       <p className={styles.text}>{t('t3.s34.intro')}</p>
 
-      <AcordesBuilder config={BUILDER_34} />
+      <AcordesBuilder config={BUILDER_34} onChordChange={onChordChange} />
 
       <RuleNote>{t('t3.s34.caption')}</RuleNote>
 
       <ul className={styles.chordList}>
-        {CHORDS.map((c) => (
-          <li key={c.code} className={styles.chordItem}>
-            <span className={styles.code}>{c.code}</span>
-            <span className={styles.formula}>{c.formula}</span>
-          </li>
-        ))}
+        {CHORDS.map((c) => {
+          const on = c.code === active.cifrado;
+          return (
+            <li
+              key={c.code}
+              className={`${styles.chordItem} ${on ? styles.chordItemActive : ''} ${
+                on && active.playing ? styles.chordItemPlaying : ''
+              }`}
+              aria-current={on ? 'true' : undefined}
+            >
+              <span className={styles.code}>{c.code}</span>
+              <span className={styles.formula}>{c.formula}</span>
+            </li>
+          );
+        })}
       </ul>
     </section>
   );

@@ -12,7 +12,7 @@
 }
 
 .text:last-child {
-  margin-top: 20px;
+  margin-top: 8px;
   margin-bottom: 0;
 }
 
@@ -20,12 +20,4 @@
   .section {
     padding: 36px 24px;
   }
-}
-
-.subheading {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 20px;
-  letter-spacing: 1px;
-  color: var(--paper);
-  margin: 32px 0 4px;
 }

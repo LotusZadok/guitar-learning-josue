@@ -5,9 +5,13 @@ import type { IntervalNumber, IntervalQuality } from '../../../utils/noteCalcula
 // ordenado de roles (sin la tónica). Las aristas y la alcanzabilidad se derivan
 // de los caminos. Doble codificación posicional invariante: vertical = altura
 // real (MÁS semitonos, más arriba — la 3M por encima de la 3m, como se apilan
-// las voces en ChordStacks), horizontal = calidad (menor/dis. a la izquierda,
-// mayor/justa a la derecha). El eje vertical se invirtió el 19/8/26 a pedido del
-// profesor: antes codificaba cercanía a la tónica, que leía al revés del oído.
+// las voces en ChordStacks), horizontal = NIVEL (tónica → tercera → quinta →
+// séptima), una sola x por nivel. El eje vertical se invirtió el 19/8/26 y las
+// columnas se alinearon el 19/8/26, ambos a pedido del profesor: antes el eje
+// vertical codificaba cercanía a la tónica (leía al revés del oído) y la x
+// escalonaba dentro del nivel para codificar calidad, lo que dejaba las
+// columnas torcidas. La calidad ya la codifican el peso y la itálica del rol
+// (roleMajor / roleMinor), así que no se perdió información.
 
 export interface BuilderNode {
   role: string; // único dentro de la config: 'T','3m','3M','5','5d','7m','7M','7d'
@@ -41,13 +45,13 @@ export interface BuilderConfig {
 export const BUILDER_17: BuilderConfig = {
   width: 460,
   height: 300,
-  ariaLabel: 'Árbol constructor de acordes: elegí una tercera y luego una quinta',
+  ariaLabel: 'Árbol constructor de acordes: elige una tercera y luego una quinta',
   tonic: { x: 46, y: 150 },
   nodes: [
-    { role: '3m', number: 3, quality: 'm', x: 175, y: 208, level: 1 },
-    { role: '3M', number: 3, quality: 'M', x: 225, y: 92, level: 1 },
-    { role: '5d', number: 5, quality: 'dim', x: 360, y: 196, level: 2 },
-    { role: '5', number: 5, quality: 'P', x: 410, y: 78, level: 2 },
+    { role: '3m', number: 3, quality: 'm', x: 200, y: 208, level: 1 },
+    { role: '3M', number: 3, quality: 'M', x: 200, y: 92, level: 1 },
+    { role: '5d', number: 5, quality: 'dim', x: 385, y: 196, level: 2 },
+    { role: '5', number: 5, quality: 'P', x: 385, y: 78, level: 2 },
   ],
   chords: [
     { path: ['3m', '5'], nombre: 'menor', cifrado: 'm' },
@@ -60,14 +64,14 @@ export const BUILDER_17: BuilderConfig = {
 export const BUILDER_312: BuilderConfig = {
   width: 470,
   height: 300,
-  ariaLabel: 'Constructor de acordes con séptimas: elegí tercera, quinta y séptima',
+  ariaLabel: 'Constructor de acordes con séptimas: elige tercera, quinta y séptima',
   tonic: { x: 40, y: 150 },
   nodes: [
-    { role: '3m', number: 3, quality: 'm', x: 150, y: 205, level: 1 },
-    { role: '3M', number: 3, quality: 'M', x: 195, y: 95, level: 1 },
+    { role: '3m', number: 3, quality: 'm', x: 172, y: 205, level: 1 },
+    { role: '3M', number: 3, quality: 'M', x: 172, y: 95, level: 1 },
     { role: '5', number: 5, quality: 'P', x: 295, y: 150, level: 2 },
-    { role: '7m', number: 7, quality: 'm', x: 405, y: 205, level: 3 },
-    { role: '7M', number: 7, quality: 'M', x: 420, y: 95, level: 3 },
+    { role: '7m', number: 7, quality: 'm', x: 412, y: 205, level: 3 },
+    { role: '7M', number: 7, quality: 'M', x: 412, y: 95, level: 3 },
   ],
   chords: [
     { path: ['3m', '5'], nombre: 'menor', cifrado: 'm' },
@@ -83,11 +87,11 @@ export const BUILDER_312: BuilderConfig = {
 export const BUILDER_33: BuilderConfig = {
   width: 460,
   height: 300,
-  ariaLabel: 'Constructor de acordes suspendidos: elegí la 2ª o la 4ª y luego la quinta',
+  ariaLabel: 'Constructor de acordes suspendidos: elige la 2ª o la 4ª y luego la quinta',
   tonic: { x: 46, y: 150 },
   nodes: [
-    { role: '2', number: 2, quality: 'M', x: 175, y: 208, level: 1 },
-    { role: '4', number: 4, quality: 'P', x: 215, y: 92, level: 1 },
+    { role: '2', number: 2, quality: 'M', x: 195, y: 208, level: 1 },
+    { role: '4', number: 4, quality: 'P', x: 195, y: 92, level: 1 },
     { role: '5', number: 5, quality: 'P', x: 405, y: 150, level: 2 },
   ],
   chords: [
@@ -102,18 +106,18 @@ export const BUILDER_33: BuilderConfig = {
 export const BUILDER_34: BuilderConfig = {
   width: 520,
   height: 340,
-  ariaLabel: 'Constructor completo de acordes: elegí tercera (o 2ª/4ª), quinta y, si querés, séptima',
+  ariaLabel: 'Constructor completo de acordes: elige tercera (o 2ª/4ª), quinta y, si quieres, séptima',
   tonic: { x: 46, y: 170 },
   nodes: [
-    { role: '2', number: 2, quality: 'M', x: 140, y: 288, level: 1 },
-    { role: '3m', number: 3, quality: 'm', x: 125, y: 210, level: 1 },
-    { role: '3M', number: 3, quality: 'M', x: 182, y: 132, level: 1 },
-    { role: '4', number: 4, quality: 'P', x: 160, y: 55, level: 1 },
-    { role: '5d', number: 5, quality: 'dim', x: 322, y: 216, level: 2 },
-    { role: '5', number: 5, quality: 'P', x: 346, y: 104, level: 2 },
-    { role: '7d', number: 7, quality: 'dim', x: 456, y: 262, level: 3 },
-    { role: '7m', number: 7, quality: 'm', x: 470, y: 170, level: 3 },
-    { role: '7M', number: 7, quality: 'M', x: 478, y: 80, level: 3 },
+    { role: '2', number: 2, quality: 'M', x: 152, y: 288, level: 1 },
+    { role: '3m', number: 3, quality: 'm', x: 152, y: 210, level: 1 },
+    { role: '3M', number: 3, quality: 'M', x: 152, y: 132, level: 1 },
+    { role: '4', number: 4, quality: 'P', x: 152, y: 55, level: 1 },
+    { role: '5d', number: 5, quality: 'dim', x: 334, y: 216, level: 2 },
+    { role: '5', number: 5, quality: 'P', x: 334, y: 104, level: 2 },
+    { role: '7d', number: 7, quality: 'dim', x: 468, y: 262, level: 3 },
+    { role: '7m', number: 7, quality: 'm', x: 468, y: 170, level: 3 },
+    { role: '7M', number: 7, quality: 'M', x: 468, y: 80, level: 3 },
   ],
   chords: [
     { path: ['2', '5'], nombre: 'suspendido 2', cifrado: 'sus2' },
@@ -134,13 +138,13 @@ export const BUILDER_34: BuilderConfig = {
 export const BUILDER_32: BuilderConfig = {
   width: 470,
   height: 300,
-  ariaLabel: 'Constructor de acordes disminuidos: elegí 3m, 5d y la séptima',
+  ariaLabel: 'Constructor de acordes disminuidos: elige 3m, 5d y la séptima',
   tonic: { x: 40, y: 150 },
   nodes: [
     { role: '3m', number: 3, quality: 'm', x: 160, y: 150, level: 1 },
     { role: '5d', number: 5, quality: 'dim', x: 290, y: 150, level: 2 },
-    { role: '7d', number: 7, quality: 'dim', x: 410, y: 205, level: 3 },
-    { role: '7m', number: 7, quality: 'm', x: 420, y: 95, level: 3 },
+    { role: '7d', number: 7, quality: 'dim', x: 415, y: 205, level: 3 },
+    { role: '7m', number: 7, quality: 'm', x: 415, y: 95, level: 3 },
   ],
   chords: [
     { path: ['3m', '5d'], nombre: 'disminuido', cifrado: '°' },

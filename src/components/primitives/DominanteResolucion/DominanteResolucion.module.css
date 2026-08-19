@@ -5,6 +5,41 @@
   align-items: center;
 }
 
+/* Selector de acorde de origen: los dos que llevan el mismo tritono (§3.5). */
+.selector {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.chip {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 1px;
+  padding: 4px 12px;
+  border: 1px solid var(--rule);
+  background: none;
+  color: var(--paper);
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.chip:hover:not(:disabled) {
+  border-color: var(--amber);
+}
+
+.chip:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.chipActive {
+  composes: chip;
+  background: var(--red);
+  border-color: var(--red);
+}
+
 .diagram {
   display: block;
   width: 100%;
@@ -12,20 +47,29 @@
   height: auto;
 }
 
-.cifrado {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 20px;
-  letter-spacing: 1px;
-  fill: var(--paper);
-  text-anchor: middle;
+/* Eje cromático: mismo lenguaje que §1.4 y §1.5. */
+.axis {
+  stroke: var(--rule);
+  stroke-width: 1.5;
 }
 
-.roman {
+.tick {
+  fill: var(--rule);
+}
+
+/* Etiqueta de fila: qué acorde vive arriba y cuál abajo del eje. */
+.rowLabel {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-anchor: end;
+  dominant-baseline: middle;
   fill: var(--muted);
-  text-anchor: middle;
+}
+
+.arrowHead {
+  fill: var(--amber);
 }
 
 .arrow {

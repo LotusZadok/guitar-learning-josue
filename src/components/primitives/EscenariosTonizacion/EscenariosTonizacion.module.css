@@ -1,0 +1,103 @@
+.wrap {
+  margin: 24px 0 0;
+}
+
+.selector {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.chip {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 1px;
+  padding: 4px 12px;
+  border: 1px solid var(--rule);
+  background: none;
+  color: var(--paper);
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.chip:hover:not(:disabled) {
+  border-color: var(--amber);
+}
+
+.chip:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.chipActive {
+  composes: chip;
+  background: var(--red);
+  border-color: var(--red);
+}
+
+/* Los tres grados lado a lado: la comparación es horizontal, como el resto de
+   §3.8 tras la reunión del 19/8/26. */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 104px;
+  padding: 12px 14px;
+  border: 1px solid var(--rule);
+  background: none;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.card:hover:not(:disabled) {
+  border-color: var(--paper);
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+.card:disabled {
+  cursor: default;
+}
+
+.cardActive {
+  border-color: var(--amber);
+  background: color-mix(in srgb, var(--amber) 10%, transparent);
+}
+
+/* Sin color por grado: acá el sujeto es la CALIDAD del acorde (mayor, menor,
+   disminuido), no su función dentro de un arco de tensión. El color diatónico
+   de §3.7 codifica función y usarlo aquí diría algo que no es. */
+.roman {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+
+.cifrado {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  color: var(--paper);
+}
+
+.audioRow {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 16px;
+}

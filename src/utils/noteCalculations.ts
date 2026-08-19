@@ -374,6 +374,40 @@ function chordAudio(chordName: string): ChordAudio {
   };
 }
 
+// === Escenarios de tonización (§3.8) ===
+// Reunión 19/8/26. Los tres grados que el profesor usa para contrastar los dos
+// escenarios. En mayor los tres aparecen ALTERADOS respecto de la escala (ese es
+// el punto: tonizar cambia la calidad): el II se vuelve mayor (V/V), el V se
+// vuelve menor (el ii de la tonalidad de IV) y el I se vuelve mayor-dominante
+// (V/IV) — en Do: D7, Gm7, C7. En la relativa menor son las calidades naturales:
+// ii° m7♭5, v m7, i m7 — en La menor: Bm7♭5, Em7, Am7.
+const ASCII_CIFRADO = (c: string) => c.replace(/♯/g, "#").replace(/♭/g, "b");
+
+export interface EscenarioGrado {
+  roman: string;
+  chord: ChordAudio;
+}
+
+export function tonizacionEscenarios(tonic: Tonic): {
+  mayor: EscenarioGrado[];
+  menor: EscenarioGrado[];
+} {
+  const may = majorScaleSpelled(tonic).map(ASCII_CIFRADO);
+  const men = relativeMinorScaleSpelled(tonic).map(ASCII_CIFRADO);
+  return {
+    mayor: [
+      { roman: "II7", chord: chordAudio(may[1] + "7") },
+      { roman: "v", chord: chordAudio(may[4] + "m7") },
+      { roman: "I7", chord: chordAudio(may[0] + "7") },
+    ],
+    menor: [
+      { roman: "ii°", chord: chordAudio(men[1] + "m7b5") },
+      { roman: "v", chord: chordAudio(men[4] + "m7") },
+      { roman: "i", chord: chordAudio(men[0] + "m7") },
+    ],
+  };
+}
+
 export interface SecondaryDominant {
   notation: string; // "V/ii"
   dom: ChordAudio; // la dominante secundaria (ej. A7)

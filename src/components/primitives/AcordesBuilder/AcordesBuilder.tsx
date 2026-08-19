@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState, type KeyboardEvent } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { useAudioEngine, stopAllNotes } from '../../../hooks/useAudioEngine';
 import { useUIStore } from '../../../stores/useUIStore';
 import { NOTE_COLORS, spelledToES } from '../../../data/notes';
@@ -25,18 +25,24 @@ interface Props {
   path?: string[];
   /** Rol del nodo que suena ahora; `PLAYING_ALL` si suena el acorde entero. */
   playingRole?: string | null;
+  /** Acorde completo bajo el camino actual (cifrado del método, ej. 'm7♭5') y si
+   *  está sonando. `null` mientras el camino no cierra un acorde. Lo usa §3.4
+   *  para resaltar la fila correspondiente en su tabla de referencia. */
+  onChordChange?: (cifrado: string | null, playing: boolean) => void;
   /** El estudiante tocó un nodo: el dueño del walkthrough debe soltar el control.
-   *  Si no lo suelta, el clic no se refleja visualmente: `selected` sigue leyendo
-   *  `path` mientras `internalSelected` diverge por debajo, invisible, hasta que
-   *  `path` vuelva a `undefined`. */
-  onUserPick?: () => void;
+   *  Recibe la selección resultante (roles por nivel, sin 'T') para que el dueño
+   *  pueda re-anclar su contenido a la tercera/quinta elegidas.
+   *  Si no suelta el control, el clic no se refleja visualmente: `selected` sigue
+   *  leyendo `path` mientras `internalSelected` diverge por debajo, invisible,
+   *  hasta que `path` vuelva a `undefined`. */
+  onUserPick?: (selection: string[]) => void;
 }
 
 // Constructor de acordes como árbol de nodos, construido por camino (tercera →
 // quinta → [séptima]). Config-driven: la topología (nodos, posiciones, caminos
 // válidos) viene de `config`, así crece de §1.7 (hasta la quinta) hacia §3.4
 // (completo) sin duplicar el componente.
-export default function AcordesBuilder({ config = BUILDER_17, path, playingRole, onUserPick }: Props) {
+export default function AcordesBuilder({ config = BUILDER_17, path, playingRole, onChordChange, onUserPick }: Props) {
   const tonic = useUIStore((s) => s.tonic);
   const { playNote } = useAudioEngine();
 
@@ -75,6 +81,12 @@ export default function AcordesBuilder({ config = BUILDER_17, path, playingRole,
     return ['T', ...selected].map((r) => members.get(r)!);
   }, [currentChord, selected, members]);
 
+  // El consumidor se entera del acorde vigente y de si suena. Sale por efecto y
+  // no durante el render para no escribir en el padre mientras el hijo pinta.
+  useEffect(() => {
+    onChordChange?.(currentChord?.cifrado ?? null, playing);
+  }, [currentChord, playing, onChordChange]);
+
   // Un nodo de nivel L es alcanzable si la selección llega AL MENOS al nivel
   // anterior (L-1) y existe un acorde cuyo prefijo coincide y continúa con él.
   // `>= L-1` (no `===`) deja re-elegir un nivel ya pasado (p.ej. cambiar de
@@ -111,17 +123,21 @@ export default function AcordesBuilder({ config = BUILDER_17, path, playingRole,
   const pickNode = useCallback(
     (node: BuilderNode) => {
       const L = node.level;
-      setInternalSelected((prev) => {
-        // Parte del camino visible (controlado o interno) para que soltar el
-        // control se sienta continuo: el clic edita lo que el estudiante ve.
-        const base = controlled ? path! : prev;
-        return base[L - 1] === node.role
+      // Parte del camino visible (controlado o interno) para que soltar el
+      // control se sienta continuo: el clic edita lo que el estudiante ve.
+      const base = controlled ? path! : internalSelected;
+      const next =
+        base[L - 1] === node.role
           ? base.slice(0, L - 1) // re-clic deselecciona
           : [...base.slice(0, L - 1), node.role];
-      });
-      onUserPick?.();
+      setInternalSelected(next);
+      // Primero avisa (el dueño puede soltar el control y callar SUS notas) y
+      // recién después suena la del estudiante: al revés, un `stopAllNotes()` del
+      // dueño cortaba la nota recién disparada y el árbol parecía mudo.
+      onUserPick?.(next);
+      scrub(members.get(node.role)!);
     },
-    [controlled, path, onUserPick],
+    [controlled, path, internalSelected, onUserPick, scrub, members],
   );
 
   const playBlock = useCallback(() => {
@@ -287,8 +303,8 @@ export default function AcordesBuilder({ config = BUILDER_17, path, playingRole,
         ) : controlled ? null : (
           <p className={styles.hint}>
             {selected.length === 0
-              ? 'Elegí una tercera para empezar a construir.'
-              : 'Seguí eligiendo notas para completar un acorde.'}
+              ? 'Elige una tercera para empezar a construir.'
+              : 'Sigue eligiendo notas para completar un acorde.'}
           </p>
         )}
       </div>

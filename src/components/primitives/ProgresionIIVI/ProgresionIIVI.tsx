@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
+import PlaybackButton from '../../shared/PlaybackButton/PlaybackButton';
 import { useUIStore } from '../../../stores/useUIStore';
 import { ALL } from '../../../data/notes';
 import {
@@ -15,7 +16,6 @@ import styles from './ProgresionIIVI.module.css';
 interface Props {
   /** Etiquetas de función por acorde (ii, V7, I / ii°, V7, i). Vienen de la sección (i18n). */
   functions: string[];
-  playLabel: string;
   /** T3 §3.10: ii°-V7-i sobre la relativa menor natural (misma armadura que
    *  `tonic`, rotada), en vez de ii-V-I mayor. */
   relativeMinor?: boolean;
@@ -56,10 +56,10 @@ const NOTE_DURATION = 1.4;
 const ARPEGGIO_GAP_MS = 150;
 const CHORD_GAP_MS = 1100;
 
-export default function ProgresionIIVI({ functions, playLabel, relativeMinor = false }: Props) {
+export default function ProgresionIIVI({ functions, relativeMinor = false }: Props) {
   const tonic = useUIStore((s) => s.tonic);
   const { playNote } = useAudioEngine();
-  const [playing, setPlaying] = useState(false);
+  const [playing, setPlaying] = useState<'bloque' | 'arpegio' | null>(null);
   const [activeCard, setActiveCard] = useState<number | null>(null);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
 
@@ -109,23 +109,28 @@ export default function ProgresionIIVI({ functions, playLabel, relativeMinor = f
     [playChord, playing],
   );
 
-  const playProgression = useCallback(() => {
-    if (playing) return;
-    setPlaying(true);
-    clearTimers();
-    chords.forEach((_, idx) => {
-      const t = setTimeout(() => {
-        setActiveCard(idx);
-        playChord(idx);
-      }, idx * CHORD_GAP_MS);
-      timers.current.push(t);
-    });
-    const end = setTimeout(() => {
-      setPlaying(false);
-      setActiveCard(null);
-    }, chords.length * CHORD_GAP_MS + NOTE_DURATION * 500);
-    timers.current.push(end);
-  }, [chords, clearTimers, playChord, playing]);
+  // Bloque = las cuatro notas de cada acorde juntas; arpegio = desplegadas. En
+  // ambos casos los tres acordes siguen encadenados con CHORD_GAP_MS.
+  const playProgression = useCallback(
+    (mode: 'bloque' | 'arpegio') => {
+      if (playing) return;
+      setPlaying(mode);
+      clearTimers();
+      chords.forEach((_, idx) => {
+        const t = setTimeout(() => {
+          setActiveCard(idx);
+          playChord(idx, mode === 'arpegio' ? ARPEGGIO_GAP_MS : 0);
+        }, idx * CHORD_GAP_MS);
+        timers.current.push(t);
+      });
+      const end = setTimeout(() => {
+        setPlaying(null);
+        setActiveCard(null);
+      }, chords.length * CHORD_GAP_MS + NOTE_DURATION * 500);
+      timers.current.push(end);
+    },
+    [chords, clearTimers, playChord, playing],
+  );
 
   return (
     <div className={styles.wrap}>
@@ -137,7 +142,7 @@ export default function ProgresionIIVI({ functions, playLabel, relativeMinor = f
               className={`${styles.card} ${activeCard === i ? styles.cardActive : ''}`}
               data-role={c.role}
               onClick={() => playCard(i)}
-              disabled={playing}
+              disabled={playing != null}
               aria-label={`${c.cifrado}, ${functions[i]}`}
             >
               <span className={styles.roman}>{c.roman}</span>
@@ -149,9 +154,20 @@ export default function ProgresionIIVI({ functions, playLabel, relativeMinor = f
         ))}
       </div>
 
-      <button type="button" className={styles.playBtn} onClick={playProgression} disabled={playing}>
-        {playLabel}
-      </button>
+      <div className={styles.audioRow}>
+        <PlaybackButton
+          mode="bloque"
+          onClick={() => playProgression('bloque')}
+          playing={playing === 'bloque'}
+          disabled={playing != null}
+        />
+        <PlaybackButton
+          mode="arpegio"
+          onClick={() => playProgression('arpegio')}
+          playing={playing === 'arpegio'}
+          disabled={playing != null}
+        />
+      </div>
     </div>
   );
 }

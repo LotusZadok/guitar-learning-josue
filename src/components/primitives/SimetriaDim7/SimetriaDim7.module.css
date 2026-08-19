@@ -1,0 +1,128 @@
+.wrap {
+  margin: 16px 0 24px;
+}
+
+/* === selector de familia === */
+.selector {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+/* Cifrado en Plex Mono (Chord-Symbol Case Rule), no en Bebas. */
+.chip {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  letter-spacing: 1px;
+  padding: 4px 12px;
+  border: 1px solid var(--rule);
+  background: none;
+  color: var(--paper);
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.chip:hover {
+  border-color: var(--amber);
+}
+
+.chipActive {
+  composes: chip;
+  background: var(--red);
+  border-color: var(--red);
+}
+
+.svg {
+  max-width: 400px;
+  width: 100%;
+  display: block;
+  margin: 0 auto;
+}
+
+/* === cuadrados inscritos === */
+/* La familia activa es el sujeto; las otras dos quedan de fondo para que se lea
+   que son el mismo cuadrado rotado un semitono. */
+.square {
+  fill: none;
+  stroke: var(--text-body);
+  stroke-width: 2.5;
+}
+
+.squareIdle {
+  fill: none;
+  stroke: var(--rule);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+}
+
+/* === nodos === */
+.node {
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.node:hover,
+.node:focus-visible {
+  transform: scale(1.12);
+  outline: none;
+}
+
+.node > circle {
+  transition: fill 0.12s, stroke 0.12s;
+}
+
+.noteText {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  text-anchor: middle;
+  /* Bebas bajo `dominant-baseline: middle` cae ~0.5px sobre el centro a este
+     tamaño; medido, y es lo que corrige la y del <text> en AcordesBuilder. */
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+
+/* Marca de la tónica global: la familia activa es la que la contiene, así que
+   la T explica por qué se está hablando de esta y no de otra. */
+.tonicMark {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-anchor: middle;
+  fill: var(--muted);
+  pointer-events: none;
+}
+
+/* === readout === */
+/* `margin: X auto`: la regla global `p { max-width: 90ch }` angosta la caja y
+   sin auto queda pegada a la izquierda, con el texto centrado dentro de una
+   caja descentrada. */
+.readout {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 15px;
+  letter-spacing: 1px;
+  color: var(--paper);
+  text-align: center;
+  margin: 4px auto 14px;
+}
+
+.audioRow {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .node,
+  .node > circle {
+    transition: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .svg {
+    max-width: 320px;
+  }
+}

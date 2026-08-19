@@ -16,7 +16,7 @@ export default function ProgresionIIVISection() {
 
       <p className={styles.text}>{t('t3.s37.intro')}</p>
 
-      <ProgresionIIVI functions={functions} playLabel={t('t3.s37.play')} />
+      <ProgresionIIVI functions={functions} />
 
       <p className={styles.text}>{t('t3.s37.explain')}</p>
     </section>

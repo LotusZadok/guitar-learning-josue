@@ -5,6 +5,7 @@ import SegundaCuartaSection from './components/SegundaCuartaSection';
 import SuspendidosSection from './components/SuspendidosSection';
 import ConstructorCompletoSection from './components/ConstructorCompletoSection';
 import GradoSeptimoSection from './components/GradoSeptimoSection';
+import TritonoSection from './components/TritonoSection';
 import DominanteSection from './components/DominanteSection';
 import ProgresionIIVISection from './components/ProgresionIIVISection';
 import TonizacionSection from './components/TonizacionSection';
@@ -22,6 +23,7 @@ export default function T3Module() {
       <SuspendidosSection />
       <ConstructorCompletoSection />
       <GradoSeptimoSection />
+      <TritonoSection />
       <DominanteSection />
       <ProgresionIIVISection />
       <TonizacionSection />

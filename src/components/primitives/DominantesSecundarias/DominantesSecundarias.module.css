@@ -1,25 +1,27 @@
+/* Reunión 19/8/26: las cinco dominantes lado a lado, no apiladas. Cada una es
+   una tarjeta autónoma (V/x arriba, la dominante, la flecha, el destino), así se
+   comparan de un vistazo en vez de leerse como una lista. */
 .list {
   list-style: none;
   padding: 0;
   margin: 24px auto 0;
-  max-width: 420px;
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
 }
 
 .row {
-  width: 100%;
-  display: grid;
-  grid-template-columns: 56px 1fr 24px 1fr;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
-  padding: 10px 16px;
+  gap: 4px;
+  min-width: 104px;
+  padding: 12px 14px;
   border: 1px solid var(--rule);
   background: none;
   cursor: pointer;
   transition: border-color 0.2s, background 0.2s;
-  text-align: left;
 }
 
 .row:hover:not(:disabled) {
@@ -60,9 +62,9 @@
 
 .arrow {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 14px;
+  font-size: 13px;
+  line-height: 1;
   color: var(--muted);
-  text-align: center;
 }
 
 .target {

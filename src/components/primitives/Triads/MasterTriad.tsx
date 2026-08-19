@@ -64,7 +64,7 @@ export default function MasterTriad() {
       <p className={styles.masterIntro}>
         {isDe
           ? 'Wähle einen Grundton. Die Kette stapelt diatonische Terzen im Kreis: T → 3 → 5 → 7 → 9 → 11 → 13 → wiederholt.'
-          : 'Seleccioná una nota raíz. La cadena apila terceras diatónicas en ciclo: T → 3ra → 5ta → 7ma → 9na → 11na → 13na → repite.'}
+          : 'Selecciona una nota raíz. La cadena apila terceras diatónicas en ciclo: T → 3ra → 5ta → 7ma → 9na → 11na → 13na → repite.'}
       </p>
       <div className={styles.chain}>
         {chainNotes.map(({ note, octave }, i) => {

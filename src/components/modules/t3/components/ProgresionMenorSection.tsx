@@ -17,7 +17,7 @@ export default function ProgresionMenorSection() {
 
       <p className={styles.text}>{t('t3.s310.intro')}</p>
 
-      <ProgresionIIVI functions={functions} playLabel={t('t3.s310.play')} relativeMinor />
+      <ProgresionIIVI functions={functions} relativeMinor />
 
       <p className={styles.text}>{t('t3.s310.explain')}</p>
     </section>

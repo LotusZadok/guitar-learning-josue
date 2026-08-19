@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
 import ChordStacks, { type ChordDef } from '../../../primitives/ChordStacks/ChordStacks';
 import AcordesBuilder from '../../../primitives/AcordesBuilder/AcordesBuilder';
+import SimetriaDim7 from '../../../primitives/SimetriaDim7/SimetriaDim7';
 import { BUILDER_32 } from '../../../primitives/AcordesBuilder/configs';
 import styles from './DisminuidosSection.module.css';
 
@@ -32,14 +33,6 @@ const CHORDS: ChordDef[] = [
       { role: 'T', number: 1, quality: 'P' },
     ],
   },
-];
-
-// Las 3 familias absolutas de dim7 (no dependen de la tónica activa): por la
-// simetría de terceras menores, cada acorde dim7 se repite cada 3 semitonos.
-const GROUPS = [
-  'C° = E♭° = G♭° = A°',
-  'C♯° = E° = G° = B♭°',
-  'D° = F° = A♭° = B°',
 ];
 
 export default function DisminuidosSection() {
@@ -82,13 +75,7 @@ export default function DisminuidosSection() {
       <h3 className={styles.subheading}>{t('t3.s32.symmetry_title')}</h3>
       <p className={styles.text}>{t('t3.s32.symmetry')}</p>
 
-      <ul className={styles.groups}>
-        {GROUPS.map((g) => (
-          <li key={g} className={styles.group}>
-            {g}
-          </li>
-        ))}
-      </ul>
+      <SimetriaDim7 />
 
       <p className={styles.text}>{t('t3.s32.function')}</p>
 

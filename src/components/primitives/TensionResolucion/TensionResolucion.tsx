@@ -97,6 +97,7 @@ const RADIUS_STABLE = 18;
 const RADIUS_TENSE = 18;
 const ARC_BASELINE = NODE_Y - RADIUS_TONIC - 6; // top of node circle
 const ARC_RISE = 52; // how far above baseline the arc peaks
+const TRITONO_Y = NODE_Y + 42; // vano del tritono, bajo los nodos (§3.6.1)
 // Reunión 6/7/26: separar/alargar las 2 notas de cada flecha para que la
 // resolución se oiga clara (antes 260ms se encimaban demasiado).
 const ARPEGGIO_GAP_MS = 430;
@@ -121,7 +122,14 @@ function arrowPath(
   return `M ${originX} ${startY} Q ${midX} ${peakY} ${destX} ${startY}`;
 }
 
-export default function TensionResolucion() {
+interface Props {
+  /** T3 §3.6.1: el mismo mapa, leído como tritono. Deja sólo los arcos que salen
+   *  de los dos grados tensos (4ª y 7ª — que ES el tritono de la tonalidad),
+   *  dibuja el vano entre ellos y atenúa el resto. Sin la prop, §1.5 no cambia. */
+  focus?: 'tritono';
+}
+
+export default function TensionResolucion({ focus }: Props = {}) {
   const { i18n } = useTranslation();
   const isDe = i18n.language === "de";
   const tonic = useUIStore((s) => s.tonic);
@@ -191,8 +199,24 @@ export default function TensionResolucion() {
           className={styles.baseline}
         />
 
+        {/* §3.6.1: el vano del tritono entre la 4ª y la 7ª, bajo el eje. */}
+        {focus === 'tritono' && (
+          <g className={styles.tritono} aria-hidden="true">
+            <line x1={nodeX(nodes[3].pos)} y1={TRITONO_Y} x2={nodeX(nodes[6].pos)} y2={TRITONO_Y} />
+            <line x1={nodeX(nodes[3].pos)} y1={TRITONO_Y - 5} x2={nodeX(nodes[3].pos)} y2={TRITONO_Y + 5} />
+            <line x1={nodeX(nodes[6].pos)} y1={TRITONO_Y - 5} x2={nodeX(nodes[6].pos)} y2={TRITONO_Y + 5} />
+            <text
+              x={(nodeX(nodes[3].pos) + nodeX(nodes[6].pos)) / 2}
+              y={TRITONO_Y + 18}
+              className={styles.tritonoLabel}
+            >
+              {isDe ? 'Tritonus · 6 HT' : 'tritono · 6 s.t.'}
+            </text>
+          </g>
+        )}
+
         {/* Resolution arrows above the strip */}
-        {ARROWS.map((a) => {
+        {ARROWS.filter((a) => focus !== 'tritono' || nodes[a.fromIdx].role === 'tense').map((a) => {
           const from = nodes[a.fromIdx];
           const to = nodes[a.toIdx];
           return (

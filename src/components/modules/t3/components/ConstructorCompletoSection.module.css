@@ -27,7 +27,24 @@
   align-items: baseline;
   gap: 12px;
   border-bottom: 1px solid var(--rule);
-  padding-bottom: 6px;
+  padding: 0 8px 6px;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+/* Enlace con el árbol: la fila del acorde armado se enmarca; mientras suena
+   lleva el ámbar, que en el resto de la app significa exactamente eso. */
+.chordItemActive {
+  border-bottom-color: var(--paper);
+  background: color-mix(in srgb, var(--paper) 7%, transparent);
+}
+
+.chordItemActive .formula {
+  color: var(--text-body);
+}
+
+.chordItemPlaying {
+  border-bottom-color: var(--amber);
+  background: color-mix(in srgb, var(--amber) 12%, transparent);
 }
 
 /* Plex Mono (no Bebas): el cifrado tiene caso semántico (m≠M, maj7, m7♭5);

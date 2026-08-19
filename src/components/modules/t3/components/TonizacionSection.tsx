@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
+import RuleNote from '../../../shared/RuleNote';
+import EscenariosTonizacion from '../../../primitives/EscenariosTonizacion/EscenariosTonizacion';
 import DominantesSecundarias from '../../../primitives/DominantesSecundarias/DominantesSecundarias';
 import styles from './TonizacionSection.module.css';
 
@@ -17,6 +19,12 @@ export default function TonizacionSection() {
       <p className={styles.text}>{t('t3.s38.construction')}</p>
 
       <DominantesSecundarias />
+
+      <h3 className={styles.subheading}>{t('t3.s38.scenarios_title')}</h3>
+      <EscenariosTonizacion
+        labels={{ mayor: t('t3.s38.scenarios_mayor'), menor: t('t3.s38.scenarios_menor') }}
+      />
+      <RuleNote>{t('t3.s38.scenarios_caption')}</RuleNote>
 
       <p className={styles.text}>{t('t3.s38.generalization')}</p>
     </section>

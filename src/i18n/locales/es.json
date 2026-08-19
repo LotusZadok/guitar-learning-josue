@@ -18,7 +18,7 @@
       },
       "new_seventh": "La séptima disminuida (7d) es un semitono menor que la 7m, lo que la vuelve enarmónicamente igual a una 6M; pero se trata como séptima porque ese es el rol que cumple dentro del acorde dim7.",
       "ruler_aria": "Regla de séptimas: distancia en semitonos desde la tónica hasta la octava",
-      "legend": "Pasá o tocá cada nodo: la 7d está un semitono por debajo de la 7m, y la 7m uno por debajo de la 7M."
+      "legend": "Pasa o toca cada nodo: la 7d está un semitono por debajo de la 7m, y la 7m uno por debajo de la 7M."
     },
     "s312": {
       "label": "3.1.2 · Acordes con séptimas",
@@ -33,7 +33,7 @@
       "difference": "La diferencia entre maj7 y dominante 7 es solo la séptima (7M vs 7m); entre m7 y dominante 7 es solo la tercera (3m vs 3M). El dominante 7 combina la 3M con la 7m, y esa combinación es la que le da su rol funcional como dominante (se desarrolla en 3.6).",
       "caption": "La tónica y la 5ª son iguales en los tres acordes. La 3ª define mayor o menor; la 7ª define maj7 frente a dominante.",
       "builder_title": "Constructor: con séptimas",
-      "builder_intro": "El árbol crece: ahora la 5J ramifica a la 7M y la 7m. Pará en la quinta para una tríada, o seguí hasta la séptima para armar maj7, m7 o dominante 7."
+      "builder_intro": "El árbol crece: ahora la 5J ramifica a la 7M y la 7m. Para en la quinta para una tríada, o sigue hasta la séptima para armar maj7, m7 o dominante 7."
     },
     "s32": {
       "label": "3.2 · Acordes disminuidos",
@@ -50,7 +50,7 @@
       "symmetry": "Todas las distancias internas del dim7 son de 3 semitonos (terceras menores apiladas). Eso lo vuelve simétrico: cualquier inversión suena igual. Por eso solo existen tres acordes disminuidos completos distintos en toda la música tonal:",
       "function": "Su rol más común es el de acorde de paso cromático entre dos acordes diatónicos. Por ejemplo, en C mayor: C, C♯°, Dm.",
       "builder_title": "Constructor: rama disminuida",
-      "builder_intro": "La 3m baja a la 5d, y desde ahí elegís la séptima: 7d para el disminuido completo (dim7) o 7m para el semidisminuido (m7♭5). Pará en la 5d para la tríada disminuida."
+      "builder_intro": "La 3m baja a la 5d, y desde ahí eliges la séptima: 7d para el disminuido completo (dim7) o 7m para el semidisminuido (m7♭5). Para en la 5d para la tríada disminuida."
     },
     "s331": {
       "label": "3.3.1 · Segunda y cuarta",
@@ -71,46 +71,59 @@
       "chords": ["Suspendido 2", "Suspendido 4"],
       "caption": "El sus2 y el sus4 comparten la tónica y la 5ª; cambia la nota del medio (2ª o 4ª) en lugar de la tercera. Sin tercera, no hay mayor ni menor.",
       "resolution_title": "Resolución",
-      "resolution": "La tensión del suspendido suele resolver moviendo esa nota a la tercera: el sus4 baja la 4ª a la 3ª (Csus4 → C, F → E) y el sus2 sube la 2ª a la 3ª (Csus2 → C, D → E). También puede quedarse sin resolver, como color.",
+      "resolution_parts": {
+        "lead": "La tensión del suspendido suele resolver moviendo esa nota a la tercera: el sus4 baja la 4ª a la 3ª ({{sus4}} → {{tonic}}, ",
+        "mid": ") y el sus2 sube la 2ª a la 3ª ({{sus2}} → {{tonic}}, ",
+        "tail": "). También puede quedarse sin resolver, como color."
+      },
       "builder_title": "Constructor: suspendidos",
-      "builder_intro": "En vez de una tercera, elegí la 2ª o la 4ª, y luego la quinta. La 2ª queda más cerca de la tónica; la 4ª, más lejos."
+      "builder_intro": "En vez de una tercera, elige la 2ª o la 4ª, y luego la quinta. La 2ª queda más cerca de la tónica; la 4ª, más lejos."
     },
     "s34": {
       "label": "3.4 · Constructor completo",
       "title": "Constructor de acordes completo",
-      "intro": "El árbol entero, con todo lo que viste en T3. Desde la tónica, elegí una segunda, una tercera o una cuarta; luego una quinta (justa o disminuida); y, si querés, una séptima. Cada camino válido arma uno de los diez acordes del método. La posición sigue codificando lo mismo: más arriba, más cerca de la tónica; más a la izquierda, más grave la calidad.",
-      "caption": "Diez acordes, un solo árbol. Pará en la quinta para una tríada o un suspendido; seguí a la séptima para los acordes de cuatro notas."
+      "intro": "El árbol entero, con todo lo que viste en T3. Desde la tónica, elige una segunda, una tercera o una cuarta; luego una quinta (justa o disminuida); y, si quieres, una séptima. Cada camino válido arma uno de los diez acordes del método. La posición sigue codificando lo mismo: más arriba, más cerca de la tónica; más a la izquierda, más grave la calidad.",
+      "caption": "Diez acordes, un solo árbol. Para en la quinta para una tríada o un suspendido; sigue a la séptima para los acordes de cuatro notas."
     },
     "s35": {
       "label": "3.5 · Grado 7",
       "title": "El grado 7 y la armonía diatónica con séptimas",
-      "intro": "Si armonizás cada grado de la escala mayor con su séptima diatónica (apilando terceras dentro de la tonalidad), cada grado recibe una calidad de séptima fija. El patrón es siempre el mismo, en cualquier tonalidad:",
-      "grado7": "El grado 7 (vii) es el caso nuevo: su tríada era disminuida (°), y al agregarle la séptima diatónica se convierte en un semidisminuido (m7♭5), el acorde que viste en 3.2. Es el único m7♭5 de la tonalidad y nace sobre la sensible."
+      "intro": "Si armonizas cada grado de la escala mayor con su séptima diatónica (apilando terceras dentro de la tonalidad), cada grado recibe una calidad de séptima fija. El patrón es siempre el mismo, en cualquier tonalidad:",
+      "grado7": "El grado 7 (vii) es el caso nuevo: su tríada era disminuida (°), y al agregarle la séptima diatónica se convierte en un semidisminuido (m7♭5), el acorde que viste en 3.2. Es el único m7♭5 de la tonalidad y nace sobre la sensible. Y el tritono no es exclusivo del V7: el vii también lo lleva adentro, entre su raíz (la sensible) y su 5ª disminuida. Son exactamente las mismas dos notas que forman el tritono del V7, y por eso el vii empuja hacia la tónica igual que él."
+    },
+    "s361": {
+      "label": "3.6.1 · El tritono",
+      "title": "El tritono: las dos notas que empujan",
+      "intro": "Antes de verlo dentro de un acorde, mira el tritono solo. En cualquier tonalidad mayor los dos grados tensos —la 4ª y la 7ª— están exactamente a 6 semitonos: eso es un tritono, el intervalo más inestable de la escala. Es el mismo mapa de resoluciones de 1.5, leído desde esas dos notas.",
+      "caption": "Las dos notas rojas son el tritono. Cada una resuelve por semitono hacia la nota estable más cercana: la 7ª sube a la tónica y la 4ª baja a la 3ª. Toca un arco para escuchar la resolución."
     },
     "s36": {
-      "label": "3.6 · Dominante 7",
+      "label": "3.6.2 · Dominante 7",
       "title": "El dominante 7 (V7)",
       "intro": "El dominante 7 es el acorde con séptima que se arma sobre el 5º grado: combina la 3ª mayor con la 7ª menor. Adentro esconde un tritono (entre su 3ª y su 7ª), el intervalo más inestable, y esa tensión es la que lo empuja a resolver al I.",
-      "resolution": "Las dos notas del tritono (resaltadas) resuelven por semitono: la sensible (la 3ª del V7) sube a la tónica, y la 7ª del V7 baja a la 3ª del I. Ese doble movimiento de medio tono es lo que hace del V7 → I la resolución más fuerte de la música tonal. Tocá el botón para escucharla."
+      "resolution": "Las dos notas del tritono (resaltadas) resuelven por semitono: la sensible (la 3ª del V7) sube a la tónica, y la 7ª del V7 baja a la 3ª del I. Ese doble movimiento de medio tono es lo que hace del V7 → I la resolución más fuerte de la música tonal. Toca el botón para escucharla."
     },
     "s37": {
       "label": "3.7 · ii-V-I",
       "title": "La progresión ii-V-I",
-      "intro": "Es el movimiento armónico más característico de la música tonal (sobre todo en jazz y bossa). Encadena tres acordes con séptima que recorren un arco de tensión completo: se aleja de la tónica, tensa al máximo y resuelve.",
+      "intro": "Es el movimiento armónico más característico de la música tonal (sobre todo en jazz y música popular). Encadena tres acordes con séptima que recorren un arco de tensión completo: tensión leve, máxima tensión y resolución.",
       "functions": [
-        "Subdominante · tensión media",
-        "Dominante · tensión alta",
+        "Subdominante · tensión leve",
+        "Dominante · máxima tensión",
         "Tónica · resolución"
       ],
-      "play": "Escuchar ii-V-I",
-      "explain": "El ii prepara, el V7 tensa (con su tritono), y el I resuelve. Como el V7 → I ya lo viste en 3.6, el ii solo agrega un paso previo que hace la llegada más satisfactoria. Tocá cada acorde o escuchá la progresión entera."
+      "explain": "El ii prepara, el V7 tensa (con su tritono), y el I resuelve. Como el V7 → I ya lo viste en 3.6, el ii solo agrega un paso previo que hace la llegada más satisfactoria. Toca cada acorde o escucha la progresión entera."
     },
     "s38": {
       "label": "3.8 · Tonización",
       "title": "Tonización y dominantes secundarias",
       "intro": "Cualquier acorde de la tonalidad (menos el I) puede tonizarse: tratarlo por un momento como si fuera la tónica. El acorde que hace ese trabajo es su dominante secundaria, y se escribe V/x, donde x es el grado tonizado.",
-      "construction": "Se construye igual que el V7, pero apuntando a otro grado: es el dominante 7 que está una quinta justa por encima de ese grado. Casi siempre trae una nota de afuera de la tonalidad (la sensible del grado tonizado), y esa es la que crea el color cromático. Tocá cada fila para oír la dominante resolver a su grado.",
-      "generalization": "La idea se amplía insertando el par completo ii-V antes de cualquier grado, no solo el V solo. Por ejemplo, en vez de I, ii, V, I podés hacer I, V/ii, ii, V, I (Cmaj7, A7, Dm7, G7, Cmaj7): el A7 toniza al Dm7 antes de seguir."
+      "construction": "Se construye igual que el V7, pero apuntando a otro grado: es el dominante 7 que está una quinta justa por encima de ese grado. Casi siempre trae una nota de afuera de la tonalidad (la sensible del grado tonizado), y esa es la que crea el color cromático. Toca cada fila para oír la dominante resolver a su grado.",
+      "scenarios_title": "Los dos escenarios",
+      "scenarios_mayor": "Escenario mayor",
+      "scenarios_menor": "Escenario menor",
+      "scenarios_caption": "En el escenario mayor los tres grados aparecen alterados: el 2º se vuelve mayor, el 5º menor y el 1º mayor. En el escenario menor son las calidades naturales de la relativa menor: 2º disminuido, 5º menor y 1º menor.",
+      "generalization": "La idea se amplía insertando el par completo ii-V antes de cualquier grado, no solo el V solo. Por ejemplo, en vez de I, ii, V, I puedes hacer I, V/ii, ii, V, I (Cmaj7, A7, Dm7, G7, Cmaj7): el A7 toniza al Dm7 antes de seguir."
     },
     "s39": {
       "label": "3.9 · Escala menor",
@@ -127,7 +140,6 @@
         "Dominante · con la sensible elevada",
         "Tónica menor"
       ],
-      "play": "Escuchar ii°-V7-i",
       "explain": "El ii° prepara igual que el ii mayor, pero ya nace tenso (es un semidisminuido). El V7 tensa con la misma lógica del tritono que viste en 3.6, solo que esa sensible es una nota prestada de la menor armónica. El i resuelve en menor. Progresiones típicas del folclore y el bolero (i-♭VI-♭VII-i, i-iv-V7-i) usan estas mismas piezas."
     }
   },
@@ -371,7 +383,7 @@
         { "type": "text", "value": " queda enmarcada para destacarla del patrón." }
       ],
       "flats_note": [
-        { "type": "text", "value": "Si nombrás las notas alteradas con bemoles, surge una segunda excepción: " },
+        { "type": "text", "value": "Si nombras las notas alteradas con bemoles, surge una segunda excepción: " },
         { "type": "note", "value": "Bb" },
         { "type": "text", "value": " → " },
         { "type": "note", "value": "F" },
@@ -561,7 +573,7 @@
       "table_no_sharps_flats": "(ninguna)",
       "tip": "Regla rápida: para encontrar la relativa menor — contar 3 semitonos hacia abajo desde la tónica mayor.",
       "circle_label": "−3 s.t.",
-      "instruction": "Elegí una tónica para ver la tonalidad mayor y su relativa menor."
+      "instruction": "Elige una tónica para ver la tonalidad mayor y su relativa menor."
     }
   },
 

@@ -11,7 +11,6 @@ import {
 import styles from './IntervalRuler.module.css';
 
 const NOTE_DURATION = 1.4;
-const STEP_MS = 240;
 const FIRE_DEBOUNCE_MS = 150;
 const R = 17;
 
@@ -64,22 +63,6 @@ export default function IntervalRuler({ stops, ariaLabel, maxSemis }: Props) {
     [playNote],
   );
 
-  // Click: suena el intervalo (tónica → nota) para oír la distancia. En la
-  // tónica, sólo suena ella.
-  const activate = useCallback(
-    (i: number) => {
-      const t = members[0];
-      const m = members[i];
-      if (i === 0) {
-        scrub(t);
-        return;
-      }
-      playNote(t.chromatic, t.octave, NOTE_DURATION);
-      setTimeout(() => playNote(m.chromatic, m.octave, NOTE_DURATION), STEP_MS);
-    },
-    [members, playNote, scrub],
-  );
-
   return (
     <svg
       className={styles.ruler}
@@ -112,7 +95,7 @@ export default function IntervalRuler({ stops, ariaLabel, maxSemis }: Props) {
             scrub(members[i]);
           }}
           onLeave={() => setActive((a) => (a === i ? null : a))}
-          onActivate={() => activate(i)}
+          onActivate={() => scrub(members[i])}
         />
       ))}
     </svg>

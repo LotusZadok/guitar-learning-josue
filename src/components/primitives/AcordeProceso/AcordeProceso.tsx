@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAudioEngine, stopAllNotes } from '../../../hooks/useAudioEngine';
 import { useUIStore } from '../../../stores/useUIStore';
@@ -6,6 +6,7 @@ import {
   chordSpelled,
   spelledChromaticCircle,
   spelledIntervalFromTonic,
+  type ChordType,
 } from '../../../utils/noteCalculations';
 import { useProcessAnimation } from '../../modules/t2/hooks/useProcessAnimation';
 import ProcessControls from '../../shared/ProcessControls/ProcessControls';
@@ -22,25 +23,26 @@ import styles from './AcordeProceso.module.css';
 // (respeta prefers-reduced-motion) y el árbol de AcordesBuilder en modo
 // controlado · un solo diagrama, no dos.
 //
-// Construye SIEMPRE la tríada mayor (decisión del profesor, 31/7/26). Menor y
-// disminuido viven en el bloque de resultado de la sección, sin animación.
+// Reunión 19/8/26: el proceso deja de ser siempre mayor. Arranca en la tríada
+// mayor, pero si el estudiante elige otra tercera o quinta en el árbol, los
+// pasos (semitonos, resultado) y el recorrido animado se re-anclan a ESA tríada.
+// La decisión previa (31/7/26, "construye SIEMPRE la mayor") queda superada.
 
 const TOTAL_STEPS = 4;
 
-// Camino del acorde mayor en BUILDER_17: T → 3M → 5J.
-//
 // OJO · acoplamiento no verificable por el compilador: estos literales deben
 // coincidir con los `role` de los nodos de BUILDER_17 en configs.ts, y
 // `BuilderNode.role` está tipado `string`. Si alguien renombra '3M' o '5' allá,
 // el walkthrough deja de iluminar y de sonar sin que tsc diga nada.
-const PATH_BY_STEP: string[][] = [
-  [], // paso 1 · sólo la tónica
-  ['3M'], // paso 2 · tercera mayor
-  ['3M', '5'], // paso 3 · quinta justa
-  ['3M', '5'], // paso 4 · resultado (suena en bloque)
-];
+type Tercera = '3m' | '3M';
+type Quinta = '5' | '5d';
 
-const PLAYING_BY_STEP: (string | null)[] = ['T', '3M', '5', PLAYING_ALL];
+// Las tres tríadas que BUILDER_17 puede armar. 3M+5d no existe como camino.
+const TIPO_POR_SELECCION = (t: Tercera, q: Quinta): ChordType =>
+  t === '3M' ? 'M' : q === '5d' ? 'dim' : 'm';
+
+const SEMIS_TERCERA: Record<Tercera, number> = { '3m': 3, '3M': 4 };
+const SEMIS_QUINTA: Record<Quinta, number> = { '5d': 6, '5': 7 };
 
 const ASCII = (s: string) => s.replace('♯', '#').replace('♭', 'b');
 
@@ -75,15 +77,19 @@ function buildPasoSemitonos(
 ): ProseSegment {
   const circle = spelledChromaticCircle(tonic);
   const tonicAscii = ASCII(circle[0].sharp) as NoteSpelling;
-  const isTercera = targetSemis === 4;
+  const isTercera = targetSemis <= 4;
+  // El nombre del intervalo sigue a la selección del árbol: 3m/3M, 5d/5J.
+  const nombreES: Record<number, string> = { 3: '3m', 4: '3M', 6: '5d', 7: '5J' };
+  const nombreDE: Record<number, string> = {
+    3: 'kl. Terz',
+    4: 'gr. Terz',
+    6: 'verm. Quinte',
+    7: 'r. Quinte',
+  };
   const prefix =
     locale === 'de'
-      ? isTercera
-        ? 'Halbtöne bis zur gr. Terz: '
-        : 'Halbtöne bis zur r. Quinte: '
-      : isTercera
-        ? 'Semitonos hasta la 3M: '
-        : 'Semitonos hasta la 5J: ';
+      ? `Halbtöne bis zur ${nombreDE[targetSemis]}: `
+      : `Semitonos hasta la ${nombreES[targetSemis]}: `;
 
   const seg: ProseFragment[] = [
     { type: 'text', value: prefix },
@@ -137,10 +143,18 @@ function buildPasoSemitonos(
   return seg;
 }
 
-function buildPasoResultado(tonic: Tonic, locale: string): ProseSegment {
-  const members = chordSpelled(tonic, 'M');
+const NOMBRE_ACORDE: Record<ChordType, { es: string; de: string }> = {
+  M: { es: 'el acorde mayor', de: 'der Durakkord' },
+  m: { es: 'el acorde menor', de: 'der Mollakkord' },
+  dim: { es: 'el acorde disminuido', de: 'der verminderte Akkord' },
+  aug: { es: 'el acorde aumentado', de: 'der übermäßige Akkord' },
+};
+
+function buildPasoResultado(tonic: Tonic, tipo: ChordType, locale: string): ProseSegment {
+  const members = chordSpelled(tonic, tipo);
   const prefix = locale === 'de' ? 'Ergebnis: ' : 'Resultado: ';
-  const suffix = locale === 'de' ? ' · der Durakkord.' : ' · el acorde mayor.';
+  const nombre = NOMBRE_ACORDE[tipo];
+  const suffix = locale === 'de' ? ` · ${nombre.de}.` : ` · ${nombre.es}.`;
   const seg: ProseFragment[] = [{ type: 'text', value: prefix }];
   members.forEach((m, i) => {
     if (i > 0) seg.push({ type: 'text', value: ' ' });
@@ -164,23 +178,35 @@ export default function AcordeProceso({ eyebrow }: Props) {
   const anim = useProcessAnimation(TOTAL_STEPS);
   const lastAudioStep = useRef(0);
 
-  const chordM = useMemo(() => chordSpelled(tonic, 'M'), [tonic]);
+  // Tercera y quinta vigentes: arrancan en la tríada mayor y se re-anclan a lo
+  // que el estudiante elige en el árbol (reunión 19/8/26).
+  const [tercera, setTercera] = useState<Tercera>('3M');
+  const [quinta, setQuinta] = useState<Quinta>('5');
+  const tipo = TIPO_POR_SELECCION(tercera, quinta);
+
+  const chordM = useMemo(() => chordSpelled(tonic, tipo), [tonic, tipo]);
 
   const steps = useMemo<ProseSegment[]>(() => {
-    const tercera = spelledIntervalFromTonic(tonic, 3, 'M');
+    const terceraSpelled = spelledIntervalFromTonic(tonic, 3, tercera === '3M' ? 'M' : 'm');
     return [
       buildPasoLetras(tonic, locale),
-      buildPasoSemitonos(tonic, 4, tercera, tercera[0], locale),
       buildPasoSemitonos(
         tonic,
-        7,
-        spelledIntervalFromTonic(tonic, 5, 'P'),
+        SEMIS_TERCERA[tercera],
+        terceraSpelled,
+        terceraSpelled[0],
+        locale,
+      ),
+      buildPasoSemitonos(
+        tonic,
+        SEMIS_QUINTA[quinta],
+        spelledIntervalFromTonic(tonic, 5, quinta === '5' ? 'P' : 'dim'),
         '',
         locale,
       ),
-      buildPasoResultado(tonic, locale),
+      buildPasoResultado(tonic, tipo, locale),
     ];
-  }, [tonic, locale]);
+  }, [tonic, locale, tercera, quinta, tipo]);
 
   // Refs para leer los valores más recientes sin que su cambio de referencia
   // re-dispare el efecto de audio: ese efecto sólo debe sonar cuando cambia el
@@ -219,10 +245,25 @@ export default function AcordeProceso({ eyebrow }: Props) {
   // El estudiante tocó un nodo: soltamos el control y callamos las notas del
   // paso en curso, que si no seguirían sonando sobre un árbol ya libre.
   const { reset } = anim;
-  const releaseControl = useCallback(() => {
-    reset();
-    stopAllNotes();
-  }, [reset]);
+  // El estudiante tocó un nodo: soltamos el control y re-anclamos los pasos a la
+  // tercera/quinta que acaba de elegir. NO se llama `stopAllNotes()`: cortaba la
+  // nota que el propio clic acaba de disparar y el árbol se sentía mudo.
+  const releaseControl = useCallback(
+    (selection: string[]) => {
+      reset();
+      const [t, q] = selection;
+      if (t === '3m' || t === '3M') setTercera(t);
+      if (q === '5' || q === '5d') setQuinta(q);
+      // Una tercera nueva sin quinta deja la quinta anterior en pie; si esa
+      // combinación no existe (3M + 5d), la quinta vuelve a la justa.
+      if ((t === '3M' && !q) || (t === '3M' && q === '5d')) setQuinta('5');
+    },
+    [reset],
+  );
+
+  // Recorrido del walkthrough, derivado de la selección vigente.
+  const pathByStep: string[][] = [[], [tercera], [tercera, quinta], [tercera, quinta]];
+  const playingByStep: (string | null)[] = ['T', tercera, quinta, PLAYING_ALL];
 
   const current = anim.currentStep;
   const running = current > 0;
@@ -242,8 +283,8 @@ export default function AcordeProceso({ eyebrow }: Props) {
       <div className={styles.layout}>
         <AcordesBuilder
           config={BUILDER_17}
-          path={running ? PATH_BY_STEP[current - 1] : undefined}
-          playingRole={running ? PLAYING_BY_STEP[current - 1] : null}
+          path={running ? pathByStep[current - 1] : undefined}
+          playingRole={running ? playingByStep[current - 1] : null}
           onUserPick={releaseControl}
         />
 

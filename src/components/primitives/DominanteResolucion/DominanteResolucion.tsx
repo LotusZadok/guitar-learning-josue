@@ -2,109 +2,150 @@ import { useCallback, useMemo, useRef, useState, type KeyboardEvent } from 'reac
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { useUIStore } from '../../../stores/useUIStore';
 import { NOTE_COLORS, ALL, spelledToES } from '../../../data/notes';
-import { majorScaleSpelled, pitchClass, spelledSequenceAscending } from '../../../utils/noteCalculations';
+import { majorScaleSpelled, pitchClass, tonicChromatic } from '../../../utils/noteCalculations';
 import type { ChromaticNote } from '../../../types/music';
 import styles from './DominanteResolucion.module.css';
 
 const NOTE_DURATION = 1.4;
 const CHORD_GAP_MS = 900;
 const FIRE_DEBOUNCE_MS = 150;
-const R = 20;
 
-// Diagrama de resolución V7 → I. El V7 (dominante sobre el 5º grado) contiene un
-// tritono entre su 3ª (sensible) y su 7ª; esas dos notas resuelven por semitono:
-// la sensible sube a la tónica, la 7ª baja a la 3ª. Todo diatónico (deriva de la
-// escala mayor de la tónica activa).
+// Diagrama de resolución hacia el I sobre el MISMO eje cromático horizontal de
+// §1.4 y §1.5 (0–12 semitonos desde la tónica). Dos acordes de la tonalidad
+// llevan el mismo tritono y por eso empujan igual hacia la tónica (§3.5): el V7
+// (dominante sobre el 5º grado, tritono entre su 3ª=sensible y su 7ª) y el vii
+// (m7♭5 sobre la sensible, tritono entre su raíz y su 5ª disminuida). En ambos
+// son LAS MISMAS dos notas.
+//
+// Sobre el eje van las notas del acorde de origen; bajo el eje, las del I. Los
+// arcos salen de las dos notas del tritono: la sensible sube un semitono a la
+// tónica (la 8va, posición 12) y el 4º grado baja un semitono a la 3ª. Sobre
+// este eje el movimiento contrario se ve literalmente: uno va hacia la derecha
+// y el otro hacia la izquierda.
 
-interface Node {
+type Origen = 'V7' | 'vii';
+
+// degrees: grados de la escala mayor (0-index) que forman el acorde.
+// El tritono siempre son los mismos dos grados: la sensible (6) y el 4º (3).
+const ORIGENES: Record<Origen, { roman: string; suffix: string; rootDeg: number; degrees: number[] }> = {
+  V7: { roman: 'V7', suffix: '7', rootDeg: 4, degrees: [4, 6, 1, 3] },
+  vii: { roman: 'vii', suffix: 'm7♭5', rootDeg: 6, degrees: [6, 1, 3, 5] },
+};
+
+const TRITONO_DEGS = [6, 3];
+// Resoluciones por semitono: grado de origen → posición de destino en el eje.
+const RESOLUCIONES = [
+  { fromDeg: 6, toSemis: 12 }, // sensible sube a la tónica (8va)
+  { fromDeg: 3, toSemis: 4 }, // 4º grado baja a la 3ª
+];
+
+const DEG_SEMIS = [0, 2, 4, 5, 7, 9, 11];
+const I_DEGREES = [0, 2, 4];
+
+const SVG_W = 560;
+const SVG_H = 250;
+const PAD_X = 34;
+const STEP_X = (SVG_W - 2 * PAD_X) / 12;
+const AXIS_Y = 125;
+const ROW_OFFSET = 62; // distancia de cada fila al eje
+const R = 19;
+
+const posX = (semis: number) => PAD_X + semis * STEP_X;
+
+interface Voice {
   spelled: string;
   chromatic: ChromaticNote;
   octave: number;
+  deg: number;
+  semis: number;
   x: number;
   y: number;
   tritono?: boolean;
 }
 
-const V7_X = 120;
-const I_X = 350;
-const VB_W = 470;
-const VB_H = 270;
-
 export default function DominanteResolucion() {
   const tonic = useUIStore((s) => s.tonic);
   const { playNote } = useAudioEngine();
+  const [origen, setOrigen] = useState<Origen>('V7');
   const [hovered, setHovered] = useState<string | null>(null);
   const [playing, setPlaying] = useState(false);
   const lastFire = useRef(0);
 
-  const { v7, chordI, v7Label, iLabel } = useMemo(() => {
-    const scale = majorScaleSpelled(tonic); // 7 notas
-    // V7 = grados 5·7·2·4 (raíz, 3ª=sensible, 5ª, 7ª). I = grados 1·3·5.
-    const v7Spelled = [scale[4], scale[6], scale[1], scale[3]];
-    const iSpelled = [scale[0], scale[2], scale[4]];
-    const v7Oct = spelledSequenceAscending(v7Spelled, 4).map((s) => s.octave);
-    const iOct = spelledSequenceAscending(iSpelled, 4).map((s) => s.octave);
-    // El V7 se apila con la raíz abajo; el tritono (B abajo-medio, F arriba)
-    // queda separado. El acorde I se coloca compacto en el centro para que las
-    // flechas del tritono CONVERJAN hacia él (la sensible SUBE a la tónica, la
-    // 7ª BAJA a la 3ª): dirección visual = dirección musical (movimiento contrario).
-    const v7Y = [215, 155, 95, 35];
-    const iY = [140, 95, 50];
-    const v7: Node[] = v7Spelled.map((sp, i) => ({
-      spelled: sp,
-      chromatic: ALL_FROM(sp),
-      octave: v7Oct[i],
-      x: V7_X,
-      y: v7Y[i],
-      tritono: i === 1 || i === 3, // 3ª (sensible) y 7ª
-    }));
-    const chordI: Node[] = iSpelled.map((sp, i) => ({
-      spelled: sp,
-      chromatic: ALL_FROM(sp),
-      octave: iOct[i],
-      x: I_X,
-      y: iY[i],
-    }));
+  const { origenVoices, iRow, origenLabel, iLabel } = useMemo(() => {
+    const scale = majorScaleSpelled(tonic);
+    const def = ORIGENES[origen];
+    const tonicIdx = ALL.indexOf(tonicChromatic(tonic));
+    // Ley del piso: la tónica es la nota más grave y la octava sube donde el
+    // grado envuelve el índice cromático.
+    const voice = (deg: number, up: boolean, semisOverride?: number): Voice => {
+      const semis = semisOverride ?? DEG_SEMIS[deg];
+      return {
+        spelled: scale[deg],
+        chromatic: ALL[pitchClass(scale[deg])],
+        octave: 4 + Math.floor((tonicIdx + semis) / 12),
+        deg,
+        semis,
+        x: posX(semis),
+        y: AXIS_Y + (up ? -ROW_OFFSET : ROW_OFFSET),
+        tritono: up && TRITONO_DEGS.includes(deg),
+      };
+    };
     return {
-      v7,
-      chordI,
-      v7Label: scale[4] + '7',
+      origenVoices: def.degrees.map((d) => voice(d, true)),
+      // El I lleva su octava además de la tónica: es donde aterriza la sensible.
+      iRow: [...I_DEGREES.map((d) => voice(d, false)), voice(0, false, 12)],
+      origenLabel: scale[def.rootDeg] + def.suffix,
       iLabel: scale[0],
     };
-  }, [tonic]);
+  }, [tonic, origen]);
 
   const scrub = useCallback(
-    (n: Node) => {
+    (v: Voice) => {
       const now = Date.now();
       if (now - lastFire.current < FIRE_DEBOUNCE_MS) return;
       lastFire.current = now;
-      playNote(n.chromatic, n.octave, NOTE_DURATION);
+      playNote(v.chromatic, v.octave, NOTE_DURATION);
     },
     [playNote],
   );
 
-  // Play resolución: V7 en bloque, luego I en bloque.
   const playResolution = useCallback(() => {
     if (playing) return;
     setPlaying(true);
-    v7.forEach((n) => playNote(n.chromatic, n.octave, NOTE_DURATION));
-    setTimeout(() => chordI.forEach((n) => playNote(n.chromatic, n.octave, NOTE_DURATION)), CHORD_GAP_MS);
+    origenVoices.forEach((v) => playNote(v.chromatic, v.octave, NOTE_DURATION));
+    setTimeout(() => iRow.forEach((v) => playNote(v.chromatic, v.octave, NOTE_DURATION)), CHORD_GAP_MS);
     setTimeout(() => setPlaying(false), CHORD_GAP_MS + NOTE_DURATION * 1000);
-  }, [v7, chordI, playNote, playing]);
+  }, [origenVoices, iRow, playNote, playing]);
 
-  // Flechas de resolución: sensible (V7[1]) → tónica (I[0]); 7ª (V7[3]) → 3ª (I[1]).
-  const arrows = [
-    { from: v7[1], to: chordI[0] },
-    { from: v7[3], to: chordI[1] },
-  ];
+  const arrows = RESOLUCIONES.map(({ fromDeg, toSemis }) => ({
+    from: origenVoices.find((v) => v.deg === fromDeg)!,
+    to: iRow.find((v) => v.semis === toSemis)!,
+  }));
+
+  const key = (v: Voice, row: string) => `${row}-${v.semis}`;
 
   return (
     <div className={styles.wrap}>
+      <div className={styles.selector} role="group" aria-label="Acorde de origen">
+        {(Object.keys(ORIGENES) as Origen[]).map((k) => (
+          <button
+            key={k}
+            type="button"
+            className={k === origen ? styles.chipActive : styles.chip}
+            aria-pressed={k === origen}
+            onClick={() => setOrigen(k)}
+            disabled={playing}
+          >
+            {ORIGENES[k].roman} → I
+          </button>
+        ))}
+      </div>
+
       <svg
         className={styles.diagram}
-        viewBox={`0 0 ${VB_W} ${VB_H}`}
+        viewBox={`0 0 ${SVG_W} ${SVG_H}`}
         role="group"
-        aria-label={`Resolución de ${v7Label} a ${iLabel}: la sensible sube a la tónica y la séptima baja a la tercera`}
+        aria-label={`Resolución de ${origenLabel} a ${iLabel} sobre el eje cromático: la sensible sube a la tónica y el 4º grado baja a la tercera`}
       >
         <defs>
           <marker
@@ -116,60 +157,75 @@ export default function DominanteResolucion() {
             orient="auto"
             markerUnits="strokeWidth"
           >
-            <path d="M0,0 L6,3 L0,6 z" fill="var(--amber)" />
+            <path d="M0,0 L6,3 L0,6 z" className={styles.arrowHead} />
           </marker>
         </defs>
 
-        {/* etiquetas de cifrado */}
-        <text className={styles.cifrado} x={V7_X} y={18}>{v7Label}</text>
-        <text className={styles.roman} x={V7_X} y={252}>V7</text>
-        <text className={styles.cifrado} x={I_X} y={18}>{iLabel}</text>
-        <text className={styles.roman} x={I_X} y={252}>I</text>
+        {/* Eje cromático: los 13 semitonos desde la tónica, como en §1.4. */}
+        <line className={styles.axis} x1={PAD_X} y1={AXIS_Y} x2={SVG_W - PAD_X} y2={AXIS_Y} />
+        {Array.from({ length: 13 }, (_, s) => (
+          <circle key={s} className={styles.tick} cx={posX(s)} cy={AXIS_Y} r={2.5} />
+        ))}
 
-        {/* flechas de resolución */}
+        <text className={styles.rowLabel} x={PAD_X - 12} y={AXIS_Y - ROW_OFFSET}>
+          {origenLabel}
+        </text>
+        <text className={styles.rowLabel} x={PAD_X - 12} y={AXIS_Y + ROW_OFFSET}>
+          {iLabel}
+        </text>
+
         {arrows.map((a, i) => (
-          <ResolutionArrow key={i} x1={a.from.x + R} y1={a.from.y} x2={a.to.x - R} y2={a.to.y} />
+          <ResolutionArrow key={i} from={a.from} to={a.to} />
         ))}
 
-        {[...v7, ...chordI].map((n) => (
-          <NoteNode
-            key={`${n.x}-${n.spelled}-${n.octave}`}
-            node={n}
-            colored={hovered === `${n.x}-${n.spelled}`}
-            onEnter={() => {
-              setHovered(`${n.x}-${n.spelled}`);
-              scrub(n);
-            }}
-            onLeave={() => setHovered((h) => (h === `${n.x}-${n.spelled}` ? null : h))}
-          />
-        ))}
+        {[...origenVoices.map((v) => [v, 'o'] as const), ...iRow.map((v) => [v, 'i'] as const)].map(
+          ([v, row]) => (
+            <VoiceNode
+              key={key(v, row)}
+              voice={v}
+              colored={hovered === key(v, row)}
+              onEnter={() => {
+                setHovered(key(v, row));
+                scrub(v);
+              }}
+              onLeave={() => setHovered((h) => (h === key(v, row) ? null : h))}
+            />
+          ),
+        )}
       </svg>
 
-      <button
-        type="button"
-        className={styles.playBtn}
-        onClick={playResolution}
-        disabled={playing}
-      >
-        {v7Label} → {iLabel}
+      <button type="button" className={styles.playBtn} onClick={playResolution} disabled={playing}>
+        {origenLabel} → {iLabel}
       </button>
     </div>
   );
 }
 
-// Convierte una grafía a su ChromaticNote (enarmoniza a sostenido, como el motor).
-function ALL_FROM(spelled: string): ChromaticNote {
-  return ALL[pitchClass(spelled)];
+// Arco entre las dos filas: sale del borde del nodo de arriba y entra por el
+// borde del de abajo. La curva es vertical en sus extremos para que se lea de
+// qué nodo sale y a cuál llega aunque las x sean casi iguales.
+function ResolutionArrow({ from, to }: { from: Voice; to: Voice }) {
+  const y1 = from.y + R;
+  const y2 = to.y - R;
+  const midY = (y1 + y2) / 2;
+  return (
+    <path
+      className={styles.arrow}
+      d={`M ${from.x} ${y1} C ${from.x} ${midY}, ${to.x} ${midY}, ${to.x} ${y2}`}
+      markerEnd="url(#dom-arrow)"
+      fill="none"
+    />
+  );
 }
 
-interface NoteNodeProps {
-  node: Node;
+interface VoiceNodeProps {
+  voice: Voice;
   colored: boolean;
   onEnter: () => void;
   onLeave: () => void;
 }
 
-function NoteNode({ node, colored, onEnter, onLeave }: NoteNodeProps) {
+function VoiceNode({ voice, colored, onEnter, onLeave }: VoiceNodeProps) {
   const onKey = useCallback(
     (e: KeyboardEvent<SVGGElement>) => {
       if (e.key === 'Enter' || e.key === ' ') {
@@ -179,17 +235,15 @@ function NoteNode({ node, colored, onEnter, onLeave }: NoteNodeProps) {
     },
     [onEnter],
   );
-  const fill = colored ? NOTE_COLORS[node.chromatic] : 'var(--surface)';
-  const stroke = colored ? 'none' : 'var(--rule)';
-  const nameES = spelledToES(node.spelled);
+  const nameES = spelledToES(voice.spelled);
 
   return (
     <g
       className={styles.node}
-      transform={`translate(${node.x},${node.y})`}
+      transform={`translate(${voice.x},${voice.y})`}
       role="button"
       tabIndex={0}
-      aria-label={`${nameES}${node.tritono ? ' · tritono' : ''}`}
+      aria-label={`${nameES}${voice.tritono ? ' · tritono' : ''}`}
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
       onFocus={onEnter}
@@ -199,7 +253,7 @@ function NoteNode({ node, colored, onEnter, onLeave }: NoteNodeProps) {
       <circle className={styles.hit} cx={0} cy={0} r={R + 6} fill="transparent" />
       {/* Tritono: anillo punteado en neutro de marca. El punteado dice
        *  "inestable, quiere moverse"; el ámbar quedó reservado para "sonando". */}
-      {node.tritono && (
+      {voice.tritono && (
         <circle
           cx={0}
           cy={0}
@@ -210,28 +264,24 @@ function NoteNode({ node, colored, onEnter, onLeave }: NoteNodeProps) {
           strokeDasharray="3 3"
         />
       )}
-      <circle cx={0} cy={0} r={R} fill={fill} stroke={stroke} strokeWidth={1.5} />
+      <circle
+        cx={0}
+        cy={0}
+        r={R}
+        fill={colored ? NOTE_COLORS[voice.chromatic] : 'var(--surface)'}
+        stroke={colored ? 'none' : 'var(--rule)'}
+        strokeWidth={1.5}
+      />
       {/* Glifo de nota blanco sobre círculo saturado en hover: excepción Signature. */}
       <text
         className={styles.glyph}
         x={0}
         y={1}
         fill={colored ? '#fff' : 'var(--text-body)'}
-        style={node.spelled.length > 2 ? { fontSize: '13px' } : undefined}
+        style={voice.spelled.length > 2 ? { fontSize: '13px' } : undefined}
       >
-        {node.spelled}
+        {voice.spelled}
       </text>
     </g>
-  );
-}
-
-function ResolutionArrow({ x1, y1, x2, y2 }: { x1: number; y1: number; x2: number; y2: number }) {
-  const mx = (x1 + x2) / 2;
-  return (
-    <path
-      className={styles.arrow}
-      d={`M ${x1} ${y1} C ${mx} ${y1}, ${mx} ${y2}, ${x2} ${y2}`}
-      markerEnd="url(#dom-arrow)"
-    />
   );
 }
