@@ -412,23 +412,12 @@ git commit -m "feat(t4): logica pura del constructor de progresiones (grilla, gr
 
 **Files:**
 - Create: `src/utils/progresionAcordes.ts`
-- Modify: `src/utils/noteCalculations.ts` (exportar `chordAudio`)
+- Create: `scripts/verify-progresion-acordes.ts`
+- Modify: `package.json`
 
-No hay arnés de Node para este archivo: importa `noteCalculations`, que a su vez importa `../data/notes` sin extensión, y Node no lo resuelve. Se verifica con un componente de humo temporal en el browser (Step 3) y con el typecheck.
-
-- [ ] **Step 1: Exportar `chordAudio`**
-
-En `src/utils/noteCalculations.ts`, línea ~368, cambiar:
-
-```ts
-function chordAudio(chordName: string): ChordAudio {
-```
-
-por:
-
-```ts
-export function chordAudio(chordName: string): ChordAudio {
-```
+> **Corregido durante la ejecución (commit `6894787`).** El plan original decía que este archivo no se podía verificar desde Node y mandaba mirar un `console.table` en el browser. Falso: la cadena de `noteCalculations` tenía **un solo** import de valores sin extensión (`"../data/notes"`), y todo lo demás era `import type`, que se borra. Con la extensión explícita — y `allowImportingTsExtensions` ya estaba activo en el tsconfig — la cadena entera carga desde Node. La ortografía de acordes es la parte más propensa a errores del feature, así que se verifica con aserciones ejecutables, no a ojo.
+>
+> El plan original también pedía exportar `chordAudio` de `noteCalculations`. **No hace falta:** `acordeDeGrado` usa `Chord.get` y `spelledSequenceAscending` directamente y nunca llama a `chordAudio`. Era trabajo muerto sobre un archivo compartido. No lo hagas.
 
 - [ ] **Step 2: Escribir `progresionAcordes.ts`**
 
@@ -436,11 +425,15 @@ Crear `src/utils/progresionAcordes.ts`:
 
 ```ts
 import { Note, Chord } from 'tonal';
+// Extensiones .ts explícitas a propósito: son las que permiten que
+// `scripts/verify-progresion-acordes.ts` cargue este archivo desde Node con
+// --experimental-strip-types. `allowImportingTsExtensions` ya está activo en
+// tsconfig.app.json y Vite las resuelve sin problema.
 import {
   majorScaleSpelled,
   relativeMinorScaleSpelled,
   spelledSequenceAscending,
-} from './noteCalculations';
+} from './noteCalculations.ts';
 import type { ChromaticNote, Tonic } from '../types/music';
 import {
   calidadesDe,
@@ -451,7 +444,7 @@ import {
   type GradoId,
   type Modo,
   type RolArmonico,
-} from './progresionArmonica';
+} from './progresionArmonica.ts';
 
 export interface Armadura {
   id: string;
@@ -564,71 +557,150 @@ export function acordeDeGrado(
 }
 ```
 
-- [ ] **Step 3: Verificar en el browser con un humo temporal**
+- [ ] **Step 3: Escribir el arnés de acordes**
 
-Añadir al final de `src/main.tsx`, temporalmente:
-
-```ts
-import { acordeDeGrado, armaduraPorId } from './utils/progresionAcordes';
-const _a = armaduraPorId('C');
-console.table(
-  (['I', 'ii', 'V', 'vii°', 'V/ii', 'ii/ii', 'V/vi', 'ii/vi'] as const).map((g) => ({
-    grado: g,
-    triada: acordeDeGrado(_a, 'mayor', g, false).cifrado,
-    septima: acordeDeGrado(_a, 'mayor', g, true).cifrado,
-  })),
-);
-```
-
-Arrancar el dev server (usar la herramienta de preview del harness, no `npm run dev` en background) y leer la consola.
-
-Esperado, en Do mayor:
-
-| grado | tríada | séptima |
-|---|---|---|
-| I | C | Cmaj7 |
-| ii | Dm | Dm7 |
-| V | G | G7 |
-| vii° | Bdim | Bm7♭5 |
-| V/ii | A7 | A7 |
-| ii/ii | Edim | Em7♭5 |
-| V/vi | E7 | E7 |
-| ii/vi | Bdim | Bm7♭5 |
-
-Razón de `ii/ii` disminuido: el ii de C es Dm, un destino **menor**, así que su propio ii es semidisminuido. `V/ii` = A7 coincide con lo que `secondaryDominants('C')` ya produce en §3.8.
-
-- [ ] **Step 4: Verificar el modo menor y una armadura con bemoles**
-
-Cambiar el humo temporal a:
+Crear `scripts/verify-progresion-acordes.ts`:
 
 ```ts
-const _b = armaduraPorId('A');
-console.table(
-  (['i', 'ii°', '♭III', 'iv', 'v', 'V/iv'] as const).map((g) => ({
-    grado: g,
-    septima: acordeDeGrado(_b, 'menor', g, true).cifrado,
-  })),
-);
+// Arnés de la resolución grado → acorde sonante. Carga la cadena real
+// (progresionAcordes → noteCalculations → data/notes) desde Node.
+import { acordeDeGrado, armaduraPorId, etiquetaTonalidad, ARMADURAS } from '../src/utils/progresionAcordes.ts';
+import { gradosDe, type GradoId, type Modo } from '../src/utils/progresionArmonica.ts';
+
+let fallos = 0;
+function check(nombre: string, real: unknown, esperado: unknown) {
+  const a = JSON.stringify(real);
+  const b = JSON.stringify(esperado);
+  if (a === b) console.log(`  ok  ${nombre}`);
+  else { fallos++; console.log(`FALLA  ${nombre}\n       esperado ${b}\n       obtenido ${a}`); }
+}
+const cif = (arm: string, modo: Modo, g: GradoId, sept: boolean) =>
+  acordeDeGrado(armaduraPorId(arm), modo, g, sept).cifrado;
+
+console.log('\n— Do mayor, triadas —');
+check('I',    cif('C', 'mayor', 'I', false),    'C');
+check('ii',   cif('C', 'mayor', 'ii', false),   'Dm');
+check('iii',  cif('C', 'mayor', 'iii', false),  'Em');
+check('IV',   cif('C', 'mayor', 'IV', false),   'F');
+check('V',    cif('C', 'mayor', 'V', false),    'G');
+check('vi',   cif('C', 'mayor', 'vi', false),   'Am');
+check('vii°', cif('C', 'mayor', 'vii°', false), 'Bdim');
+
+console.log('\n— Do mayor, septimas —');
+check('Imaj7',  cif('C', 'mayor', 'I', true),    'Cmaj7');
+check('ii7',    cif('C', 'mayor', 'ii', true),   'Dm7');
+check('V7',     cif('C', 'mayor', 'V', true),    'G7');
+check('vii m7b5', cif('C', 'mayor', 'vii°', true), 'Bm7♭5');
+
+console.log('\n— Tonizaciones en Do mayor —');
+// La dominante secundaria SIEMPRE lleva 7ma, aunque el banco este en triadas:
+// sin la 7ma es solo un acorde mayor y pierde el punto (decision del spec §2).
+check('V/ii en triadas sigue siendo dominante', cif('C', 'mayor', 'V/ii', false), 'A7');
+check('V/ii', cif('C', 'mayor', 'V/ii', true), 'A7');
+check('V/iii', cif('C', 'mayor', 'V/iii', true), 'B7');
+check('V/IV', cif('C', 'mayor', 'V/IV', true), 'C7');
+check('V/V', cif('C', 'mayor', 'V/V', true), 'D7');
+check('V/vi', cif('C', 'mayor', 'V/vi', true), 'E7');
+// El ii de x toma su calidad del destino: destino mayor → m7, destino menor →
+// m7b5. Son los dos escenarios de §3.8.
+check('ii/ii (destino menor) es semidisminuido', cif('C', 'mayor', 'ii/ii', true), 'Em7♭5');
+check('ii/vi (destino menor) es semidisminuido', cif('C', 'mayor', 'ii/vi', true), 'Bm7♭5');
+check('ii/IV (destino mayor) es menor', cif('C', 'mayor', 'ii/IV', true), 'Gm7');
+check('ii/V (destino mayor) es menor', cif('C', 'mayor', 'ii/V', true), 'Am7');
+
+console.log('\n— Fa# menor (relativa de La mayor) —');
+check('i',    cif('A', 'menor', 'i', true),    'F♯m7');
+check('ii°',  cif('A', 'menor', 'ii°', true),  'G♯m7♭5');
+check('♭III', cif('A', 'menor', '♭III', true), 'Amaj7');
+check('iv',   cif('A', 'menor', 'iv', true),   'Bm7');
+check('v',    cif('A', 'menor', 'v', true),    'C♯m7');
+check('♭VI',  cif('A', 'menor', '♭VI', true),  'Dmaj7');
+check('♭VII', cif('A', 'menor', '♭VII', true), 'E7');
+check('V/iv', cif('A', 'menor', 'V/iv', true), 'F♯7');
+
+console.log('\n— Armadura con bemoles —');
+check('Mib mayor I',  cif('Eb', 'mayor', 'I', true),  'E♭maj7');
+check('Mib mayor IV', cif('Eb', 'mayor', 'IV', true), 'A♭maj7');
+check('Mib mayor V',  cif('Eb', 'mayor', 'V', true),  'B♭7');
+
+console.log('\n— Etiquetas de tonalidad —');
+check('3♯ mayor', etiquetaTonalidad(armaduraPorId('A'), 'mayor'), 'A');
+check('3♯ menor', etiquetaTonalidad(armaduraPorId('A'), 'menor'), 'F♯m');
+check('0♯ menor', etiquetaTonalidad(armaduraPorId('C'), 'menor'), 'Am');
+
+console.log('\n— Barrido: ningun grado de ninguna armadura produce un acorde vacio —');
+const rotos: string[] = [];
+for (const arm of ARMADURAS) {
+  for (const modo of ['mayor', 'menor'] as Modo[]) {
+    const gs = gradosDe(modo);
+    for (let i = 0; i < gs.length; i++) {
+      const ids: GradoId[] = [gs[i], `V/${gs[i]}`, `ii/${gs[i]}`];
+      for (const id of ids) {
+        for (const sept of [false, true]) {
+          const a = acordeDeGrado(arm, modo, id, sept);
+          if (a.notas.length < 3 || a.notas.some((n) => !n.chromatic)) {
+            rotos.push(`${arm.id}/${modo}/${id}/${sept ? '7' : '3'}`);
+          }
+        }
+      }
+    }
+  }
+}
+check('todas las combinaciones producen un acorde con notas', rotos.slice(0, 12), []);
+
+console.log('\n— Barrido: las notas siempre ascienden desde la raiz —');
+const desordenados: string[] = [];
+for (const arm of ARMADURAS) {
+  for (const modo of ['mayor', 'menor'] as Modo[]) {
+    for (const g of gradosDe(modo)) {
+      const a = acordeDeGrado(arm, modo, g, true);
+      for (let k = 1; k < a.notas.length; k++) {
+        const prev = a.notas[k - 1], cur = a.notas[k];
+        if (cur.octave < prev.octave) desordenados.push(`${arm.id}/${modo}/${g}`);
+      }
+    }
+  }
+}
+check('ninguna nota baja de octava respecto de la anterior', desordenados.slice(0, 12), []);
+
+console.log(fallos === 0 ? '\nTODO OK\n' : `\n${fallos} FALLAS\n`);
+process.exit(fallos === 0 ? 0 : 1);
 ```
 
-Esperado en F♯ menor (relativa de A mayor): `i` = F♯m7 · `ii°` = G♯m7♭5 · `♭III` = Amaj7 · `iv` = Bm7 · `v` = C♯m7 · `V/iv` = F♯7.
+Añadir a `package.json`, después de `verify:constructor`:
 
-- [ ] **Step 5: Quitar el humo temporal**
+```json
+    "verify:acordes": "node --experimental-strip-types scripts/verify-progresion-acordes.ts",
+```
 
-Borrar de `src/main.tsx` las líneas añadidas en los steps 3 y 4. Verificar que `src/main.tsx` queda idéntico a como estaba (`git diff src/main.tsx` sin salida).
+**El barrido de las últimas dos secciones es lo importante.** Los checks puntuales confirman lo que ya se espera; el barrido recorre las 14 armaduras × 2 modos × 7 grados × 3 variantes × 2 calidades y es lo que caza las tonalidades extremas (C♯ mayor con sus dobles sostenidos, G♭ mayor) donde el spelling se rompe sin que nadie lo mire.
 
-- [ ] **Step 6: Build limpio**
+- [ ] **Step 4: Correr el arnés**
+
+```bash
+npm run verify:acordes
+```
+
+Esperado: `TODO OK`, exit 0.
+
+Si algún cifrado del barrido falla en una tonalidad extrema, **no cambies el valor esperado del arnés para que pase**. Pará y reportá cuál es: `DESIGN.md §7` ya registra una deuda abierta sobre dobles sostenidos en tonalidades extremas (`D♯`, `G♯`, `A♯` mayores producen F♯♯, B♯, C♯♯) y esto puede ser la misma deuda asomando por otro lado. Es una decisión del dueño, no tuya.
+
+- [ ] **Step 5: Build y lint limpios**
 
 ```bash
 npm run build
 ```
 
-Esperado: exitoso, sin errores.
+```bash
+npx eslint src
+```
 
-- [ ] **Step 7: Commit**
+Esperado: ambos sin errores.
+
+- [ ] **Step 6: Commit**
 
 ```bash
-git add src/utils/progresionAcordes.ts src/utils/noteCalculations.ts
+git add src/utils/progresionAcordes.ts scripts/verify-progresion-acordes.ts package.json
 git commit -m "feat(t4): armaduras y resolucion de grado a acorde sonante"
 ```
 
@@ -743,10 +815,12 @@ En `src/components/primitives/GradosArmonicos/GradosArmonicos.module.css`, borra
 - [ ] **Step 4: Verificar que no quedaron referencias muertas**
 
 ```bash
-npm run lint
+npx eslint src
 ```
 
-Esperado: sin errores. Si aparece `'DiatonicRole' is defined but never used` en `GradosArmonicos.tsx`, quitar `DiatonicRole` del import de `NoteToken` **solo si** ya no lo usan `DEGREE_ROLE`/`HARMONIC_ROLE` — sí lo usan, así que el import debe quedarse.
+Esperado: sin errores. **Usar `npx eslint src`, no `npm run lint`**: `npm run lint` corre `eslint .` sobre todo el repo y arrastra 50 errores preexistentes en los scripts vendorizados de `.agents/skills/impeccable/` y `.claude/skills/impeccable/` (bundles minificados). Esos errores no son tuyos y no se arreglan acá; acotar a `src` es la única señal útil.
+
+Si aparece `'DiatonicRole' is defined but never used` en `GradosArmonicos.tsx`, quitar `DiatonicRole` del import de `NoteToken` **solo si** ya no lo usan `DEGREE_ROLE`/`HARMONIC_ROLE` — sí lo usan, así que el import debe quedarse.
 
 - [ ] **Step 5: Verificar la no-regresión visual**
 
@@ -2324,8 +2398,10 @@ Cambiar a tema claro. Verificar que los cuatro tintes diatónicos y el borde ám
 - [ ] **Step 7: Correr la anti-checklist y el lint**
 
 ```bash
-npm run lint
+npx eslint src
 ```
+
+(No `npm run lint`: arrastra 50 errores preexistentes de los bundles vendorizados del skill `impeccable`, fuera de `src`.)
 
 ```bash
 npm run verify:constructor
