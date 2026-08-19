@@ -1,5 +1,5 @@
 import { Note, Interval, Scale, Key, Chord } from "tonal";
-import { ALL, NOTE_ES } from "../data/notes";
+import { ALL, NOTE_ES } from "../data/notes.ts";
 import type { ChromaticNote, NoteInfo, Tonic } from "../types/music";
 
 export function noteAtFret(
