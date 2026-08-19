@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
+import RuleNote from '../../../shared/RuleNote';
 import IntervalRuler, { type RulerStop } from '../../../primitives/IntervalRuler/IntervalRuler';
 import styles from './SeptimasSection.module.css';
 
@@ -57,7 +58,7 @@ export default function SeptimasSection() {
       <p className={styles.text}>{t('t3.s311.new_seventh')}</p>
 
       <IntervalRuler stops={RULER_STOPS} maxSemis={12} ariaLabel={t('t3.s311.ruler_aria')} />
-      <p className={styles.caption}>{t('t3.s311.legend')}</p>
+      <RuleNote>{t('t3.s311.legend')}</RuleNote>
     </section>
   );
 }

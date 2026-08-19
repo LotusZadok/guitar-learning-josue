@@ -69,11 +69,16 @@
   opacity: 0.5;
 }
 
+/* `margin-inline: auto` por el mismo motivo que en AcordesBuilder: la regla
+   global `p { max-width: 90ch }` angosta la caja y sin auto queda pegada a la
+   izquierda, con el texto centrado dentro de una caja descentrada (medido: 165px
+   fuera de eje). */
 .footnote {
   font-size: 11px;
   color: var(--muted);
   line-height: 1.6;
   margin-top: 8px;
+  margin-inline: auto;
   text-align: center;
 }
 

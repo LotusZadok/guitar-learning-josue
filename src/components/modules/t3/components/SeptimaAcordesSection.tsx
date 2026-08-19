@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
+import RuleNote from '../../../shared/RuleNote';
 import ChordStacks, { type ChordDef } from '../../../primitives/ChordStacks/ChordStacks';
 import AcordesBuilder from '../../../primitives/AcordesBuilder/AcordesBuilder';
 import { BUILDER_312 } from '../../../primitives/AcordesBuilder/configs';
@@ -80,7 +81,7 @@ export default function SeptimaAcordesSection() {
 
       <ChordStacks chords={CHORDS} />
 
-      <p className={styles.caption}>{t('t3.s312.caption')}</p>
+      <RuleNote>{t('t3.s312.caption')}</RuleNote>
 
       <h3 className={styles.subheading}>{t('t3.s312.builder_title')}</h3>
       <p className={styles.text}>{t('t3.s312.builder_intro')}</p>

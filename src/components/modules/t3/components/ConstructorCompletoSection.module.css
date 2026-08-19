@@ -11,16 +11,6 @@
   margin-bottom: 16px;
 }
 
-.caption {
-  margin: 22px auto 4px;
-  max-width: 560px;
-  text-align: center;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px;
-  line-height: 1.7;
-  color: var(--muted);
-}
-
 /* Los 10 acordes como referencia: cifrado + fórmula de intervalos. */
 .chordList {
   list-style: none;

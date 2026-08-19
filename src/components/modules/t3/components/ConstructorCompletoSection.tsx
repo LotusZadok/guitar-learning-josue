@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
+import RuleNote from '../../../shared/RuleNote';
 import AcordesBuilder from '../../../primitives/AcordesBuilder/AcordesBuilder';
 import { BUILDER_34 } from '../../../primitives/AcordesBuilder/configs';
 import styles from './ConstructorCompletoSection.module.css';
@@ -31,7 +32,7 @@ export default function ConstructorCompletoSection() {
 
       <AcordesBuilder config={BUILDER_34} />
 
-      <p className={styles.caption}>{t('t3.s34.caption')}</p>
+      <RuleNote>{t('t3.s34.caption')}</RuleNote>
 
       <ul className={styles.chordList}>
         {CHORDS.map((c) => (

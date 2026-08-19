@@ -41,16 +41,6 @@
   font-weight: 600;
 }
 
-.caption {
-  margin: 18px auto 0;
-  max-width: 560px;
-  text-align: center;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px;
-  line-height: 1.7;
-  color: var(--muted);
-}
-
 @media (max-width: 900px) {
   .section {
     padding: 36px 24px;

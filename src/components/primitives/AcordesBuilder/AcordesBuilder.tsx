@@ -172,14 +172,6 @@ export default function AcordesBuilder({ config = BUILDER_17, path, playingRole,
       ? playIdx >= 0
       : controlled && playingRole != null && playingRole !== PLAYING_ALL;
 
-  // Nota que suena ahora, para nombrarla en el readout (anti-checklist item 12:
-  // el audio nunca es el único portador de la información).
-  const playingSpelled = useMemo(() => {
-    if (!soloPlaying) return '';
-    const role = playIdx != null ? chain[playIdx] : playingRole!;
-    return members.get(role)?.spelled ?? '';
-  }, [soloPlaying, playingRole, chain, playIdx, members]);
-
   // Aristas: pares consecutivos de cada camino (T→path[0], path[i]→path[i+1]).
   const edges = useMemo(() => {
     const set = new Map<string, { from: string; to: string }>();
@@ -270,15 +262,14 @@ export default function AcordesBuilder({ config = BUILDER_17, path, playingRole,
         {currentChord && chordMembers ? (
           <>
             <p className={styles.chordName}>
-              {spelledToES(tonicMember.spelled)} {currentChord.nombre}
-              <span className={styles.cifrado}>
-                {tonicMember.spelled}
-                {currentChord.cifrado}
+              {tonicMember.spelled}
+              {currentChord.cifrado}
+              <span className={styles.chordAlias}>
+                {spelledToES(tonicMember.spelled)} {currentChord.nombre}
               </span>
             </p>
             <p className={styles.chordNotes}>{chordMembers.map((m) => m.spelled).join('  ')}</p>
-            <p className={styles.nowPlaying}>{playingSpelled}</p>
-            <div className={styles.audioRow}>
+                <div className={styles.audioRow}>
               <PlaybackButton
                 mode="bloque"
                 onClick={playBlock}
@@ -383,10 +374,14 @@ function Node({ role, x, y, quality, member, state, playing, dimmed, onSelect, o
         {/* Reposo: rol (función) en Plex Mono, que preserva mayús/minús (así 3m≠3M
             y 5d≠5). Activo: glifo de la nota en Bebas, blanco sobre el círculo
             saturado (excepción Signature). */}
+        {/* y: la tinta se centra con `dominant-baseline: middle` + un ajuste por
+            fuente. Medido en browser: con Bebas 18px la baseline cae 6.3px bajo
+            el centro y la ideal es 6.5 (y = 0); con Plex Mono 14px cae 3.61 y la
+            ideal es 5 (y = 1). Un solo valor descentra una de las dos. */}
         <text
           className={colored ? styles.nodeGlyph : roleClass}
           x={0}
-          y={1}
+          y={colored ? 0 : 1}
           fill={colored ? '#fff' : 'var(--text-body)'}
           style={colored && member.spelled.length > 2 ? { fontSize: '13px' } : undefined}
         >

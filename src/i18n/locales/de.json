@@ -10,7 +10,7 @@
   "t3": {
     "s311": {
       "label": "3.1.1 · Septimen",
-      "title": "Die neuen Septimen",
+      "title": "Die Septimen",
       "intro": "Aus der Intervalltabelle von T1 gibt es drei Septim-Qualitäten zum Bau von Akkorden. Die große Septime (7M) und die kleine Septime (7m) kennst du bereits; neu ist die verminderte Septime (7d).",
       "table_headers": {
         "interval": "Intervall",
@@ -57,14 +57,9 @@
     "s331": {
       "label": "3.3.1 · Sekunde und Quarte",
       "title": "Große Sekunde und reine Quarte",
-      "intro": "Zwei Intervalle aus T1, jetzt als Baustein für Akkorde (nicht nur als Töne innerhalb einer Tonleiter). Die große Sekunde (2M) liegt 2 Halbtöne von der Tonika entfernt; die reine Quarte (4J) 5. Beide ersetzen die Terz, um die Sus-Akkorde zu bilden (3.3).",
-      "table_headers": {
-        "interval": "Intervall",
-        "semitones": "Halbtöne",
-        "use": "Bildet"
-      },
+      "intro": "Zwei Intervalle aus T1, jetzt als Baustein für Akkorde (nicht nur als Töne innerhalb einer Tonleiter). Die große Sekunde (2M) liegt 2 Halbtöne von der Tonika entfernt; die reine Quarte (4J) 5.",
       "ruler_aria": "Intervall-Lineal: Sekunde und Quarte rund um die Terz",
-      "legend": "Die 2. (2 HT) liegt direkt unter der Terz, die 4. (5 HT) direkt darüber. Die Terzen, abgeblendet, sind die Referenz, die sie ersetzen werden."
+      "legend": "Die 2. (2 HT) liegt direkt unter der kleinen Terz, die 4. (5 HT) direkt über der großen Terz. Die Terzen, abgeblendet, sind die Referenz, die sie ersetzen werden."
     },
     "s33": {
       "label": "3.3 · Sus-Akkorde",
@@ -540,11 +535,17 @@
           { "type": "text", "value": "Jede Durtonart hat eine Moll-Paralleltonart, die genau dieselben Vorzeichen teilt. Die Paralleltonart wird auf der 6. Stufe der Durtonart aufgebaut." }
         ],
         [
-          { "type": "text", "value": "Die natürliche Molltonleiter wird mit denselben 7 Tönen der Durtonleiter gebildet, beginnt aber auf dem 6. Ton. Die sieben Akkorde sind in beiden Fällen dieselben — nur die Reihenfolge ändert sich: in " },
+          { "type": "text", "value": "Die natürliche Molltonleiter wird mit denselben 7 Tönen der Durtonleiter gebildet, beginnt aber auf dem 6. Ton. Die sieben Akkorde sind in beiden Fällen dieselben — nur die Reihenfolge ändert sich:" }
+        ],
+        [
+          { "type": "text", "value": "In " },
           { "type": "note", "value": "C" },
-          { "type": "text", "value": " Dur → C Dm Em F G Am B°; in " },
+          { "type": "text", "value": " Dur → C Dm Em F G Am B°" }
+        ],
+        [
+          { "type": "text", "value": "In " },
           { "type": "note", "value": "A" },
-          { "type": "text", "value": " Moll → Am B° C Dm Em F G." }
+          { "type": "text", "value": " Moll → Am B° C Dm Em F G" }
         ]
       ],
       "scale_example_major": "C-Dur:",

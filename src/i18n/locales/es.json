@@ -8,7 +8,7 @@
   "t3": {
     "s311": {
       "label": "3.1.1 · Séptimas",
-      "title": "Las nuevas séptimas",
+      "title": "Las séptimas",
       "intro": "Recordando la tabla de intervalos de T1, hay tres calidades de séptima a la hora de armar acordes. La séptima mayor (7M) y la séptima menor (7m) ya las conocías; la novedad es la séptima disminuida (7d).",
       "table_headers": {
         "interval": "Intervalo",
@@ -55,14 +55,9 @@
     "s331": {
       "label": "3.3.1 · Segunda y cuarta",
       "title": "Segunda mayor y cuarta justa",
-      "intro": "Dos intervalos que ya viste en T1, ahora como material para construir acordes (no solo como notas dentro de una escala). La segunda mayor (2M) está a 2 semitonos de la tónica; la cuarta justa (4J), a 5. Ambas van a reemplazar la tercera para formar los acordes suspendidos (3.3).",
-      "table_headers": {
-        "interval": "Intervalo",
-        "semitones": "Semitonos",
-        "use": "Forma"
-      },
+      "intro": "Dos intervalos que ya viste en T1, ahora como material para construir acordes (no solo como notas dentro de una escala). La segunda mayor (2M) está a 2 semitonos de la tónica; la cuarta justa (4J), a 5.",
       "ruler_aria": "Regla de intervalos: la segunda y la cuarta alrededor de la tercera",
-      "legend": "La 2ª (2 s.t.) queda justo debajo de la tercera, y la 4ª (5 s.t.) justo arriba. Las terceras, atenuadas, son la referencia que van a reemplazar."
+      "legend": "La 2ª (2 s.t.) queda justo debajo de la tercera menor, y la 4ª (5 s.t.) justo arriba de la tercera mayor. Las terceras, atenuadas, son la referencia que van a reemplazar."
     },
     "s33": {
       "label": "3.3 · Acordes suspendidos",
@@ -531,18 +526,24 @@
     "s49": {
       "label": "2.8 · Relativas menores",
       "title": "Relativas menores",
-      "intro_p1": "Toda tonalidad mayor tiene una tonalidad menor relativa que comparte exactamente la misma armadura. La relativa menor se construye sobre el vi grado de la mayor.",
+      "intro_p1": "Toda tonalidad mayor tiene una tonalidad menor relativa que comparte exactamente la misma armadura. La relativa menor se construye sobre el vi grado de la relativa mayor.",
       "intro_p2": "La escala menor natural usa las mismas 7 notas, pero comienza en la 6ta. Los acordes son los mismos en ambos casos, solo cambia el orden:",
       "intro_prose": [
         [
-          { "type": "text", "value": "Toda tonalidad mayor tiene una tonalidad menor relativa que comparte exactamente la misma armadura. La relativa menor se construye sobre el vi grado de la mayor." }
+          { "type": "text", "value": "Toda tonalidad mayor tiene una tonalidad menor relativa que comparte exactamente la misma armadura. La relativa menor se construye sobre el vi grado de la relativa mayor." }
         ],
         [
-          { "type": "text", "value": "La escala menor natural usa las mismas 7 notas, pero comienza en la 6ta. Los acordes son los mismos en ambos casos, solo cambia el orden: en " },
+          { "type": "text", "value": "La escala menor natural usa las mismas 7 notas, pero comienza en la 6ta. Los acordes son los mismos en ambos casos, solo cambia el orden:" }
+        ],
+        [
+          { "type": "text", "value": "En " },
           { "type": "note", "value": "C" },
-          { "type": "text", "value": " mayor → C Dm Em F G Am B°; en " },
+          { "type": "text", "value": " mayor → C Dm Em F G Am B°" }
+        ],
+        [
+          { "type": "text", "value": "En " },
           { "type": "note", "value": "A" },
-          { "type": "text", "value": " menor → Am B° C Dm Em F G." }
+          { "type": "text", "value": " menor → Am B° C Dm Em F G" }
         ]
       ],
       "scale_example_major": "Do mayor:",

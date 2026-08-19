@@ -97,28 +97,35 @@
   text-align: center;
 }
 
+/* El cifrado es el titular (Chord-Symbol Case Rule: Plex Mono, nunca Bebas —
+   la minúscula de m7/maj7/sus4 es semántica). El nombre en español baja a alias. */
 .chordName {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 26px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 24px;
+  font-weight: 500;
   letter-spacing: 1px;
   color: var(--paper);
   margin: 0;
 }
 
-.cifrado {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 14px;
+.chordAlias {
+  font-size: 12px;
+  font-weight: 400;
   letter-spacing: 1px;
   color: var(--muted);
   margin-left: 12px;
 }
 
+/* `margin: X auto` no es cosmético: la regla global `p { max-width: 90ch }` le
+   da a estos párrafos una caja más angosta que el contenedor, y sin `auto` esa
+   caja se pega a la izquierda — el texto queda centrado dentro de una caja
+   descentrada (medido: 84.5px fuera de eje en el readout del árbol). */
 .chordNotes {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 14px;
   letter-spacing: 2px;
   color: var(--text-body);
-  margin: 6px 0 16px;
+  margin: 6px auto 16px;
 }
 
 .hint {
@@ -126,7 +133,7 @@
   font-size: 13px;
   letter-spacing: 0.5px;
   color: var(--muted);
-  margin: 28px 0;
+  margin: 28px auto;
 }
 
 /* === controles de audio === */
@@ -138,8 +145,7 @@
 
 /* === destacado del arpegio ===
    Bajo la Note-Color Quarantine el "está sonando" no puede ser un color nuevo:
-   se codifica con opacity (hermanos atenuados) + geometría (anillo y escala) +
-   el nombre de la nota en el readout. */
+   se codifica con opacity (hermanos atenuados) + geometría (anillo y escala). */
 .nodeDimmed {
   opacity: 0.35;
   transition: opacity 0.2s ease;
@@ -150,17 +156,6 @@
   transition: transform 0.18s ease;
 }
 
-.nowPlaying {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 13px;
-  letter-spacing: 2px;
-  color: var(--amber);
-  /* Reserva el alto de una línea aunque el texto esté vacío, para que el
-     readout no salte cuando pasa de silencio a sonando. */
-  min-height: 19px;
-  margin: 0 0 8px;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .nodePulse {
     transform: none;
@@ -169,6 +164,6 @@
 
 @media (max-width: 600px) {
   .chordName {
-    font-size: 22px;
+    font-size: 20px;
   }
 }

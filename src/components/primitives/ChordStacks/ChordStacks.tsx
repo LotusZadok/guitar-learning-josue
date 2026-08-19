@@ -120,10 +120,7 @@ function ChordColumn({ chord, tonic }: ChordColumnProps) {
 
   return (
     <div className={styles.col}>
-      <div className={styles.cifrado}>
-        {tonicSpelled}
-        <span className={styles.suffix}>{chord.suffix}</span>
-      </div>
+      <div className={styles.cifrado}>{tonicSpelled}{chord.suffix}</div>
 
       <svg className={styles.stack} viewBox={`0 0 ${SVG_W} ${svgH}`} aria-hidden="true">
         {stacked.map(({ tone, m }, i) => {
