@@ -107,24 +107,6 @@ export default function ConstructorProgresionesSection() {
         </div>
       )}
 
-      {confirmarLimpiar && (
-        <div className={styles.aviso} role="alertdialog" aria-labelledby="aviso-limpiar">
-          <p id="aviso-limpiar" className={styles.text}>{t('t4.s41.aviso_limpiar')}</p>
-          <div className={styles.avisoAcciones}>
-            <button
-              ref={primeraAccionLimpiarRef}
-              type="button"
-              onClick={() => { s.limpiarGrid(); setConfirmarLimpiar(false); }}
-            >
-              {t('t4.s41.aviso_limpiar_si')}
-            </button>
-            <button type="button" onClick={() => setConfirmarLimpiar(false)}>
-              {t('t4.s41.aviso_cancelar')}
-            </button>
-          </div>
-        </div>
-      )}
-
       <BancoGrados
         armadura={armadura}
         modo={s.modo}
@@ -165,6 +147,24 @@ export default function ConstructorProgresionesSection() {
         onStop={stop}
         onLimpiar={pedirLimpiar}
       />
+
+      {confirmarLimpiar && (
+        <div className={styles.aviso} role="alertdialog" aria-labelledby="aviso-limpiar">
+          <p id="aviso-limpiar" className={styles.text}>{t('t4.s41.aviso_limpiar')}</p>
+          <div className={styles.avisoAcciones}>
+            <button
+              ref={primeraAccionLimpiarRef}
+              type="button"
+              onClick={() => { s.limpiarGrid(); setConfirmarLimpiar(false); }}
+            >
+              {t('t4.s41.aviso_limpiar_si')}
+            </button>
+            <button type="button" onClick={() => setConfirmarLimpiar(false)}>
+              {t('t4.s41.aviso_cancelar')}
+            </button>
+          </div>
+        </div>
+      )}
 
       <p className={styles.text}>{t('t4.s41.explain')}</p>
     </section>
