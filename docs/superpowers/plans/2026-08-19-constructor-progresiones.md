@@ -23,6 +23,7 @@ Leer antes de empezar. No son opcionales.
 5. **Commits sin trailer `Co-Authored-By`.**
 6. **Idioma del código**: comentarios y nombres de dominio en español (el repo ya lo hace: `tonizacionEscenarios`, `esExcepcion`). Nombres de API de React/zustand en inglés.
 7. **i18n**: toda copy visible va a `src/i18n/locales/es.json` y `de.json`. Los **datos musicales** (romanos, cifrados, tablas de calidad) NO van a i18n — viven como const del módulo consumidor (`DESIGN.md §7`).
+8. **La copy en español tutea, no vosea** (`.impeccable/lessons-learned.md:136`, decisión del 2026-08-19): *elige*, *toca*, *escucha*, *puedes*, *quieres* — nunca *elegí*, *tocá*, *podés*. El proyecto había acumulado voseo porque cada ola copiaba el registro del texto vecino, y una ola entera se gastó en corregir 25 ocurrencias. No lo reintroduzcas.
 
 ---
 
@@ -2249,9 +2250,9 @@ y como grupo nuevo al mismo nivel que `"t3"`:
   "t4": {
     "s41": {
       "label": "4.1 · Constructor de progresiones",
-      "title": "Armá tu propia progresión",
-      "intro": "Elegí una armadura y decidí si trabajás en su tonalidad mayor o en su relativa menor. Después escogé el compás y cuántos compases querés, y colocá grados sobre los pulsos. Un acorde suena hasta que aparece el siguiente: si dejás un pulso vacío, el acorde anterior lo llena.",
-      "explain": "Nada de lo que armes está bien o mal. Tocá play y escuchá: si la progresión no cierra, el oído te lo va a decir antes que cualquier regla.",
+      "title": "Arma tu propia progresión",
+      "intro": "Elige una armadura y decide si trabajas en su tonalidad mayor o en su relativa menor. Después escoge el compás y cuántos compases quieres, y coloca grados sobre los pulsos. Un acorde suena hasta que aparece el siguiente: si dejas un pulso vacío, el acorde anterior lo llena.",
+      "explain": "Nada de lo que armes está bien o mal. Toca play y escucha: si la progresión no cierra, el oído te lo va a decir antes que cualquier regla.",
       "armadura_label": "Armadura",
       "sostenidos": "Armaduras con sostenidos",
       "bemoles": "Armaduras con bemoles",
