@@ -17,7 +17,7 @@
 Leer antes de empezar. No son opcionales.
 
 1. **`CLAUDE.md §5`**: todo cambio de frontend pasa por la doctrina. Cargar `PRODUCT.md`, `DESIGN.md` y `.impeccable/lessons-learned.md` antes de escribir CSS. Pasar la anti-checklist de 14 items antes de cada commit que toque UI.
-2. **The Amber-Means-Sounding Rule** (`DESIGN.md §7`): el ámbar (`--ambar-pergamino`) significa **solo** "está sonando". Ningún acento ámbar decorativo.
+2. **The Amber-Means-Sounding Rule** (`DESIGN.md §7`): el ámbar significa **solo** "está sonando". Ningún acento ámbar decorativo. El token CSS es **`var(--amber)`** (`src/global.css:10`, `#d4a017`). Ojo: `DESIGN.md` lo llama `ambar-pergamino` en su mapa de colores, pero **esa variable no existe en el CSS** — usarla no rompe el build ni avisa, simplemente cae a `currentcolor` y el estado "sonando" sale del color equivocado.
 3. **Note-Color Quarantine**: los 12 hues `--note-X` solo visten notas individuales. Los tokens `--diatonic-*` solo visten grados dentro de una tonalidad activa. Este constructor habla de **grados**, así que usa `--diatonic-*` y **nunca** `--note-X`.
 4. **The Chord-Symbol Case Rule**: los cifrados van en `'IBM Plex Mono'`, nunca en Bebas Neue (Bebas es all-caps y destruye `m7` vs `M7`).
 5. **Commits sin trailer `Co-Authored-By`.**
@@ -1559,7 +1559,7 @@ Crear `src/components/primitives/GrillaProgresion/GrillaProgresion.module.css`:
    El ámbar aparece SOLO acá. */
 .casilla[data-role][data-sonando='true'],
 .casilla[data-sonando='true'] {
-  box-shadow: inset 0 0 0 2px var(--ambar-pergamino);
+  box-shadow: inset 0 0 0 2px var(--amber);
 }
 
 .casilla:focus-visible { outline: 2px solid var(--paper); outline-offset: 2px; }
