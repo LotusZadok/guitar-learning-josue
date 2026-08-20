@@ -15,6 +15,7 @@ const SECTIONS = [
   { id: 't1', path: '/t1', labelKey: 'nav.t1' },
   { id: 't2', path: '/t2', labelKey: 'nav.t2' },
   { id: 't3', path: '/t3', labelKey: 'nav.t3' },
+  { id: 't4', path: '/t4', labelKey: 'nav.t4' },
 ] as const;
 
 export default function Sidebar() {

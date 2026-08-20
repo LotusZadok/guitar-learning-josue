@@ -5,7 +5,8 @@
   "nav": {
     "t1": "T1 · Musikalische Grundlagen",
     "t2": "T2 · Tonarten und diatonische Harmonik",
-    "t3": "T3 · Anreicherung der Harmonik"
+    "t3": "T3 · Anreicherung der Harmonik",
+    "t4": "T4 · Akkordfolgen-Baukasten"
   },
   "t3": {
     "s311": {
@@ -143,6 +144,40 @@
         "Tonika in Moll"
       ],
       "explain": "Das ii° bereitet wie das Dur-ii vor, ist aber von Anfang an gespannt (ein Halbverminderter). Das V7 spannt nach derselben Tritonus-Logik aus 3.6, nur ist dieser Leitton ein Ton, der aus der harmonischen Moll entlehnt ist. Das i löst in Moll auf. Typische Verbindungen aus Folklore und Bolero (i-♭VI-♭VII-i, i-iv-V7-i) nutzen genau diese Bausteine."
+    }
+  },
+  "t4": {
+    "s41": {
+      "label": "4.1 · Akkordfolgen-Baukasten",
+      "title": "Baue deine eigene Akkordfolge",
+      "intro": "Wähle ein Vorzeichen und entscheide, ob du in der Dur-Tonart oder in der parallelen Moll-Tonart arbeitest. Wähle danach die Taktart und wie viele Takte du willst, und setze Stufen auf die Schläge. Ein Akkord klingt, bis der nächste erscheint: lässt du einen Schlag leer, füllt ihn der vorige Akkord.",
+      "explain": "Nichts, was du baust, ist richtig oder falsch. Drücke Play und höre zu: klingt die Folge nicht rund, sagt dir das Ohr das früher als jede Regel.",
+      "armadura_label": "Vorzeichen",
+      "sostenidos": "Vorzeichen mit Kreuzen",
+      "bemoles": "Vorzeichen mit Bs",
+      "tonalidad_label": "Tonart",
+      "tonizaciones": "Tonikalisieren",
+      "armar_grado": "Stufe {{grado}}, Akkord {{acorde}}",
+      "casilla_vacia": "Takt {{compas}}, Schlag {{pulso}}, leer",
+      "casilla_colocar": "Takt {{compas}}, Schlag {{pulso}}, leer. Hier setzen",
+      "casilla_reemplazar": "Takt {{compas}}, Schlag {{pulso}}, {{acorde}}. Ersetzen",
+      "casilla_vaciar": "Takt {{compas}}, Schlag {{pulso}}, {{acorde}}. Leeren",
+      "compas_label": "Taktart",
+      "compases_label": "Takte",
+      "mundo_binario": "binär",
+      "mundo_ternario": "ternär",
+      "velocidad_label": "Geschwindigkeit",
+      "bpm_aria": "Geschwindigkeit in Schlägen pro Minute",
+      "bpm_valuetext": "{{bpm}} Schläge pro Minute",
+      "septimas": "Septimen",
+      "metronomo": "Metronom",
+      "loop": "Wiederholen",
+      "aviso_modo_one": "Der Wechsel des Modus schreibt die Stufen neu. 1 Akkord deiner Folge existiert nicht in der anderen Tonart und wird geleert.",
+      "aviso_modo_other": "Der Wechsel des Modus schreibt die Stufen neu. {{count}} Akkorde deiner Folge existieren nicht in der anderen Tonart und werden geleert.",
+      "aviso_continuar": "Trotzdem wechseln",
+      "aviso_cancelar": "So lassen",
+      "aviso_limpiar": "Du löschst die gesamte Folge. Das lässt sich nicht rückgängig machen.",
+      "aviso_limpiar_si": "Löschen"
     }
   },
   "lock": {

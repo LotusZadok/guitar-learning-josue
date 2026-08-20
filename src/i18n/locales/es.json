@@ -3,7 +3,8 @@
   "nav": {
     "t1": "T1 · Fundamentos musicales",
     "t2": "T2 · Tonalidades y armonía diatónica",
-    "t3": "T3 · Enriqueciendo la armonía"
+    "t3": "T3 · Enriqueciendo la armonía",
+    "t4": "T4 · Constructor de progresiones"
   },
   "t3": {
     "s311": {
@@ -141,6 +142,40 @@
         "Tónica menor"
       ],
       "explain": "El ii° prepara igual que el ii mayor, pero ya nace tenso (es un semidisminuido). El V7 tensa con la misma lógica del tritono que viste en 3.6, solo que esa sensible es una nota prestada de la menor armónica. El i resuelve en menor. Progresiones típicas del folclore y el bolero (i-♭VI-♭VII-i, i-iv-V7-i) usan estas mismas piezas."
+    }
+  },
+  "t4": {
+    "s41": {
+      "label": "4.1 · Constructor de progresiones",
+      "title": "Arma tu propia progresión",
+      "intro": "Elige una armadura y decide si trabajas en su tonalidad mayor o en su relativa menor. Después escoge el compás y cuántos compases quieres, y coloca grados sobre los pulsos. Un acorde suena hasta que aparece el siguiente: si dejas un pulso vacío, el acorde anterior lo llena.",
+      "explain": "Nada de lo que armes está bien o mal. Toca play y escucha: si la progresión no cierra, el oído te lo va a decir antes que cualquier regla.",
+      "armadura_label": "Armadura",
+      "sostenidos": "Armaduras con sostenidos",
+      "bemoles": "Armaduras con bemoles",
+      "tonalidad_label": "Tonalidad",
+      "tonizaciones": "Tonizar",
+      "armar_grado": "Grado {{grado}}, acorde {{acorde}}",
+      "casilla_vacia": "Compás {{compas}}, pulso {{pulso}}, vacío",
+      "casilla_colocar": "Compás {{compas}}, pulso {{pulso}}, vacío. Colocar acá",
+      "casilla_reemplazar": "Compás {{compas}}, pulso {{pulso}}, {{acorde}}. Reemplazar",
+      "casilla_vaciar": "Compás {{compas}}, pulso {{pulso}}, {{acorde}}. Vaciar",
+      "compas_label": "Compás",
+      "compases_label": "Compases",
+      "mundo_binario": "binario",
+      "mundo_ternario": "ternario",
+      "velocidad_label": "Velocidad",
+      "bpm_aria": "Velocidad en pulsos por minuto",
+      "bpm_valuetext": "{{bpm}} pulsos por minuto",
+      "septimas": "Séptimas",
+      "metronomo": "Metrónomo",
+      "loop": "Repetir",
+      "aviso_modo_one": "Cambiar de modo reescribe los grados. 1 acorde de tu progresión no existe en la otra tonalidad y se va a vaciar.",
+      "aviso_modo_other": "Cambiar de modo reescribe los grados. {{count}} acordes de tu progresión no existen en la otra tonalidad y se van a vaciar.",
+      "aviso_continuar": "Cambiar igual",
+      "aviso_cancelar": "Dejarlo así",
+      "aviso_limpiar": "Vas a borrar la progresión entera. No se puede deshacer.",
+      "aviso_limpiar_si": "Borrar"
     }
   },
   "lock": {
