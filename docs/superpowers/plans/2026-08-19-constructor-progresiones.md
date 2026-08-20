@@ -2101,6 +2101,7 @@ export default function ConstructorProgresionesSection() {
         modo={s.modo}
         septimas={s.septimas}
         sonando={sonando}
+        hayGradoArmado={s.gradoArmado !== null}
         onColocar={s.colocarEn}
         onVaciar={s.vaciarSlot}
         onSoltar={soltar}
@@ -2258,7 +2259,9 @@ y como grupo nuevo al mismo nivel que `"t3"`:
       "tonizaciones": "Tonizar",
       "armar_grado": "Grado {{grado}}, acorde {{acorde}}",
       "casilla_vacia": "Compás {{compas}}, pulso {{pulso}}, vacío",
-      "casilla_llena": "Compás {{compas}}, pulso {{pulso}}, grado {{grado}}, acorde {{acorde}}",
+      "casilla_colocar": "Compás {{compas}}, pulso {{pulso}}, vacío. Colocar acá",
+      "casilla_reemplazar": "Compás {{compas}}, pulso {{pulso}}, {{acorde}}. Reemplazar",
+      "casilla_vaciar": "Compás {{compas}}, pulso {{pulso}}, {{acorde}}. Vaciar",
       "compas_label": "Compás",
       "compases_label": "Compases",
       "mundo_binario": "binario",
@@ -2300,7 +2303,9 @@ y el grupo `"t4"`:
       "tonizaciones": "Tonikalisieren",
       "armar_grado": "Stufe {{grado}}, Akkord {{acorde}}",
       "casilla_vacia": "Takt {{compas}}, Schlag {{pulso}}, leer",
-      "casilla_llena": "Takt {{compas}}, Schlag {{pulso}}, Stufe {{grado}}, Akkord {{acorde}}",
+      "casilla_colocar": "Takt {{compas}}, Schlag {{pulso}}, leer. Hier setzen",
+      "casilla_reemplazar": "Takt {{compas}}, Schlag {{pulso}}, {{acorde}}. Ersetzen",
+      "casilla_vaciar": "Takt {{compas}}, Schlag {{pulso}}, {{acorde}}. Leeren",
       "compas_label": "Taktart",
       "compases_label": "Takte",
       "mundo_binario": "binär",
