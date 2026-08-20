@@ -1,0 +1,45 @@
+/* Carril tipográfico de calidad (reunión 24/5/26 + §3.9): mayor = bold recto,
+   menor = regular, disminuido = itálica y un punto más chico. La discriminación
+   es tipográfica ADEMÁS de cromática, para que el color no sea el único
+   portador de información. Plex Mono, nunca Bebas (The Chord-Symbol Case Rule:
+   Bebas es all-caps y borraría la diferencia mayúscula/minúscula). */
+.romanMajor {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 1px;
+  color: var(--paper);
+}
+
+.romanMinor {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  color: var(--text-body);
+}
+
+.romanDim {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  color: var(--text-body);
+}
+
+/* Formato armónico: el color lo pone el propio glifo vía su data-harmonic, no
+   un ancestro. Antes estas reglas dependían de un contenedor con el atributo;
+   al mudarse a un componente compartido el atributo viaja con el glifo. */
+.romanMajor[data-harmonic='stable'],
+.romanMinor[data-harmonic='stable'] { color: var(--diatonic-stable); }
+
+.romanMajor[data-harmonic='medium'],
+.romanMinor[data-harmonic='medium'] { color: var(--diatonic-medium); }
+
+.romanMajor[data-harmonic='mediumTense'],
+.romanMinor[data-harmonic='mediumTense'] { color: var(--diatonic-medium-tense); }
+
+.romanMajor[data-harmonic='tense'],
+.romanMinor[data-harmonic='tense'],
+.romanDim[data-harmonic='tense'] { color: var(--diatonic-tense); }

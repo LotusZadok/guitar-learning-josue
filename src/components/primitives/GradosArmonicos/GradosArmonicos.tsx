@@ -4,6 +4,7 @@ import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { ALL } from '../../../data/notes';
 import { majorScaleSpelled, relativeMinorScaleSpelled, spelledSequenceAscending, tonicChromatic } from '../../../utils/noteCalculations';
 import NoteToken, { type DiatonicRole } from '../../shared/NoteToken/NoteToken';
+import RomanGlyph from '../../shared/RomanGlyph/RomanGlyph';
 import type { ChromaticNote, NoteSpelling, Tonic } from '../../../types/music';
 import styles from './GradosArmonicos.module.css';
 
@@ -325,22 +326,6 @@ function Row({ label, cells, ascii, roles }: RowProps) {
         );
       })}
     </tr>
-  );
-}
-
-function RomanGlyph({ roman, role }: { roman: string; role: DiatonicRole }) {
-  // Reunión 24/5/26: color por formato armónico (no por mayor/menor visual).
-  // Generalizado en §3.9 para 'ii°' (menor) además de 'vii°' (mayor): cualquier
-  // grado disminuido termina en '°', sin importar el modo.
-  const isDim = roman.endsWith('°');
-  const isMajor = !isDim && roman === roman.toUpperCase();
-  return (
-    <span
-      className={isDim ? styles.romanDim : (isMajor ? styles.romanMajor : styles.romanMinor)}
-      data-harmonic={role}
-    >
-      {roman}
-    </span>
   );
 }
 
