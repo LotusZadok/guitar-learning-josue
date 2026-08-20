@@ -820,10 +820,12 @@ Si aparece `'DiatonicRole' is defined but never used` en `GradosArmonicos.tsx`, 
 
 - [ ] **Step 5: Verificar la no-regresión visual**
 
+**La app usa `HashRouter`**: las rutas son `#/t2`, `#/t3`, `#/t4`. Navegar a `http://localhost:5173/t2` carga T1 y deja la URL en `/t2#/t1`, que se confunde fácil con un bug. Y el `LockScreen` se saltea sin contraseña: `App.tsx` solo lee `localStorage.getItem('site-unlocked') === 'true'`, así que basta `localStorage.setItem('site-unlocked','true')` y recargar.
+
 Arrancar el preview y comparar contra `main`:
-- `/t2` → §2.6 "Grados armónicos": los romanos `I ii iii IV V vi vii°` conservan tamaño, peso, itálica del `vii°` y color por rol (I verde, IV púrpura, V rojo).
-- `/t3` → §3.5 "Grado 7": arranca en el paso de séptimas, romanos iguales.
-- `/t3` → §3.9 "Escala menor": `i ii° ♭III iv v ♭VI ♭VII`, el `ii°` en itálica.
+- `#/t2` → §2.6 "Grados armónicos" (sección `s-t2-grados`): los romanos `I ii iii IV V vi vii°` conservan tamaño, peso, itálica del `vii°` y color por rol (I verde, IV púrpura, V rojo).
+- `#/t3` → §3.5 "Grado 7" (`s-t3-grado-7`): arranca en el paso de séptimas, romanos iguales.
+- `#/t3` → §3.9 "Escala menor" (`s-t3-escala-menor`): `i ii° ♭III iv v ♭VI ♭VII`, el `ii°` en itálica.
 
 - [ ] **Step 6: Build limpio y commit**
 
@@ -2318,7 +2320,7 @@ y el grupo `"t4"`:
 
 - [ ] **Step 7: Verificar en el browser**
 
-Arrancar el preview y navegar a `/t4`. Verificar:
+Arrancar el preview (`preview_start` con la config `dev` de `.claude/launch.json`, puerto 5173) y navegar a `http://localhost:5173/#/t4` — **con hash**, la app usa `HashRouter`. Saltear el `LockScreen` con `localStorage.setItem('site-unlocked','true')` y recargar. Verificar:
 1. El sidebar muestra la entrada T4 y el TOC muestra "4.1 · Constructor de progresiones".
 2. Se ve el selector de armaduras, el par mayor/menor, el banco de 7 grados, la grilla de 4 compases × 4 casillas y el transporte.
 3. Ninguna clave i18n aparece cruda (nada de `t4.s41.label` en pantalla).
