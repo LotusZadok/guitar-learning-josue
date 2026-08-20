@@ -59,6 +59,33 @@ check('Mib mayor I',  cif('Eb', 'mayor', 'I', true),  'E♭maj7');
 check('Mib mayor IV', cif('Eb', 'mayor', 'IV', true), 'A♭maj7');
 check('Mib mayor V',  cif('Eb', 'mayor', 'V', true),  'B♭7');
 
+console.log('\n— Doble sostenido: convencion x, no dos sostenidos —');
+// noteCalculations fija 'x' para el doble sostenido (diff === 2 → "x", y lo
+// documenta en ChordMember como "Cx"). Do♯ mayor (7♯) es la unica armadura
+// seleccionable que lo alcanza, via las tonizaciones ii/iii y ii/v.
+check('C♯ mayor ii/iii triada',  cif('C#', 'mayor', 'ii/iii', false), 'Fxdim');
+check('C♯ mayor ii/iii septima', cif('C#', 'mayor', 'ii/iii', true),  'Fxm7♭5');
+check('C♯ menor ii/v triada',    cif('C#', 'menor', 'ii/v', false),   'Fxdim');
+check('C♯ menor ii/v septima',   cif('C#', 'menor', 'ii/v', true),    'Fxm7♭5');
+
+console.log('\n— Barrido: ningun cifrado usa ♯♯ ni ♭♭ —');
+const dobles: string[] = [];
+for (const arm of ARMADURAS) {
+  for (const modo of ['mayor', 'menor'] as Modo[]) {
+    const gs = gradosDe(modo);
+    for (let i = 0; i < gs.length; i++) {
+      const ids: GradoId[] = [gs[i], `V/${gs[i]}`, `ii/${gs[i]}`];
+      for (const id of ids) {
+        for (const sept of [false, true]) {
+          const c = acordeDeGrado(arm, modo, id, sept).cifrado;
+          if (c.includes('♯♯')) dobles.push(`${arm.id}/${modo}/${id} -> ${c}`);
+        }
+      }
+    }
+  }
+}
+check('ninguna combinacion escribe el doble sostenido como ♯♯', dobles.slice(0, 12), []);
+
 console.log('\n— Etiquetas de tonalidad —');
 check('3♯ mayor', etiquetaTonalidad(armaduraPorId('A'), 'mayor'), 'A');
 check('3♯ menor', etiquetaTonalidad(armaduraPorId('A'), 'menor'), 'F♯m');

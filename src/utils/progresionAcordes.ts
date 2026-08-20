@@ -56,8 +56,13 @@ export function armaduraPorId(id: string): Armadura {
   return a;
 }
 
-const ASCII = (s: string) => s.replace(/♯/g, '#').replace(/♭/g, 'b');
-const GLIFO = (s: string) => s.replace(/#/g, '♯').replace(/b/g, '♭');
+const ASCII = (s: string) => s.replace(/x/g, '##').replace(/♯/g, '#').replace(/♭/g, 'b');
+// El doble sostenido se escribe 'x', no '♯♯': es la convención que ya fija
+// noteCalculations (`diff === 2 → "x"`, documentada en ChordMember como
+// "Cx"). Sin este caso, el reemplazo global de '#' produciría 'F♯♯dim' donde
+// el resto de la app muestra 'Fxdim'. Alcanzable en Do♯ mayor (7♯): las
+// tonizaciones ii/iii y ii/v caen ahí.
+const GLIFO = (s: string) => s.replace(/##/g, 'x').replace(/#/g, '♯').replace(/b/g, '♭');
 
 /** Etiqueta de la tonalidad tal como se muestra: 'A' o 'F♯m'. */
 export function etiquetaTonalidad(armadura: Armadura, modo: Modo): string {
