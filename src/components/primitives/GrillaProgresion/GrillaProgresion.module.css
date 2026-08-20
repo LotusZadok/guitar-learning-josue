@@ -53,6 +53,12 @@
 
 .casilla[data-acento='true'] { border-top-width: 2px; border-top-color: var(--muted); }
 
+/* Afordancia de qué hace el tap: sin grado armado y sin acorde que vaciar,
+   tocar no hace nada — el cursor lo dice sin usar color (el ámbar sigue
+   siendo exclusivo de "sonando"). Los otros tres casos (colocar, reemplazar,
+   vaciar) son accionables y conservan el cursor pointer por defecto. */
+.casilla[data-accion='ninguna'] { cursor: default; }
+
 /* Formato armónico — misma receta que el banco y que GradosArmonicos. */
 .casilla[data-role='stable']      { background: color-mix(in srgb, var(--diatonic-stable) 12%, transparent); }
 .casilla[data-role='medium']      { background: color-mix(in srgb, var(--diatonic-medium) 12%, transparent); }
