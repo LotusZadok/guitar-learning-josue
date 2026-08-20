@@ -1,0 +1,80 @@
+.pentagrama {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: 16px 0;
+}
+
+/* La grilla envuelve POR COMPÁS, nunca a mitad de compás. */
+.compas {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 12px;
+  border-left: 2px solid var(--rule);
+}
+
+/* El último compás cierra la grilla con la doble barra de fin: el
+   border-right normal + una segunda línea desplazada 3px vía box-shadow
+   (spread -1 la acorta 1px arriba/abajo para que se lea como un trazo fino,
+   no un bloque). :last-child ya identifica sin ambigüedad al último compás
+   renderizado — no hace falta un data-attribute duplicado para lo mismo. */
+.compas:last-child {
+  border-right: 2px solid var(--rule);
+  box-shadow: 3px 0 0 -1px var(--rule);
+}
+
+.numeroCompas {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.casillas { display: flex; gap: 2px; }
+
+/* 6/8 se agrupa 3+3: el hueco después de la 3ª corchea hace ver el "dos". */
+.casillas[data-agrupado='true'] > .casilla:nth-child(3) { margin-right: 12px; }
+
+.casilla {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 68px;
+  height: 60px;
+  border: 1px solid var(--rule);
+  background: transparent;
+  cursor: pointer;
+}
+
+.casilla[data-acento='true'] { border-top-width: 2px; border-top-color: var(--muted); }
+
+/* Formato armónico — misma receta que el banco y que GradosArmonicos. */
+.casilla[data-role='stable']      { background: color-mix(in srgb, var(--diatonic-stable) 12%, transparent); }
+.casilla[data-role='medium']      { background: color-mix(in srgb, var(--diatonic-medium) 12%, transparent); }
+.casilla[data-role='mediumTense'] { background: color-mix(in srgb, var(--diatonic-medium-tense) 14%, transparent); }
+.casilla[data-role='tense']       { background: color-mix(in srgb, var(--diatonic-tense) 12%, transparent); }
+
+/* Sonando. Calificado con [data-role] para ganarle al tinte por especificidad
+   (0,3,0 vs 0,2,0) — el mismo patrón que ProgresionIIVI, ver DESIGN.md §7.
+   El ámbar aparece SOLO acá. */
+.casilla[data-role][data-sonando='true'],
+.casilla[data-sonando='true'] {
+  box-shadow: inset 0 0 0 2px var(--amber);
+}
+
+.casilla:focus-visible { outline: 2px solid var(--paper); outline-offset: 2px; }
+
+.cifrado {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* Ligadura de relleno: la línea que dice "acá sigue sonando el anterior". */
+.ligadura { display: block; width: 100%; height: 1px; }
+.casilla[data-continua='true'] .ligadura { background: var(--muted); }
