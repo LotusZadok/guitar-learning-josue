@@ -1,5 +1,5 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
-import { useAudioEngine } from '../../../hooks/useAudioEngine';
+import { useCallback, useMemo, useState } from 'react';
+import { useChordPlayer } from '../../../hooks/useChordPlayer';
 import PlaybackButton from '../../shared/PlaybackButton/PlaybackButton';
 import { useUIStore } from '../../../stores/useUIStore';
 import { ALL } from '../../../data/notes';
@@ -58,10 +58,9 @@ const CHORD_GAP_MS = 1100;
 
 export default function ProgresionIIVI({ functions, relativeMinor = false }: Props) {
   const tonic = useUIStore((s) => s.tonic);
-  const { playNote } = useAudioEngine();
+  const { playChord, at, clear } = useChordPlayer(NOTE_DURATION);
   const [playing, setPlaying] = useState<'bloque' | 'arpegio' | null>(null);
   const [activeCard, setActiveCard] = useState<number | null>(null);
-  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   const chords = useMemo(() => {
     const defs = relativeMinor ? DEFS_MINOR : DEFS_MAJOR;
@@ -83,30 +82,14 @@ export default function ProgresionIIVI({ functions, relativeMinor = false }: Pro
     });
   }, [tonic, relativeMinor]);
 
-  const clearTimers = useCallback(() => {
-    timers.current.forEach(clearTimeout);
-    timers.current = [];
-  }, []);
-
-  const playChord = useCallback(
-    (idx: number, gap = ARPEGGIO_GAP_MS) => {
-      chords[idx].members.forEach((m, i) => {
-        const t = setTimeout(() => playNote(m.chromatic, m.octave, NOTE_DURATION), i * gap);
-        timers.current.push(t);
-      });
-    },
-    [chords, playNote],
-  );
-
   const playCard = useCallback(
     (idx: number) => {
       if (playing) return;
       setActiveCard(idx);
-      playChord(idx);
-      const t = setTimeout(() => setActiveCard(null), NOTE_DURATION * 1000);
-      timers.current.push(t);
+      playChord(chords[idx].members, ARPEGGIO_GAP_MS);
+      at(() => setActiveCard(null), NOTE_DURATION * 1000);
     },
-    [playChord, playing],
+    [playChord, at, chords, playing],
   );
 
   // Bloque = las cuatro notas de cada acorde juntas; arpegio = desplegadas. En
@@ -115,21 +98,19 @@ export default function ProgresionIIVI({ functions, relativeMinor = false }: Pro
     (mode: 'bloque' | 'arpegio') => {
       if (playing) return;
       setPlaying(mode);
-      clearTimers();
+      clear();
       chords.forEach((_, idx) => {
-        const t = setTimeout(() => {
+        at(() => {
           setActiveCard(idx);
-          playChord(idx, mode === 'arpegio' ? ARPEGGIO_GAP_MS : 0);
+          playChord(chords[idx].members, mode === 'arpegio' ? ARPEGGIO_GAP_MS : 0);
         }, idx * CHORD_GAP_MS);
-        timers.current.push(t);
       });
-      const end = setTimeout(() => {
+      at(() => {
         setPlaying(null);
         setActiveCard(null);
       }, chords.length * CHORD_GAP_MS + NOTE_DURATION * 500);
-      timers.current.push(end);
     },
-    [chords, clearTimers, playChord, playing],
+    [chords, clear, at, playChord, playing],
   );
 
   return (

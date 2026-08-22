@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAudioEngine, stopAllNotes } from '../../../hooks/useAudioEngine';
+import { useChordPlayer } from '../../../hooks/useChordPlayer';
 import { useFireGate } from '../../../hooks/useFireGate';
 import { ALL } from '../../../data/notes';
 import { majorScaleSpelled, tonicChromatic } from '../../../utils/noteCalculations';
@@ -89,31 +90,39 @@ export default function ProgresionesArmonicas({ tonalidad }: Props) {
   const [playingId, setPlayingId] = useState<string | null>(null);
   const [activeChordIdx, setActiveChordIdx] = useState<number | null>(null);
   const { playNote } = useAudioEngine();
+  // `at`/`clear` (y el cancelado al desmontar) vienen del scheduler compartido.
+  // Este consumidor NO usa su `playChord`: dispara notas sueltas con octavas
+  // calculadas por grado, no una lista de miembros ya armada.
+  const { at: schedule, clear } = useChordPlayer(NOTE_DURATION);
   const fire = useFireGate();
-  const timeoutRefs = useRef<ReturnType<typeof setTimeout>[]>([]);
   const playingIdRef = useRef<string | null>(null);
 
   const diatonic = useMemo(() => buildDiatonic(tonalidad), [tonalidad]);
 
   const clearAll = useCallback(() => {
-    timeoutRefs.current.forEach(clearTimeout);
-    timeoutRefs.current = [];
+    clear();
     playingIdRef.current = null;
     setPlayingId(null);
     setActiveChordIdx(null);
-  }, []);
+  }, [clear]);
 
-  // Cancel playback when tonic or playMode changes
-  useEffect(() => { clearAll(); }, [tonalidad, clearAll]);
-  useEffect(() => { clearAll(); }, [playMode, clearAll]);
+  // Cancelar la reproducción cuando cambia la tonalidad o el modo. El estado
+  // se resetea en render (patrón de React para "resetear al cambiar un prop");
+  // los timers, que son sistema externo, en un efecto. Antes eran dos efectos
+  // que hacían setState sincrónico y pintaban un frame con la fila anterior
+  // todavía marcada como sonando.
+  const key = `${tonalidad}|${playMode}`;
+  const [prevKey, setPrevKey] = useState(key);
+  if (prevKey !== key) {
+    setPrevKey(key);
+    setPlayingId(null);
+    setActiveChordIdx(null);
+  }
 
-  // Cleanup on unmount
-  useEffect(() => () => { timeoutRefs.current.forEach(clearTimeout); }, []);
-
-  const schedule = useCallback((fn: () => void, delay: number) => {
-    const t = setTimeout(fn, delay);
-    timeoutRefs.current.push(t);
-  }, []);
+  useEffect(() => {
+    clear();
+    playingIdRef.current = null;
+  }, [key, clear]);
 
   const playRow = useCallback(
     (rowId: string, grados: ReadonlyArray<DiatonicDegree>) => {

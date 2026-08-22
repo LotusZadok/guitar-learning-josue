@@ -1,7 +1,7 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
-import { useAudioEngine } from '../../../hooks/useAudioEngine';
+import { useCallback, useMemo, useState } from 'react';
+import { useChordPlayer } from '../../../hooks/useChordPlayer';
 import { useUIStore } from '../../../stores/useUIStore';
-import { secondaryDominants, type ChordAudio } from '../../../utils/noteCalculations';
+import { secondaryDominants } from '../../../utils/noteCalculations';
 import styles from './DominantesSecundarias.module.css';
 
 const NOTE_DURATION = 1.3;
@@ -13,36 +13,20 @@ const CHORD_GAP_MS = 700;
 // tratarse como una tónica temporal. Datos vía Tonal.js (secondaryDominants).
 export default function DominantesSecundarias() {
   const tonic = useUIStore((s) => s.tonic);
-  const { playNote } = useAudioEngine();
+  const { playChord, at, clear } = useChordPlayer(NOTE_DURATION);
   const [active, setActive] = useState<number | null>(null);
-  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const rows = useMemo(() => secondaryDominants(tonic), [tonic]);
-
-  const playChord = useCallback(
-    (chord: ChordAudio, delay: number) => {
-      chord.members.forEach((m, i) => {
-        const t = setTimeout(
-          () => playNote(m.chromatic, m.octave, NOTE_DURATION),
-          delay + i * ARPEGGIO_GAP_MS,
-        );
-        timers.current.push(t);
-      });
-    },
-    [playNote],
-  );
 
   const playRow = useCallback(
     (idx: number) => {
       if (active !== null) return;
       setActive(idx);
-      timers.current.forEach(clearTimeout);
-      timers.current = [];
-      playChord(rows[idx].dom, 0);
-      playChord(rows[idx].target, CHORD_GAP_MS);
-      const end = setTimeout(() => setActive(null), CHORD_GAP_MS + NOTE_DURATION * 1000);
-      timers.current.push(end);
+      clear();
+      playChord(rows[idx].dom.members, ARPEGGIO_GAP_MS);
+      playChord(rows[idx].target.members, ARPEGGIO_GAP_MS, CHORD_GAP_MS);
+      at(() => setActive(null), CHORD_GAP_MS + NOTE_DURATION * 1000);
     },
-    [active, playChord, rows],
+    [active, playChord, at, clear, rows],
   );
 
   return (

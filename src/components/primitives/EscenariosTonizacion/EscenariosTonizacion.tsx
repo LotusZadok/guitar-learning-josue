@@ -1,5 +1,5 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
-import { useAudioEngine } from '../../../hooks/useAudioEngine';
+import { useCallback, useMemo, useState } from 'react';
+import { useChordPlayer } from '../../../hooks/useChordPlayer';
 import { useUIStore } from '../../../stores/useUIStore';
 import { tonizacionEscenarios } from '../../../utils/noteCalculations';
 import PlaybackButton from '../../shared/PlaybackButton/PlaybackButton';
@@ -20,66 +20,45 @@ interface Props {
 // calidades naturales (ii°, v, i). Grados y cifrados salen de la tónica activa.
 export default function EscenariosTonizacion({ labels }: Props) {
   const tonic = useUIStore((s) => s.tonic);
-  const { playNote } = useAudioEngine();
+  const { playChord, at, clear } = useChordPlayer(NOTE_DURATION);
   const escenarios = useMemo(() => tonizacionEscenarios(tonic), [tonic]);
   const [modo, setModo] = useState<'mayor' | 'menor'>('mayor');
   const [playing, setPlaying] = useState<'bloque' | 'arpegio' | null>(null);
   const [activo, setActivo] = useState<number | null>(null);
-  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   const grados = escenarios[modo];
-
-  const clearTimers = useCallback(() => {
-    timers.current.forEach(clearTimeout);
-    timers.current = [];
-  }, []);
-
-  const playChord = useCallback(
-    (idx: number, delay: number, gap: number) => {
-      grados[idx].chord.members.forEach((m, i) => {
-        timers.current.push(
-          setTimeout(() => playNote(m.chromatic, m.octave, NOTE_DURATION), delay + i * gap),
-        );
-      });
-    },
-    [grados, playNote],
-  );
 
   const playCard = useCallback(
     (idx: number) => {
       if (playing) return;
-      clearTimers();
+      clear();
       setActivo(idx);
-      playChord(idx, 0, ARPEGGIO_GAP_MS);
-      timers.current.push(setTimeout(() => setActivo(null), NOTE_DURATION * 1000));
+      playChord(grados[idx].chord.members, ARPEGGIO_GAP_MS);
+      at(() => setActivo(null), NOTE_DURATION * 1000);
     },
-    [clearTimers, playChord, playing],
+    [clear, playChord, at, grados, playing],
   );
 
   const playAll = useCallback(
     (mode: 'bloque' | 'arpegio') => {
       if (playing) return;
-      clearTimers();
+      clear();
       setPlaying(mode);
       grados.forEach((_, idx) => {
-        timers.current.push(
-          setTimeout(() => {
-            setActivo(idx);
-            playChord(idx, 0, mode === 'arpegio' ? ARPEGGIO_GAP_MS : 0);
-          }, idx * CHORD_GAP_MS),
-        );
+        at(() => {
+          setActivo(idx);
+          playChord(grados[idx].chord.members, mode === 'arpegio' ? ARPEGGIO_GAP_MS : 0);
+        }, idx * CHORD_GAP_MS);
       });
-      timers.current.push(
-        setTimeout(
-          () => {
-            setPlaying(null);
-            setActivo(null);
-          },
-          grados.length * CHORD_GAP_MS + NOTE_DURATION * 500,
-        ),
+      at(
+        () => {
+          setPlaying(null);
+          setActivo(null);
+        },
+        grados.length * CHORD_GAP_MS + NOTE_DURATION * 500,
       );
     },
-    [clearTimers, grados, playChord, playing],
+    [clear, at, grados, playChord, playing],
   );
 
   return (
