@@ -16,7 +16,13 @@ import {
 // El selector global de octava desplaza todo respecto a esta base.
 const REFERENCE_OCTAVE = 4;
 
-const getCtx = (): AudioContext => {
+// Exportada (no solo de uso interno): el reloj del constructor de progresiones
+// (useProgressionPlayback) necesita un AudioContext para leer currentTime aun
+// con el audio muteado -- el cabezal visual no puede depender de que suene
+// nada. playNote/playClick cortan camino ANTES de llamar a esto cuando
+// audioMuted es true, así que sin este export el primer Play con audio
+// muteado (el estado por defecto) no crea contexto y no pasa nada.
+export const getCtx = (): AudioContext => {
   let ctx = getAudioContext();
   if (!ctx) {
     ctx = new AudioContext();

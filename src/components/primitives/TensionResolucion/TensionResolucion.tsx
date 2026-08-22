@@ -1,12 +1,12 @@
 import {
   useCallback,
   useMemo,
-  useRef,
   useState,
   type KeyboardEvent,
 } from "react";
 import { useTranslation } from "react-i18next";
 import { useAudioEngine } from "../../../hooks/useAudioEngine";
+import { useFireGate } from "../../../hooks/useFireGate";
 import { useUIStore } from "../../../stores/useUIStore";
 import { ALL, NOTE_ES } from "../../../data/notes";
 import {
@@ -102,7 +102,6 @@ const TRITONO_Y = NODE_Y + 42; // vano del tritono, bajo los nodos (§3.6.1)
 // resolución se oiga clara (antes 260ms se encimaban demasiado).
 const ARPEGGIO_GAP_MS = 430;
 const NOTE_TAIL_MS = 420;
-const FIRE_DEBOUNCE_MS = 150;
 
 function nodeX(pos: number): number {
   return PAD_X + pos * STEP_X;
@@ -135,14 +134,12 @@ export default function TensionResolucion({ focus }: Props = {}) {
   const tonic = useUIStore((s) => s.tonic);
   const nodes = useMemo(() => buildNodes(tonic), [tonic]);
   const { playSequence } = useAudioEngine();
-  const lastFireRef = useRef<number>(0);
+  const fire = useFireGate();
   const [playingArrow, setPlayingArrow] = useState<string | null>(null);
 
   const playResolution = useCallback(
     (fromIdx: number, toIdx: number, arrowId: string) => {
-      const now = performance.now();
-      if (now - lastFireRef.current < FIRE_DEBOUNCE_MS) return;
-      lastFireRef.current = now;
+      if (!fire()) return;
 
       setPlayingArrow(arrowId);
       const from = nodes[fromIdx];
@@ -161,7 +158,7 @@ export default function TensionResolucion({ focus }: Props = {}) {
         ARPEGGIO_GAP_MS + NOTE_TAIL_MS + 400,
       );
     },
-    [playSequence, nodes],
+    [playSequence, nodes, fire],
   );
 
   return (

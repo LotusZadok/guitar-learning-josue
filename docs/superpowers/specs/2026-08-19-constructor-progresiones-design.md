@@ -127,7 +127,7 @@ El profesor pidió explícitamente conservar el formato de color de los grados, 
 
 Reglas heredadas que este componente respeta:
 
-- **The Amber-Means-Sounding Rule**: el ámbar aparece **solo** en el estado "sonando". Ningún acento ámbar decorativo.
+- **The Amber-Means-Sounding Rule**: el ámbar aparece **solo** en el estado "sonando". Ningún acento ámbar decorativo. El token es `var(--amber)` — `DESIGN.md` lo nombra `ambar-pergamino` en su mapa de colores, pero esa variable CSS no existe y usarla degrada silenciosamente a `currentcolor`.
 - **Note-Color Quarantine** en ambas direcciones: los 12 hues `--note-X` no entran a la grilla (habla de grados, no de notas), y los tokens diatónicos no decoran chrome que no sea un grado.
 - Señal no cromática redundante: `RomanGlyph` ya discrimina mayor/menor/disminuido tipográficamente.
 

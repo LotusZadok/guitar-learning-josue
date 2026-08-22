@@ -1,9 +1,11 @@
 import { useCallback, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
+import { useFireGate } from '../../../hooks/useFireGate';
 import { ALL } from '../../../data/notes';
 import { majorScaleSpelled, relativeMinorScaleSpelled, spelledSequenceAscending, tonicChromatic } from '../../../utils/noteCalculations';
 import NoteToken, { type DiatonicRole } from '../../shared/NoteToken/NoteToken';
+import RomanGlyph from '../../shared/RomanGlyph/RomanGlyph';
 import type { ChromaticNote, NoteSpelling, Tonic } from '../../../types/music';
 import styles from './GradosArmonicos.module.css';
 
@@ -68,7 +70,6 @@ const VALID_SPELLINGS: ReadonlySet<string> = new Set([
 
 const ARPEGGIO_GAP_MS = 220;
 const NOTE_DURATION = 1.4;
-const FIRE_DEBOUNCE_MS = 150;
 
 interface DiatonicNote {
   spelled: string;        // glifo ♯/♭
@@ -123,7 +124,7 @@ export default function GradosArmonicos({ tonalidad, initialStep = 1, relativeMi
   const [step, setStep] = useState<Step>(Math.min(initialStep, maxStep) as Step);
   const [playingCell, setPlayingCell] = useState<number | null>(null);
   const { playNote } = useAudioEngine();
-  const lastFireRef = useRef<number>(0);
+  const fire = useFireGate();
   const clearCellRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const diatonic = useMemo(() => buildDiatonic(tonalidad, relativeMinor), [tonalidad, relativeMinor]);
@@ -137,9 +138,7 @@ export default function GradosArmonicos({ tonalidad, initialStep = 1, relativeMi
 
   const playTriad = useCallback(
     (gradeIdx: number) => {
-      const now = performance.now();
-      if (now - lastFireRef.current < FIRE_DEBOUNCE_MS) return;
-      lastFireRef.current = now;
+      if (!fire()) return;
 
       const root = diatonic[gradeIdx];
       const third = diatonic[(gradeIdx + 2) % 7];
@@ -168,7 +167,7 @@ export default function GradosArmonicos({ tonalidad, initialStep = 1, relativeMi
       if (clearCellRef.current) clearTimeout(clearCellRef.current);
       clearCellRef.current = setTimeout(() => setPlayingCell(null), totalMs);
     },
-    [diatonic, playNote, step],
+    [diatonic, playNote, step, fire],
   );
 
   // Filas Tónica/Tercera/Quinta dependen del estado: state 1 = letras naturales,
@@ -325,22 +324,6 @@ function Row({ label, cells, ascii, roles }: RowProps) {
         );
       })}
     </tr>
-  );
-}
-
-function RomanGlyph({ roman, role }: { roman: string; role: DiatonicRole }) {
-  // Reunión 24/5/26: color por formato armónico (no por mayor/menor visual).
-  // Generalizado en §3.9 para 'ii°' (menor) además de 'vii°' (mayor): cualquier
-  // grado disminuido termina en '°', sin importar el modo.
-  const isDim = roman.endsWith('°');
-  const isMajor = !isDim && roman === roman.toUpperCase();
-  return (
-    <span
-      className={isDim ? styles.romanDim : (isMajor ? styles.romanMajor : styles.romanMinor)}
-      data-harmonic={role}
-    >
-      {roman}
-    </span>
   );
 }
 

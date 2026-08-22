@@ -38,4 +38,7 @@ export const TOC_SECTIONS: Record<string, TocItem[]> = {
     { id: 's-t3-escala-menor', labelKey: 't3.s39.label' },
     { id: 's-t3-progresion-menor', labelKey: 't3.s310.label' },
   ],
+  '/t4': [
+    { id: 's-t4-constructor', labelKey: 't4.s41.label' },
+  ],
 };

@@ -1,0 +1,75 @@
+.wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+.fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.legend {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0 0 8px;
+}
+
+.fila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.armadura,
+.tonalidad {
+  font-family: 'IBM Plex Mono', monospace;
+  background: transparent;
+  color: var(--text-body);
+  border: 1px solid var(--rule);
+  cursor: pointer;
+  transition: border-color 160ms ease, color 160ms ease;
+}
+
+.armadura {
+  min-width: 40px;
+  padding: 6px 8px;
+  font-size: 13px;
+}
+
+.tonalidad {
+  min-width: 64px;
+  padding: 6px 14px;
+  font-size: 14px;
+}
+
+.armadura:hover,
+.tonalidad:hover {
+  border-color: var(--muted);
+  color: var(--paper);
+}
+
+.armadura[aria-pressed='true'],
+.tonalidad[aria-pressed='true'] {
+  border-color: var(--paper);
+  color: var(--paper);
+  background: var(--surface);
+}
+
+.armadura:focus-visible,
+.tonalidad:focus-visible {
+  outline: 2px solid var(--paper);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .armadura,
+  .tonalidad { transition: none; }
+}

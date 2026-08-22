@@ -1,0 +1,88 @@
+.wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.columna {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 88px;
+}
+
+/* Formato armónico: tinte de fondo al 12% + el romano en el token pleno (lo
+   pone RomanGlyph vía data-harmonic). Misma receta que GradosArmonicos §2.6 y
+   ProgresionIIVI §3.7 — ver DESIGN.md §7. */
+.chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 10px;
+  border: 1px solid var(--rule);
+  background: transparent;
+  cursor: grab;
+  transition: border-color 160ms ease;
+}
+
+.chip[data-role='stable']      { background: color-mix(in srgb, var(--diatonic-stable) 12%, transparent); }
+.chip[data-role='medium']      { background: color-mix(in srgb, var(--diatonic-medium) 12%, transparent); }
+.chip[data-role='mediumTense'] { background: color-mix(in srgb, var(--diatonic-medium-tense) 14%, transparent); }
+.chip[data-role='tense']       { background: color-mix(in srgb, var(--diatonic-tense) 12%, transparent); }
+
+.chip:hover { border-color: var(--muted); }
+
+/* "Armado" = esperando casilla. Se marca con el borde de tinta, NO con ámbar:
+   el ámbar significa "sonando" (The Amber-Means-Sounding Rule). Esta regla y
+   `.chip[data-role]` empatan en especificidad (0,2,0), pero no chocan: una
+   toca `background`, la otra `border-color`/`box-shadow`. A diferencia del bug
+   documentado de `.cellPlaying` (que perdía `background` contra
+   `.gradoCell[data-harmonic]` por tener menor especificidad), acá no hay
+   propiedad compartida que pueda taparse — no depende del orden en el
+   archivo. No fusionar esto en una sola regla con mayor especificidad; no
+   hace falta. */
+.chip[aria-pressed='true'] {
+  border-color: var(--paper);
+  box-shadow: inset 0 0 0 1px var(--paper);
+}
+
+.chip:focus-visible {
+  outline: 2px solid var(--paper);
+  outline-offset: 2px;
+}
+
+.cifrado {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.chipToniz { padding: 6px 8px; }
+
+.expandir {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--rule);
+  padding: 2px 0;
+  cursor: pointer;
+}
+
+.expandir:hover { color: var(--paper); }
+.expandir:focus-visible { outline: 2px solid var(--paper); outline-offset: 2px; }
+
+.tonizaciones {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip { transition: none; }
+}
