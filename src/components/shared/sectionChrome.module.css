@@ -1,0 +1,42 @@
+/* Chrome editorial de una sección del método: el ritmo vertical, la regla que
+   la separa de la siguiente y su entrada animada. Lo componen las 28 secciones
+   de T1/T2/T3 vía `composes` · el nombre de clase local se conserva, así que
+   el TSX y los selectores descendentes de cada módulo no cambian.
+
+   Extraído en la 45ª ola. Antes vivía redeclarado idéntico en 28 module.css:
+   el patrón de error que lessons-learned describe como "el formato correcto no
+   se busca, se copia del archivo hermano más cercano". T4 NO compone acá: su
+   sección es un layout de columnas con padding propio, intención distinta.
+
+   `fadeUp` se declara ACÁ, no en global.css: CSS Modules hashea el nombre de
+   animación al referenciarlo desde un módulo, así que un `@keyframes fadeUp`
+   global nunca resolvía. Las 28 secciones venían con la animación de entrada
+   muerta desde siempre (23 referencias `_fadeUp_<hash>_1` distintas contra un
+   único `@keyframes fadeUp` sin hashear en el bundle). Declarado en el mismo
+   módulo, el hash de la referencia y el de la regla coinciden.
+   `prefers-reduced-motion` lo sigue neutralizando vía el reset global de
+   global.css, que aplica por selector `*` sin mirar el nombre. */
+
+.section {
+  padding: 48px 60px;
+  border-bottom: 1px solid var(--rule);
+  animation: fadeUp 0.6s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+  .section {
+    padding: 36px 24px;
+  }
+}
+
+/* Sólo el ritmo entre párrafos. `font-size`, `line-height`, `color` y el cap de
+   90ch ya los da la regla global `p, li` de global.css, y las 21 copias que
+   vivían en los módulos los repetían con valores idénticos. */
+.text {
+  margin-bottom: 16px;
+}
