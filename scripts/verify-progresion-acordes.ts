@@ -2,14 +2,8 @@
 // (progresionAcordes → noteCalculations → data/notes) desde Node.
 import { acordeDeGrado, armaduraPorId, etiquetaTonalidad, ARMADURAS } from '../src/utils/progresionAcordes.ts';
 import { gradosDe, type GradoId, type Modo } from '../src/utils/progresionArmonica.ts';
+import { check, resumen } from './verify-helpers.ts';
 
-let fallos = 0;
-function check(nombre: string, real: unknown, esperado: unknown) {
-  const a = JSON.stringify(real);
-  const b = JSON.stringify(esperado);
-  if (a === b) console.log(`  ok  ${nombre}`);
-  else { fallos++; console.log(`FALLA  ${nombre}\n       esperado ${b}\n       obtenido ${a}`); }
-}
 const cif = (arm: string, modo: Modo, g: GradoId, sept: boolean) =>
   acordeDeGrado(armaduraPorId(arm), modo, g, sept).cifrado;
 
@@ -126,5 +120,4 @@ for (const arm of ARMADURAS) {
 }
 check('ninguna nota baja de octava respecto de la anterior', desordenados.slice(0, 12), []);
 
-console.log(fallos === 0 ? '\nTODO OK\n' : `\n${fallos} FALLAS\n`);
-process.exit(fallos === 0 ? 0 : 1);
+resumen();

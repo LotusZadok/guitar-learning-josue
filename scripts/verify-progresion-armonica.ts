@@ -18,22 +18,7 @@ import {
   type Grid,
   type Compas,
 } from '../src/utils/progresionArmonica.ts';
-
-let fallos = 0;
-function check(nombre: string, real: unknown, esperado: unknown) {
-  const a = JSON.stringify(real);
-  const b = JSON.stringify(esperado);
-  if (a === b) {
-    console.log(`  ok  ${nombre}`);
-  } else {
-    fallos++;
-    console.log(`FALLA  ${nombre}\n       esperado ${b}\n       obtenido ${a}`);
-  }
-}
-function checkCasi(nombre: string, real: number, esperado: number, tol = 0.01) {
-  if (Math.abs(real - esperado) <= tol) console.log(`  ok  ${nombre}`);
-  else { fallos++; console.log(`FALLA  ${nombre}\n       esperado ~${esperado}\n       obtenido ${real}`); }
-}
+import { check, checkCasi, resumen } from './verify-helpers.ts';
 
 console.log('\n— Compases —');
 check('casillas 2/4', CASILLAS_POR_COMPAS['2/4'], 2);
@@ -139,5 +124,4 @@ check('toda V/x es tensa', rolDe('mayor', 'V/ii'), 'tense');
 check('toda ii/x es media', rolDe('mayor', 'ii/vi'), 'medium');
 check('el ii° menor no se confunde con ii/x', rolDe('menor', 'ii°'), 'medium');
 
-console.log(fallos === 0 ? '\nTODO OK\n' : `\n${fallos} FALLAS\n`);
-process.exit(fallos === 0 ? 0 : 1);
+resumen();
