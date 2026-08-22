@@ -211,10 +211,14 @@ export default function AcordeProceso({ eyebrow }: Props) {
   // Refs para leer los valores más recientes sin que su cambio de referencia
   // re-dispare el efecto de audio: ese efecto sólo debe sonar cuando cambia el
   // número de paso (mismo patrón que TriadaProceso).
+  // En un efecto, no durante el render (react-hooks/refs) · mismo patrón que
+  // TriadaProceso. Corre antes que el efecto de audio, que los lee frescos.
   const chordRef = useRef(chordM);
   const playNoteRef = useRef(playNote);
-  chordRef.current = chordM;
-  playNoteRef.current = playNote;
+  useEffect(() => {
+    chordRef.current = chordM;
+    playNoteRef.current = playNote;
+  });
 
   // Reinicia al cambiar la tónica.
   useEffect(() => {

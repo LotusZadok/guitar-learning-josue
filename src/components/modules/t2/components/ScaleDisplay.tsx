@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './ScaleDisplay.module.css';
 
 interface Props {
@@ -6,27 +6,24 @@ interface Props {
   label?: string;
 }
 
+// La nota saliente vive en estado, no en un ref leído durante el render: el
+// ref hacía que el crossfade dependiera de un valor que React no rastrea
+// (react-hooks/refs). Con estado, "hay crossfade" es simplemente prev !== note,
+// y el `animating` separado sobra.
 function NoteSlot({ note }: { note: string }) {
-  const prevRef = useRef(note);
-  const [animating, setAnimating] = useState(false);
-  const prevNote = prevRef.current;
+  const [prev, setPrev] = useState(note);
 
   useEffect(() => {
-    if (note !== prevRef.current) {
-      setAnimating(true);
-      const t = setTimeout(() => {
-        prevRef.current = note;
-        setAnimating(false);
-      }, 300);
-      return () => clearTimeout(t);
-    }
-  }, [note]);
+    if (note === prev) return;
+    const t = setTimeout(() => setPrev(note), 300);
+    return () => clearTimeout(t);
+  }, [note, prev]);
 
-  const showCrossfade = animating && prevNote !== note;
+  const showCrossfade = prev !== note;
 
   return (
     <div className={styles.slot}>
-      {showCrossfade && <span className={styles.fadeOut}>{prevNote}</span>}
+      {showCrossfade && <span className={styles.fadeOut}>{prev}</span>}
       <span className={showCrossfade ? styles.fadeIn : styles.note}>{note}</span>
     </div>
   );

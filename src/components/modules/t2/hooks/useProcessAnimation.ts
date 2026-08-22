@@ -19,17 +19,22 @@ export function useProcessAnimation(maxSteps: number) {
 
   useEffect(() => {
     if (state.mode !== 'playing') return;
-    if (prefersReducedMotion()) {
-      setState(prev => ({ ...prev, currentStep: maxSteps, mode: 'paused' }));
-      return;
-    }
-    if (state.currentStep >= maxSteps) {
-      setState(prev => ({ ...prev, mode: 'paused' }));
-      return;
-    }
-    const ms = state.speed === 'normal' ? 2000 : 4000;
+    // Todos los cambios de estado salen por el timer, nunca sincronos en el
+    // cuerpo del efecto (react-hooks/set-state-in-effect). Con delay 0 el
+    // salto al final sigue siendo inmediato en la practica.
+    const done = state.currentStep >= maxSteps;
+    const reduced = prefersReducedMotion();
+    // `reduced` se re-evalua acá y no sólo en play(): cubre al usuario que
+    // activa reduce-motion en el sistema con la animación ya corriendo.
+    const ms = done || reduced ? 0 : state.speed === 'normal' ? 2000 : 4000;
     const timer = setTimeout(() => {
-      setState(prev => ({ ...prev, currentStep: prev.currentStep + 1 }));
+      setState(prev =>
+        reduced
+          ? { ...prev, currentStep: maxSteps, mode: 'paused' }
+          : done
+            ? { ...prev, mode: 'paused' }
+            : { ...prev, currentStep: prev.currentStep + 1 },
+      );
     }, ms);
     return () => clearTimeout(timer);
   }, [state.mode, state.currentStep, state.speed, maxSteps]);

@@ -20,14 +20,11 @@ export default function ProcesoView({ tonalidad, compact }: Props) {
   const { i18n } = useTranslation();
   const isDe = i18n.language === 'de';
   const [dirRight, setDirRight] = useState(false);
-  const direction = dirRight ? 'der' : 'izq';
-
   const isException = tonalidad.esExcepcion;
-
-  // Force left direction for F exception
-  useEffect(() => {
-    if (isException) setDirRight(false);
-  }, [isException]);
+  // La excepción de F sólo existe de izquierda a derecha, así que fuerza la
+  // dirección en render en vez de corregirla con un efecto después de haber
+  // renderizado una vez en la dirección equivocada.
+  const direction = dirRight && !isException ? 'der' : 'izq';
 
   const steps = useMemo(
     () => getProcessSteps(tonalidad, direction, isDe ? 'de' : 'es'),

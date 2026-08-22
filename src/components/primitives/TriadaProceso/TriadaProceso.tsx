@@ -75,10 +75,16 @@ export default function TriadaProceso() {
   // (p. ej. takenAsc al cambiar la tónica) dispare el efecto de audio de abajo:
   // ese efecto solo debe sonar cuando cambia el número de paso, no cuando
   // cambia takenAsc por otro motivo (evita re-disparos con currentStep stale).
+  // Se escriben en un efecto, no durante el render: escribir un ref en render
+  // es lectura/escritura de estado externo a mitad de render y React lo puede
+  // descartar o repetir (react-hooks/refs). El efecto corre antes que el de
+  // audio de abajo, así que éste sigue viendo los valores frescos.
   const takenAscRef = useRef(takenAsc);
   const playNoteRef = useRef(playNote);
-  takenAscRef.current = takenAsc;
-  playNoteRef.current = playNote;
+  useEffect(() => {
+    takenAscRef.current = takenAsc;
+    playNoteRef.current = playNote;
+  });
 
   const steps = useMemo<StepLine[]>(() => {
     const n = (i: number) =>

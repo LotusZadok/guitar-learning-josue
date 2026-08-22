@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from 'react';
+import { useCallback, useRef, useState, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAudioEngine, stopAllNotes } from '../../../hooks/useAudioEngine';
 import { ALL, NOTE_COLORS } from '../../../data/notes';
@@ -79,7 +79,15 @@ export default function SimetriaDim7() {
   // dependen de la tonalidad), así que la tónica global no re-ancla el círculo.
   // Lo que sí hace es elegir de qué familia se habla: la tónica activa pertenece
   // a exactamente una. Un clic posterior manda hasta el próximo cambio de tónica.
-  useEffect(() => setActive(familyOf(tonicChrom)), [tonicChrom]);
+  //
+  // Ajuste en render (patrón documentado de React para "resetear estado cuando
+  // cambia un prop") en vez de un efecto: el efecto pintaba un frame con la
+  // familia vieja antes de corregirse.
+  const [prevTonic, setPrevTonic] = useState(tonicChrom);
+  if (prevTonic !== tonicChrom) {
+    setPrevTonic(tonicChrom);
+    setActive(familyOf(tonicChrom));
+  }
 
   const family = FAMILIES[active];
   const labelOf = useCallback(

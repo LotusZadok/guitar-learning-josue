@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback, useEffect, type KeyboardEvent } from 'react';
+import { useMemo, useState, useCallback, type KeyboardEvent } from 'react';
 import type { CircleNoteData } from '../data/processSteps';
 import { NOTE_TO_POS } from '../data/processSteps';
 import { useAudioEngine } from '../../../../hooks/useAudioEngine';
@@ -58,18 +58,22 @@ function arcPath(fromPos: number, toPos: number): string {
 export default function ChromaticCircleAnimated({ notes, arrow, compact, playOnClick = false, inlineClearButton = false, markedNotes, onMarkedNotesChange, playingNote }: Props) {
   const size = compact ? 280 : 400;
   const isControlled = markedNotes !== undefined;
-  const [picked, setPicked] = useState<Set<number>>(new Set());
+  const [uncontrolledPicked, setPicked] = useState<Set<number>>(new Set());
   const { playNote } = useAudioEngine();
 
-  useEffect(() => {
-    if (!isControlled) return;
+  // Modo controlado: las marcas SON el prop, derivadas en render. Antes se
+  // copiaban a estado desde un efecto, que renderizaba una vez con el valor
+  // viejo antes de sincronizar.
+  const controlledPicked = useMemo(() => {
     const next = new Set<number>();
-    for (const name of markedNotes!) {
+    for (const name of markedNotes ?? []) {
       const pos = NOTE_TO_POS[name];
       if (pos !== undefined) next.add(pos);
     }
-    setPicked(next);
-  }, [isControlled, markedNotes]);
+    return next;
+  }, [markedNotes]);
+
+  const picked = isControlled ? controlledPicked : uncontrolledPicked;
 
   const toggleNote = useCallback((pos: number) => {
     const label = notes[pos]?.label;
