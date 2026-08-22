@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react";
+import { useCallback } from "react";
 import { Note } from "tonal";
 import { useUIStore } from "../stores/useUIStore";
 import { instrument } from "../audio";
@@ -46,8 +46,6 @@ export const setMasterVolume = (v: number) => {
 export { stopAllNotes };
 
 export const useAudioEngine = () => {
-  const lastPlayedRef = useRef<string | null>(null);
-
   const playNote = useCallback(
     (noteName: string, octave: number, duration = 2.0) => {
       if (useUIStore.getState().audioMuted) return;
@@ -103,42 +101,5 @@ export const useAudioEngine = () => {
     osc.stop(time + 0.12);
   }, []);
 
-  const playRhythm = useCallback(
-    (count: number, totalBeats: number, bpm = 100) => {
-      if (useUIStore.getState().audioMuted) return;
-      const ctx = getCtx();
-      const beatDur = 60 / bpm;
-      const totalDur = beatDur * totalBeats;
-      const interval = totalDur / count;
-      const now = ctx.currentTime;
-      for (let i = 0; i < count; i++) {
-        playClick(i === 0 ? 880 : 660, now + i * interval);
-      }
-    },
-    [playClick],
-  );
-
-  const playNoteIfNew = useCallback(
-    (noteName: string, octave: number, stringIndex: number, fret: number) => {
-      const key = `${noteName}${octave}${stringIndex}${fret}`;
-      if (lastPlayedRef.current !== key) {
-        lastPlayedRef.current = key;
-        playNote(noteName, octave);
-      }
-    },
-    [playNote],
-  );
-
-  const resetLastPlayed = useCallback(() => {
-    lastPlayedRef.current = null;
-  }, []);
-
-  return {
-    playNote,
-    playSequence,
-    playClick,
-    playRhythm,
-    playNoteIfNew,
-    resetLastPlayed,
-  };
+  return { playNote, playSequence, playClick };
 };

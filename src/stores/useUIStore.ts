@@ -28,7 +28,7 @@ interface UIState {
 // 4 octavas centrado en C3 (decisión del método: default C3, grave↔agudo ±2).
 export const OCTAVE_MIN = 1;
 export const OCTAVE_MAX = 5;
-export const OCTAVE_DEFAULT = 3;
+const OCTAVE_DEFAULT = 3;
 
 export const useUIStore = create<UIState>()(
   persist(

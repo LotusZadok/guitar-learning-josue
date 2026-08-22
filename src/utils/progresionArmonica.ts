@@ -44,15 +44,15 @@ export const ACENTOS: Record<Compas, number[]> = {
 // Cuántas casillas entran en un pulso principal. El BPM se refiere SIEMPRE al
 // pulso principal: negra en los x/4, negra con puntillo en 6/8 (que contiene
 // 3 corcheas). Así "tortuga → conejo" significa lo mismo en los dos mundos.
-export const CASILLAS_POR_PULSO: Record<Compas, number> = {
+const CASILLAS_POR_PULSO: Record<Compas, number> = {
   '2/4': 1,
   '4/4': 1,
   '3/4': 1,
   '6/8': 3,
 };
 
-export const GRADOS_MAYOR = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'] as const;
-export const GRADOS_MENOR = ['i', 'ii°', '♭III', 'iv', 'v', '♭VI', '♭VII'] as const;
+const GRADOS_MAYOR = ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'] as const;
+const GRADOS_MENOR = ['i', 'ii°', '♭III', 'iv', 'v', '♭VI', '♭VII'] as const;
 
 export type GradoDiatonico = (typeof GRADOS_MAYOR)[number] | (typeof GRADOS_MENOR)[number];
 export type GradoId = GradoDiatonico | `V/${GradoDiatonico}` | `ii/${GradoDiatonico}`;
@@ -64,8 +64,8 @@ export function gradosDe(modo: Modo): readonly GradoDiatonico[] {
 export type Calidad = 'M' | 'm' | 'dim';
 
 // Mismas tablas que GradosArmonicos (QUALITIES / QUALITIES_MINOR).
-export const CALIDAD_MAYOR: readonly Calidad[] = ['M', 'm', 'm', 'M', 'M', 'm', 'dim'];
-export const CALIDAD_MENOR: readonly Calidad[] = ['m', 'dim', 'M', 'm', 'm', 'M', 'M'];
+const CALIDAD_MAYOR: readonly Calidad[] = ['M', 'm', 'm', 'M', 'M', 'm', 'dim'];
+const CALIDAD_MENOR: readonly Calidad[] = ['m', 'dim', 'M', 'm', 'm', 'M', 'M'];
 
 export function calidadesDe(modo: Modo): readonly Calidad[] {
   return modo === 'mayor' ? CALIDAD_MAYOR : CALIDAD_MENOR;
@@ -74,7 +74,7 @@ export function calidadesDe(modo: Modo): readonly Calidad[] {
 // Formato armónico heredado de GradosArmonicos (reunión 24/5/26): I y vi
 // reposo · ii y iii medio · IV medio-tenso · V y vii tenso. Es un mapeo por
 // índice de grado (tónica, supertónica, ...), no atado al modo.
-export const ROL_POR_INDICE: readonly RolArmonico[] = [
+const ROL_POR_INDICE: readonly RolArmonico[] = [
   'stable',
   'medium',
   'medium',

@@ -1,17 +1,6 @@
 import { Note, Interval, Scale, Key, Chord } from "tonal";
-import { ALL, NOTE_ES } from "../data/notes.ts";
-import type { ChromaticNote, NoteInfo, Tonic } from "../types/music";
-
-export function noteAtFret(
-  openNote: ChromaticNote,
-  openOct: number,
-  fret: number,
-): NoteInfo {
-  const si = ALL.indexOf(openNote);
-  const idx = (si + fret) % 12;
-  const octUp = Math.floor((si + fret) / 12);
-  return { note: ALL[idx], octave: openOct + octUp };
-}
+import { ALL } from "../data/notes.ts";
+import type { ChromaticNote, Tonic } from "../types/music";
 
 export function noteShort(n: string): string {
   return n.replace("#", "♯").replace(/^([A-G])b$/, "$1♭");
@@ -30,24 +19,9 @@ export function noteShortDE(n: string): string {
   return result;
 }
 
-export function noteDisplay(n: ChromaticNote): string {
-  const map: Partial<Record<ChromaticNote, string>> = {
-    "C#": "C♯/D♭",
-    "D#": "D♯/E♭",
-    "F#": "F♯/G♭",
-    "G#": "G♯/A♭",
-    "A#": "A♯/B♭",
-  };
-  return map[n] || n;
-}
-
-export function noteNameES(n: ChromaticNote): string {
-  return NOTE_ES[n];
-}
-
 // Nombre en latín (solfeo) que RESPETA la grafía elegida: Db → "Re♭", no "Do♯".
-// `noteNameES`/`NOTE_ES` enarmonizan al sostenido (bueno para identidad cromática),
-// pero al nombrar la tónica/nota con su grafía hay que conservar el bemol.
+// `NOTE_ES` enarmoniza al sostenido (bueno para identidad cromática), pero al
+// nombrar la tónica/nota con su grafía hay que conservar el bemol.
 const LETTER_ES: Record<string, string> = {
   C: "Do",
   D: "Re",
@@ -163,16 +137,6 @@ export function chordSpelled(tonic: Tonic, type: ChordType): ChordMember[] {
       octave,
       role: roles[i],
     };
-  });
-}
-
-// Reorders chord members so each successive note is higher than the previous.
-// Prevents arpeggio from playing a descending leap when octave wraps backward.
-export function ensureAscending(members: ChordMember[]): ChordMember[] {
-  return [...members].sort((a, b) => {
-    const fa = Note.freq(`${a.chromatic}${a.octave}`) ?? 0;
-    const fb = Note.freq(`${b.chromatic}${b.octave}`) ?? 0;
-    return fa - fb;
   });
 }
 

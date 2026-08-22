@@ -11,10 +11,10 @@ import {
 
 export const BPM_MIN = 40;
 export const BPM_MAX = 200;
-export const BPM_DEFAULT = 90;
+const BPM_DEFAULT = 90;
 export const COMPASES_MIN = 1;
 export const COMPASES_MAX = 8;
-export const COMPASES_DEFAULT = 4;
+const COMPASES_DEFAULT = 4;
 
 interface ConstructorState {
   armaduraId: string;
