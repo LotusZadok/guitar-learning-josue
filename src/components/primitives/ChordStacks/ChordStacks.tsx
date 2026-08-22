@@ -1,5 +1,6 @@
-import { useCallback, useMemo, useRef, useState, type KeyboardEvent } from 'react';
+import { useCallback, useMemo, useState, type KeyboardEvent } from 'react';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
+import { useFireGate } from '../../../hooks/useFireGate';
 import { useUIStore } from '../../../stores/useUIStore';
 import { NOTE_COLORS, spelledToES } from '../../../data/notes';
 import {
@@ -35,7 +36,6 @@ interface Props {
 
 const NOTE_DURATION = 1.4;
 const ARPEGGIO_GAP_MS = 230;
-const FIRE_DEBOUNCE_MS = 150;
 const R = 16;
 
 const SVG_W = 118;
@@ -65,7 +65,7 @@ function ChordColumn({ chord, tonic }: ChordColumnProps) {
   const [playing, setPlaying] = useState(false);
   const [playIdx, setPlayIdx] = useState<number | null>(null); // -1 bloque; 0..n arpegio (asc)
   const [hovered, setHovered] = useState<number | null>(null);
-  const lastFire = useRef(0);
+  const fire = useFireGate();
 
   // Tonos en orden de apilado (7ª→T) para el render; ascendente (T→7ª) para audio.
   const stacked = useMemo(
@@ -78,12 +78,10 @@ function ChordColumn({ chord, tonic }: ChordColumnProps) {
 
   const scrub = useCallback(
     (m: IntervalMember) => {
-      const now = Date.now();
-      if (now - lastFire.current < FIRE_DEBOUNCE_MS) return;
-      lastFire.current = now;
+      if (!fire()) return;
       playNote(m.chromatic, m.octave, NOTE_DURATION);
     },
-    [playNote],
+    [playNote, fire],
   );
 
   const playBlock = useCallback(() => {

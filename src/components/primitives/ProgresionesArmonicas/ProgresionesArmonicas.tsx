@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAudioEngine, stopAllNotes } from '../../../hooks/useAudioEngine';
+import { useFireGate } from '../../../hooks/useFireGate';
 import { ALL } from '../../../data/notes';
 import { majorScaleSpelled, tonicChromatic } from '../../../utils/noteCalculations';
 import type { DiatonicRole } from '../../shared/NoteToken/NoteToken';
@@ -46,7 +47,6 @@ const MAJOR_INTERVALS = [0, 2, 4, 5, 7, 9, 11] as const;
 const ARPEGGIO_GAP_MS = 260;
 const CHORD_GAP_MS = 1500;
 const NOTE_DURATION = 1.3;
-const FIRE_DEBOUNCE_MS = 150;
 
 interface DiatonicNote {
   spelled: string;
@@ -89,7 +89,7 @@ export default function ProgresionesArmonicas({ tonalidad }: Props) {
   const [playingId, setPlayingId] = useState<string | null>(null);
   const [activeChordIdx, setActiveChordIdx] = useState<number | null>(null);
   const { playNote } = useAudioEngine();
-  const lastFireRef = useRef<number>(0);
+  const fire = useFireGate();
   const timeoutRefs = useRef<ReturnType<typeof setTimeout>[]>([]);
   const playingIdRef = useRef<string | null>(null);
 
@@ -117,9 +117,7 @@ export default function ProgresionesArmonicas({ tonalidad }: Props) {
 
   const playRow = useCallback(
     (rowId: string, grados: ReadonlyArray<DiatonicDegree>) => {
-      const now = performance.now();
-      if (now - lastFireRef.current < FIRE_DEBOUNCE_MS) return;
-      lastFireRef.current = now;
+      if (!fire()) return;
 
       if (playingIdRef.current === rowId) {
         clearAll();
@@ -165,16 +163,14 @@ export default function ProgresionesArmonicas({ tonalidad }: Props) {
         if (playingIdRef.current === rowId) clearAll();
       }, totalTime);
     },
-    [diatonic, playMode, playNote, clearAll, schedule],
+    [diatonic, playMode, playNote, clearAll, schedule, fire],
   );
 
   // Reunión 24/5/26: tocar el acorde individual al hacer click en un chip.
   // Siempre ascendente, respetando playMode (bloque/arpegio).
   const playSingleChord = useCallback(
     (gradeIdx: number) => {
-      const now = performance.now();
-      if (now - lastFireRef.current < FIRE_DEBOUNCE_MS) return;
-      lastFireRef.current = now;
+      if (!fire()) return;
       clearAll();
       stopAllNotes(50);
 
@@ -197,7 +193,7 @@ export default function ProgresionesArmonicas({ tonalidad }: Props) {
         schedule(() => playNote(fifth.chromatic, fifthOct, NOTE_DURATION), 60 + ARPEGGIO_GAP_MS * 2);
       }
     },
-    [diatonic, playMode, playNote, clearAll, schedule],
+    [diatonic, playMode, playNote, clearAll, schedule, fire],
   );
 
   return (

@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
+import { useCallback, useEffect, useMemo, useState, type KeyboardEvent } from 'react';
 import { useAudioEngine, stopAllNotes } from '../../../hooks/useAudioEngine';
+import { useFireGate } from '../../../hooks/useFireGate';
 import { useUIStore } from '../../../stores/useUIStore';
 import { NOTE_COLORS, spelledToES } from '../../../data/notes';
 import {
@@ -12,7 +13,6 @@ import styles from './AcordesBuilder.module.css';
 
 const ARPEGGIO_GAP_MS = 250;
 const NOTE_DURATION = 1.4;
-const FIRE_DEBOUNCE_MS = 150;
 const R = 24; // radio de nodo
 
 /** Centinela para `playingRole`: el acorde suena en bloque, no hay una sola nota. */
@@ -52,7 +52,7 @@ export default function AcordesBuilder({ config = BUILDER_17, path, playingRole,
   const selected = controlled ? path : internalSelected;
   const [playing, setPlaying] = useState(false);
   const [playIdx, setPlayIdx] = useState<number | null>(null); // -1 bloque; 0..n arpegio
-  const lastFire = useRef(0);
+  const fire = useFireGate();
 
   const nodeByRole = useMemo(() => {
     const map = new Map<string, BuilderNode>();
@@ -112,12 +112,10 @@ export default function AcordesBuilder({ config = BUILDER_17, path, playingRole,
 
   const scrub = useCallback(
     (mem: IntervalMember) => {
-      const now = Date.now();
-      if (now - lastFire.current < FIRE_DEBOUNCE_MS) return;
-      lastFire.current = now;
+      if (!fire()) return;
       playNote(mem.chromatic, mem.octave, NOTE_DURATION);
     },
-    [playNote],
+    [playNote, fire],
   );
 
   const pickNode = useCallback(

@@ -1,5 +1,6 @@
-import { useCallback, useMemo, useRef, useState, type KeyboardEvent } from 'react';
+import { useCallback, useMemo, useState, type KeyboardEvent } from 'react';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
+import { useFireGate } from '../../../hooks/useFireGate';
 import { useUIStore } from '../../../stores/useUIStore';
 import { NOTE_COLORS, ALL, spelledToES } from '../../../data/notes';
 import { majorScaleSpelled, pitchClass, tonicChromatic } from '../../../utils/noteCalculations';
@@ -8,7 +9,6 @@ import styles from './DominanteResolucion.module.css';
 
 const NOTE_DURATION = 1.4;
 const CHORD_GAP_MS = 900;
-const FIRE_DEBOUNCE_MS = 150;
 
 // Diagrama de resolución hacia el I sobre el MISMO eje cromático horizontal de
 // §1.4 y §1.5 (0–12 semitonos desde la tónica). Dos acordes de la tonalidad
@@ -69,7 +69,7 @@ export default function DominanteResolucion() {
   const [origen, setOrigen] = useState<Origen>('V7');
   const [hovered, setHovered] = useState<string | null>(null);
   const [playing, setPlaying] = useState(false);
-  const lastFire = useRef(0);
+  const fire = useFireGate();
 
   const { origenVoices, iRow, origenLabel, iLabel } = useMemo(() => {
     const scale = majorScaleSpelled(tonic);
@@ -101,12 +101,10 @@ export default function DominanteResolucion() {
 
   const scrub = useCallback(
     (v: Voice) => {
-      const now = Date.now();
-      if (now - lastFire.current < FIRE_DEBOUNCE_MS) return;
-      lastFire.current = now;
+      if (!fire()) return;
       playNote(v.chromatic, v.octave, NOTE_DURATION);
     },
-    [playNote],
+    [playNote, fire],
   );
 
   const playResolution = useCallback(() => {

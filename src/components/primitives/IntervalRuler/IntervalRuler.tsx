@@ -1,5 +1,6 @@
-import { useCallback, useMemo, useRef, useState, type KeyboardEvent } from 'react';
+import { useCallback, useMemo, useState, type KeyboardEvent } from 'react';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
+import { useFireGate } from '../../../hooks/useFireGate';
 import { useUIStore } from '../../../stores/useUIStore';
 import { NOTE_COLORS, spelledToES } from '../../../data/notes';
 import {
@@ -11,7 +12,6 @@ import {
 import styles from './IntervalRuler.module.css';
 
 const NOTE_DURATION = 1.4;
-const FIRE_DEBOUNCE_MS = 150;
 const R = 17;
 
 // Regla de intervalos: eje de semitonos desde la tónica. La posición de cada
@@ -42,7 +42,7 @@ export default function IntervalRuler({ stops, ariaLabel, maxSemis }: Props) {
   const tonic = useUIStore((s) => s.tonic);
   const { playNote } = useAudioEngine();
   const [active, setActive] = useState<number | null>(null);
-  const lastFire = useRef(0);
+  const fire = useFireGate();
 
   const max = maxSemis ?? Math.max(...stops.map((s) => s.semis));
   const scale = (VB_W - 2 * PAD) / max;
@@ -55,12 +55,10 @@ export default function IntervalRuler({ stops, ariaLabel, maxSemis }: Props) {
 
   const scrub = useCallback(
     (m: IntervalMember) => {
-      const now = Date.now();
-      if (now - lastFire.current < FIRE_DEBOUNCE_MS) return;
-      lastFire.current = now;
+      if (!fire()) return;
       playNote(m.chromatic, m.octave, NOTE_DURATION);
     },
-    [playNote],
+    [playNote, fire],
   );
 
   return (
