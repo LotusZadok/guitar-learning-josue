@@ -8,27 +8,13 @@ import { useTranslation } from "react-i18next";
 import { useAudioEngine } from "../../../hooks/useAudioEngine";
 import { useFireGate } from "../../../hooks/useFireGate";
 import { useUIStore } from "../../../stores/useUIStore";
-import { ALL, NOTE_ES } from "../../../data/notes";
+import { ALL, NOTE_ES, NOTE_DE } from "../../../data/notes";
 import {
   majorScaleSpelled,
   spelledNameES,
   tonicChromatic,
 } from "../../../utils/noteCalculations";
 
-const NOTE_DE_LETTER: Record<string, string> = {
-  C: "C",
-  "C#": "Cis",
-  D: "D",
-  "D#": "Dis",
-  E: "E",
-  F: "F",
-  "F#": "Fis",
-  G: "G",
-  "G#": "Gis",
-  A: "A",
-  "A#": "B",
-  B: "H",
-};
 import type { ChromaticNote, Tonic } from "../../../types/music";
 import styles from "./TensionResolucion.module.css";
 
@@ -169,7 +155,7 @@ export default function TensionResolucion({ focus }: Props = {}) {
         role="img"
         aria-label={
           isDe
-            ? `Karte der Spannungsauflösungen in ${NOTE_DE_LETTER[tonicChromatic(tonic)] ?? tonic}-Dur`
+            ? `Karte der Spannungsauflösungen in ${NOTE_DE[tonicChromatic(tonic)] ?? tonic}-Dur`
             : `Mapa de resoluciones de tensión en ${spelledNameES(tonic)} mayor`
         }
       >
@@ -223,7 +209,7 @@ export default function TensionResolucion({ focus }: Props = {}) {
               width={a.width}
               ariaLabel={
                 isDe
-                  ? `Auflösung von ${NOTE_DE_LETTER[from.note] ?? from.note} nach ${NOTE_DE_LETTER[to.note] ?? to.note} spielen`
+                  ? `Auflösung von ${NOTE_DE[from.note] ?? from.note} nach ${NOTE_DE[to.note] ?? to.note} spielen`
                   : `Reproducir resolución de ${NOTE_ES[from.note]} a ${NOTE_ES[to.note]}`
               }
               onPlay={() => playResolution(a.fromIdx, a.toIdx, a.id)}

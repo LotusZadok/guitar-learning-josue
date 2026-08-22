@@ -1,13 +1,10 @@
 import { useState, useCallback, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
-import { NOTE_COLORS, NOTE_ES } from '../../../data/notes';
+import { NOTE_COLORS, NOTE_ES, NOTE_DE } from '../../../data/notes';
 import type { NaturalNote } from '../../../types/music';
 import styles from './Triads.module.css';
 
-const NOTE_DE: Record<NaturalNote, string> = {
-  C: 'C', D: 'D', E: 'E', F: 'F', G: 'G', A: 'A', B: 'H',
-};
 
 interface Props {
   note: NaturalNote;

@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import TriadNode from './TriadNode';
 import MasterTriad from './MasterTriad';
-import { NATURALS, NOTE_COLORS, NOTE_ES } from '../../../data/notes';
+import { NATURALS, NOTE_COLORS, NOTE_ES, NOTE_DE } from '../../../data/notes';
 import { TRIADS } from '../../../data/triads';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import PlaybackButton from '../../shared/PlaybackButton/PlaybackButton';
@@ -35,9 +35,6 @@ const CX = 175, CY = 175, R = 110;
 const LABELS_ES = ['Tónica', 'Tercera', 'Quinta'];
 const LABELS_DE = ['Tonika', 'Terz', 'Quinte'];
 
-const NOTE_DE: Record<NaturalNote, string> = {
-  C: 'C', D: 'D', E: 'E', F: 'F', G: 'G', A: 'A', B: 'H',
-};
 
 export default function TriadsSection() {
   const { i18n } = useTranslation();

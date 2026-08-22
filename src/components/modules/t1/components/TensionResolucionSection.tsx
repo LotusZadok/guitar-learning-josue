@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { NOTE_DE } from "../../../../data/notes";
 import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
@@ -71,10 +72,6 @@ function buildReglas(tonic: Tonic, isDe: boolean): { titulo: string; cuerpo: Pro
   ];
 }
 
-const NOTE_DE_NAME: Record<string, string> = {
-  C: 'C', 'C#': 'Cis', D: 'D', 'D#': 'Dis', E: 'E', F: 'F',
-  'F#': 'Fis', G: 'G', 'G#': 'Gis', A: 'A', 'A#': 'B', B: 'H',
-};
 import styles from './TensionResolucionSection.module.css';
 
 export default function TensionResolucionSection() {
@@ -99,7 +96,7 @@ export default function TensionResolucionSection() {
       </ol>
 
       <h3 className={styles.subheading}>{locale === 'de'
-        ? `Karte der Auflösungen in ${NOTE_DE_NAME[tonicChromatic(tonic)] ?? tonic} Dur`
+        ? `Karte der Auflösungen in ${NOTE_DE[tonicChromatic(tonic)] ?? tonic} Dur`
         : `Mapa de resoluciones en ${spelledNameES(tonic)} mayor`}</h3>
       <p className={styles.text}>{t('t1.s05.map_instruction')}</p>
       <TensionResolucion />

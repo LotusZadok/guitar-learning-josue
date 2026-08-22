@@ -2,12 +2,8 @@ import { useCallback, useMemo, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAudioEngine, stopAllNotes } from '../../../hooks/useAudioEngine';
 import { useUIStore } from '../../../stores/useUIStore';
-import { ALL, NOTE_COLORS, NOTE_ES } from '../../../data/notes';
+import { ALL, NOTE_COLORS, NOTE_ES, NOTE_DE } from '../../../data/notes';
 
-const NOTE_DE_LETTER: Record<string, string> = {
-  C: 'C', 'C#': 'Cis', D: 'D', 'D#': 'Dis', E: 'E', F: 'F',
-  'F#': 'Fis', G: 'G', 'G#': 'Gis', A: 'A', 'A#': 'B', B: 'H',
-};
 import { majorScaleSpelled, spelledNameES, tonicChromatic } from '../../../utils/noteCalculations';
 import type { ChromaticNote } from '../../../types/music';
 import styles from './EscalaMayor.module.css';
@@ -94,7 +90,7 @@ export default function EscalaMayor() {
         className={styles.svg}
         viewBox={`0 0 ${SVG_W} ${SVG_H}`}
         role="img"
-        aria-label={isDe ? `Dur-Tonleiter von ${NOTE_DE_LETTER[tonicChromatic(tonic)] ?? tonic}` : `Escala mayor de ${spelledNameES(tonic)}`}
+        aria-label={isDe ? `Dur-Tonleiter von ${NOTE_DE[tonicChromatic(tonic)] ?? tonic}` : `Escala mayor de ${spelledNameES(tonic)}`}
       >
         {/* Subtle baseline rule between nodes */}
         <line
@@ -159,7 +155,7 @@ function ScaleNode({ data, onPlay, isDe }: ScaleNodeProps) {
       tabIndex={isOnScale ? 0 : -1}
       role={isOnScale ? 'button' : undefined}
       aria-label={isOnScale ? (isDe
-        ? `${NOTE_DE_LETTER[chromatic] ?? chromatic}${grade ? ` · Stufe ${grade}` : ''}`
+        ? `${NOTE_DE[chromatic] ?? chromatic}${grade ? ` · Stufe ${grade}` : ''}`
         : `${NOTE_ES[chromatic]}${grade ? ` · grado ${grade}` : ''}`) : undefined}
       onFocus={isOnScale ? handleEnter : undefined}
       onKeyDown={isOnScale ? handleKey : undefined}

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useAudioEngine, stopAllNotes } from "../../../hooks/useAudioEngine";
 import { useUIStore } from "../../../stores/useUIStore";
-import { NATURALS, NOTE_COLORS, NOTE_ES } from "../../../data/notes";
+import { NATURALS, NOTE_COLORS, NOTE_ES, NOTE_DE } from "../../../data/notes";
 import { spelledSequenceAscending } from "../../../utils/noteCalculations";
 // Reutiliza la máquina de pasos de los procesos de §2.3/§2.4 (lógica pura,
 // respeta prefers-reduced-motion). Misma "onda" que pidió el método.
@@ -12,15 +12,6 @@ import type { NaturalNote } from "../../../types/music";
 import chrome from "../../shared/processChrome.module.css";
 import styles from "./TriadaProceso.module.css";
 
-const NOTE_DE: Record<NaturalNote, string> = {
-  C: "C",
-  D: "D",
-  E: "E",
-  F: "F",
-  G: "G",
-  A: "A",
-  B: "H",
-};
 
 // 5 nodos: tónica → 2ª → 3ª → 4ª → 5ª. Tomadas las pares (0,2,4), saltadas las
 // impares (1,3). 6 pasos = 5 nodos revelados uno a uno + el resultado (la tríada).

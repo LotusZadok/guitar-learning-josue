@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAudioEngine, stopAllNotes } from '../../../hooks/useAudioEngine';
 import { useUIStore } from '../../../stores/useUIStore';
-import { NATURALS, NOTE_COLORS, NOTE_ES } from '../../../data/notes';
+import { NATURALS, NOTE_COLORS, NOTE_ES, NOTE_DE } from '../../../data/notes';
 import { pitchClass } from '../../../utils/noteCalculations';
 import { ROLE_LABELS } from '../../../data/triads';
 import type { NaturalNote } from '../../../types/music';
@@ -10,9 +10,6 @@ import styles from './Triads.module.css';
 
 const CYCLES = 1;
 
-const NOTE_DE: Record<NaturalNote, string> = {
-  C: 'C', D: 'D', E: 'E', F: 'F', G: 'G', A: 'A', B: 'H',
-};
 
 // La tónica global puede ser alterada; la cadena maestra trabaja con letras naturales.
 // Tomamos la letra de la tónica activa (descartando alteración) como raíz pedagógica.

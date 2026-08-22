@@ -1,15 +1,10 @@
 import { useTranslation } from 'react-i18next';
+import { NOTE_DE } from "../../../data/notes";
 import IntervalRow from './IntervalRow';
 import { useUIStore } from '../../../stores/useUIStore';
 import { noteShort, spelledIntervalFromTonic, spelledNameES, tonicChromatic } from '../../../utils/noteCalculations';
-import type { ChromaticNote } from '../../../types/music';
 import styles from './Intervals.module.css';
 
-// Letras alemanas reutilizando ChromaticNote como índice. Bb → B; B → H (estándar alemán).
-const NOTE_DE_LETTER: Record<ChromaticNote, string> = {
-  C: 'C', 'C#': 'Cis', D: 'D', 'D#': 'Dis', E: 'E', F: 'F',
-  'F#': 'Fis', G: 'G', 'G#': 'Gis', A: 'A', 'A#': 'B', B: 'H',
-};
 
 // El primitive usa el validador para mostrar las terceras correctas según la tónica
 // (regla letra-única). p.ej. 3m de G es B♭, no A♯.
@@ -23,7 +18,7 @@ export default function IntervalsSection() {
   const quinta = spelledIntervalFromTonic(root, 5, 'P');
   const rootSpelled = noteShort(root);
   const rootES = spelledNameES(root);
-  const rootDE = NOTE_DE_LETTER[tonicChromatic(root)];
+  const rootDE = NOTE_DE[tonicChromatic(root)];
 
   const intervals = isDe
     ? [

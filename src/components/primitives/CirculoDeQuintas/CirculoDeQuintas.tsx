@@ -1,12 +1,8 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
-import { NOTE_COLORS, NOTE_ES } from '../../../data/notes';
+import { NOTE_COLORS, NOTE_ES, NOTE_DE } from '../../../data/notes';
 
-const NOTE_DE_LETTER: Record<string, string> = {
-  C: 'C', 'C#': 'Cis', D: 'D', 'D#': 'Dis', E: 'E', F: 'F',
-  'F#': 'Fis', G: 'G', 'G#': 'Gis', A: 'A', 'A#': 'B', B: 'H',
-};
 import { perfectFifth, noteShort } from '../../../utils/noteCalculations';
 import type { ChromaticNote } from '../../../types/music';
 import styles from './CirculoDeQuintas.module.css';
@@ -136,7 +132,7 @@ export default function CirculoDeQuintas() {
               tabIndex={0}
               role="button"
               aria-label={isDe
-                ? `${NOTE_DE_LETTER[node.note] ?? node.note}: reine Quinte → ${noteLabel(node.fifthChromatic)}${node.isException ? ' (Ausnahme)' : ''}`
+                ? `${NOTE_DE[node.note] ?? node.note}: reine Quinte → ${noteLabel(node.fifthChromatic)}${node.isException ? ' (Ausnahme)' : ''}`
                 : `${NOTE_ES[node.note]}: quinta justa → ${noteLabel(node.fifthChromatic)}${node.isException ? ' (excepción)' : ''}`}
               onMouseEnter={() => setHovered(node.note)}
               onMouseLeave={() => setHovered(null)}

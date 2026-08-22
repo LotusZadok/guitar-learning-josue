@@ -14,6 +14,17 @@ export const NOTE_ES: Record<ChromaticNote, NoteNameES> = {
   'F#':'Fa♯','G':'Sol','G#':'Sol♯','A':'La','A#':'La♯','B':'Si',
 };
 
+// Nomenclatura alemana: B → H, A♯/B♭ → B, alteraciones en -is. Es dato musical,
+// no UI copy, así que vive acá junto a NOTE_ES y no en los locales (ver la
+// doctrina de lessons-learned: las tablas de notas no van a i18n).
+// Antes estaba copiada idéntica en 10 componentes, con tres nombres distintos
+// (NOTE_DE, NOTE_DE_LETTER, NOTE_DE_NAME). Los que sólo manejan letras
+// naturales indexan igual: NaturalNote es un subconjunto de ChromaticNote.
+export const NOTE_DE: Record<ChromaticNote, string> = {
+  'C':'C','C#':'Cis','D':'D','D#':'Dis','E':'E','F':'F',
+  'F#':'Fis','G':'G','G#':'Gis','A':'A','A#':'B','B':'H',
+};
+
 // Nombre en solfeo derivado de la grafía (no de la cromática), para que coincida
 // con el glifo que se muestra. Mapea la letra y conserva ♭/♯.
 const LETTER_ES: Record<string, string> = {
