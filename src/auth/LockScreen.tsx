@@ -21,18 +21,30 @@ export default function LockScreen({ onUnlock }: Props) {
   const { t, i18n } = useTranslation()
   const isDe = i18n.language === 'de'
   const [password, setPassword] = useState('')
-  const [error, setError] = useState(false)
+  const [error, setError] = useState<'wrong' | 'unavailable' | null>(null)
   const [submitting, setSubmitting] = useState(false)
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setSubmitting(true)
-    const hash = await sha256Hex(password)
+    let hash: string
+    try {
+      // crypto.subtle sólo existe en contextos seguros (https o localhost).
+      hash = await sha256Hex(password)
+    } catch {
+      setError('unavailable')
+      setSubmitting(false)
+      return
+    }
     if (hash === CORRECT_HASH) {
-      localStorage.setItem('site-unlocked', 'true')
+      try {
+        localStorage.setItem('site-unlocked', 'true')
+      } catch {
+        // Sin almacenamiento se desbloquea igual; sólo no se recuerda.
+      }
       onUnlock()
     } else {
-      setError(true)
+      setError('wrong')
       setSubmitting(false)
     }
   }
@@ -55,11 +67,11 @@ export default function LockScreen({ onUnlock }: Props) {
           value={password}
           onChange={(e) => {
             setPassword(e.target.value)
-            if (error) setError(false)
+            if (error) setError(null)
           }}
           autoFocus
         />
-        {error && <p className={styles.error} role="alert">{t('lock.error')}</p>}
+        {error && <p className={styles.error} role="alert">{t(error === 'wrong' ? 'lock.error' : 'lock.unavailable')}</p>}
         <button
           className={styles.button}
           type="submit"

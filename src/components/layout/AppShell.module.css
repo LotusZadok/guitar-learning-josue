@@ -17,6 +17,15 @@
   width: 100%;
 }
 
+.renderError {
+  max-width: 90ch;
+  padding: 48px 40px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--text-body);
+}
+
 @media (max-width: 900px) {
   .shell {
     flex-direction: column;

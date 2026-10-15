@@ -285,7 +285,7 @@ export default function TriadaProceso() {
                 aria-current={active ? "step" : undefined}
               >
                 <span className={chrome.stepNum}>{stepNum}</span>
-                {step.text}
+                <span>{step.text}</span>
               </li>
             );
           })}

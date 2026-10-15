@@ -183,7 +183,8 @@
   "lock": {
     "prompt": "Passwort eingeben",
     "submit": "Eintreten",
-    "error": "Falsches Passwort"
+    "error": "Falsches Passwort",
+    "unavailable": "Das Passwort kann über diese Verbindung nicht geprüft werden. Öffne die Seite über https."
   },
 
   "t1": {
@@ -615,6 +616,7 @@
   },
 
   "common": {
+    "render_error": "Dieser Abschnitt konnte nicht angezeigt werden. Lade die Seite neu oder wähle ein anderes Modul im Menü.",
     "tonic_selector_label": "Tonika",
     "mute_label": "Ton",
     "volume_label": "Lautstärke",

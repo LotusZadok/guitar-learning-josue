@@ -305,7 +305,7 @@ export default function AcordeProceso({ eyebrow }: Props) {
                 aria-current={active ? 'step' : undefined}
               >
                 <span className={chrome.stepNum}>{stepNum}</span>
-                <Prose segment={seg} />
+                <span><Prose segment={seg} /></span>
               </li>
             );
           })}

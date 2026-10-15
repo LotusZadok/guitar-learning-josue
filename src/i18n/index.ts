@@ -25,4 +25,9 @@ void i18n
     interpolation: { escapeValue: false },
   })
 
+// Que los lectores de pantalla lean con la fonética del idioma activo.
+const syncLang = (lng: string) => document.documentElement.setAttribute('lang', lng.slice(0, 2))
+syncLang(i18n.resolvedLanguage ?? 'es')
+i18n.on('languageChanged', syncLang)
+
 export default i18n

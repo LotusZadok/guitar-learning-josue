@@ -181,7 +181,8 @@
   "lock": {
     "prompt": "Ingrese la contraseña",
     "submit": "Entrar",
-    "error": "Contraseña incorrecta"
+    "error": "Contraseña incorrecta",
+    "unavailable": "No se puede verificar la contraseña en esta conexión. Abre el sitio con https."
   },
 
   "t1": {
@@ -613,6 +614,7 @@
   },
 
   "common": {
+    "render_error": "Esta sección no se pudo mostrar. Recarga la página o elige otro módulo en el menú.",
     "tonic_selector_label": "Tónica",
     "mute_label": "Sonido",
     "volume_label": "Volumen",

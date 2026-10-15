@@ -10,9 +10,14 @@ import './i18n'
 import './global.css'
 
 export default function App() {
-  const [unlocked, setUnlocked] = useState(
-    () => localStorage.getItem('site-unlocked') === 'true'
-  )
+  const [unlocked, setUnlocked] = useState(() => {
+    // Con el almacenamiento bloqueado, getItem tira: se pide la contraseña en vez de pantalla en blanco.
+    try {
+      return localStorage.getItem('site-unlocked') === 'true'
+    } catch {
+      return false
+    }
+  })
 
   if (!unlocked) {
     return <LockScreen onUnlock={() => setUnlocked(true)} />
@@ -26,6 +31,7 @@ export default function App() {
         <Route path="/t2/*" element={<T2Module />} />
         <Route path="/t3/*" element={<T3Module />} />
         <Route path="/t4/*" element={<T4Module />} />
+        <Route path="*" element={<Navigate to="/t1" replace />} />
       </Routes>
     </AppShell>
   )

@@ -39,5 +39,10 @@
   font-size: 12px;
   color: var(--muted);
   line-height: 1.5;
+  /* Sin min-width: 0 el ítem flex no encoge bajo su palabra más larga
+     (DE: "Ausgangspunkt" desbordaba a 320px). hyphens usa el lang del <html>. */
+  min-width: 0;
+  hyphens: auto;
+  overflow-wrap: break-word;
 }
 
