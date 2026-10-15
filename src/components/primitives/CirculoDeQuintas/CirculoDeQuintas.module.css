@@ -21,7 +21,14 @@
 }
 
 .node > circle {
-  transition: r 0.15s, opacity 0.2s;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.15s, opacity 0.2s;
+}
+
+/* Nodo activo y su 5J: el radio crece de 24 a 28 (28/24) vía transform, no `r`. */
+.node > circle[data-big] {
+  transform: scale(1.1667);
 }
 
 .noteText {

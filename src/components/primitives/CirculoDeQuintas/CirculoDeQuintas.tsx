@@ -151,7 +151,8 @@ export default function CirculoDeQuintas() {
               {/* Reunión 24/5/26: monocromo salvo nodo activo y su 5J. */}
               <circle
                 cx={node.x} cy={node.y}
-                r={isHovered || isFifthOf ? NODE_R + 4 : NODE_R}
+                r={NODE_R}
+                data-big={isHovered || isFifthOf || undefined}
                 fill={isHovered || isFifthOf ? NOTE_COLORS[node.note] : 'var(--surface)'}
                 opacity={dim ? 0.25 : 1}
                 stroke={isHovered ? 'var(--paper)' : isFifthOf ? 'var(--amber)' : 'var(--rule)'}

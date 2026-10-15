@@ -61,7 +61,7 @@
   fill: none;
   stroke: var(--muted);
   cursor: pointer;
-  transition: stroke-width 0.15s ease, stroke 0.15s ease;
+  transition: stroke 0.15s ease;
 }
 
 .arrow:hover {
