@@ -1,6 +1,7 @@
 import { useState, useCallback, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
+import { useFireGate } from '../../../hooks/useFireGate';
 import { NOTE_COLORS, NOTE_ES, NOTE_DE } from '../../../data/notes';
 import type { NaturalNote } from '../../../types/music';
 import styles from './Triads.module.css';
@@ -27,12 +28,15 @@ export default function TriadNode({ note, index, cx, cy, r, onHover, onPlay }: P
   const y = cy + r * Math.sin(angle);
   const labelR = r + 34;
 
+  // Tap = mouseenter + focus casi simultáneos: la compuerta deja sonar uno.
+  const fire = useFireGate();
   const handleEnter = useCallback(() => {
     setHovered(true);
     onHover(note);
+    if (!fire()) return;
     if (onPlay) onPlay();
     else playNote(note, 4, 2);
-  }, [note, onHover, onPlay, playNote]);
+  }, [note, onHover, onPlay, playNote, fire]);
 
   const handleLeave = useCallback(() => {
     setHovered(false);

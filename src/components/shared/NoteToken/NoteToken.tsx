@@ -1,6 +1,7 @@
 import type { KeyboardEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { useAudioEngine } from "../../../hooks/useAudioEngine";
+import { useFireGate } from "../../../hooks/useFireGate";
 import { useUIStore } from "../../../stores/useUIStore";
 import {
   noteShort,
@@ -81,6 +82,9 @@ export default function NoteToken({
   const { i18n } = useTranslation();
   const isDe = i18n.language === "de";
   const { playNote } = useAudioEngine();
+  // Un tap emite mouseenter + focus + click en el mismo instante: sin la
+  // compuerta la nota suena tres veces (y un clic con mouse, dos).
+  const fire = useFireGate();
   const tonic = useUIStore((s) => s.tonic);
   const display = isDe ? noteShortDE(note) : noteShort(note);
   const dataNote = DATA_NOTE[note];
@@ -88,7 +92,7 @@ export default function NoteToken({
   const isTonic = chromatic === tonicChromatic(tonic);
 
   const handlePlay = () => {
-    playNote(note, octave ?? octaveAboveTonic(tonic, note));
+    if (fire()) playNote(note, octave ?? octaveAboveTonic(tonic, note));
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLSpanElement>) => {

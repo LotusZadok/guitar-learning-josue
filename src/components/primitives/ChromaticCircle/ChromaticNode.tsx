@@ -1,4 +1,5 @@
 import { useState, useCallback, type KeyboardEvent } from 'react';
+import { useFireGate } from '../../../hooks/useFireGate';
 import { NOTE_COLORS, NOTE_ES } from '../../../data/notes';
 import { noteShort } from '../../../utils/noteCalculations';
 import type { ChromaticNote } from '../../../types/music';
@@ -31,10 +32,12 @@ export default function ChromaticNode({ note, index, cx, cy, r, onPlay }: Chroma
   const isNat = !note.includes('#');
   const labelR = r + 32;
 
+  // Tap = mouseenter + focus casi simultáneos: la compuerta deja sonar uno.
+  const fire = useFireGate();
   const handleEnter = useCallback(() => {
     setHovered(true);
-    onPlay();
-  }, [onPlay]);
+    if (fire()) onPlay();
+  }, [onPlay, fire]);
 
   const handleLeave = useCallback(() => {
     setHovered(false);

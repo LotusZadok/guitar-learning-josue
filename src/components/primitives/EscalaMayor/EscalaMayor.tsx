@@ -1,6 +1,7 @@
 import { useCallback, useMemo, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAudioEngine, stopAllNotes } from '../../../hooks/useAudioEngine';
+import { useFireGate } from '../../../hooks/useFireGate';
 import { useUIStore } from '../../../stores/useUIStore';
 import { ALL, NOTE_COLORS, NOTE_ES, NOTE_DE } from '../../../data/notes';
 
@@ -136,9 +137,11 @@ function ScaleNode({ data, onPlay, isDe }: ScaleNodeProps) {
 
   // Reunión 24/5/26: las notas fuera de escala (cromáticas tenues) no deben sonar.
   // Reunión 9/6/26 (1.4): suena solo al ENTRAR al círculo (no al salir).
+  // Tap = mouseenter + focus casi simultáneos: la compuerta deja sonar uno.
+  const fire = useFireGate();
   const handleEnter = useCallback(() => {
-    if (isOnScale) onPlay(chromatic, octaveAdj);
-  }, [chromatic, octaveAdj, onPlay, isOnScale]);
+    if (isOnScale && fire()) onPlay(chromatic, octaveAdj);
+  }, [chromatic, octaveAdj, onPlay, isOnScale, fire]);
   const handleKey = useCallback(
     (e: KeyboardEvent<SVGGElement>) => {
       if (e.key === 'Enter' || e.key === ' ') {
