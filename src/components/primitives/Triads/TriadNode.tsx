@@ -79,7 +79,7 @@ export default function TriadNode({ note, index, cx, cy, r, onHover, onPlay }: P
         cx={x} cy={y}
         r={hovered ? 28 : 24}
         fill={hovered ? NOTE_COLORS[note] : 'var(--surface)'}
-        stroke={hovered ? '#fff' : 'var(--rule)'}
+        stroke={hovered ? 'var(--paper)' : 'var(--rule)'}
         strokeWidth={hovered ? 2 : 1}
       />
       <text

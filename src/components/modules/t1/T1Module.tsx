@@ -10,7 +10,7 @@ import styles from './T1Module.module.css';
 
 export default function T1Module() {
   return (
-    <main className={styles.main}>
+    <div className={styles.main}>
       <NotasNaturalesSection />
       <CirculoCromaticoSection />
       <IntervalosSection />
@@ -19,6 +19,6 @@ export default function T1Module() {
       <TriadasSection />
       <AcordesSection />
       <ReglaQuintaSection />
-    </main>
+    </div>
   );
 }

@@ -45,7 +45,7 @@
 }
 
 .cifra { font-size: 13px; }
-.mundo { font-size: 9px; letter-spacing: 0.5px; text-transform: uppercase; color: var(--muted); }
+.mundo { font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: var(--muted); }
 
 .numero {
   font-family: 'IBM Plex Mono', monospace;

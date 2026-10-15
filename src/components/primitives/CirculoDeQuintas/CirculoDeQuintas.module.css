@@ -66,7 +66,6 @@
   letter-spacing: 1px;
   text-transform: uppercase;
   fill: var(--muted);
-  opacity: 0.5;
 }
 
 /* `margin-inline: auto` por el mismo motivo que en AcordesBuilder: la regla

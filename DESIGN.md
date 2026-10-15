@@ -9,14 +9,15 @@ colors:
   surface-hi: "#222222"
   surface-translucent-dark: "#0e0e0eE6"
   rule-graphite: "#2a2a2a"
-  muted-stone: "#6b6560"
+  muted-stone: "#867e78"
   light-bg: "#f5f0e8"
   light-surface: "#ede6da"
   light-surface-hi: "#c8bfae"
   light-rule: "#d0c8c0"
-  light-muted: "#8a8580"
+  light-muted: "#686460"
   rojo-cardenal: "#c0392b"
   ambar-pergamino: "#d4a017"
+  light-ambar: "#7f600e"
   note-c: "#c0392b"
   note-c-sharp: "#a93226"
   note-d: "#e67e22"
@@ -169,7 +170,7 @@ Una paleta de tres anillos: neutros tintados que sostienen el aire, dos acentos 
 ### Primary
 
 - **Rojo Cardenal** (`#c0392b`): el acento de marca principal. Aparece en hovers, estados activos, links visitados, el énfasis de "Guitarra" en el header. Nunca como fondo de panel. Nunca en bloques de texto largos. Se gana cada uso.
-- **Ámbar Pergamino** (`#d4a017`): el acento secundario, reservado para CTA primarios (botón Entrar de la pantalla de bloqueo, focus rings, indicador de idioma activo). Lleva la idea de "tinta dorada" sobre cuaderno.
+- **Ámbar Pergamino** (`#d4a017` / light `#7f600e`, ocre que da 5.17:1 sobre crema): el acento secundario, reservado para CTA primarios (botón Entrar de la pantalla de bloqueo, focus rings, indicador de idioma activo). Lleva la idea de "tinta dorada" sobre cuaderno.
 
 ### Neutral
 
@@ -178,7 +179,7 @@ Una paleta de tres anillos: neutros tintados que sostienen el aire, dos acentos 
 - **Surface Near** (`#0a0a0a` / light `#ede6da`): superficie de cards, sidebar, paneles informativos. Una capa más profunda que el bg, sin sombra que la levante.
 - **Surface High** (`#222222` / light `#c8bfae`): tracks de toggles, controles secundarios. La capa "más palpable" cuando hace falta separar un control de un bg.
 - **Rule Graphite** (`#2a2a2a` / light `#d0c8c0`): el divisor. Aparece en bordes 1px de cards, headers, sidebar, y como stroke de los anillos exteriores en SVGs.
-- **Muted Stone** (`#6b6560` / light `#8a8580`): el texto secundario, labels, captions, navegación inactiva. Lo que comunica "esto es soporte, no contenido principal".
+- **Muted Stone** (`#867e78` / light `#686460`, ambos ≥4.5:1 sobre su `--bg` desde la 46ª ola): el texto secundario, labels, captions, navegación inactiva. Lo que comunica "esto es soporte, no contenido principal".
 
 ### Tertiary: Note Identity
 
@@ -398,7 +399,7 @@ Este componente es el que identifica la marca. Aparece en T1 (primitiva Chromati
 
 Esta sección lista deudas que las auditorías y pasadas de resolución identificaron pero **no** han sido resueltas. Son trabajo futuro explícito, no aprobaciones tácitas. Cada vez que una pasada resuelve una deuda, se remueve de esta lista; cada nueva deuda descubierta se añade.
 
-**Última actualización:** 2026-08-22 (45ª ola — extracción de `sectionChrome`, auditoría de sobre-ingeniería). Anterior: 2026-08-19 (44ª ola — T4: constructor de progresiones, módulo nuevo). Anterior: 43ª ola — registro voseo → tuteo). Anterior: 42ª ola — §1.7 audio del árbol + pasos re-anclados). Anterior: 41ª ola — §3.8 horizontal + escenarios). Anterior: 40ª ola — §3.6 partido en 3.6.1 tritono + 3.6.2 dominante, ambos sobre el eje horizontal). Anterior: 39ª ola — §3.4 tabla enlazada al árbol, columnas alineadas, §3.5 tritono del vii, §3.6 vii→I, §3.7 copy + color armónico + bloque/arpegio). Anterior: 38ª ola — §3.2 simetría del dim7 como círculo interactivo). Anterior: 36ª–37ª ola — cambios del profesor sobre §2.8, §3.1.1, §3.1.2, §3.3.1, los cinco árboles de nodos y estandarización de notas en T3). Anterior: 2026-07-31 (35ª ola — cambios del profesor sobre §1.6, §1.7, §1.8 y §2.6: tabla de tríadas anclada a la tónica, stepper animado sobre el árbol de acordes, destaque de la nota que suena en el arpegio, y fila de grados reproducible).
+**Última actualización:** 2026-10-14 (46ª ola: auditoría técnica, contraste de tokens, toggles accesibles). Anterior: 2026-08-22 (45ª ola — extracción de `sectionChrome`, auditoría de sobre-ingeniería). Anterior: 2026-08-19 (44ª ola — T4: constructor de progresiones, módulo nuevo). Anterior: 43ª ola — registro voseo → tuteo). Anterior: 42ª ola — §1.7 audio del árbol + pasos re-anclados). Anterior: 41ª ola — §3.8 horizontal + escenarios). Anterior: 40ª ola — §3.6 partido en 3.6.1 tritono + 3.6.2 dominante, ambos sobre el eje horizontal). Anterior: 39ª ola — §3.4 tabla enlazada al árbol, columnas alineadas, §3.5 tritono del vii, §3.6 vii→I, §3.7 copy + color armónico + bloque/arpegio). Anterior: 38ª ola — §3.2 simetría del dim7 como círculo interactivo). Anterior: 36ª–37ª ola — cambios del profesor sobre §2.8, §3.1.1, §3.1.2, §3.3.1, los cinco árboles de nodos y estandarización de notas en T3). Anterior: 2026-07-31 (35ª ola — cambios del profesor sobre §1.6, §1.7, §1.8 y §2.6: tabla de tríadas anclada a la tónica, stepper animado sobre el árbol de acordes, destaque de la nota que suena en el arpegio, y fila de grados reproducible).
 
 ### Doctrina activa (decisiones pendientes de diseño)
 
@@ -450,6 +451,9 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 - **T4: el banco en modo menor no incluye la menor armónica.** El constructor ofrece los 7 grados naturales de la relativa menor y sus tonizaciones. Queda sin decidir si debe incluir chips de `V7` (dominante prestado), `vii°7` (disminuido completo) y `♭III+` (aumentado), que es el vocabulario que el profesor planteó para el módulo. La arquitectura no cambia al añadirlos (el banco consume una lista de grados), pero **el aumentado no tiene rol de color asignado** en el sub-sistema diatónico: `stable`/`medium`/`mediumTense`/`tense` no contemplan esa sonoridad. Requiere decisión del profesor sobre el contenido y del dueño sobre el color.
 - **ESLint no lintea ningún archivo de la aplicación.** `eslint.config.js` declara un solo bloque con `files: ['**/*.{js,jsx}']`, y `src/` tiene 110 archivos `.ts`/`.tsx` y cero `.js`/`.jsx`. `npm run lint` solo alcanza bundles vendorizados de `.agents/skills/` y `.claude/skills/` (50 errores preexistentes, ajenos al proyecto); `npx eslint src` falla con exit 2 ("all files matching the glob are ignored"). La red de seguridad estática real es `tsc -b` en strict con `noUnusedLocals`/`noUnusedParameters`, que sí corre. Habilitar linting de TS requiere añadir `typescript-eslint` y elegir un preset: decisión del dueño, fuera del alcance de una ola de feature.
 - **El mapa de colores del frontmatter de este documento no son los tokens CSS.** `ambar-pergamino` figura arriba como nombre de color, pero **la variable CSS es `--amber`** (`src/global.css:10`). Un `var(--ambar-pergamino)` no rompe el build, no emite warning y degrada en silencio a `currentcolor`. Pasó en la 44ª ola (lo cazó la revisión, no el compilador). Regla: verificar todo token contra `global.css`, nunca contra el frontmatter.
+- **`--red` como texto en tema oscuro: 3.55:1 (46ª ola, amplía la deuda de `--diatonic-tense`).** No es sólo el alias diatónico: 37 reglas usan `color: var(--red)` como texto (link activo del Sidebar, SectionLabels, eyebrows de sección). Subirlo cambia el acento de marca en todo el sitio y la decisión es del dueño, por eso no se tocó junto con `--muted`/`--amber`.
+- **Code-splitting por ruta bloqueado por `useActiveSection` (46ª ola).** Se probó `React.lazy` en las 4 rutas de `App.tsx` (bundle inicial 175 → 133 KB gzip) y se revirtió: el hook del Sidebar busca los ids de sección en el `useEffect` del cambio de ruta, cuando el chunk todavía no cargó, y el resaltado del TOC queda muerto en la primera visita. Para retomarlo, el hook tiene que re-observar cuando las secciones aparecen (o los módulos tienen que avisar al montar). Ganancia chica para una herramienta de clase; no urge.
+- **`transition: r` y `stroke-width` en SVG (46ª ola, P3).** `CirculoDeQuintas` (`.node > circle`) y `TensionResolucion` (`.arrow`) animan geometría SVG. Baratas a esta escala; violan la letra del item 10 de la anti-checklist. Reescribir como `transform: scale` cuando se toquen esas primitivas.
 
 ### Histórico (resueltas, conservar para contexto)
 

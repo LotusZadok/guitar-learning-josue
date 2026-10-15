@@ -77,7 +77,7 @@ export default function ChromaticNode({ note, index, cx, cy, r, onPlay }: Chroma
         r={hovered ? (isNat ? 26 : 21) : (isNat ? 22 : 17)}
         fill={hovered ? NOTE_COLORS[note] : 'var(--surface)'}
         opacity={hovered ? (isNat ? 1 : 0.7) : (isNat ? 1 : 0.5)}
-        stroke={hovered ? '#fff' : 'var(--rule)'}
+        stroke={hovered ? 'var(--paper)' : 'var(--rule)'}
         strokeWidth={hovered ? 2 : 1}
       />
       {(() => {

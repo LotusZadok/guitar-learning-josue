@@ -65,9 +65,10 @@ export default function ProcesoView({ tonalidad, compact }: Props) {
           {isDe ? 'Tonart → Vorzeichen' : 'Tonalidad → Armadura'}
         </span>
         <ToggleSwitch
-          label=""
+          ariaLabel={isDe ? 'Vorzeichen → Tonart' : 'Armadura → Tonalidad'}
           on={dirRight}
-          onToggle={() => !isException && setDirRight(v => !v)}
+          onToggle={() => setDirRight(v => !v)}
+          disabled={isException}
         />
         <span className={`${dirRight ? styles.dirActive : styles.dirLabel} ${isException ? styles.dirDisabled : ''}`}>
           {isDe ? 'Vorzeichen → Tonart' : 'Armadura → Tonalidad'}

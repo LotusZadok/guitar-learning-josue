@@ -43,11 +43,10 @@
 
 .centerSub {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 1px;
   text-transform: uppercase;
   fill: var(--muted);
-  opacity: 0.45;
   pointer-events: none;
 }
 

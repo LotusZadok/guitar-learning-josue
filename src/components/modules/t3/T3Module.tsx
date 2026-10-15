@@ -15,7 +15,7 @@ import styles from './T3Module.module.css';
 
 export default function T3Module() {
   return (
-    <main className={styles.main}>
+    <div className={styles.main}>
       <SeptimasSection />
       <SeptimaAcordesSection />
       <DisminuidosSection />
@@ -29,6 +29,6 @@ export default function T3Module() {
       <TonizacionSection />
       <SeptimasMenorSection />
       <ProgresionMenorSection />
-    </main>
+    </div>
   );
 }

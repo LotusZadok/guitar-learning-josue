@@ -1,16 +1,26 @@
 import styles from './ToggleSwitch.module.css';
 
 interface ToggleSwitchProps {
-  label: string;
+  label?: string;
+  ariaLabel: string;
   on: boolean;
   onToggle: () => void;
+  disabled?: boolean;
 }
 
-export default function ToggleSwitch({ label, on, onToggle }: ToggleSwitchProps) {
+export default function ToggleSwitch({ label, ariaLabel, on, onToggle, disabled }: ToggleSwitchProps) {
   return (
-    <div className={styles.wrap} onClick={onToggle}>
-      <span className={styles.label}>{label}</span>
-      <div className={on ? styles.toggleOn : styles.toggle} />
-    </div>
+    <button
+      type="button"
+      role="switch"
+      aria-checked={on}
+      aria-label={ariaLabel}
+      className={styles.wrap}
+      onClick={onToggle}
+      disabled={disabled}
+    >
+      {label && <span className={styles.label}>{label}</span>}
+      <span className={on ? styles.toggleOn : styles.toggle} />
+    </button>
   );
 }

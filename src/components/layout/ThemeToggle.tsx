@@ -16,9 +16,16 @@ export default function ThemeToggle() {
   const labelLight = isDe ? 'Hell' : 'Claro';
 
   return (
-    <div className={styles.wrap} onClick={toggleTheme}>
+    <button
+      type="button"
+      role="switch"
+      aria-checked={theme === 'light'}
+      aria-label={labelLight}
+      className={styles.wrap}
+      onClick={toggleTheme}
+    >
       <span className={styles.label}>{theme === 'dark' ? labelDark : labelLight}</span>
-      <div className={theme === 'light' ? styles.toggleOn : styles.toggle} />
-    </div>
+      <span className={theme === 'light' ? styles.toggleOn : styles.toggle} />
+    </button>
   );
 }

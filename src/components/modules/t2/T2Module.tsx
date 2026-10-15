@@ -11,7 +11,7 @@ import styles from './T2Module.module.css';
 export default function T2Module() {
   return (
     <div className={styles.app}>
-      <main className={styles.main}>
+      <div className={styles.main}>
         <IntroSection />
         <HerramientaSection />
         <ProcesoSostenidosSection />
@@ -20,7 +20,7 @@ export default function T2Module() {
         <GradosArmonicosSection />
         <ProgresionesArmonicasSection />
         <RelativasMenoresSection />
-      </main>
+      </div>
     </div>
   );
 }

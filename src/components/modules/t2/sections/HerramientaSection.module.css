@@ -58,7 +58,7 @@
 .noteFlat {
   composes: noteNatural;
   color: var(--amber);
-  border-color: rgba(212,160,23,0.3);
+  border-color: color-mix(in srgb, var(--amber) 30%, transparent);
 }
 
 .cards {

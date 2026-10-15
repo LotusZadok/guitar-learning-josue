@@ -43,7 +43,7 @@
       "muted-stone": {
         "role": "neutral",
         "displayName": "Muted Stone",
-        "canonical": "#6b6560",
+        "canonical": "#867e78",
         "tonalRamp": ["#1a1815", "#2e2a26", "#444038", "#5a5450", "#6b6560", "#8a8580", "#a8a39c", "#cfcac1"]
       },
       "note-c": {
