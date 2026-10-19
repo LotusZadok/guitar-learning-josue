@@ -460,6 +460,12 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
 
+**56ª ola (2026-10-19): §3.6.1 oír el tritono junto (pedidos #19, #20):**
+- ✓ **Botón de bloque para el tritono.** Con `focus='tritono'`, `TensionResolucion` muestra un `PlaybackButton` de bloque que toca la 4ª y la 7ª a la vez ("la idea del tritono es justamente escucharlo como suena junto"). Mientras suenan, los dos nodos llevan un anillo ámbar estático (Amber-Means-Sounding); sin animación, así que `prefers-reduced-motion` no cambia nada. §1.5 no muestra el botón.
+- ✓ **`PlaybackButton` acepta `label`** (aria-label y tooltip) para cuando el botón toca algo específico; sin la prop, sigue diciendo Bloque/Arpegio. La etiqueta del tritono llega de la sección (`t3.s361.play_label`), no de la primitiva.
+- ✓ **El timer del arco que suena pasó a `useChordPlayer`** (`at`/`clear`, con limpieza al desmontar): era un `setTimeout` suelto (lessons-learned, temporizadores sin limpiar).
+- ✓ **Caption:** nombra los dos gestos (tocar un arco para cada resolución, o el botón para las dos notas juntas).
+
 **55ª ola (2026-10-19): §3.6.1 la 4ª del tritono no sube a la 5ª (pedido #18):**
 - ✓ **Sin flecha 4→5 en el tritono.** Con `focus='tritono'`, `TensionResolucion` deja solo las dos resoluciones del tritono: la 7ª sube a la tónica y la 4ª baja a la 3ª ("no sube a la quinta"). §1.5, que usa la misma primitiva sin `focus`, conserva las dos salidas del 4º grado.
 - ⚠ **Pendiente (decisión D14 del plan del 19/10):** el texto de §1.5 dice que el 4º grado "resuelve al 3er o al 5to grado". El comentario del profesor fue sobre el tritono; si también vale para §1.5, cambian el texto y la flecha ahí. Se le pregunta en la próxima reunión.

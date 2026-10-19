@@ -17,14 +17,17 @@ interface Props {
   /** Resaltado mientras suena. */
   playing?: boolean;
   disabled?: boolean;
+  /** Reemplaza el nombre del modo cuando el botón toca algo específico (ej.
+   *  "las dos notas del tritono"): es el aria-label y el tooltip. */
+  label?: string;
 }
 
 // Botón de reproducción icono-only: solo se ve el glifo de notación; la etiqueta
 // explicativa aparece en hover/focus (tooltip, sin layout shift). El nombre del
 // modo siempre está disponible para lectores de pantalla vía aria-label.
-export default function PlaybackButton({ mode, onClick, pressed, playing, disabled }: Props) {
+export default function PlaybackButton({ mode, onClick, pressed, playing, disabled, label: customLabel }: Props) {
   const { i18n } = useTranslation();
-  const label = (LABELS[i18n.language] ?? LABELS.es)[mode];
+  const label = customLabel ?? (LABELS[i18n.language] ?? LABELS.es)[mode];
   const isToggle = pressed !== undefined;
 
   let cls = styles.btn;

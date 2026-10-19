@@ -159,3 +159,9 @@
   text-anchor: middle;
   fill: var(--muted);
 }
+
+.tritonoPlay {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}

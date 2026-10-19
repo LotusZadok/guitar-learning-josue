@@ -6,6 +6,8 @@ import {
 } from "react";
 import { useTranslation } from "react-i18next";
 import { useAudioEngine } from "../../../hooks/useAudioEngine";
+import { useChordPlayer } from "../../../hooks/useChordPlayer";
+import PlaybackButton from "../../shared/PlaybackButton/PlaybackButton";
 import { useFireGate } from "../../../hooks/useFireGate";
 import { useUIStore } from "../../../stores/useUIStore";
 import { ALL, NOTE_ES, NOTE_DE } from "../../../data/notes";
@@ -112,9 +114,17 @@ interface Props {
    *  de los dos grados tensos (4ª y 7ª — que ES el tritono de la tonalidad),
    *  dibuja el vano entre ellos y atenúa el resto. Sin la prop, §1.5 no cambia. */
   focus?: 'tritono';
+  /** Con `focus="tritono"`: aria-label y tooltip del botón que toca las dos
+   *  notas juntas. Viene de la sección (i18n). */
+  tritonoPlayLabel?: string;
 }
 
-export default function TensionResolucion({ focus }: Props = {}) {
+// Reunión 19/10/26: "la idea del tritono es justamente escucharlo como suena
+// junto". Las dos notas (4ª y 7ª) a la vez, con anillo ámbar mientras suenan.
+const TRITONO_DURATION = 1.6;
+const TRITONO_IDX = [3, 6];
+
+export default function TensionResolucion({ focus, tritonoPlayLabel }: Props = {}) {
   const { i18n } = useTranslation();
   const isDe = i18n.language === "de";
   const tonic = useUIStore((s) => s.tonic);
@@ -122,6 +132,8 @@ export default function TensionResolucion({ focus }: Props = {}) {
   const { playSequence } = useAudioEngine();
   const fire = useFireGate();
   const [playingArrow, setPlayingArrow] = useState<string | null>(null);
+  const [tritonoSonando, setTritonoSonando] = useState(false);
+  const { playChord, at, clear } = useChordPlayer(TRITONO_DURATION);
 
   const playResolution = useCallback(
     (fromIdx: number, toIdx: number, arrowId: string) => {
@@ -139,13 +151,20 @@ export default function TensionResolucion({ focus }: Props = {}) {
         ARPEGGIO_GAP_MS,
         NOTE_TAIL_MS,
       );
-      setTimeout(
-        () => setPlayingArrow(null),
-        ARPEGGIO_GAP_MS + NOTE_TAIL_MS + 400,
-      );
+      at(() => setPlayingArrow(null), ARPEGGIO_GAP_MS + NOTE_TAIL_MS + 400);
     },
-    [playSequence, nodes, fire],
+    [playSequence, nodes, fire, at],
   );
+
+  const playTritono = useCallback(() => {
+    clear();
+    setTritonoSonando(true);
+    playChord(
+      TRITONO_IDX.map((i) => ({ chromatic: nodes[i].note, octave: 4 + nodes[i].octaveAdj })),
+      0,
+    );
+    at(() => setTritonoSonando(false), TRITONO_DURATION * 1000);
+  }, [clear, playChord, at, nodes]);
 
   return (
     <div className={styles.wrap}>
@@ -225,9 +244,24 @@ export default function TensionResolucion({ focus }: Props = {}) {
 
         {/* Nodes */}
         {nodes.map((n, i) => (
-          <ScaleNode key={`${n.pos}-${i}`} data={n} />
+          <ScaleNode
+            key={`${n.pos}-${i}`}
+            data={n}
+            sounding={tritonoSonando && TRITONO_IDX.includes(i)}
+          />
         ))}
       </svg>
+
+      {focus === 'tritono' && (
+        <div className={styles.tritonoPlay}>
+          <PlaybackButton
+            mode="bloque"
+            label={tritonoPlayLabel}
+            playing={tritonoSonando}
+            onClick={playTritono}
+          />
+        </div>
+      )}
 
       {/* Reunión 24/5/26: removidas las entradas "4ª/7ª tensos" y "2ª/6ª intermedios"
           del legend (la información ya está implícita en el strip y se duplica). */}
@@ -317,9 +351,10 @@ function ArrowPath({
 
 interface ScaleNodeProps {
   data: TensionNode;
+  sounding?: boolean;
 }
 
-function ScaleNode({ data }: ScaleNodeProps) {
+function ScaleNode({ data, sounding }: ScaleNodeProps) {
   const { pos, spelled, role } = data;
   const cx = nodeX(pos);
   const radius =
@@ -338,6 +373,10 @@ function ScaleNode({ data }: ScaleNodeProps) {
 
   return (
     <g className={styles.node} aria-hidden="true">
+      {/* Ámbar = "sonando ahora" (Amber-Means-Sounding): solo mientras suena. */}
+      {sounding && (
+        <circle cx={cx} cy={NODE_Y} r={radius + 5} fill="none" stroke="var(--amber)" strokeWidth={2.5} />
+      )}
       <circle
         cx={cx}
         cy={NODE_Y}

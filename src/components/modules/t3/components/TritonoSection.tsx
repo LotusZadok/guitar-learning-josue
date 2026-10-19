@@ -18,7 +18,7 @@ export default function TritonoSection() {
 
       <p className={styles.text}>{t('t3.s361.intro')}</p>
 
-      <TensionResolucion focus="tritono" />
+      <TensionResolucion focus="tritono" tritonoPlayLabel={t('t3.s361.play_label')} />
 
       <RuleNote>{t('t3.s361.caption')}</RuleNote>
     </section>
