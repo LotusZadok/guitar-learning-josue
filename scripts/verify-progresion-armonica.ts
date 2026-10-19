@@ -15,6 +15,7 @@ import {
   esTonizable,
   rolDe,
   casillaEn,
+  clicksDeMetronomo,
   type Grid,
   type Compas,
 } from '../src/utils/progresionArmonica.ts';
@@ -123,5 +124,21 @@ check('el vi es reposo', rolDe('mayor', 'vi'), 'stable');
 check('toda V/x es tensa', rolDe('mayor', 'V/ii'), 'tense');
 check('toda ii/x es media', rolDe('mayor', 'ii/vi'), 'medium');
 check('el ii° menor no se confunde con ii/x', rolDe('menor', 'ii°'), 'medium');
+
+console.log('\n— Metronomo —');
+// Reunión 19/10/26: con la grilla vacía el metrónomo no sonaba. Un clic por
+// casilla, haya o no acordes.
+check(
+  '6/8 x2: 12 clics, acento en 0 3 6 9',
+  clicksDeMetronomo(12, '6/8').map((c, i) => (c.acento ? i : -1)).filter((i) => i >= 0),
+  [0, 3, 6, 9],
+);
+check('6/8 x2: 12 clics', clicksDeMetronomo(12, '6/8').length, 12);
+check(
+  '4/4 x1: 4 clics, acento solo en el 1',
+  clicksDeMetronomo(4, '4/4').map((c) => c.acento),
+  [true, false, false, false],
+);
+check('cada clic sabe su casilla', clicksDeMetronomo(3, '3/4').map((c) => c.casilla), [0, 1, 2]);
 
 resumen();

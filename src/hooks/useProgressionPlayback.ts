@@ -3,9 +3,8 @@ import { useAudioEngine, stopAllNotes, getCtx } from './useAudioEngine';
 import { getAudioContext } from './audioEngineShared';
 import { acordeDeGrado, type Armadura } from '../utils/progresionAcordes';
 import {
-  ACENTOS,
-  CASILLAS_POR_COMPAS,
   casillaEn,
+  clicksDeMetronomo,
   duracionTotalMs,
   gridToEvents,
   msPorCasilla,
@@ -40,6 +39,8 @@ export function useProgressionPlayback(op: Opciones) {
   const timers = useRef<number[]>([]);
   const raf = useRef<number | null>(null);
   const t0 = useRef(0);
+  const opActual = useRef(op);
+  const playActual = useRef<() => void>(() => {});
 
   const cancelar = useCallback(() => {
     timers.current.forEach((id) => clearTimeout(id));
@@ -71,7 +72,8 @@ export function useProgressionPlayback(op: Opciones) {
 
     cancelar();
     const eventos = gridToEvents(op.grid, op.compas, op.bpm);
-    if (eventos.length === 0) return;
+    // Con la grilla vacía igual se puede tocar el metrónomo solo.
+    if (eventos.length === 0 && !op.metronomo) return;
 
     const totalMs = duracionTotalMs(op.grid, op.compas, op.bpm);
     t0.current = ctx.currentTime;
@@ -90,17 +92,13 @@ export function useProgressionPlayback(op: Opciones) {
     // que es donde el agrupamiento 3+3 se vuelve audible.
     if (op.metronomo) {
       const paso = msPorCasilla(op.compas, op.bpm);
-      const porCompas = CASILLAS_POR_COMPAS[op.compas];
-      const acentos = ACENTOS[op.compas];
-      for (let i = 0; i < op.grid.length; i++) {
-        const enCompas = i % porCompas;
-        const esAcento = acentos.includes(enCompas);
+      clicksDeMetronomo(op.grid.length, op.compas).forEach(({ casilla, acento }) => {
         const id = window.setTimeout(() => {
           const ctxAhora = getAudioContext();
-          if (ctxAhora) playClick(esAcento ? 880 : 660, ctxAhora.currentTime);
-        }, i * paso);
+          if (ctxAhora) playClick(acento ? 880 : 660, ctxAhora.currentTime);
+        }, casilla * paso);
         timers.current.push(id);
-      }
+      });
     }
 
     // Cabezal visual: lee el reloj de audio, no un setTimeout paralelo. Un solo
@@ -116,12 +114,21 @@ export function useProgressionPlayback(op: Opciones) {
     };
     raf.current = requestAnimationFrame(tick);
 
+    // La vuelta siguiente se decide con las opciones de ESE momento, no con
+    // las de cuando se apretó Tocar: apagar "Repetir" en plena reproducción
+    // termina al final de la vuelta, y activar el metrónomo suena desde la
+    // siguiente (reunión 19/10/26: "a veces suena, a veces no").
     const fin = window.setTimeout(() => {
-      if (op.loop) play();
+      if (opActual.current.loop) playActual.current();
       else stop();
     }, totalMs);
     timers.current.push(fin);
   }, [op, cancelar, stop, playNote, playClick]);
+
+  useEffect(() => {
+    opActual.current = op;
+    playActual.current = play;
+  });
 
   // Deps intencionalmente NO son [op]: `op` es un objeto literal armado en
   // cada render de la sección, así que cambia de identidad aunque nada haya
@@ -137,11 +144,13 @@ export function useProgressionPlayback(op: Opciones) {
   // el efecto por sí solos: lo que importa es "¿cambió la progresión?", y
   // cuando el efecto SÍ corre, lee el `reproduciendo` y el `stop` más
   // recientes por clausura (React siempre ejecuta la versión más nueva del
-  // callback), así que no hay closure vieja.
-  // eslint no cubre TypeScript en este repo (ver CLAUDE.md), así que esto no
-  // se puede delegar a react-hooks/exhaustive-deps: es una decisión explícita.
+  // callback), así que no hay closure vieja. Por eso se silencian las dos
+  // reglas: el efecto sincroniza un sistema externo (los timers y el audio),
+  // y el setState de `stop` es consecuencia de cortarlos.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (reproduciendo) stop();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [op.grid, op.compas, op.bpm, op.armadura, op.modo, op.septimas]);
 
   // Cleanup de desmontaje. `stop` es estable (depende solo de `cancelar`,

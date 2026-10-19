@@ -155,6 +155,22 @@ export function gridToEvents(grid: Grid, compas: Compas, bpm: number): EventoAco
   return eventos;
 }
 
+export interface ClickMetronomo {
+  casilla: number;
+  acento: boolean;
+}
+
+// Un clic por casilla, haya o no acordes en ella: el metrónomo marca el pulso
+// de la grilla entera, también vacía (reunión 19/10/26: "apreté el metrónomo
+// y no suena nada"). Acento en el 1, y también en el 4 en 6/8.
+export function clicksDeMetronomo(nCasillas: number, compas: Compas): ClickMetronomo[] {
+  const porCompas = CASILLAS_POR_COMPAS[compas];
+  return Array.from({ length: nCasillas }, (_, casilla) => ({
+    casilla,
+    acento: ACENTOS[compas].includes(casilla % porCompas),
+  }));
+}
+
 // Qué casilla está sonando en un instante dado. Devuelve -1 antes del primer
 // acorde. Lo usa el cabezal visual, que lee el reloj de audio.
 export function casillaEn(ms: number, compas: Compas, bpm: number, total: number): number {
