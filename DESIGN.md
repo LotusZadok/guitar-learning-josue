@@ -460,6 +460,10 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
 
+**55ª ola (2026-10-19): §3.6.1 la 4ª del tritono no sube a la 5ª (pedido #18):**
+- ✓ **Sin flecha 4→5 en el tritono.** Con `focus='tritono'`, `TensionResolucion` deja solo las dos resoluciones del tritono: la 7ª sube a la tónica y la 4ª baja a la 3ª ("no sube a la quinta"). §1.5, que usa la misma primitiva sin `focus`, conserva las dos salidas del 4º grado.
+- ⚠ **Pendiente (decisión D14 del plan del 19/10):** el texto de §1.5 dice que el 4º grado "resuelve al 3er o al 5to grado". El comentario del profesor fue sobre el tritono; si también vale para §1.5, cambian el texto y la flecha ahí. Se le pregunta en la próxima reunión.
+
 **54ª ola (2026-10-19): §3.6.2 vii°, texto según el acorde y las dos sensibles (pedidos #11, #14, #15, #17):**
 - ✓ **"7♭5" era un recorte, no un dato.** La etiqueta de fila (`text-anchor:end` en x=22) dejaba "Em" fuera del SVG. El `viewBox` gana un margen izquierdo de 48 (`LABEL_GUTTER`) y la etiqueta se ancla a la izquierda del primer nodo: "Em7♭5" y cifrados de 6 caracteres (`D♯m7♭5`) entran completos. Las etiquetas ya estaban en Plex Mono, así que la deuda "el último cifrado en Bebas" de esta primitiva queda cerrada.
 - ✓ **El vii lleva su círculo:** el chip dice `vii° → I`.

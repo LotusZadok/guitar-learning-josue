@@ -198,8 +198,12 @@ export default function TensionResolucion({ focus }: Props = {}) {
           </g>
         )}
 
-        {/* Resolution arrows above the strip */}
-        {ARROWS.filter((a) => focus !== 'tritono' || nodes[a.fromIdx].role === 'tense').map((a) => {
+        {/* Resolution arrows above the strip. En el tritono (§3.6.1) la 4ª solo
+            baja a la 3ª: "no sube a la quinta" (reunión 19/10/26). §1.5
+            conserva las dos salidas del 4º grado. */}
+        {ARROWS.filter(
+          (a) => focus !== 'tritono' || (nodes[a.fromIdx].role === 'tense' && a.id !== 'f-g'),
+        ).map((a) => {
           const from = nodes[a.fromIdx];
           const to = nodes[a.toIdx];
           return (
