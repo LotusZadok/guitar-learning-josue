@@ -103,6 +103,10 @@ Estos son los modos concretos en que el código original se desvió de la doctri
 
 En táctil, un tap emite `mouseenter` + `focus` + `click` casi en el mismo milisegundo (el navegador emula el mouse). Un elemento que reproduce audio en dos o tres de esos handlers suena dos o tres veces. `NoteToken` (el chip de nota que está en casi todas las secciones) sonaba **3 veces por tap** y 2 por clic con mouse; `ChromaticNode`, `TriadNode` y `EscalaMayor` igual. Medido contando `createGain` por activación con Edge emulando un Pixel 7. Regla: todo elemento que dispare audio desde más de un handler pasa por `useFireGate()`. Las primitivas que ya lo usaban (`AcordesBuilder`, `ChordStacks`, `IntervalRuler`, etc.) daban 1.
 
+### Un AudioContext no se queda despierto solo (51ª ola)
+
+El navegador suspende el `AudioContext` al cambiar de pestaña, bloquear la pantalla o recibir una llamada (iOS lo deja en `interrupted`), y puede cerrarlo. `getCtx()` llamaba a `ctx.resume()` sin `.catch` y desde handlers que no siempre cuentan como gesto (`mouseenter` emulado, `setTimeout`): el rechazo quedaba silenciado y el profesor reportó "vuelvo a la página y ya no suena". Regla: todo `resume()` lleva `.catch` visible, el contexto se reanuda en `visibilitychange`/`pageshow`, un contexto `closed` se recrea, y el clic de AUDIO ON crea o reanuda el contexto. En iOS, además, `navigator.audioSession.type = 'playback'` o el interruptor de silencio apaga Web Audio.
+
 ### Anti-checklist antes de commit
 
 Pasar cada surface por estas preguntas antes de aprobar el cambio:

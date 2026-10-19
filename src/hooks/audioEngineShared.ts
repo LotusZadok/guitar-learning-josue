@@ -12,8 +12,8 @@ export function stopAllNotes(fadeMs = 80) {
       const v = Math.max(g.gain.value, 0.0001);
       g.gain.setValueAtTime(v, t);
       g.gain.exponentialRampToValueAtTime(0.0001, t + fadeSec);
-    } catch {
-      /* ignored */
+    } catch (err) {
+      console.warn("[audio] no se pudo atenuar una voz", err);
     }
   });
   activeGains.clear();

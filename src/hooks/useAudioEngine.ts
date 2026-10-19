@@ -24,18 +24,59 @@ const REFERENCE_OCTAVE = 4;
 // muteado (el estado por defecto) no crea contexto y no pasa nada.
 export const getCtx = (): AudioContext => {
   let ctx = getAudioContext();
-  if (!ctx) {
-    ctx = new AudioContext();
-    setAudioContext(ctx);
-    const gainNode = ctx.createGain();
-    gainNode.gain.value = useUIStore.getState().volume;
-    gainNode.connect(ctx.destination);
-    setMasterVolumeNode(gainNode);
-    void instrument.preload?.(ctx);
-  }
-  ctx.resume();
+  // Un contexto cerrado no se puede reanudar: se crea otro. Los AudioBuffer
+  // del banco de guitarra sirven en cualquier contexto, no hay que recargarlos.
+  if (!ctx || ctx.state === "closed") ctx = createAudioContext();
+  resumeAudioContext(ctx);
   return ctx;
 };
+
+function createAudioContext(): AudioContext {
+  enablePlaybackAudioSession();
+  const ctx = new AudioContext();
+  setAudioContext(ctx);
+  const gainNode = ctx.createGain();
+  gainNode.gain.value = useUIStore.getState().volume;
+  gainNode.connect(ctx.destination);
+  setMasterVolumeNode(gainNode);
+  void instrument.preload?.(ctx);
+  resumeAudioContextOnReturn();
+  return ctx;
+}
+
+// Reunión 19/10/26: "vuelvo aquí a la página y ya no suena". Al cambiar de
+// pestaña, bloquear la pantalla o recibir una llamada (iOS: estado
+// "interrupted"), el navegador suspende el contexto y nada lo reanudaba.
+function resumeAudioContext(ctx: AudioContext) {
+  if (ctx.state === "running") return;
+  ctx.resume().catch((err) => {
+    console.warn("[audio] no se pudo reanudar el AudioContext", err);
+  });
+}
+
+let resumeOnReturnRegistered = false;
+
+function resumeAudioContextOnReturn() {
+  if (resumeOnReturnRegistered) return;
+  resumeOnReturnRegistered = true;
+  const resumeIfVisible = () => {
+    const ctx = getAudioContext();
+    if (document.visibilityState === "visible" && ctx && ctx.state !== "closed") {
+      resumeAudioContext(ctx);
+    }
+  };
+  document.addEventListener("visibilitychange", resumeIfVisible);
+  window.addEventListener("pageshow", resumeIfVisible);
+}
+
+// Safari iOS (16.4+): con el tipo "playback" el audio suena aunque el
+// interruptor físico de silencio esté activado. Sin él, Web Audio lo respeta
+// y "pongo el sonido y no sonó" en el celular.
+function enablePlaybackAudioSession() {
+  const session = (navigator as Navigator & { audioSession?: { type: string } })
+    .audioSession;
+  if (session) session.type = "playback";
+}
 
 // Update master volume in real time. Called from Sidebar volume slider.
 export const setMasterVolume = (v: number) => {
