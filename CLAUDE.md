@@ -134,3 +134,27 @@ Para auditorías de proyectos completos (multi-página), usar `.impeccable/audit
 - `/impeccable document` — Genera DESIGN.md spec-compliant capturando el sistema visual.
 - `/impeccable extract` — Extrae componentes/tokens/patrones reusables al sistema de diseño.
 - `/impeccable live` — Itera en el browser. Pickear elemento, comentar, recibir 3 variantes.
+
+## 6. Clean Code (Robert C. Martin, 2.ª edición, 2025)
+
+Doctrina de código para todo lo que se escriba o se modifique dentro del alcance de una ola.
+
+### Precedencia
+
+- §2 Simplicity First y §3 Surgical Changes mandan sobre esta sección cuando choquen.
+- La Regla del Boy Scout ("deje el código más limpio de lo que lo encontró") se limita a la función o al componente que la ola ya está modificando. No autoriza refactors fuera del alcance de la ola.
+- §5 (impeccable) gobierna lo visual; esta sección gobierna la estructura del código. No se pisan.
+
+### Reglas
+
+1. **Nombres que revelan intención.** Variables, funciones, componentes, props y claves i18n dicen qué son o qué hacen, sin abreviaturas crípticas. Respete el idioma de nombres que ya usa cada módulo. Los conceptos de teoría musical se nombran como en el método del profesor y en `es.json`.
+2. **Funciones pequeñas que hacen una sola cosa**, con un solo nivel de abstracción. Orden descendente: la función de alto nivel arriba, sus detalles abajo.
+3. **Pocos argumentos.** Una función de utilidad recibe como máximo tres argumentos posicionales; si necesita más, reciba un objeto tipado.
+4. **Separación comando/consulta.** Una función calcula y devuelve, o cambia estado (store de Zustand, motor de audio), pero no las dos cosas.
+5. **Sin efectos secundarios ocultos.** Si una función cambia algo fuera de ella, su nombre lo dice.
+6. **Comentarios solo para el porqué**: una decisión pedagógica del profesor, una regla de `DESIGN.md`, un workaround de Tone.js. El código nuevo se explica con sus nombres. No borre comentarios existentes fuera de las líneas que la ola reescribe.
+7. **Duplicación con generalización conservadora.** Extraiga a helper o primitiva cuando exista un segundo uso real, no antes (YAGNI). Las primitivas se extienden en vez de duplicarse.
+8. **Lógica de teoría musical fuera de los componentes.** Los cálculos viven en `src/utils/` (por ejemplo `noteCalculations.ts`) como funciones puras, comprobables sin React. Los componentes no calculan teoría inline.
+9. **Tests primero para lógica pura.** Toda corrección o funcionalidad nueva en `utils/`, stores o lógica de hooks empieza con un test que falla y reproduce el caso; luego se hace pasar. Lo visual se verifica con build, lint, anti-checklist de §5 y una prueba manual concreta. Si el repo no tiene un runner de tests, no lo instale por su cuenta: repórtelo como decisión pendiente.
+10. **Errores visibles.** Nada de `catch` vacíos ni fallos silenciados, en especial en el motor de audio.
+11. **Formato.** Manda la configuración de ESLint/Prettier del repo.
