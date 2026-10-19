@@ -101,8 +101,12 @@
     "s36": {
       "label": "3.6.2 · Dominante 7",
       "title": "El dominante 7 (V7)",
-      "intro": "El dominante 7 es el acorde con séptima que se arma sobre el 5º grado: combina la 3ª mayor con la 7ª menor. Adentro esconde un tritono (entre su 3ª y su 7ª), el intervalo más inestable, y esa tensión es la que lo empuja a resolver al I.",
-      "resolution": "Las dos notas del tritono (resaltadas) resuelven por semitono: la sensible (la 3ª del V7) sube a la tónica, y la 7ª del V7 baja a la 3ª del I. Ese doble movimiento de medio tono es lo que hace del V7 → I la resolución más fuerte de la música tonal. Toca el botón para escucharla."
+      "intro_V7": "El dominante 7 es el acorde con séptima que se arma sobre el 5º grado: combina la 3ª mayor con la 7ª menor. Adentro esconde un tritono (entre su 3ª y su 7ª), el intervalo más inestable, y esa tensión es la que lo empuja a resolver al I.",
+      "intro_vii": "El vii° es el acorde con séptima que se arma sobre el 7º grado: un semidisminuido (m7♭5). Lleva el mismo tritono que el V7, pero en otro lugar del acorde: entre su tónica y su 5ª disminuida. Por eso hace el mismo trabajo y también resuelve al I.",
+      "resolution_V7": "Las dos notas del tritono (resaltadas) resuelven por semitono. La sensible tonal (el 7º grado de la escala), que en el V7 es su 3ª, sube a la tónica; la sensible modal (el 4º grado), que en el V7 es su 7ª, baja a la 3ª del I. Ese doble movimiento de medio tono es lo que hace del V7 → I la resolución más fuerte de la música tonal.",
+      "resolution_vii": "Las dos notas del tritono (resaltadas) resuelven por semitono, igual que en el V7. La sensible tonal (el 7º grado de la escala), que en el vii° es su tónica, sube a la tónica del I; la sensible modal (el 4º grado), que en el vii° es su 5ª disminuida, baja a la 3ª del I.",
+      "selector_label": "Acorde de origen",
+      "diagram_label": "Resolución de {{origen}} a {{destino}} sobre el eje cromático: la sensible tonal sube a la tónica y la sensible modal baja a la tercera"
     },
     "s37": {
       "label": "3.7 · ii-V-I",

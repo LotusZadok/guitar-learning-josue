@@ -3,7 +3,13 @@ import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { useFireGate } from '../../../hooks/useFireGate';
 import { useUIStore } from '../../../stores/useUIStore';
 import { NOTE_COLORS, ALL, spelledToES } from '../../../data/notes';
-import { majorScaleSpelled, pitchClass, tonicChromatic } from '../../../utils/noteCalculations';
+import {
+  acordeDominante,
+  majorScaleSpelled,
+  pitchClass,
+  tonicChromatic,
+  type OrigenDominante,
+} from '../../../utils/noteCalculations';
 import type { ChromaticNote } from '../../../types/music';
 import styles from './DominanteResolucion.module.css';
 
@@ -23,16 +29,8 @@ const CHORD_GAP_MS = 900;
 // este eje el movimiento contrario se ve literalmente: uno va hacia la derecha
 // y el otro hacia la izquierda.
 
-type Origen = 'V7' | 'vii';
+const ORIGENES: OrigenDominante[] = ['V7', 'vii'];
 
-// degrees: grados de la escala mayor (0-index) que forman el acorde.
-// El tritono siempre son los mismos dos grados: la sensible (6) y el 4º (3).
-const ORIGENES: Record<Origen, { roman: string; suffix: string; rootDeg: number; degrees: number[] }> = {
-  V7: { roman: 'V7', suffix: '7', rootDeg: 4, degrees: [4, 6, 1, 3] },
-  vii: { roman: 'vii', suffix: 'm7♭5', rootDeg: 6, degrees: [6, 1, 3, 5] },
-};
-
-const TRITONO_DEGS = [6, 3];
 // Resoluciones por semitono: grado de origen → posición de destino en el eje.
 const RESOLUCIONES = [
   { fromDeg: 6, toSemis: 12 }, // sensible sube a la tónica (8va)
@@ -42,13 +40,17 @@ const RESOLUCIONES = [
 const DEG_SEMIS = [0, 2, 4, 5, 7, 9, 11];
 const I_DEGREES = [0, 2, 4];
 
+const R = 19;
 const SVG_W = 560;
 const SVG_H = 250;
 const PAD_X = 34;
+// Margen a la izquierda del eje para el cifrado de cada fila: "Em7♭5" mide
+// ~40px y antes quedaba recortado (reunión 19/10/26: se leía solo "7♭5").
+const LABEL_GUTTER = 48;
+const LABEL_X = PAD_X - R - 8;
 const STEP_X = (SVG_W - 2 * PAD_X) / 12;
 const AXIS_Y = 125;
 const ROW_OFFSET = 62; // distancia de cada fila al eje
-const R = 19;
 
 const posX = (semis: number) => PAD_X + semis * STEP_X;
 
@@ -63,21 +65,31 @@ interface Voice {
   tritono?: boolean;
 }
 
-export default function DominanteResolucion() {
+interface Props {
+  /** El acorde elegido vive en la sección: el texto de §3.6.2 cambia con él. */
+  origen: OrigenDominante;
+  onOrigenChange: (origen: OrigenDominante) => void;
+  /** Textos accesibles; vienen de la sección (i18n). */
+  labels: {
+    selector: string;
+    diagram: (origen: string, destino: string) => string;
+  };
+}
+
+export default function DominanteResolucion({ origen, onOrigenChange, labels }: Props) {
   const tonic = useUIStore((s) => s.tonic);
   const { playNote } = useAudioEngine();
-  const [origen, setOrigen] = useState<Origen>('V7');
   const [hovered, setHovered] = useState<string | null>(null);
   const [playing, setPlaying] = useState(false);
   const fire = useFireGate();
 
   const { origenVoices, iRow, origenLabel, iLabel } = useMemo(() => {
     const scale = majorScaleSpelled(tonic);
-    const def = ORIGENES[origen];
+    const acorde = acordeDominante(tonic, origen);
     const tonicIdx = ALL.indexOf(tonicChromatic(tonic));
     // Ley del piso: la tónica es la nota más grave y la octava sube donde el
     // grado envuelve el índice cromático.
-    const voice = (deg: number, up: boolean, semisOverride?: number): Voice => {
+    const voice = (deg: number, up: boolean, semisOverride?: number, tritono = false): Voice => {
       const semis = semisOverride ?? DEG_SEMIS[deg];
       return {
         spelled: scale[deg],
@@ -87,14 +99,14 @@ export default function DominanteResolucion() {
         semis,
         x: posX(semis),
         y: AXIS_Y + (up ? -ROW_OFFSET : ROW_OFFSET),
-        tritono: up && TRITONO_DEGS.includes(deg),
+        tritono,
       };
     };
     return {
-      origenVoices: def.degrees.map((d) => voice(d, true)),
+      origenVoices: acorde.voces.map((v) => voice(v.grado, true, undefined, v.tritono)),
       // El I lleva su octava además de la tónica: es donde aterriza la sensible.
       iRow: [...I_DEGREES.map((d) => voice(d, false)), voice(0, false, 12)],
-      origenLabel: scale[def.rootDeg] + def.suffix,
+      origenLabel: acorde.cifrado,
       iLabel: scale[0],
     };
   }, [tonic, origen]);
@@ -124,26 +136,26 @@ export default function DominanteResolucion() {
 
   return (
     <div className={styles.wrap}>
-      <div className={styles.selector} role="group" aria-label="Acorde de origen">
-        {(Object.keys(ORIGENES) as Origen[]).map((k) => (
+      <div className={styles.selector} role="group" aria-label={labels.selector}>
+        {ORIGENES.map((k) => (
           <button
             key={k}
             type="button"
             className={k === origen ? styles.chipActive : styles.chip}
             aria-pressed={k === origen}
-            onClick={() => setOrigen(k)}
+            onClick={() => onOrigenChange(k)}
             disabled={playing}
           >
-            {ORIGENES[k].roman} → I
+            {acordeDominante(tonic, k).roman} → I
           </button>
         ))}
       </div>
 
       <svg
         className={styles.diagram}
-        viewBox={`0 0 ${SVG_W} ${SVG_H}`}
+        viewBox={`${-LABEL_GUTTER} 0 ${SVG_W + LABEL_GUTTER} ${SVG_H}`}
         role="group"
-        aria-label={`Resolución de ${origenLabel} a ${iLabel} sobre el eje cromático: la sensible sube a la tónica y el 4º grado baja a la tercera`}
+        aria-label={labels.diagram(origenLabel, iLabel)}
       >
         <defs>
           <marker
@@ -165,10 +177,10 @@ export default function DominanteResolucion() {
           <circle key={s} className={styles.tick} cx={posX(s)} cy={AXIS_Y} r={2.5} />
         ))}
 
-        <text className={styles.rowLabel} x={PAD_X - 12} y={AXIS_Y - ROW_OFFSET}>
+        <text className={styles.rowLabel} x={LABEL_X} y={AXIS_Y - ROW_OFFSET}>
           {origenLabel}
         </text>
-        <text className={styles.rowLabel} x={PAD_X - 12} y={AXIS_Y + ROW_OFFSET}>
+        <text className={styles.rowLabel} x={LABEL_X} y={AXIS_Y + ROW_OFFSET}>
           {iLabel}
         </text>
 

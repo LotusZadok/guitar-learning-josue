@@ -1,6 +1,7 @@
 // Arnés de verificación de la teoría de T3 (lógica pura de noteCalculations).
 // Se corre con `npm run verify:t3` (node --experimental-strip-types).
 import {
+  acordeDominante,
   progresionIIVI,
   tonizacionEscenarios,
 } from '../src/utils/noteCalculations.ts';
@@ -51,5 +52,24 @@ check(
   progresionIIVI({ tonica: 'C', modo: 'menor', septimaEnI: false }).map((c) => c.cifrado),
   ['Bm7♭5', 'E7', 'Am'],
 );
+
+console.log('\n— 3.6.2 dominante: voces del V7 y del vii° —');
+const voces = (o: 'V7' | 'vii') =>
+  acordeDominante('C', o).voces.map((v) => [v.nota, v.intervalo, v.tritono, v.sensible ?? '-']);
+check('V7 en C: G(T) B(3M, tritono, tonal) D(5J) F(7m, tritono, modal)', voces('V7'), [
+  ['G', 'T', false, '-'],
+  ['B', '3M', true, 'tonal'],
+  ['D', '5J', false, '-'],
+  ['F', '7m', true, 'modal'],
+]);
+check('vii en C: B(T, tritono, tonal) D(3m) F(5d, tritono, modal) A(7m)', voces('vii'), [
+  ['B', 'T', true, 'tonal'],
+  ['D', '3m', false, '-'],
+  ['F', '5d', true, 'modal'],
+  ['A', '7m', false, '-'],
+]);
+check('cifrados', [acordeDominante('C', 'V7').cifrado, acordeDominante('C', 'vii').cifrado], ['G7', 'Bm7♭5']);
+check('romanos (el vii lleva su círculo)', [acordeDominante('C', 'V7').roman, acordeDominante('C', 'vii').roman], ['V7', 'vii°']);
+check('en F el vii es Em7♭5', acordeDominante('F', 'vii').cifrado, 'Em7♭5');
 
 resumen();

@@ -402,6 +402,54 @@ function sensibleMenorArmonica(tonicaMenor: string): string {
   return spelledIntervalFromTonic(ascii, 7, "M");
 }
 
+// === Dominante y vii° (§3.6.2) ===
+// Los dos acordes de la tonalidad que llevan el tritono (4º y 7º grados) y por
+// eso resuelven al I. Reunión 19/10/26: cada voz dice qué intervalo es dentro
+// del acorde y, si es del tritono, qué sensible es: la tonal es el 7º grado
+// de la escala y la modal el 4º.
+export type OrigenDominante = "V7" | "vii";
+export type IntervaloEnAcorde = "T" | "3M" | "3m" | "5J" | "5d" | "7m";
+
+export interface VozDominante {
+  nota: string; // grafía con glifos
+  grado: number; // índice en la escala mayor
+  intervalo: IntervaloEnAcorde;
+  tritono: boolean;
+  sensible?: "tonal" | "modal";
+}
+
+const DOMINANTES: Record<
+  OrigenDominante,
+  { roman: string; sufijo: string; grados: number[]; intervalos: IntervaloEnAcorde[] }
+> = {
+  V7: { roman: "V7", sufijo: "7", grados: [4, 6, 1, 3], intervalos: ["T", "3M", "5J", "7m"] },
+  vii: { roman: "vii°", sufijo: "m7♭5", grados: [6, 1, 3, 5], intervalos: ["T", "3m", "5d", "7m"] },
+};
+
+const SENSIBLE_POR_GRADO: Record<number, "tonal" | "modal"> = { 6: "tonal", 3: "modal" };
+
+export function acordeDominante(
+  tonica: Tonic,
+  origen: OrigenDominante,
+): { roman: string; cifrado: string; voces: VozDominante[] } {
+  const escala = majorScaleSpelled(tonica);
+  const def = DOMINANTES[origen];
+  return {
+    roman: def.roman,
+    cifrado: escala[def.grados[0]] + def.sufijo,
+    voces: def.grados.map((grado, i) => {
+      const sensible = SENSIBLE_POR_GRADO[grado];
+      return {
+        nota: escala[grado],
+        grado,
+        intervalo: def.intervalos[i],
+        tritono: sensible !== undefined,
+        ...(sensible ? { sensible } : {}),
+      };
+    }),
+  };
+}
+
 // Reunión 19/10/26: los dos escenarios son el ii-V-I mayor y el ii°-V7-i de
 // la relativa menor, todos con séptima ("el primero debería ser maj7, el
 // quinto dominante y el segundo menor7"; en menor "este debería ser mayor,
