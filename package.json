@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "verify:constructor": "node --experimental-strip-types scripts/verify-progresion-armonica.ts",
     "verify:acordes": "node --experimental-strip-types scripts/verify-progresion-acordes.ts",
+    "verify:t3": "node --experimental-strip-types scripts/verify-t3.ts",
     "preview": "vite preview"
   },
   "dependencies": {

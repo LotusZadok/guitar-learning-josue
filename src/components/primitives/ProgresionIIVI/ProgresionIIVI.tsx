@@ -4,13 +4,10 @@ import PlaybackButton from '../../shared/PlaybackButton/PlaybackButton';
 import { useUIStore } from '../../../stores/useUIStore';
 import { ALL } from '../../../data/notes';
 import {
-  majorScaleSpelled,
   pitchClass,
-  relativeMinorScaleSpelled,
-  spelledIntervalFromTonic,
+  progresionIIVI,
   spelledSequenceAscending,
 } from '../../../utils/noteCalculations';
-import type { Tonic } from '../../../types/music';
 import styles from './ProgresionIIVI.module.css';
 
 interface Props {
@@ -21,36 +18,11 @@ interface Props {
   relativeMinor?: boolean;
 }
 
-type Role = 'medium' | 'tense' | 'stable';
-
-interface ProgressionDef {
-  roman: string;
-  rootIdx: number;
-  suffix: string;
-  degrees: number[];
-  role: Role;
-  /** Solo V7 menor: sube la sensible natural (♭VII) a la 7M de la tónica menor
-   *  (menor armónica) para que el V suene dominante en vez de menor natural. */
-  raise7?: boolean;
-}
-
-// La progresión ii-V-I con séptimas diatónicas. Cada acorde deriva de la escala
-// mayor de la tónica activa (terceras apiladas). El arco de tensión: subdominante
-// (media) → dominante (alta) → tónica (resolución).
-const DEFS_MAJOR: ProgressionDef[] = [
-  { roman: 'ii', rootIdx: 1, suffix: 'm7', degrees: [1, 3, 5, 0], role: 'medium' },
-  { roman: 'V7', rootIdx: 4, suffix: '7', degrees: [4, 6, 1, 3], role: 'tense' },
-  { roman: 'I', rootIdx: 0, suffix: 'maj7', degrees: [0, 2, 4, 6], role: 'stable' },
-];
-
-// ii°-V7-i menor (§3.10): ii° y el i (tríada) salen directo de la menor natural
-// relativa (mismas notas que la mayor, rotadas — ver GradosArmonicos §3.9). El
-// V7 es el único que se aparta de la escala natural: pide la sensible elevada.
-const DEFS_MINOR: ProgressionDef[] = [
-  { roman: 'ii°', rootIdx: 1, suffix: 'm7♭5', degrees: [1, 3, 5, 0], role: 'medium' },
-  { roman: 'V7', rootIdx: 4, suffix: '7', degrees: [4, 6, 1, 3], role: 'tense', raise7: true },
-  { roman: 'i', rootIdx: 0, suffix: 'm', degrees: [0, 2, 4], role: 'stable' },
-];
+// Los acordes (y su arco de tensión) salen de `progresionIIVI` en
+// noteCalculations, compartido con los escenarios de §3.8. Aquí solo viven los
+// romanos que muestra cada sección.
+const ROMANS_MAJOR = ['ii', 'V7', 'I'];
+const ROMANS_MINOR = ['ii°', 'V7', 'i'];
 
 const NOTE_DURATION = 1.4;
 const ARPEGGIO_GAP_MS = 150;
@@ -63,21 +35,19 @@ export default function ProgresionIIVI({ functions, relativeMinor = false }: Pro
   const [activeCard, setActiveCard] = useState<number | null>(null);
 
   const chords = useMemo(() => {
-    const defs = relativeMinor ? DEFS_MINOR : DEFS_MAJOR;
-    const scale = relativeMinor ? relativeMinorScaleSpelled(tonic) : majorScaleSpelled(tonic);
-    return defs.map((d) => {
-      let notes = d.degrees.map((g) => scale[g]);
-      if (d.raise7) {
-        const minorTonicAscii = scale[0].replace('♯', '#').replace('♭', 'b') as Tonic;
-        const raised = spelledIntervalFromTonic(minorTonicAscii, 7, 'M');
-        notes = notes.map((n) => (n === scale[6] ? raised : n));
-      }
-      const seq = spelledSequenceAscending(notes, 4);
+    const romans = relativeMinor ? ROMANS_MINOR : ROMANS_MAJOR;
+    const acordes = progresionIIVI({
+      tonica: tonic,
+      modo: relativeMinor ? 'menor' : 'mayor',
+      septimaEnI: !relativeMinor,
+    });
+    return acordes.map((a, i) => {
+      const seq = spelledSequenceAscending(a.notas, 4);
       return {
-        roman: d.roman,
-        role: d.role,
-        cifrado: scale[d.rootIdx] + d.suffix,
-        members: notes.map((sp, i) => ({ chromatic: ALL[pitchClass(sp)], octave: seq[i].octave })),
+        roman: romans[i],
+        role: a.rol,
+        cifrado: a.cifrado,
+        members: a.notas.map((sp, j) => ({ chromatic: ALL[pitchClass(sp)], octave: seq[j].octave })),
       };
     });
   }, [tonic, relativeMinor]);

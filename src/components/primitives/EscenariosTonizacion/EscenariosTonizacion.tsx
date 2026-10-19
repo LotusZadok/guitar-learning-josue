@@ -14,10 +14,9 @@ interface Props {
   labels: { mayor: string; menor: string };
 }
 
-// §3.8 · Los dos escenarios del profesor, lado a lado: qué calidad toma el 2º, el
-// 5º y el 1er grado en cada uno. En mayor los tres están alterados por la
-// tonización (II mayor, v menor, I mayor); en la relativa menor son las
-// calidades naturales (ii°, v, i). Grados y cifrados salen de la tónica activa.
+// §3.8 · Los dos escenarios del profesor, lado a lado: el ii-V-I mayor y el
+// ii°-V7-i de la relativa menor, todos con séptima (reunión 19/10/26). Grados y
+// cifrados salen de la tónica activa vía `tonizacionEscenarios`.
 export default function EscenariosTonizacion({ labels }: Props) {
   const tonic = useUIStore((s) => s.tonic);
   const { playChord, at, clear } = useChordPlayer(NOTE_DURATION);

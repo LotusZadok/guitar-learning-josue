@@ -125,8 +125,8 @@
       "scenarios_title": "Die zwei Szenarien",
       "scenarios_mayor": "Dur-Szenario",
       "scenarios_menor": "Moll-Szenario",
-      "scenarios_caption": "Im Dur-Szenario erscheinen alle drei Stufen verändert: die 2. wird zu Dur, die 5. zu Moll und die 1. zu Dur. Im Moll-Szenario sind es die natürlichen Qualitäten der Moll-Paralleltonart: 2. vermindert, 5. Moll und 1. Moll.",
-      "generalization": "Die Idee erweitert sich, indem man das ganze ii-V-Paar vor jede Stufe einfügt, nicht nur das V allein. Zum Beispiel statt I, ii, V, I: I, V/ii, ii, V, I (Cmaj7, A7, Dm7, G7, Cmaj7): das A7 tonikalisiert das Dm7, bevor es weitergeht."
+      "scenarios_caption": "Die beiden Szenarien sind die zwei ii-V-I-Kadenzen, mit Septime auf allen Stufen. Im Dur-Szenario: ii7 (Moll), V7 (Dominante) und Imaj7. Im Moll-Szenario, auf der Moll-Paralleltonart: iiø7 (halbvermindert), V7 (Dominante, mit dem erhöhten Leitton von harmonisch Moll) und i7 (Moll).",
+      "generalization": "Die Idee erweitert sich, indem man das ganze ii-V-Paar vor jede Stufe einfügt, nicht nur das V allein. Zum Beispiel statt I, ii, V, I: I, ii/ii, V/ii, ii, V, I (Cmaj7, Em7♭5, A7, Dm7, G7, Cmaj7): Em7♭5 und A7 tonikalisieren das Dm7, bevor es weitergeht. Die ii/ii ist halbvermindert, weil die tonikalisierte Stufe Moll ist."
     },
     "s39": {
       "label": "3.9 · Moll-Tonleiter",

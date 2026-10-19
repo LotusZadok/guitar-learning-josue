@@ -123,8 +123,8 @@
       "scenarios_title": "Los dos escenarios",
       "scenarios_mayor": "Escenario mayor",
       "scenarios_menor": "Escenario menor",
-      "scenarios_caption": "En el escenario mayor los tres grados aparecen alterados: el 2º se vuelve mayor, el 5º menor y el 1º mayor. En el escenario menor son las calidades naturales de la relativa menor: 2º disminuido, 5º menor y 1º menor.",
-      "generalization": "La idea se amplía insertando el par completo ii-V antes de cualquier grado, no solo el V solo. Por ejemplo, en vez de I, ii, V, I puedes hacer I, V/ii, ii, V, I (Cmaj7, A7, Dm7, G7, Cmaj7): el A7 toniza al Dm7 antes de seguir."
+      "scenarios_caption": "Los dos escenarios son las dos cadencias ii-V-I, con séptima en todos los grados. En el escenario mayor: ii7 (menor), V7 (dominante) e Imaj7. En el escenario menor, sobre la relativa menor: iiø7 (semidisminuido), V7 (dominante, con la sensible elevada de la menor armónica) e i7 (menor).",
+      "generalization": "La idea se amplía insertando el par completo ii-V antes de cualquier grado, no solo el V solo. Por ejemplo, en vez de I, ii, V, I puedes hacer I, ii/ii, V/ii, ii, V, I (Cmaj7, Em7♭5, A7, Dm7, G7, Cmaj7): el Em7♭5 y el A7 tonizan al Dm7 antes de seguir. El ii/ii es semidisminuido porque el grado tonizado es menor."
     },
     "s39": {
       "label": "3.9 · Escala menor",

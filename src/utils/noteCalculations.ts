@@ -338,38 +338,101 @@ function chordAudio(chordName: string): ChordAudio {
   };
 }
 
-// === Escenarios de tonización (§3.8) ===
-// Reunión 19/8/26. Los tres grados que el profesor usa para contrastar los dos
-// escenarios. En mayor los tres aparecen ALTERADOS respecto de la escala (ese es
-// el punto: tonizar cambia la calidad): el II se vuelve mayor (V/V), el V se
-// vuelve menor (el ii de la tonalidad de IV) y el I se vuelve mayor-dominante
-// (V/IV) — en Do: D7, Gm7, C7. En la relativa menor son las calidades naturales:
-// ii° m7♭5, v m7, i m7 — en La menor: Bm7♭5, Em7, Am7.
-const ASCII_CIFRADO = (c: string) => c.replace(/♯/g, "#").replace(/♭/g, "b");
+// === ii-V-I (§3.7, §3.10) y escenarios de tonización (§3.8) ===
+export type RolIIVI = "medium" | "tense" | "stable";
 
+export interface AcordeIIVI {
+  cifrado: string; // con glifos ♯/♭
+  notas: string[]; // grafía con glifos, desde la fundamental
+  rol: RolIIVI;
+}
+
+interface DefIIVI {
+  grado: number; // índice de la fundamental en la escala
+  sufijo: string;
+  voces: number[]; // índices de escala, terceras apiladas
+  rol: RolIIVI;
+  sensibleElevada?: boolean;
+}
+
+// ii-V-I mayor con séptimas diatónicas: subdominante (media) → dominante
+// (alta) → tónica (resolución).
+const IIVI_MAYOR: DefIIVI[] = [
+  { grado: 1, sufijo: "m7", voces: [1, 3, 5, 0], rol: "medium" },
+  { grado: 4, sufijo: "7", voces: [4, 6, 1, 3], rol: "tense" },
+  { grado: 0, sufijo: "maj7", voces: [0, 2, 4, 6], rol: "stable" },
+];
+
+// ii°-V7-i sobre la relativa menor natural. El V7 es el único que se aparta de
+// la escala natural: sube la sensible (menor armónica) para sonar dominante.
+const IIVI_MENOR: DefIIVI[] = [
+  { grado: 1, sufijo: "m7♭5", voces: [1, 3, 5, 0], rol: "medium" },
+  { grado: 4, sufijo: "7", voces: [4, 6, 1, 3], rol: "tense", sensibleElevada: true },
+];
+const I_MENOR_TRIADA: DefIIVI = { grado: 0, sufijo: "m", voces: [0, 2, 4], rol: "stable" };
+const I_MENOR_SEPTIMA: DefIIVI = { grado: 0, sufijo: "m7", voces: [0, 2, 4, 6], rol: "stable" };
+
+// `tonica` es la tónica MAYOR activa: en modo menor se usa su relativa (misma
+// armadura). `septimaEnI` existe porque §3.10 muestra el i como tríada
+// (decisión de su ola) y §3.8 lo pide con séptima ("todos deberían tener
+// séptima, o ninguno").
+export function progresionIIVI({
+  tonica,
+  modo,
+  septimaEnI,
+}: {
+  tonica: Tonic;
+  modo: "mayor" | "menor";
+  septimaEnI: boolean;
+}): AcordeIIVI[] {
+  const escala = modo === "mayor" ? majorScaleSpelled(tonica) : relativeMinorScaleSpelled(tonica);
+  const defs =
+    modo === "mayor" ? IIVI_MAYOR : [...IIVI_MENOR, septimaEnI ? I_MENOR_SEPTIMA : I_MENOR_TRIADA];
+  return defs.map((d) => ({
+    cifrado: escala[d.grado] + d.sufijo,
+    notas: d.voces.map((v) =>
+      d.sensibleElevada && v === 6 ? sensibleMenorArmonica(escala[0]) : escala[v],
+    ),
+    rol: d.rol,
+  }));
+}
+
+function sensibleMenorArmonica(tonicaMenor: string): string {
+  const ascii = tonicaMenor.replace("♯", "#").replace("♭", "b") as Tonic;
+  return spelledIntervalFromTonic(ascii, 7, "M");
+}
+
+// Reunión 19/10/26: los dos escenarios son el ii-V-I mayor y el ii°-V7-i de
+// la relativa menor, todos con séptima ("el primero debería ser maj7, el
+// quinto dominante y el segundo menor7"; en menor "este debería ser mayor,
+// La7"). La lectura anterior (grados alterados por la tonización: II7, v, I7)
+// la refutó el profesor.
 export interface EscenarioGrado {
   roman: string;
   chord: ChordAudio;
 }
 
+const ROMANOS_ESCENARIO = {
+  mayor: ["ii7", "V7", "Imaj7"],
+  menor: ["iiø7", "V7", "i7"],
+} as const;
+
 export function tonizacionEscenarios(tonic: Tonic): {
   mayor: EscenarioGrado[];
   menor: EscenarioGrado[];
 } {
-  const may = majorScaleSpelled(tonic).map(ASCII_CIFRADO);
-  const men = relativeMinorScaleSpelled(tonic).map(ASCII_CIFRADO);
-  return {
-    mayor: [
-      { roman: "II7", chord: chordAudio(may[1] + "7") },
-      { roman: "v", chord: chordAudio(may[4] + "m7") },
-      { roman: "I7", chord: chordAudio(may[0] + "7") },
-    ],
-    menor: [
-      { roman: "ii°", chord: chordAudio(men[1] + "m7b5") },
-      { roman: "v", chord: chordAudio(men[4] + "m7") },
-      { roman: "i", chord: chordAudio(men[0] + "m7") },
-    ],
-  };
+  const escenario = (modo: "mayor" | "menor"): EscenarioGrado[] =>
+    progresionIIVI({ tonica: tonic, modo, septimaEnI: true }).map((acorde, i) => ({
+      roman: ROMANOS_ESCENARIO[modo][i],
+      chord: {
+        cifrado: acorde.cifrado,
+        members: spelledSequenceAscending(acorde.notas, 4).map((s) => ({
+          chromatic: s.name,
+          octave: s.octave,
+        })),
+      },
+    }));
+  return { mayor: escenario("mayor"), menor: escenario("menor") };
 }
 
 export interface SecondaryDominant {
