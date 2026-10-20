@@ -68,14 +68,26 @@
   fill: var(--muted);
 }
 
+/* Neutro en reposo: el ámbar queda para "sonando" (Amber-Means-Sounding, D9
+   del plan del 19/10). */
 .arrowHead {
-  fill: var(--amber);
+  fill: var(--muted);
 }
 
 .arrow {
   fill: none;
-  stroke: var(--amber);
+  stroke: var(--muted);
   stroke-width: 2;
+}
+
+/* Intervalo de cada voz dentro del acorde de origen: soporte, no contenido. */
+.intervalo {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  fill: var(--muted);
 }
 
 /* Un solo receptor de eventos por nodo. */
@@ -105,31 +117,19 @@
   dominant-baseline: middle;
 }
 
-.playBtn {
+.play {
   margin-top: 20px;
+  /* Espacio para el tooltip del PlaybackButton, que cuelga bajo el botón. */
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.playLabel {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 13px;
   letter-spacing: 1px;
-  padding: 8px 18px;
-  border: 1px solid var(--rule);
-  background: none;
   color: var(--paper);
-  cursor: pointer;
-  border-radius: 4px;
-  transition: border-color 0.2s, color 0.2s;
-}
-
-.playBtn:hover:not(:disabled) {
-  border-color: var(--red);
-  color: var(--red);
-}
-
-.playBtn:focus-visible {
-  outline: 2px solid var(--amber);
-  outline-offset: 2px;
-}
-
-.playBtn:disabled {
-  opacity: 0.35;
-  cursor: default;
+  margin-right: 6px;
 }

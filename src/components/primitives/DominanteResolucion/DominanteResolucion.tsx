@@ -1,5 +1,7 @@
 import { useCallback, useMemo, useState, type KeyboardEvent } from 'react';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
+import { useChordPlayer } from '../../../hooks/useChordPlayer';
+import PlaybackButton, { type PlayMode } from '../../shared/PlaybackButton/PlaybackButton';
 import { useFireGate } from '../../../hooks/useFireGate';
 import { useUIStore } from '../../../stores/useUIStore';
 import { NOTE_COLORS, ALL, spelledToES } from '../../../data/notes';
@@ -15,6 +17,7 @@ import styles from './DominanteResolucion.module.css';
 
 const NOTE_DURATION = 1.4;
 const CHORD_GAP_MS = 900;
+const ARPEGGIO_GAP_MS = 150;
 
 // Diagrama de resolución hacia el I sobre el MISMO eje cromático horizontal de
 // §1.4 y §1.5 (0–12 semitonos desde la tónica). Dos acordes de la tonalidad
@@ -53,6 +56,7 @@ const AXIS_Y = 125;
 const ROW_OFFSET = 62; // distancia de cada fila al eje
 
 const posX = (semis: number) => PAD_X + semis * STEP_X;
+const key = (v: { semis: number }, row: string) => `${row}-${v.semis}`;
 
 interface Voice {
   spelled: string;
@@ -63,6 +67,9 @@ interface Voice {
   x: number;
   y: number;
   tritono?: boolean;
+  /** Solo en la fila del acorde de origen: T, 3M, 5J, 7m… (reunión 19/10/26:
+   *  "la gente podría pensar que sol es la tónica"). */
+  intervalo?: string;
 }
 
 interface Props {
@@ -79,8 +86,10 @@ interface Props {
 export default function DominanteResolucion({ origen, onOrigenChange, labels }: Props) {
   const tonic = useUIStore((s) => s.tonic);
   const { playNote } = useAudioEngine();
+  const { playChord, at, clear } = useChordPlayer(NOTE_DURATION);
   const [hovered, setHovered] = useState<string | null>(null);
-  const [playing, setPlaying] = useState(false);
+  const [playing, setPlaying] = useState<PlayMode | null>(null);
+  const [sonando, setSonando] = useState<string[]>([]);
   const fire = useFireGate();
 
   const { origenVoices, iRow, origenLabel, iLabel } = useMemo(() => {
@@ -89,7 +98,13 @@ export default function DominanteResolucion({ origen, onOrigenChange, labels }: 
     const tonicIdx = ALL.indexOf(tonicChromatic(tonic));
     // Ley del piso: la tónica es la nota más grave y la octava sube donde el
     // grado envuelve el índice cromático.
-    const voice = (deg: number, up: boolean, semisOverride?: number, tritono = false): Voice => {
+    const voice = (
+      deg: number,
+      up: boolean,
+      semisOverride?: number,
+      tritono = false,
+      intervalo?: string,
+    ): Voice => {
       const semis = semisOverride ?? DEG_SEMIS[deg];
       return {
         spelled: scale[deg],
@@ -100,10 +115,11 @@ export default function DominanteResolucion({ origen, onOrigenChange, labels }: 
         x: posX(semis),
         y: AXIS_Y + (up ? -ROW_OFFSET : ROW_OFFSET),
         tritono,
+        intervalo,
       };
     };
     return {
-      origenVoices: acorde.voces.map((v) => voice(v.grado, true, undefined, v.tritono)),
+      origenVoices: acorde.voces.map((v) => voice(v.grado, true, undefined, v.tritono, v.intervalo)),
       // El I lleva su octava además de la tónica: es donde aterriza la sensible.
       iRow: [...I_DEGREES.map((d) => voice(d, false)), voice(0, false, 12)],
       origenLabel: acorde.cifrado,
@@ -119,20 +135,37 @@ export default function DominanteResolucion({ origen, onOrigenChange, labels }: 
     [playNote, fire],
   );
 
-  const playResolution = useCallback(() => {
-    if (playing) return;
-    setPlaying(true);
-    origenVoices.forEach((v) => playNote(v.chromatic, v.octave, NOTE_DURATION));
-    setTimeout(() => iRow.forEach((v) => playNote(v.chromatic, v.octave, NOTE_DURATION)), CHORD_GAP_MS);
-    setTimeout(() => setPlaying(false), CHORD_GAP_MS + NOTE_DURATION * 1000);
-  }, [origenVoices, iRow, playNote, playing]);
+  // Reunión 19/10/26: los mismos dos botones de los ejemplos de acordes
+  // (bloque y arpegio), con la nota que suena resaltada en ámbar.
+  const playResolution = useCallback(
+    (mode: PlayMode) => {
+      if (playing) return;
+      clear();
+      setPlaying(mode);
+      const gap = mode === 'arpegio' ? ARPEGGIO_GAP_MS : 0;
+      const filas = [
+        { voces: origenVoices, fila: 'o' },
+        { voces: iRow, fila: 'i' },
+      ];
+      let inicio = 0;
+      filas.forEach(({ voces, fila }) => {
+        playChord(voces, gap, inicio);
+        if (gap === 0) at(() => setSonando(voces.map((v) => key(v, fila))), inicio);
+        else voces.forEach((v, i) => at(() => setSonando([key(v, fila)]), inicio + i * gap));
+        inicio += voces.length * gap + CHORD_GAP_MS;
+      });
+      at(() => {
+        setPlaying(null);
+        setSonando([]);
+      }, inicio + NOTE_DURATION * 500);
+    },
+    [origenVoices, iRow, playing, clear, at, playChord],
+  );
 
   const arrows = RESOLUCIONES.map(({ fromDeg, toSemis }) => ({
     from: origenVoices.find((v) => v.deg === fromDeg)!,
     to: iRow.find((v) => v.semis === toSemis)!,
   }));
-
-  const key = (v: Voice, row: string) => `${row}-${v.semis}`;
 
   return (
     <div className={styles.wrap}>
@@ -144,7 +177,7 @@ export default function DominanteResolucion({ origen, onOrigenChange, labels }: 
             className={k === origen ? styles.chipActive : styles.chip}
             aria-pressed={k === origen}
             onClick={() => onOrigenChange(k)}
-            disabled={playing}
+            disabled={playing !== null}
           >
             {acordeDominante(tonic, k).roman} → I
           </button>
@@ -194,6 +227,7 @@ export default function DominanteResolucion({ origen, onOrigenChange, labels }: 
               key={key(v, row)}
               voice={v}
               colored={hovered === key(v, row)}
+              sounding={sonando.includes(key(v, row))}
               onEnter={() => {
                 setHovered(key(v, row));
                 scrub(v);
@@ -204,9 +238,20 @@ export default function DominanteResolucion({ origen, onOrigenChange, labels }: 
         )}
       </svg>
 
-      <button type="button" className={styles.playBtn} onClick={playResolution} disabled={playing}>
-        {origenLabel} → {iLabel}
-      </button>
+      <div className={styles.play}>
+        <span className={styles.playLabel}>
+          {origenLabel} → {iLabel}
+        </span>
+        {(['bloque', 'arpegio'] as const).map((mode) => (
+          <PlaybackButton
+            key={mode}
+            mode={mode}
+            playing={playing === mode}
+            disabled={playing !== null && playing !== mode}
+            onClick={() => playResolution(mode)}
+          />
+        ))}
+      </div>
     </div>
   );
 }
@@ -231,11 +276,12 @@ function ResolutionArrow({ from, to }: { from: Voice; to: Voice }) {
 interface VoiceNodeProps {
   voice: Voice;
   colored: boolean;
+  sounding: boolean;
   onEnter: () => void;
   onLeave: () => void;
 }
 
-function VoiceNode({ voice, colored, onEnter, onLeave }: VoiceNodeProps) {
+function VoiceNode({ voice, colored, sounding, onEnter, onLeave }: VoiceNodeProps) {
   const onKey = useCallback(
     (e: KeyboardEvent<SVGGElement>) => {
       if (e.key === 'Enter' || e.key === ' ') {
@@ -261,6 +307,15 @@ function VoiceNode({ voice, colored, onEnter, onLeave }: VoiceNodeProps) {
       onKeyDown={onKey}
     >
       <circle className={styles.hit} cx={0} cy={0} r={R + 6} fill="transparent" />
+      {/* Ámbar = "sonando ahora" (Amber-Means-Sounding): solo mientras suena. */}
+      {sounding && (
+        <circle cx={0} cy={0} r={R + 9} fill="none" stroke="var(--amber)" strokeWidth={2.5} />
+      )}
+      {voice.intervalo && (
+        <text className={styles.intervalo} x={0} y={-R - 18}>
+          {voice.intervalo}
+        </text>
+      )}
       {/* Tritono: anillo punteado en neutro de marca. El punteado dice
        *  "inestable, quiere moverse"; el ámbar quedó reservado para "sonando". */}
       {voice.tritono && (
