@@ -21,6 +21,7 @@ import {
   type Modo,
   type RolArmonico,
   type Slot,
+  type Sus,
 } from './progresionArmonica.ts';
 
 export interface Armadura {
@@ -118,11 +119,13 @@ export function acordeDeGrado({
   modo,
   id,
   septimas,
+  sus,
 }: {
   armadura: Armadura;
   modo: Modo;
   id: GradoId;
   septimas: boolean;
+  sus?: Sus;
 }): AcordeSonante {
   const raices = raicesDe(armadura, modo);
   const grados = gradosDe(modo);
@@ -162,12 +165,29 @@ export function acordeDeGrado({
     nombre = raiz + sufijo(calidades[i], septimas, distSeptima === 10);
   }
 
-  const seq = spelledSequenceAscending(Chord.get(nombre).notes, 4);
+  const base = Chord.get(nombre).notes;
+  const { notas, cifrado } = sus ? suspender(base, sus) : { notas: base, cifrado: nombre };
+  const seq = spelledSequenceAscending(notas, 4);
   return {
-    cifrado: GLIFO(nombre),
+    cifrado: GLIFO(cifrado),
     roman: id,
     rol: rolDe(modo, id),
     notas: seq.map((s) => ({ chromatic: s.name, octave: s.octave })),
+  };
+}
+
+// sus2 / sus4 por intervalos sobre el acorde ya resuelto: la 3ª se cambia por
+// la 2M o la 4J de la fundamental y la 7ª se conserva. No se le pide el nombre
+// a `tonal` porque no conoce G7sus2 ni Dm7sus4 (los devuelve vacíos). Sin 3ª
+// no hay calidad: Dm7 + sus4 se escribe D7sus4; la 7M se nombra maj7.
+function suspender(notas: string[], sus: Sus): { notas: string[]; cifrado: string } {
+  const [raiz, , quinta, septima] = notas;
+  const nueva = Note.transpose(raiz, sus === 'sus2' ? '2M' : '4P');
+  if (!septima) return { notas: [raiz, nueva, quinta], cifrado: raiz + sus };
+  const septimaMayor = ((Note.chroma(septima) ?? 0) - (Note.chroma(raiz) ?? 0) + 12) % 12 === 11;
+  return {
+    notas: [raiz, nueva, quinta, septima],
+    cifrado: raiz + (septimaMayor ? 'maj7' : '7') + sus,
   };
 }
 
@@ -179,5 +199,6 @@ export function acordeDeSlot(slot: NonNullable<Slot>, septimas: boolean): Acorde
     modo: slot.tonalidad.modo,
     id: slot.degree,
     septimas,
+    sus: slot.sus,
   });
 }

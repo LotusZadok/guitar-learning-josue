@@ -460,6 +460,13 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
 
+**68ª ola (2026-10-19): §4.1 sus2 y sus4 por acorde (pedido #31, D11 del plan):**
+- ✓ **Fichas sus2 / sus4** en un grupo "Modificadores" del banco. Gesto tap-tap (ficha → acorde colocado), con arrastre encima y teclado completo; el mismo sus otra vez lo quita, el otro lo reemplaza. Brief aprobado por el dueño. Armar un sus desarma el grado y viceversa (`susArmado` en el store).
+- ✓ **El acorde se construye por intervalos** (`suspender` en `progresionAcordes.ts`): la 3ª se cambia por la 2M o la 4J y la 7ª se conserva. `tonal` devuelve vacío para `G7sus2` o `Dm7sus4`, así que no se le pide el nombre. Cifrado sin calidad (Dm7 + sus4 = `D7sus4`) y `maj7` si la 7ª es mayor (`Cmaj7sus4`). Funciona igual sobre tonizaciones (`V/ii` → `A7sus4`).
+- ✓ **Qué admite sus** (`admiteSus`, puro): todo menos los acordes con 5ª disminuida: vii°, ii° en menor, el vii° de la armónica y el ii/x semidisminuido de un destino menor. Amplía el "todos salvo vii°" del brief con el mismo criterio: sin 3ª, una 5ª disminuida ya no suena a sus.
+- ✓ **`aplicarSus` puro** (poner, cambiar, quitar; casilla vacía o acorde que no lo admite quedan igual), cubierto por `verify:constructor`; los acordes, por `verify:acordes`.
+- Cifrado pendiente de confirmar con el profesor (D11): se le muestra en la próxima reunión.
+
 **67ª ola (2026-10-19): §4.1 círculo de tonalidades (pedido #29 selector):**
 - ✓ **`CirculoTonalidades` reemplaza a `ArmaduraSelector`** (borrado: quedó sin consumidores, junto con sus claves `armadura_label`, `sostenidos` y `bemoles`). Afuera las 12 mayores, adentro su relativa menor; un clic fija armadura y modo a la vez, y con acordes puestos pasa por la pregunta de modular (ola 64). En el centro, la tonalidad elegida y su armadura. Brief aprobado por el dueño: enarmónicas como F♯ (6♯), D♭ (5♭) y B (5♯).
 - ✓ **Botones HTML reales** (`<button aria-pressed>` con `aria-label` "E menor"), ubicados en % alrededor del centro: alcanzables con Tab y lector de pantalla, a diferencia del SVG de §1.8. La posición es el único estilo en línea (valor calculado en render, anti-checklist 14).

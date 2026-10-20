@@ -1,12 +1,14 @@
 import { create } from 'zustand';
 import {
   CASILLAS_POR_COMPAS,
+  aplicarSus,
   colocarSlot,
   crearGrid,
   type Compas,
   type GradoId,
   type Grid,
   type Modo,
+  type Sus,
 } from '../utils/progresionArmonica';
 
 export const BPM_MIN = 40;
@@ -28,6 +30,9 @@ interface ConstructorState {
   grid: Grid;
   /** El grado tocado en el banco, esperando una casilla. Null = nada armado. */
   gradoArmado: GradoId | null;
+  /** El sus tocado en el banco, esperando un acorde colocado. Excluye a
+   *  gradoArmado: armar uno desarma el otro. */
+  susArmado: Sus | null;
 
   setArmadura: (id: string) => void;
   setModo: (modo: Modo) => void;
@@ -38,6 +43,8 @@ interface ConstructorState {
   toggleMetronomo: () => void;
   toggleLoop: () => void;
   armarGrado: (id: GradoId | null) => void;
+  armarSus: (sus: Sus | null) => void;
+  suspenderEn: (slotIndex: number) => void;
   colocarEn: (slotIndex: number) => void;
   vaciarSlot: (slotIndex: number) => void;
   limpiarGrid: () => void;
@@ -54,6 +61,7 @@ export const useConstructorStore = create<ConstructorState>()((set) => ({
   loop: false,
   grid: crearGrid('4/4', COMPASES_DEFAULT),
   gradoArmado: null,
+  susArmado: null,
 
   // Armadura y modo son la tonalidad ACTIVA: la que recibe el próximo acorde.
   // Lo ya colocado conserva su tonalidad (modulación, reunión 19/10/26); la
@@ -81,7 +89,12 @@ export const useConstructorStore = create<ConstructorState>()((set) => ({
   toggleMetronomo: () => set((s) => ({ metronomo: !s.metronomo })),
   toggleLoop: () => set((s) => ({ loop: !s.loop })),
 
-  armarGrado: (gradoArmado) => set({ gradoArmado }),
+  armarGrado: (gradoArmado) => set({ gradoArmado, susArmado: null }),
+  armarSus: (susArmado) => set({ susArmado, gradoArmado: null }),
+
+  // Igual que colocar: el sus se consume al aplicarlo.
+  suspenderEn: (slotIndex) =>
+    set((s) => (s.susArmado ? { grid: aplicarSus(s.grid, slotIndex, s.susArmado), susArmado: null } : {})),
 
   // Colocar consume el grado armado: el gesto es tocar-grado → tocar-casilla, y
   // dejarlo armado invitaría a llenar la grilla del mismo acorde sin querer.
@@ -102,5 +115,5 @@ export const useConstructorStore = create<ConstructorState>()((set) => ({
       return { grid };
     }),
 
-  limpiarGrid: () => set((s) => ({ grid: crearGrid(s.compas, s.nCompases), gradoArmado: null })),
+  limpiarGrid: () => set((s) => ({ grid: crearGrid(s.compas, s.nCompases), gradoArmado: null, susArmado: null })),
 }));

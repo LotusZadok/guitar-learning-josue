@@ -8,7 +8,7 @@ import TransporteProgresion, { MedidaProgresion } from '../../../primitives/Tran
 import { useProgressionPlayback } from '../../../../hooks/useProgressionPlayback';
 import { useConstructorStore } from '../../../../stores/useConstructorStore';
 import { armaduraPorId, etiquetaTonalidad } from '../../../../utils/progresionAcordes';
-import { mismaTonalidad, type GradoId, type Tonalidad } from '../../../../utils/progresionArmonica';
+import { mismaTonalidad, type GradoId, type Sus, type Tonalidad } from '../../../../utils/progresionArmonica';
 import styles from './ConstructorProgresionesSection.module.css';
 
 // 4.1 · Constructor de progresiones. Sandbox puro: se arma y se oye. No evalúa,
@@ -62,8 +62,14 @@ export default function ConstructorProgresionesSection() {
     dialogoLimpiarRef.current?.showModal();
   };
 
-  const soltar = (slotIndex: number, id: GradoId) => {
-    s.armarGrado(id);
+  // Lo que se suelta puede ser un grado o una ficha sus ("sus:sus4").
+  const soltar = (slotIndex: number, dato: string) => {
+    if (dato.startsWith('sus:')) {
+      s.armarSus(dato.slice(4) as Sus);
+      s.suspenderEn(slotIndex);
+      return;
+    }
+    s.armarGrado(dato as GradoId);
     s.colocarEn(slotIndex);
   };
 
@@ -127,6 +133,12 @@ export default function ConstructorProgresionesSection() {
         onArmar={s.armarGrado}
         tonizacionesLabel={t('t4.s41.tonizaciones_rotulo')}
         menorArmonicaLabel={t('t4.s41.menor_armonica')}
+        sus={{
+          armado: s.susArmado,
+          onArmar: s.armarSus,
+          rotulo: t('t4.s41.modificadores'),
+          etiqueta: (sus) => t(`t4.s41.armar_${sus}`),
+        }}
       />
 
       <GrillaProgresion
@@ -136,6 +148,9 @@ export default function ConstructorProgresionesSection() {
         septimas={s.septimas}
         sonando={sonando}
         hayGradoArmado={s.gradoArmado !== null}
+        susArmado={s.susArmado}
+        onSuspender={s.suspenderEn}
+        etiquetaSuspender={(datos) => t('t4.s41.casilla_suspender', datos)}
         onColocar={s.colocarEn}
         onVaciar={s.vaciarSlot}
         onSoltar={soltar}

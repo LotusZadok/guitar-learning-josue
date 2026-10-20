@@ -22,6 +22,8 @@ import {
   puntosDeModulacion,
   gradosArmonicosDe,
   tonizacionesDeGrado,
+  admiteSus,
+  aplicarSus,
   type Grid,
   type Tonalidad,
   type Compas,
@@ -195,5 +197,23 @@ check('el vii° armónico es tenso', rolDe('menor', 'vii°'), 'tense');
 check('el V armónico se toniza', tonizacionesDeGrado('V'), ['V/V', 'ii/V']);
 check('el vii° no se toniza ("los disminuidos no tienen tonizaciones")', tonizacionesDeGrado('vii°'), []);
 check('los siete naturales de menor siguen igual', gradosDe('menor'), ['i', 'ii°', '♭III', 'iv', 'v', '♭VI', '♭VII']);
+
+console.log('\n— sus2 / sus4 sobre la grilla —');
+check('los acordes mayores y menores admiten sus', ['I', 'ii', 'V', 'vi'].map((g) => admiteSus('mayor', g as never)), [true, true, true, true]);
+check('el vii° no admite sus', admiteSus('mayor', 'vii°'), false);
+check('el ii° menor no admite sus', admiteSus('menor', 'ii°'), false);
+check('el vii° de la armónica no admite sus', admiteSus('menor', 'vii°'), false);
+check('el V de la armónica sí', admiteSus('menor', 'V'), true);
+check('V/x siempre admite sus', admiteSus('mayor', 'V/ii'), true);
+check('ii/x hacia un menor es semidisminuido: no', admiteSus('mayor', 'ii/vi'), false);
+check('ii/x hacia un mayor es menor: sí', admiteSus('mayor', 'ii/V'), true);
+const conV: Grid = [slot('V'), null];
+const susV = aplicarSus(conV, 0, 'sus4');
+check('aplicarSus pone el sus en la casilla', susV[0], { degree: 'V', tonalidad: DO, sus: 'sus4' });
+check('el mismo sus otra vez lo quita', aplicarSus(susV, 0, 'sus4')[0], { degree: 'V', tonalidad: DO });
+check('el otro sus lo reemplaza', aplicarSus(susV, 0, 'sus2')[0], { degree: 'V', tonalidad: DO, sus: 'sus2' });
+check('sobre una casilla vacía no hace nada', aplicarSus(conV, 1, 'sus4'), conV);
+check('sobre un acorde que no lo admite no hace nada', aplicarSus([slot('vii°')], 0, 'sus4'), [slot('vii°')]);
+check('aplicarSus no muta la grilla', conV[0], { degree: 'V', tonalidad: DO });
 
 resumen();

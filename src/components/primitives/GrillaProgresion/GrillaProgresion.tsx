@@ -4,11 +4,13 @@ import { acordeDeSlot, armaduraPorId, etiquetaTonalidad } from '../../../utils/p
 import {
   ACENTOS,
   CASILLAS_POR_COMPAS,
+  admiteSus,
   puntosDeModulacion,
   rolDe,
   type Compas,
   type GradoId,
   type Grid,
+  type Sus,
 } from '../../../utils/progresionArmonica';
 import styles from './GrillaProgresion.module.css';
 
@@ -22,6 +24,11 @@ interface Props {
   /** Si el banco tiene un grado armado. Decide qué hace tocar una casilla:
    *  con grado armado coloca, sin grado armado vacía la casilla ocupada. */
   hayGradoArmado: boolean;
+  /** Con un sus armado, tocar un acorde que lo admite lo suspende. */
+  susArmado: Sus | null;
+  onSuspender: (slotIndex: number) => void;
+  /** aria-label de una casilla suspendible; viene de la sección (i18n). */
+  etiquetaSuspender: (datos: { compas: number; pulso: number; acorde: string; sus: Sus }) => string;
   onColocar: (slotIndex: number) => void;
   onVaciar: (slotIndex: number) => void;
   onSoltar: (slotIndex: number, id: GradoId) => void;
@@ -35,7 +42,8 @@ interface Props {
 // ligadura que se extiende desde él: así la regla de relleno se ve antes de
 // oírse.
 export default function GrillaProgresion({
-  grid, compas, nCompases, septimas, sonando, hayGradoArmado, onColocar, onVaciar, onSoltar, etiquetaModulacion,
+  grid, compas, nCompases, septimas, sonando, hayGradoArmado, susArmado, onSuspender, etiquetaSuspender,
+  onColocar, onVaciar, onSoltar, etiquetaModulacion,
 }: Props) {
   const { t } = useTranslation();
   const porCompas = CASILLAS_POR_COMPAS[compas];
@@ -78,12 +86,17 @@ export default function GrillaProgresion({
               // ocupada se vacía y una vacía no hace nada. El estudiante
               // necesita anticipar esto — por eso alimenta tanto el aria-label
               // como el cursor (`data-accion`), no solo el handler.
-              const accion = hayGradoArmado ? (slot ? 'reemplazar' : 'colocar') : (slot ? 'vaciar' : 'ninguna');
+              const suspendible = slot !== null && admiteSus(slot.tonalidad.modo, slot.degree);
+              const accion = susArmado
+                ? (suspendible ? 'suspender' : 'ninguna')
+                : hayGradoArmado ? (slot ? 'reemplazar' : 'colocar') : (slot ? 'vaciar' : 'ninguna');
               const ariaAccion =
                 accion === 'colocar'
                   ? t('t4.s41.casilla_colocar', { compas: c + 1, pulso: p + 1 })
                   : accion === 'reemplazar'
                     ? t('t4.s41.casilla_reemplazar', { compas: c + 1, pulso: p + 1, acorde: acorde?.cifrado })
+                    : accion === 'suspender' && susArmado
+                      ? etiquetaSuspender({ compas: c + 1, pulso: p + 1, acorde: acorde?.cifrado ?? '', sus: susArmado })
                     : accion === 'vaciar'
                       ? t('t4.s41.casilla_vaciar', { compas: c + 1, pulso: p + 1, acorde: acorde?.cifrado })
                       : t('t4.s41.casilla_vacia', { compas: c + 1, pulso: p + 1 });
@@ -101,7 +114,9 @@ export default function GrillaProgresion({
                   data-accion={accion}
                   aria-label={ariaLabel}
                   onClick={() => {
-                    if (hayGradoArmado) onColocar(i);
+                    if (susArmado) {
+                      if (suspendible) onSuspender(i);
+                    } else if (hayGradoArmado) onColocar(i);
                     else if (slot) onVaciar(i);
                   }}
                   onContextMenu={(e) => { e.preventDefault(); onVaciar(i); }}

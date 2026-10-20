@@ -75,6 +75,33 @@ export function esGradoArmonico(modo: Modo, id: GradoId): boolean {
   return (gradosArmonicosDe(modo) as readonly string[]).includes(id);
 }
 
+// Un sus reemplaza la 3ª: sobre un acorde con 5ª disminuida (vii°, ii° en
+// menor, el ii/x semidisminuido de un destino menor) deja de sonar a sus, así
+// que esos no lo admiten (D11 del plan del 19/10: todos salvo los disminuidos).
+export function admiteSus(modo: Modo, id: GradoId): boolean {
+  if (id.startsWith('V/')) return true;
+  if (id.startsWith('ii/')) {
+    const destino = id.slice(3) as GradoDiatonico;
+    return calidadDeGrado(modo, destino) === 'M';
+  }
+  return calidadDeGrado(modo, id as GradoDiatonico) !== 'dim';
+}
+
+function calidadDeGrado(modo: Modo, grado: GradoDiatonico): Calidad {
+  if (esGradoArmonico(modo, grado)) return grado === 'V' ? 'M' : 'dim';
+  return calidadesDe(modo)[gradosDe(modo).indexOf(grado)];
+}
+
+// Tocar una casilla con un sus armado: lo pone, lo cambia por el otro o, si
+// ya tenía el mismo, lo quita. Casillas vacías o acordes que no lo admiten
+// quedan igual.
+export function aplicarSus(grid: Grid, indice: number, sus: Sus): Grid {
+  const slot = grid[indice];
+  if (!slot || !admiteSus(slot.tonalidad.modo, slot.degree)) return grid;
+  const { sus: actual, ...resto } = slot;
+  return colocarSlot(grid, indice, actual === sus ? resto : { ...resto, sus });
+}
+
 // "Cada uno con sus tonizaciones, excepto el disminuido."
 export function tonizacionesDeGrado(grado: GradoDiatonico): GradoId[] {
   return grado.endsWith('°') ? [] : [`V/${grado}`, `ii/${grado}`];
@@ -138,7 +165,10 @@ export interface Tonalidad {
   armaduraId: string;
   modo: Modo;
 }
-export type Slot = { degree: GradoId; tonalidad: Tonalidad } | null;
+// Reunión 19/10/26: sus2 / sus4 se aplican sobre un acorde ya colocado,
+// independientes de la séptima ("una cosa es la séptima y otra la tríada").
+export type Sus = 'sus2' | 'sus4';
+export type Slot = { degree: GradoId; tonalidad: Tonalidad; sus?: Sus } | null;
 export type Grid = Slot[];
 
 export function mismaTonalidad(a: Tonalidad, b: Tonalidad): boolean {

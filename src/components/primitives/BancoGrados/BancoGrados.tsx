@@ -11,6 +11,7 @@ import {
   esTonizable,
   type GradoId,
   type Modo,
+  type Sus,
 } from '../../../utils/progresionArmonica';
 import styles from './BancoGrados.module.css';
 
@@ -23,6 +24,13 @@ interface Props {
   /** Rótulos; vienen de la sección (i18n). */
   tonizacionesLabel: string;
   menorArmonicaLabel: string;
+  /** Fichas sus2 / sus4: se tocan y después el acorde colocado. */
+  sus: {
+    armado: Sus | null;
+    onArmar: (sus: Sus | null) => void;
+    rotulo: string;
+    etiqueta: (sus: Sus) => string;
+  };
 }
 
 // El banco: los 7 grados del modo activo. Cada grado tonizable expande sus dos
@@ -38,6 +46,7 @@ export default function BancoGrados({
   onArmar,
   tonizacionesLabel,
   menorArmonicaLabel,
+  sus,
 }: Props) {
   const { t } = useTranslation();
   const [abierto, setAbierto] = useState<number | null>(null);
@@ -130,6 +139,25 @@ export default function BancoGrados({
           <span className={styles.rotulo} aria-hidden="true">{menorArmonicaLabel}</span>
         </div>
       )}
+      <div className={styles.modificadores} role="group" aria-label={sus.rotulo}>
+        <div className={styles.armonicaGrados}>
+          {(['sus2', 'sus4'] as const).map((m) => (
+            <button
+              key={m}
+              type="button"
+              className={`${styles.chip} ${styles.chipSus}`}
+              aria-pressed={sus.armado === m}
+              aria-label={sus.etiqueta(m)}
+              draggable
+              onDragStart={(e) => e.dataTransfer.setData('text/plain', `sus:${m}`)}
+              onClick={() => sus.onArmar(sus.armado === m ? null : m)}
+            >
+              {m}
+            </button>
+          ))}
+        </div>
+        <span className={styles.rotulo} aria-hidden="true">{sus.rotulo}</span>
+      </div>
     </div>
   );
 }

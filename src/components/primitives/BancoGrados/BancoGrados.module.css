@@ -117,3 +117,16 @@
   display: flex;
   gap: 8px;
 }
+
+/* Modificadores (sus2 / sus4): no son grados, así que sin tinte de rol; el
+   cifrado en Plex Mono (minúsculas con significado). */
+.modificadores {
+  composes: armonica;
+}
+
+.chipSus {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: var(--paper);
+  min-height: 44px;
+}

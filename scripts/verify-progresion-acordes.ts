@@ -142,4 +142,23 @@ check('V/V en La menor (dominante del V)', enLa('V/V', true), 'B7');
 check('ii/V en La menor (el V es mayor: su ii es menor)', enLa('ii/V', true), 'F♯m7');
 check('el v natural no cambia', enLa('v', true), 'Em7');
 
+console.log('\n— sus2 y sus4 (reunión 19/10/26) —');
+const conSus = (g: GradoId, sept: boolean, sus: 'sus2' | 'sus4') =>
+  acordeDeGrado({ armadura: armaduraPorId('C'), modo: 'mayor', id: g, septimas: sept, sus });
+const notasDe = (a: { notas: { chromatic: string }[] }) => a.notas.map((n) => n.chromatic);
+check('V + sus4 + 7 en Do: G C D F', notasDe(conSus('V', true, 'sus4')), ['G', 'C', 'D', 'F']);
+check('V + sus4 + 7 se escribe G7sus4', conSus('V', true, 'sus4').cifrado, 'G7sus4');
+check('V + sus2 + 7 en Do: G A D F', notasDe(conSus('V', true, 'sus2')), ['G', 'A', 'D', 'F']);
+check('ii + sus4 + 7 no queda mudo: D G A C', notasDe(conSus('ii', true, 'sus4')), ['D', 'G', 'A', 'C']);
+check('sin tercera no hay calidad: Dm7 + sus4 = D7sus4', conSus('ii', true, 'sus4').cifrado, 'D7sus4');
+check('tríada Gsus2: G A D', notasDe(conSus('V', false, 'sus2')), ['G', 'A', 'D']);
+check('tríada Gsus2 se escribe Gsus2', conSus('V', false, 'sus2').cifrado, 'Gsus2');
+check('Imaj7 + sus4 = Cmaj7sus4 (conserva la 7M)', conSus('I', true, 'sus4').cifrado, 'Cmaj7sus4');
+check('Imaj7 + sus4 suena C F G B', notasDe(conSus('I', true, 'sus4')), ['C', 'F', 'G', 'B']);
+check(
+  'una tonización también: V/ii + sus4 = A7sus4',
+  conSus('V/ii', true, 'sus4').cifrado,
+  'A7sus4',
+);
+
 resumen();
