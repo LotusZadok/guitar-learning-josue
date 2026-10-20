@@ -86,3 +86,18 @@
 @media (prefers-reduced-motion: reduce) {
   .chip { transition: none; }
 }
+
+/* Columna del rótulo: la ficha fantasma solo aporta altura. */
+.fantasma {
+  visibility: hidden;
+}
+
+.rotulo {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 2px 0;
+  text-align: right;
+}

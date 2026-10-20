@@ -73,3 +73,9 @@
   .armadura,
   .tonalidad { transition: none; }
 }
+
+/* Séptimas: misma ficha que la tonalidad, separada para que no se lea como
+   una tercera tonalidad. */
+.septimas {
+  margin-left: 16px;
+}

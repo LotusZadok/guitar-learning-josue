@@ -460,6 +460,13 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
 
+**61ª ola (2026-10-19): §4.1 orden y controles del transporte (pedidos #30, #33, #35, #37, #40):**
+- ✓ **El compás manda primero.** `MedidaProgresion` (compás y cantidad de compases) salió de `TransporteProgresion` y abre la sección, antes de la armadura ("tengo que saber qué compás estoy"). `t4.s41.intro` describe el orden nuevo.
+- ✓ **Séptimas junto a la tonalidad** (#30): ficha en la fila de `ArmaduraSelector`, con la etiqueta por prop. Condicionado a la pregunta 10 de la minuta: si el profesor quiere solo la séptima arrastrable por acorde, este botón se quita.
+- ✓ **Repetir y Borrar como glifos** (#35, #37): signo de repetición `‖: :‖` y borrador, en un `IconButton` compartido nuevo que **compone** la piel y el tooltip de `PlaybackButton` (`composes: … from`), sin copiar CSS. Etiqueta en hover/focus y en `aria-label`; "Repetir" conserva `aria-pressed`. `common.reset` no se tocó (lo usan otros módulos): la clave nueva es `t4.s41.limpiar`.
+- ✓ **Rótulo "Tonizaciones" a la izquierda del banco** (#40), a la altura de los botones de tonizar gracias a una ficha fantasma (`visibility: hidden`) que copia la altura real.
+- Regla de primitivas (D13): ninguna clave `t4.s41.*` nueva dentro de las primitivas; las tres etiquetas nuevas llegan por props.
+
 **60ª ola (2026-10-19): gutter horizontal de §4.1 (D7 del plan, relacionado con el pedido #26):**
 - ✓ **El constructor deja de tocar el borde.** `ConstructorProgresionesSection` tenía `padding: 64px 0` y ningún breakpoint: era la única sección sin margen horizontal. Ahora `64px 60px`, y `36px 24px` bajo 900px, los mismos valores del chrome editorial. El pedido #26 sigue abierto (pregunta 8 de la minuta) por si el profesor vio otra página.
 

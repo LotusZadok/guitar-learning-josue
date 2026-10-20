@@ -1,0 +1,12 @@
+/* Misma piel que PlaybackButton: se compone, no se copia. */
+.btn {
+  composes: btn from '../PlaybackButton/PlaybackButton.module.css';
+}
+
+.active {
+  composes: active from '../PlaybackButton/PlaybackButton.module.css';
+}
+
+.tip {
+  composes: tip from '../PlaybackButton/PlaybackButton.module.css';
+}

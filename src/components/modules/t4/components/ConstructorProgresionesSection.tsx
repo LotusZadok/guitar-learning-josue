@@ -4,7 +4,7 @@ import SectionLabel from '../../../shared/SectionLabel';
 import ArmaduraSelector from '../../../primitives/ArmaduraSelector/ArmaduraSelector';
 import BancoGrados from '../../../primitives/BancoGrados/BancoGrados';
 import GrillaProgresion from '../../../primitives/GrillaProgresion/GrillaProgresion';
-import TransporteProgresion from '../../../primitives/TransporteProgresion/TransporteProgresion';
+import TransporteProgresion, { MedidaProgresion } from '../../../primitives/TransporteProgresion/TransporteProgresion';
 import { useProgressionPlayback } from '../../../../hooks/useProgressionPlayback';
 import { contarHuerfanas, useConstructorStore } from '../../../../stores/useConstructorStore';
 import { armaduraPorId } from '../../../../utils/progresionAcordes';
@@ -80,11 +80,19 @@ export default function ConstructorProgresionesSection() {
 
       <p className={styles.text}>{t('t4.s41.intro')}</p>
 
+      <MedidaProgresion
+        compas={s.compas}
+        nCompases={s.nCompases}
+        onCompas={s.setCompas}
+        onNCompases={s.setNCompases}
+      />
+
       <ArmaduraSelector
         armaduraId={s.armaduraId}
         modo={s.modo}
         onArmadura={s.setArmadura}
         onModo={pedirModo}
+        septimas={{ activas: s.septimas, etiqueta: t('t4.s41.septimas'), onToggle: s.toggleSeptimas }}
       />
 
       {modoPendiente && (
@@ -113,6 +121,7 @@ export default function ConstructorProgresionesSection() {
         septimas={s.septimas}
         gradoArmado={s.gradoArmado}
         onArmar={s.armarGrado}
+        tonizacionesLabel={t('t4.s41.tonizaciones_rotulo')}
       />
 
       <GrillaProgresion
@@ -130,22 +139,17 @@ export default function ConstructorProgresionesSection() {
       />
 
       <TransporteProgresion
-        compas={s.compas}
-        nCompases={s.nCompases}
         bpm={s.bpm}
-        septimas={s.septimas}
         metronomo={s.metronomo}
         loop={s.loop}
         reproduciendo={reproduciendo}
-        onCompas={s.setCompas}
-        onNCompases={s.setNCompases}
         onBpm={s.setBpm}
-        onSeptimas={s.toggleSeptimas}
         onMetronomo={s.toggleMetronomo}
         onLoop={s.toggleLoop}
         onPlay={play}
         onStop={stop}
         onLimpiar={pedirLimpiar}
+        limpiarLabel={t('t4.s41.limpiar')}
       />
 
       {confirmarLimpiar && (

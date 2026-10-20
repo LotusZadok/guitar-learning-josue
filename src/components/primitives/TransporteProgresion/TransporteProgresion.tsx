@@ -1,25 +1,29 @@
 import { useTranslation } from 'react-i18next';
 import { COMPASES, MUNDO_POR_COMPAS, type Compas } from '../../../utils/progresionArmonica';
 import { BPM_MAX, BPM_MIN, COMPASES_MAX, COMPASES_MIN } from '../../../stores/useConstructorStore';
+import IconButton from '../../shared/IconButton/IconButton';
 import styles from './TransporteProgresion.module.css';
 
 interface Props {
-  compas: Compas;
-  nCompases: number;
   bpm: number;
-  septimas: boolean;
   metronomo: boolean;
   loop: boolean;
   reproduciendo: boolean;
-  onCompas: (c: Compas) => void;
-  onNCompases: (n: number) => void;
   onBpm: (n: number) => void;
-  onSeptimas: () => void;
   onMetronomo: () => void;
   onLoop: () => void;
   onPlay: () => void;
   onStop: () => void;
   onLimpiar: () => void;
+  /** Etiqueta del borrador; viene de la sección (i18n). */
+  limpiarLabel: string;
+}
+
+interface MedidaProps {
+  compas: Compas;
+  nCompases: number;
+  onCompas: (c: Compas) => void;
+  onNCompases: (n: number) => void;
 }
 
 // Tortuga y conejo: los extremos del slider, como pidió el profesor. SVG lineal
@@ -55,7 +59,38 @@ function Conejo() {
   );
 }
 
-export default function TransporteProgresion(p: Props) {
+// Signo de repetición de la partitura (‖: :‖): barra gruesa, barra fina y
+// los dos puntos, a cada lado.
+function SignoRepeticion() {
+  return (
+    <svg viewBox="0 0 28 20" className={styles.glifo} aria-hidden="true" focusable="false">
+      <rect x="1" y="2" width="3" height="16" />
+      <rect x="6" y="2" width="1" height="16" />
+      <circle cx="10" cy="7.5" r="1.4" />
+      <circle cx="10" cy="12.5" r="1.4" />
+      <circle cx="18" cy="7.5" r="1.4" />
+      <circle cx="18" cy="12.5" r="1.4" />
+      <rect x="21" y="2" width="1" height="16" />
+      <rect x="24" y="2" width="3" height="16" />
+    </svg>
+  );
+}
+
+// Borrador: cuerpo inclinado con su punta, y la línea que deja al borrar.
+function Borrador() {
+  return (
+    <svg viewBox="0 0 24 20" className={styles.glifoLinea} aria-hidden="true" focusable="false">
+      <path d="M9 17 L3 11 L12 2 L20 10 L13 17 Z" />
+      <path d="M7.5 6.5 L15.5 14.5" />
+      <path d="M13 17 H22" />
+    </svg>
+  );
+}
+
+// Reunión 19/10/26: "antes de yo pensar acordes y todo eso, tengo que saber
+// qué compás estoy". El compás y la cantidad de compases van al principio de
+// la sección, separados del transporte.
+export function MedidaProgresion(p: MedidaProps) {
   const { t } = useTranslation();
 
   return (
@@ -89,7 +124,15 @@ export default function TransporteProgresion(p: Props) {
           onChange={(e) => p.onNCompases(Number(e.target.value))}
         />
       </fieldset>
+    </div>
+  );
+}
 
+export default function TransporteProgresion(p: Props) {
+  const { t } = useTranslation();
+
+  return (
+    <div className={styles.wrap}>
       <fieldset className={styles.grupo}>
         <legend className={styles.legend}>{t('t4.s41.velocidad_label')}</legend>
         <div className={styles.slider}>
@@ -122,18 +165,15 @@ export default function TransporteProgresion(p: Props) {
         >
           {p.reproduciendo ? t('common.stop') : t('common.play')}
         </button>
-        <button type="button" className={styles.chip} aria-pressed={p.septimas} onClick={p.onSeptimas}>
-          {t('t4.s41.septimas')}
-        </button>
         <button type="button" className={styles.chip} aria-pressed={p.metronomo} onClick={p.onMetronomo}>
           {t('t4.s41.metronomo')}
         </button>
-        <button type="button" className={styles.chip} aria-pressed={p.loop} onClick={p.onLoop}>
-          {t('t4.s41.loop')}
-        </button>
-        <button type="button" className={styles.chip} onClick={p.onLimpiar}>
-          {t('common.reset')}
-        </button>
+        <IconButton label={t('t4.s41.loop')} pressed={p.loop} onClick={p.onLoop}>
+          <SignoRepeticion />
+        </IconButton>
+        <IconButton label={p.limpiarLabel} onClick={p.onLimpiar}>
+          <Borrador />
+        </IconButton>
       </div>
     </div>
   );

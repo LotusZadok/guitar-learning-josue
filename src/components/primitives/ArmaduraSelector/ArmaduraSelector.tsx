@@ -8,6 +8,9 @@ interface Props {
   modo: Modo;
   onArmadura: (id: string) => void;
   onModo: (modo: Modo) => void;
+  /** Reunión 19/10/26: el botón de séptimas va junto a la elección de
+   *  tonalidad. La etiqueta viene de la sección (i18n). */
+  septimas: { activas: boolean; etiqueta: string; onToggle: () => void };
 }
 
 function etiquetaArmadura(alteraciones: number, tipo: 'sostenido' | 'bemol'): string {
@@ -18,7 +21,7 @@ function etiquetaArmadura(alteraciones: number, tipo: 'sostenido' | 'bemol'): st
 // Escenario 1 del profesor: primero la armadura, después cuál de las dos
 // tonalidades que la comparten. A y F♯m tienen la misma armadura; elegir una
 // determina los grados que se despliegan abajo.
-export default function ArmaduraSelector({ armaduraId, modo, onArmadura, onModo }: Props) {
+export default function ArmaduraSelector({ armaduraId, modo, onArmadura, onModo, septimas }: Props) {
   const { t } = useTranslation();
   const activa = armaduraPorId(armaduraId);
   const sostenidos = ARMADURAS.filter((a) => a.tipo === 'sostenido');
@@ -72,6 +75,14 @@ export default function ArmaduraSelector({ armaduraId, modo, onArmadura, onModo 
               {etiquetaTonalidad(activa, m)}
             </button>
           ))}
+          <button
+            type="button"
+            className={`${styles.tonalidad} ${styles.septimas}`}
+            aria-pressed={septimas.activas}
+            onClick={septimas.onToggle}
+          >
+            {septimas.etiqueta}
+          </button>
         </div>
       </fieldset>
     </div>
