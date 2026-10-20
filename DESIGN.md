@@ -460,6 +460,11 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
 
+**63ª ola (2026-10-19): §4.1 confirmar el borrado en una ventana (pedido #38, D2 del plan):**
+- ✓ **`<dialog>` con `showModal()`** en lugar del aviso en línea: centrado sobre la página atenuada (`::backdrop` con `--bg` al 75%, sin negro puro), foco inicial en "Borrar", Esc cancela y el resto de la página queda inerte. El profesor no vio el aviso anterior y borró igual ("lo preguntó ya después de que la borré").
+- ✓ **Supera la decisión de la 44ª ola "cada aviso de confirmación vive junto a su disparador".** Aquella corregía que el aviso quedaba fuera de vista; la ventana modal lo resuelve igual y además bloquea el resto. El aviso de cambio de modo sigue en línea hasta la ola de modulación.
+- Trampa medida: el reset global pone `margin: 0` en todo y el `<dialog>` perdía su centrado nativo (abría en la esquina). `.dialogo` lleva `margin: auto`.
+
 **62ª ola (2026-10-19): §4.1 Tocar como play/pausa (pedido #39):**
 - ✓ **Play ▶ / pausa ‖ en un `IconButton`** (que ganó `playing`: ámbar solo mientras suena). La pausa guarda la casilla del reloj de audio; Play reanuda desde ahí con `eventosDesde` (el acorde en curso suena lo que le quedaba) y `clicksDesde` (el metrónomo sigue alineado), ambos puros y cubiertos por `verify:constructor`. El cabezal sigue en tiempo absoluto: `t0` se corre hacia atrás lo ya tocado. Cambiar la grilla, el tempo o la tonalidad en pausa la descarta.
 - ✓ **Claves huérfanas podadas:** `common.play`, `common.stop` y `common.reset` quedaron sin consumidor tras las olas 61 y 62 y se borraron de es/de. Las etiquetas nuevas (`t4.s41.reproducir`/`reanudar`/`pausar`) llegan por props.

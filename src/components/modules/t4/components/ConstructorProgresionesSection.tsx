@@ -19,7 +19,7 @@ export default function ConstructorProgresionesSection() {
   const s = useConstructorStore();
   const armadura = armaduraPorId(s.armaduraId);
   const [modoPendiente, setModoPendiente] = useState<Modo | null>(null);
-  const [confirmarLimpiar, setConfirmarLimpiar] = useState(false);
+  const dialogoLimpiarRef = useRef<HTMLDialogElement>(null);
 
   const { reproduciendo, pausado, sonando, play, pause } = useProgressionPlayback({
     grid: s.grid,
@@ -43,18 +43,17 @@ export default function ConstructorProgresionesSection() {
       s.setModo(modo);
       return;
     }
-    // Solo un aviso a la vez: si "limpiar" ya estaba pidiendo confirmación,
-    // esta acción lo reemplaza en vez de apilarse encima.
-    setConfirmarLimpiar(false);
     setModoPendiente(modo);
   };
 
   // Limpiar no tiene deshacer ni persistencia: un click accidental borra el
-  // trabajo. Solo se pregunta si hay algo que perder.
+  // trabajo. Solo se pregunta si hay algo que perder. Reunión 19/10/26: la
+  // pregunta va en una ventana encima de todo (el profesor no la vio y borró
+  // igual). `showModal()` trae foco, Esc y fondo bloqueado nativos.
   const pedirLimpiar = () => {
     if (!hayContenido) return;
     setModoPendiente(null);
-    setConfirmarLimpiar(true);
+    dialogoLimpiarRef.current?.showModal();
   };
 
   const soltar = (slotIndex: number, id: GradoId) => {
@@ -65,13 +64,9 @@ export default function ConstructorProgresionesSection() {
   // Un alertdialog que no recibe foco es invisible para un lector de
   // pantalla: al aparecer, el foco se mueve a su primera acción.
   const primeraAccionModoRef = useRef<HTMLButtonElement>(null);
-  const primeraAccionLimpiarRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     if (modoPendiente) primeraAccionModoRef.current?.focus();
   }, [modoPendiente]);
-  useEffect(() => {
-    if (confirmarLimpiar) primeraAccionLimpiarRef.current?.focus();
-  }, [confirmarLimpiar]);
 
   return (
     <section id="s-t4-constructor" className={styles.section}>
@@ -156,23 +151,17 @@ export default function ConstructorProgresionesSection() {
         }}
       />
 
-      {confirmarLimpiar && (
-        <div className={styles.aviso} role="alertdialog" aria-labelledby="aviso-limpiar">
-          <p id="aviso-limpiar" className={styles.text}>{t('t4.s41.aviso_limpiar')}</p>
-          <div className={styles.avisoAcciones}>
-            <button
-              ref={primeraAccionLimpiarRef}
-              type="button"
-              onClick={() => { s.limpiarGrid(); setConfirmarLimpiar(false); }}
-            >
-              {t('t4.s41.aviso_limpiar_si')}
-            </button>
-            <button type="button" onClick={() => setConfirmarLimpiar(false)}>
-              {t('t4.s41.aviso_cancelar')}
-            </button>
-          </div>
-        </div>
-      )}
+      <dialog ref={dialogoLimpiarRef} className={styles.dialogo} aria-labelledby="aviso-limpiar">
+        <p id="aviso-limpiar" className={styles.text}>{t('t4.s41.aviso_limpiar')}</p>
+        <form method="dialog" className={styles.avisoAcciones}>
+          <button type="submit" value="borrar" onClick={() => s.limpiarGrid()}>
+            {t('t4.s41.aviso_limpiar_si')}
+          </button>
+          <button type="submit" value="cancelar">
+            {t('t4.s41.aviso_cancelar')}
+          </button>
+        </form>
+      </dialog>
 
       <p className={styles.text}>{t('t4.s41.explain')}</p>
     </section>

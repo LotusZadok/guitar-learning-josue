@@ -46,3 +46,26 @@
 
 .avisoAcciones button:hover { border-color: var(--paper); }
 .avisoAcciones button:focus-visible { outline: 2px solid var(--paper); outline-offset: 2px; }
+
+/* Ventana de confirmación encima de todo (<dialog> + showModal). Misma piel
+   que el aviso en línea; el fondo atenúa la página sin negro puro. */
+.dialogo {
+  /* El reset global pone margin: 0 en todo y le quita al <dialog> su
+     centrado nativo. */
+  margin: auto;
+  padding: 20px;
+  border: 1px solid var(--rule);
+  background: var(--surface);
+  color: var(--text-body);
+  max-width: min(68ch, calc(100vw - 32px));
+}
+
+.dialogo[open] {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dialogo::backdrop {
+  background: color-mix(in srgb, var(--bg) 75%, transparent);
+}
