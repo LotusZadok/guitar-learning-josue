@@ -126,7 +126,7 @@
 .caracterTable tr[data-harmonic="mediumTense"] .romanCell,
 .caracterTable tr[data-harmonic="mediumTense"] .caracterCell { color: var(--diatonic-medium-tense); }
 .caracterTable tr[data-harmonic="tense"]       .romanCell,
-.caracterTable tr[data-harmonic="tense"]       .caracterCell { color: var(--diatonic-tense); }
+.caracterTable tr[data-harmonic="tense"]       .caracterCell { color: var(--diatonic-tense-text); }
 
 @media (max-width: 900px) {
   .caracterTable th,

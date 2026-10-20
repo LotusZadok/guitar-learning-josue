@@ -44,6 +44,11 @@
   --diatonic-medium: #f5900a;   /* naranja ámbar    */
   --diatonic-medium-tense: #a259d4; /* púrpura — IV grado (reunión 24/5/26) */
   --diatonic-tense:  var(--red); /* alias del acento de marca */
+  /* D15 (plan del 19/10): el rojo de marca da 3.55:1 sobre el fondo oscuro.
+     Para TEXTO tenso (romanos, cifrados, números de grado) se usa este rojo
+     más claro: 5.64:1 sobre --bg y 5.24:1 sobre el tinte del 12%. Fondos y
+     rellenos siguen en --diatonic-tense. */
+  --diatonic-tense-text: #e0645a;
 
   --fret-bg: #110e06;
   --fret-wire: #3a2e18;
@@ -87,6 +92,7 @@
   --diatonic-stable: #167040;  /* verde oscuro bosque    */
   --diatonic-medium: #8c4800;  /* naranja quemado oscuro */
   --diatonic-medium-tense: #6a2d8f; /* púrpura oscuro para light theme */
+  --diatonic-tense-text: var(--diatonic-tense); /* el rojo de marca ya da 4.79:1 sobre crema */
 }
 
 html { scroll-behavior: smooth; }

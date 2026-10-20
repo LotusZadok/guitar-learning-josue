@@ -216,7 +216,7 @@
 .chordCellActive[data-harmonic="stable"]      .chordSymbol { color: var(--diatonic-stable); }
 .chordCellActive[data-harmonic="medium"]      .chordSymbol { color: var(--diatonic-medium); }
 .chordCellActive[data-harmonic="mediumTense"] .chordSymbol { color: var(--diatonic-medium-tense); }
-.chordCellActive[data-harmonic="tense"]       .chordSymbol { color: var(--diatonic-tense); }
+.chordCellActive[data-harmonic="tense"]       .chordSymbol { color: var(--diatonic-tense-text); }
 
 @media (prefers-reduced-motion: reduce) {
   .revealRow,

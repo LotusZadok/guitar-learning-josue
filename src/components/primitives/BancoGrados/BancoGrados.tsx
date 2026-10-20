@@ -3,9 +3,11 @@ import { useTranslation } from 'react-i18next';
 import RomanGlyph from '../../shared/RomanGlyph/RomanGlyph';
 import { acordeDeGrado, type Armadura } from '../../../utils/progresionAcordes';
 import {
+  gradosArmonicosDe,
   gradosDe,
   rolDe,
   tonizacionesDe,
+  tonizacionesDeGrado,
   esTonizable,
   type GradoId,
   type Modo,
@@ -18,8 +20,9 @@ interface Props {
   septimas: boolean;
   gradoArmado: GradoId | null;
   onArmar: (id: GradoId | null) => void;
-  /** Rótulo de la fila de tonizaciones; viene de la sección (i18n). */
+  /** Rótulos; vienen de la sección (i18n). */
   tonizacionesLabel: string;
+  menorArmonicaLabel: string;
 }
 
 // El banco: los 7 grados del modo activo. Cada grado tonizable expande sus dos
@@ -34,10 +37,12 @@ export default function BancoGrados({
   gradoArmado,
   onArmar,
   tonizacionesLabel,
+  menorArmonicaLabel,
 }: Props) {
   const { t } = useTranslation();
   const [abierto, setAbierto] = useState<number | null>(null);
   const grados = gradosDe(modo);
+  const armonicos = gradosArmonicosDe(modo);
 
   const chip = (id: GradoId, extra?: string) => {
     const acorde = acordeDeGrado({ armadura, modo, id, septimas });
@@ -93,6 +98,38 @@ export default function BancoGrados({
           )}
         </div>
       ))}
+      {armonicos.length > 0 && (
+        <div className={styles.armonica} role="group" aria-label={menorArmonicaLabel}>
+          <div className={styles.armonicaGrados}>
+            {armonicos.map((g, k) => {
+              const clave = grados.length + k;
+              const tonizaciones = tonizacionesDeGrado(g);
+              return (
+                <div key={g} className={styles.columna}>
+                  {chip(g)}
+                  {tonizaciones.length > 0 && (
+                    <>
+                      <button
+                        type="button"
+                        className={styles.expandir}
+                        aria-expanded={abierto === clave}
+                        aria-controls={`toniz-${clave}`}
+                        onClick={() => setAbierto(abierto === clave ? null : clave)}
+                      >
+                        {t('t4.s41.tonizaciones')}
+                      </button>
+                      <div id={`toniz-${clave}`} className={styles.tonizaciones} hidden={abierto !== clave}>
+                        {tonizaciones.map((id) => chip(id, styles.chipToniz))}
+                      </div>
+                    </>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+          <span className={styles.rotulo} aria-hidden="true">{menorArmonicaLabel}</span>
+        </div>
+      )}
     </div>
   );
 }

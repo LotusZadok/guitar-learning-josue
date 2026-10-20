@@ -20,6 +20,8 @@ import {
   eventosDesde,
   colocarSlot,
   puntosDeModulacion,
+  gradosArmonicosDe,
+  tonizacionesDeGrado,
   type Grid,
   type Tonalidad,
   type Compas,
@@ -184,5 +186,14 @@ check(
 );
 check('sin modulación hay un solo tramo', puntosDeModulacion([slot('I'), slot('V')]).length, 1);
 check('grilla vacía: sin tramos', puntosDeModulacion(vacia), []);
+
+console.log('\n— Grados de la menor armónica (reunión 19/10/26) —');
+check('en menor se desbloquean V y vii°', gradosArmonicosDe('menor'), ['V', 'vii°']);
+check('en mayor no hay grados extra', gradosArmonicosDe('mayor'), []);
+check('el V armónico es tenso', rolDe('menor', 'V'), 'tense');
+check('el vii° armónico es tenso', rolDe('menor', 'vii°'), 'tense');
+check('el V armónico se toniza', tonizacionesDeGrado('V'), ['V/V', 'ii/V']);
+check('el vii° no se toniza ("los disminuidos no tienen tonizaciones")', tonizacionesDeGrado('vii°'), []);
+check('los siete naturales de menor siguen igual', gradosDe('menor'), ['i', 'ii°', '♭III', 'iv', 'v', '♭VI', '♭VII']);
 
 resumen();

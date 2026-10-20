@@ -127,4 +127,19 @@ check('el I colocado en Do sigue siendo C aunque después se module', acordeDeSl
 check('el I colocado en Sol es G', acordeDeSlot(iEnSol, false).cifrado, 'G');
 check('el V7 en Sol con séptimas', acordeDeSlot({ degree: 'V', tonalidad: iEnSol.tonalidad }, true).cifrado, 'D7');
 
+console.log('\n— Banco menor: V y vii° de la menor armónica (reunión 19/10/26) —');
+const enLa = (g: GradoId, sept: boolean) => cif('C', 'menor', g, sept);
+check('V en La menor', enLa('V', false), 'E');
+check('V7 en La menor', enLa('V', true), 'E7');
+check('vii° en La menor', enLa('vii°', false), 'G♯dim');
+check('vii°7 en La menor (disminuido completo)', enLa('vii°', true), 'G♯dim7');
+check(
+  'el V7 lleva la sensible elevada',
+  acordeDeGrado({ armadura: armaduraPorId('C'), modo: 'menor', id: 'V', septimas: true }).notas.map((n) => n.chromatic),
+  ['E', 'G#', 'B', 'D'],
+);
+check('V/V en La menor (dominante del V)', enLa('V/V', true), 'B7');
+check('ii/V en La menor (el V es mayor: su ii es menor)', enLa('ii/V', true), 'F♯m7');
+check('el v natural no cambia', enLa('v', true), 'Em7');
+
 resumen();

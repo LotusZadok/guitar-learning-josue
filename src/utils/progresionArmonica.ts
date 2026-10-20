@@ -61,6 +61,25 @@ export function gradosDe(modo: Modo): readonly GradoDiatonico[] {
   return modo === 'mayor' ? GRADOS_MAYOR : GRADOS_MENOR;
 }
 
+// Reunión 19/10/26: al elegir una tonalidad menor "se desbloquean dos acordes:
+// el quinto mayor y el séptimo disminuido", importados de la menor armónica
+// para que la menor tenga dominante. Van además de los siete naturales (el v
+// menor natural sigue disponible). El III+ queda fuera (D4 del plan).
+const GRADOS_MENOR_ARMONICA = ['V', 'vii°'] as const;
+
+export function gradosArmonicosDe(modo: Modo): readonly GradoDiatonico[] {
+  return modo === 'menor' ? GRADOS_MENOR_ARMONICA : [];
+}
+
+export function esGradoArmonico(modo: Modo, id: GradoId): boolean {
+  return (gradosArmonicosDe(modo) as readonly string[]).includes(id);
+}
+
+// "Cada uno con sus tonizaciones, excepto el disminuido."
+export function tonizacionesDeGrado(grado: GradoDiatonico): GradoId[] {
+  return grado.endsWith('°') ? [] : [`V/${grado}`, `ii/${grado}`];
+}
+
 export type Calidad = 'M' | 'm' | 'dim';
 
 // Mismas tablas que GradosArmonicos (QUALITIES / QUALITIES_MINOR).
@@ -107,6 +126,7 @@ export function tonizacionesDe(modo: Modo, indice: number): GradoId[] {
 export function rolDe(modo: Modo, id: GradoId): RolArmonico {
   if (id.startsWith('V/')) return 'tense';
   if (id.startsWith('ii/')) return 'medium';
+  if (esGradoArmonico(modo, id)) return 'tense';
   const i = gradosDe(modo).indexOf(id as GradoDiatonico);
   return ROL_POR_INDICE[i];
 }

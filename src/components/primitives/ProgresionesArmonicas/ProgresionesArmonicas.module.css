@@ -162,7 +162,7 @@
 .chordPairBtn[data-harmonic="tense"]       .chordSymbol,
 .chordPairBtn[data-harmonic="tense"]       .romanMajor,
 .chordPairBtn[data-harmonic="tense"]       .romanMinor,
-.chordPairBtn[data-harmonic="tense"]       .romanDim { color: var(--diatonic-tense); }
+.chordPairBtn[data-harmonic="tense"]       .romanDim { color: var(--diatonic-tense-text); }
 
 .chordSymbol {
   font-family: 'IBM Plex Mono', monospace;

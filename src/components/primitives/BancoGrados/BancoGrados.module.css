@@ -101,3 +101,19 @@
   padding: 2px 0;
   text-align: right;
 }
+
+/* Grados de la menor armónica (solo en menor): un grupo aparte, separado por
+   un filete, con su rótulo debajo. Son préstamos, no grados naturales. */
+.armonica {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: 12px;
+  margin-left: 4px;
+  border-left: 1px solid var(--rule);
+}
+
+.armonicaGrados {
+  display: flex;
+  gap: 8px;
+}

@@ -161,6 +161,7 @@
       "tonalidad_label": "Tonalidad",
       "tonizaciones": "Tonizar",
       "tonizaciones_rotulo": "Tonizaciones",
+      "menor_armonica": "De la menor armónica",
       "armar_grado": "Grado {{grado}}, acorde {{acorde}}",
       "casilla_vacia": "Compás {{compas}}, pulso {{pulso}}, vacío",
       "casilla_colocar": "Compás {{compas}}, pulso {{pulso}}, vacío. Colocar acá",

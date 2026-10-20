@@ -125,7 +125,7 @@
 }
 
 .gradeNumberTense {
-  fill: var(--diatonic-tense);
+  fill: var(--diatonic-tense-text);
 }
 
 @media (max-width: 900px) {

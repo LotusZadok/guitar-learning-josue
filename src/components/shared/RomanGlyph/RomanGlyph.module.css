@@ -42,4 +42,4 @@
 
 .romanMajor[data-harmonic='tense'],
 .romanMinor[data-harmonic='tense'],
-.romanDim[data-harmonic='tense'] { color: var(--diatonic-tense); }
+.romanDim[data-harmonic='tense'] { color: var(--diatonic-tense-text); }

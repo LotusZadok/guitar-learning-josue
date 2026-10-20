@@ -163,6 +163,7 @@
       "tonalidad_label": "Tonart",
       "tonizaciones": "Tonikalisieren",
       "tonizaciones_rotulo": "Tonikalisierungen",
+      "menor_armonica": "Aus harmonisch Moll",
       "armar_grado": "Stufe {{grado}}, Akkord {{acorde}}",
       "casilla_vacia": "Takt {{compas}}, Schlag {{pulso}}, leer",
       "casilla_colocar": "Takt {{compas}}, Schlag {{pulso}}, leer. Hier setzen",

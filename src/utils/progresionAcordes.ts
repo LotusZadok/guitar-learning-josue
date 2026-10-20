@@ -4,6 +4,7 @@ import { Note, Chord } from 'tonal';
 // --experimental-strip-types. `allowImportingTsExtensions` ya está activo en
 // tsconfig.app.json y Vite las resuelve sin problema.
 import {
+  harmonicMinorScaleSpelled,
   majorScaleSpelled,
   relativeMinorScaleSpelled,
   spelledSequenceAscending,
@@ -11,6 +12,7 @@ import {
 import type { ChromaticNote, Tonic } from '../types/music';
 import {
   calidadesDe,
+  esGradoArmonico,
   gradosDe,
   rolDe,
   type Calidad,
@@ -100,6 +102,17 @@ function raicesDe(armadura: Armadura, modo: Modo): string[] {
   return escala.map(ASCII);
 }
 
+// Raíz (ASCII) y calidad de un grado del banco. En menor, V y vii° salen de
+// la menor armónica: la sensible subida los vuelve mayor y disminuido.
+function raizDeGrado(armadura: Armadura, modo: Modo, grado: GradoDiatonico): { raiz: string; calidad: Calidad } {
+  if (esGradoArmonico(modo, grado)) {
+    const escala = harmonicMinorScaleSpelled(armadura.mayor).map(ASCII);
+    return grado === 'V' ? { raiz: escala[4], calidad: 'M' } : { raiz: escala[6], calidad: 'dim' };
+  }
+  const i = gradosDe(modo).indexOf(grado);
+  return { raiz: raicesDe(armadura, modo)[i], calidad: calidadesDe(modo)[i] };
+}
+
 export function acordeDeGrado({
   armadura,
   modo,
@@ -119,8 +132,7 @@ export function acordeDeGrado({
 
   if (id.includes('/')) {
     const [funcion, destino] = id.split('/') as ['V' | 'ii', GradoDiatonico];
-    const j = grados.indexOf(destino);
-    const raizDestino = raices[j];
+    const { raiz: raizDestino, calidad: calidadDestino } = raizDeGrado(armadura, modo, destino);
 
     if (funcion === 'V') {
       // El V de x: quinta justa sobre la raíz de x. SIEMPRE dominante con
@@ -132,8 +144,13 @@ export function acordeDeGrado({
       // menor (m7); si x es menor su ii es semidisminuido (m7♭5). Son los dos
       // escenarios de §3.8.
       const raiz = ASCII(Note.transpose(raizDestino, '2M'));
-      nombre = raiz + sufijo(calidades[j] === 'm' ? 'dim' : 'm', septimas);
+      nombre = raiz + sufijo(calidadDestino === 'm' ? 'dim' : 'm', septimas);
     }
+  } else if (esGradoArmonico(modo, id)) {
+    // V y vii° de la menor armónica: con séptimas son el dominante 7 y el
+    // disminuido completo (dim7), no el semidisminuido.
+    const { raiz, calidad } = raizDeGrado(armadura, modo, id as GradoDiatonico);
+    nombre = calidad === 'M' ? raiz + (septimas ? '7' : '') : raiz + (septimas ? 'dim7' : 'dim');
   } else {
     const i = grados.indexOf(id as GradoDiatonico);
     const raiz = raices[i];

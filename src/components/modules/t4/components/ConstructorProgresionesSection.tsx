@@ -123,6 +123,7 @@ export default function ConstructorProgresionesSection() {
         gradoArmado={s.gradoArmado}
         onArmar={s.armarGrado}
         tonizacionesLabel={t('t4.s41.tonizaciones_rotulo')}
+        menorArmonicaLabel={t('t4.s41.menor_armonica')}
       />
 
       <GrillaProgresion

@@ -58,7 +58,7 @@
 
 .card[data-role='stable'] .roman { color: var(--diatonic-stable); }
 .card[data-role='medium'] .roman { color: var(--diatonic-medium); }
-.card[data-role='tense']  .roman { color: var(--diatonic-tense); font-weight: 700; }
+.card[data-role='tense']  .roman { color: var(--diatonic-tense-text); font-weight: 700; }
 
 .card[data-role].cardActive {
   border-color: var(--amber);
