@@ -460,6 +460,10 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
 
+**58ª ola (2026-10-19): §3.1.2 menor Maj7 y título de §3.5 (pedidos #7, #6):**
+- ✓ **Cuarto acorde con séptima: menor Maj7** (`T + 3m + 5J + 7M`, cifrado `mMaj7` en Plex Mono, D10 del plan del 19/10). Fila en la tabla, pila en `ChordStacks` (a 390 px quedan 2×2) y camino `3m → 5 → 7M` en `BUILDER_312` (la arista ya existía). Textos de §3.1.2 pasan de "los tres" a "los cuatro". `verify:t3` cubre la unicidad de caminos y el deletreo en C, G y B♭.
+- ✓ **§3.5 se llama "Grados armónicos con séptima"** (etiqueta y título, es/de). El número no cambia hasta la reestructura (ola 19 del plan).
+
 **57ª ola (2026-10-19): §3.6.2 Bloque/Arpegio e intervalos por voz (pedidos #12, #16):**
 - ✓ **Los botones de siempre.** El botón de texto `G7 → C` pasó a los dos `PlaybackButton` (bloque y arpegio) con el cifrado como rótulo al lado. La reproducción usa `useChordPlayer` (antes, `setTimeout` sin limpiar) y marca en ámbar la nota que suena: todo el acorde en bloque, nota por nota en arpegio.
 - ✓ **Etiqueta de intervalo sobre cada voz del acorde de origen** (T · 3M · 5J · 7m en el V7; T · 3m · 5d · 7m en el vii°), en Plex Mono `--muted`. Sale de `acordeDominante`.

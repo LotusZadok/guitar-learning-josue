@@ -24,17 +24,17 @@
     "s312": {
       "label": "3.1.2 · Acordes con séptimas",
       "title": "Acordes con séptimas",
-      "intro": "Un acorde con séptima agrega una cuarta nota a la tríada, a un intervalo de séptima de la tónica. Combinando las dos terceras (3m, 3M) con las dos séptimas útiles (7m, 7M) salen los tres acordes con séptima más comunes:",
+      "intro": "Un acorde con séptima agrega una cuarta nota a la tríada, a un intervalo de séptima de la tónica. Combinando las dos terceras (3m, 3M) con las dos séptimas útiles (7m, 7M) salen cuatro acordes con séptima:",
       "table_headers": {
         "chord": "Acorde",
         "formula": "Fórmula",
         "code": "Cifrado"
       },
-      "chords": ["Mayor 7", "Menor 7", "Dominante 7"],
-      "difference": "La diferencia entre maj7 y dominante 7 es solo la séptima (7M vs 7m); entre m7 y dominante 7 es solo la tercera (3m vs 3M). El dominante 7 combina la 3M con la 7m, y esa combinación es la que le da su rol funcional como dominante (se desarrolla en 3.6).",
-      "caption": "La tónica y la 5ª son iguales en los tres acordes. La 3ª define mayor o menor; la 7ª define maj7 frente a dominante.",
+      "chords": ["Mayor 7", "Menor 7", "Dominante 7", "Menor Maj7"],
+      "difference": "La diferencia entre maj7 y dominante 7 es solo la séptima (7M vs 7m); entre m7 y dominante 7 es solo la tercera (3m vs 3M). El dominante 7 combina la 3M con la 7m, y esa combinación es la que le da su rol funcional como dominante (se desarrolla en 3.6). El cuarto, el menor Maj7, combina al revés: 3m con 7M.",
+      "caption": "La tónica y la 5ª son iguales en los cuatro acordes. La 3ª define mayor o menor; la 7ª define si la séptima es mayor o menor.",
       "builder_title": "Constructor: con séptimas",
-      "builder_intro": "El árbol crece: ahora la 5J ramifica a la 7M y la 7m. Para en la quinta para una tríada, o sigue hasta la séptima para armar maj7, m7 o dominante 7."
+      "builder_intro": "El árbol crece: ahora la 5J ramifica a la 7M y la 7m. Para en la quinta para una tríada, o sigue hasta la séptima para armar maj7, m7, dominante 7 o menor Maj7."
     },
     "s32": {
       "label": "3.2 · Acordes disminuidos",
@@ -87,8 +87,8 @@
       "caption": "Diez acordes, un solo árbol. Para en la quinta para una tríada o un suspendido; sigue a la séptima para los acordes de cuatro notas."
     },
     "s35": {
-      "label": "3.5 · Grado 7",
-      "title": "El grado 7 y la armonía diatónica con séptimas",
+      "label": "3.5 · Grados armónicos con séptima",
+      "title": "Grados armónicos con séptima",
       "intro": "Si armonizas cada grado de la escala mayor con su séptima diatónica (apilando terceras dentro de la tonalidad), cada grado recibe una calidad de séptima fija. El patrón es siempre el mismo, en cualquier tonalidad:",
       "grado7": "El grado 7 (vii) es el caso nuevo: su tríada era disminuida (°), y al agregarle la séptima diatónica se convierte en un semidisminuido (m7♭5), el acorde que viste en 3.2. Es el único m7♭5 de la tonalidad y nace sobre la sensible. Y el tritono no es exclusivo del V7: el vii también lo lleva adentro, entre su raíz (la sensible) y su 5ª disminuida. Son exactamente las mismas dos notas que forman el tritono del V7, y por eso el vii empuja hacia la tónica igual que él."
     },

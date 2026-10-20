@@ -41,15 +41,16 @@ La **séptima mayor (7M)** y la **séptima menor (7m)** ya estaban en la tabla d
 
 ---
 
-## 3.1.2 Acordes con séptimas — maj7, m7, 7 🟢
+## 3.1.2 Acordes con séptimas — maj7, m7, 7, mMaj7 🟢
 
-Construir un acorde con séptima es agregar una cuarta nota a la tríada, a un intervalo de séptima de la tónica. Combinando las dos calidades de tercera (3m, 3M) con las dos séptimas útiles aquí (7m, 7M), salen los tres acordes con séptima más comunes:
+Construir un acorde con séptima es agregar una cuarta nota a la tríada, a un intervalo de séptima de la tónica. Combinando las dos calidades de tercera (3m, 3M) con las dos séptimas útiles aquí (7m, 7M), salen cuatro acordes con séptima (el menor Maj7 lo sumó el profesor en la reunión del 19/10/26):
 
 | Acorde      | Fórmula          | Ejemplo en C | Cifrado |
 | ----------- | ---------------- | ------------ | ------- |
 | Mayor 7     | T + 3M + 5J + 7M | C E G B      | Cmaj7   |
 | Menor 7     | T + 3m + 5J + 7m | C E♭ G B♭    | Cm7     |
 | Dominante 7 | T + 3M + 5J + 7m | C E G B♭     | C7      |
+| Menor Maj7  | T + 3m + 5J + 7M | C E♭ G B     | CmMaj7  |
 
 La diferencia entre Cmaj7 y C7 es solo la séptima (B vs B♭). La diferencia entre Cm7 y C7 es solo la tercera (E♭ vs E). El **dominante 7** combina la 3M (carácter mayor) con la 7m (tensión), y esa combinación es lo que le da su rol funcional como dominante (se desarrolla en §3.6).
 

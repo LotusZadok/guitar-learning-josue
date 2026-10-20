@@ -26,17 +26,17 @@
     "s312": {
       "label": "3.1.2 · Septakkorde",
       "title": "Akkorde mit Septime",
-      "intro": "Ein Septakkord fügt der Dreiklang eine vierte Note im Septimabstand zur Tonika hinzu. Kombiniert man die beiden Terzen (3m, 3M) mit den beiden nützlichen Septimen (7m, 7M), ergeben sich die drei häufigsten Septakkorde:",
+      "intro": "Ein Septakkord fügt der Dreiklang eine vierte Note im Septimabstand zur Tonika hinzu. Kombiniert man die beiden Terzen (3m, 3M) mit den beiden nützlichen Septimen (7m, 7M), ergeben sich vier Septakkorde:",
       "table_headers": {
         "chord": "Akkord",
         "formula": "Formel",
         "code": "Chiffre"
       },
-      "chords": ["Dur 7", "Moll 7", "Dominant 7"],
-      "difference": "Der Unterschied zwischen maj7 und Dominant 7 ist nur die Septime (7M vs 7m); zwischen m7 und Dominant 7 nur die Terz (3m vs 3M). Der Dominant 7 verbindet die 3M mit der 7m, und genau diese Kombination gibt ihm seine Funktion als Dominante (wird in 3.6 behandelt).",
-      "caption": "Tonika und Quinte sind in allen drei Akkorden gleich. Die 3. bestimmt Dur oder Moll; die 7. bestimmt maj7 gegenüber Dominante.",
+      "chords": ["Dur 7", "Moll 7", "Dominant 7", "Moll Maj7"],
+      "difference": "Der Unterschied zwischen maj7 und Dominant 7 ist nur die Septime (7M vs 7m); zwischen m7 und Dominant 7 nur die Terz (3m vs 3M). Der Dominant 7 verbindet die 3M mit der 7m, und genau diese Kombination gibt ihm seine Funktion als Dominante (wird in 3.6 behandelt). Der vierte, Moll Maj7, kombiniert umgekehrt: 3m mit 7M.",
+      "caption": "Tonika und Quinte sind in allen vier Akkorden gleich. Die 3. bestimmt Dur oder Moll; die 7. bestimmt, ob die Septime groß oder klein ist.",
       "builder_title": "Konstruktor: mit Septimen",
-      "builder_intro": "Der Baum wächst: jetzt verzweigt die r. Quinte zur 7M und 7m. Halte bei der Quinte für einen Dreiklang, oder geh weiter bis zur Septime für maj7, m7 oder Dominant 7."
+      "builder_intro": "Der Baum wächst: jetzt verzweigt die r. Quinte zur 7M und 7m. Halte bei der Quinte für einen Dreiklang, oder geh weiter bis zur Septime für maj7, m7, Dominant 7 oder Moll Maj7."
     },
     "s32": {
       "label": "3.2 · Verminderte Akkorde",
@@ -89,8 +89,8 @@
       "caption": "Zehn Akkorde, ein Baum. Halte bei der Quinte für einen Dreiklang oder Sus-Akkord; geh weiter bis zur Septime für die vierstimmigen Akkorde."
     },
     "s35": {
-      "label": "3.5 · Stufe 7",
-      "title": "Die 7. Stufe und die diatonische Harmonik mit Septimen",
+      "label": "3.5 · Harmonische Stufen mit Septime",
+      "title": "Harmonische Stufen mit Septime",
       "intro": "Harmonisierst du jede Stufe der Dur-Tonleiter mit ihrer diatonischen Septime (Terzen innerhalb der Tonart gestapelt), erhält jede Stufe eine feste Septim-Qualität. Das Muster ist in jeder Tonart dasselbe:",
       "grado7": "Die 7. Stufe (vii) ist der neue Fall: ihr Dreiklang war vermindert (°), und mit der diatonischen Septime wird sie zum halbverminderten (m7♭5), dem Akkord aus 3.2. Es ist der einzige m7♭5 der Tonart und entsteht auf dem Leitton. Und der Tritonus gehört nicht allein dem V7: das vii trägt ihn ebenfalls in sich, zwischen seinem Grundton (dem Leitton) und seiner verminderten Quinte. Es sind genau dieselben zwei Töne wie im Tritonus des V7, und darum drängt das vii genauso zur Tonika."
     },

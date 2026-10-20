@@ -3,8 +3,10 @@
 import {
   acordeDominante,
   progresionIIVI,
+  spelledIntervalFromTonic,
   tonizacionEscenarios,
 } from '../src/utils/noteCalculations.ts';
+import { BUILDER_312 } from '../src/components/primitives/AcordesBuilder/configs.ts';
 import { check, resumen } from './verify-helpers.ts';
 
 const cifrados = (gs: { chord: { cifrado: string } }[]) => gs.map((g) => g.chord.cifrado);
@@ -71,5 +73,20 @@ check('vii en C: B(T, tritono, tonal) D(3m) F(5d, tritono, modal) A(7m)', voces(
 check('cifrados', [acordeDominante('C', 'V7').cifrado, acordeDominante('C', 'vii').cifrado], ['G7', 'Bm7♭5']);
 check('romanos (el vii lleva su círculo)', [acordeDominante('C', 'V7').roman, acordeDominante('C', 'vii').roman], ['V7', 'vii°']);
 check('en F el vii es Em7♭5', acordeDominante('F', 'vii').cifrado, 'Em7♭5');
+
+console.log('\n— 3.1.2 menor Maj7 (reunión 19/10/26) —');
+const caminos312 = BUILDER_312.chords.map((c) => c.path.join('-'));
+check('cada camino de BUILDER_312 es único', new Set(caminos312).size, caminos312.length);
+check('BUILDER_312 incluye el menor Maj7', BUILDER_312.chords.find((c) => c.cifrado === 'mMaj7')?.path, ['3m', '5', '7M']);
+const deletreo = (tonica: 'C' | 'G' | 'Bb', camino: readonly string[]) => [
+  tonica.replace('b', '♭'),
+  ...camino.map((rol) => {
+    const n = BUILDER_312.nodes.find((x) => x.role === rol)!;
+    return spelledIntervalFromTonic(tonica, n.number, n.quality);
+  }),
+];
+check('mMaj7 en C', deletreo('C', ['3m', '5', '7M']), ['C', 'E♭', 'G', 'B']);
+check('mMaj7 en G', deletreo('G', ['3m', '5', '7M']), ['G', 'B♭', 'D', 'F♯']);
+check('mMaj7 en B♭', deletreo('Bb', ['3m', '5', '7M']), ['B♭', 'D♭', 'F', 'A']);
 
 resumen();

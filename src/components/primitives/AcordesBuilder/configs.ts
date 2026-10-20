@@ -60,7 +60,7 @@ export const BUILDER_17: BuilderConfig = {
   ],
 };
 
-// §3.1.2 · agrega el nivel de séptimas (maj7, m7, dominante 7) sobre la 5J.
+// §3.1.2 · agrega el nivel de séptimas (maj7, m7, dominante 7, menor Maj7) sobre la 5J.
 export const BUILDER_312: BuilderConfig = {
   width: 470,
   height: 300,
@@ -79,6 +79,8 @@ export const BUILDER_312: BuilderConfig = {
     { path: ['3m', '5', '7m'], nombre: 'menor 7', cifrado: 'm7' },
     { path: ['3M', '5', '7M'], nombre: 'mayor 7', cifrado: 'maj7' },
     { path: ['3M', '5', '7m'], nombre: 'dominante 7', cifrado: '7' },
+    // Reunión 19/10/26: la cuarta combinación, menor con séptima mayor.
+    { path: ['3m', '5', '7M'], nombre: 'menor Maj7', cifrado: 'mMaj7' },
   ],
 };
 

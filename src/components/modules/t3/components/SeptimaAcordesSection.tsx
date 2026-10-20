@@ -6,14 +6,16 @@ import AcordesBuilder from '../../../primitives/AcordesBuilder/AcordesBuilder';
 import { BUILDER_312 } from '../../../primitives/AcordesBuilder/configs';
 import styles from './SeptimaAcordesSection.module.css';
 
-// 3.1.2 · Acordes con séptimas (maj7, m7, 7). Fórmulas del source of truth de T3.
+// 3.1.2 · Acordes con séptimas (maj7, m7, 7, mMaj7). Fórmulas del source of truth
+// de T3; el mMaj7 lo sumó el profesor en la reunión del 19/10/26.
 const ROWS = [
   { formula: 'T + 3M + 5J + 7M', code: 'maj7' },
   { formula: 'T + 3m + 5J + 7m', code: 'm7' },
   { formula: 'T + 3M + 5J + 7m', code: '7' },
+  { formula: 'T + 3m + 5J + 7M', code: 'mMaj7' },
 ] as const;
 
-// La 3ª y la 7ª son los tonos que cambian entre los tres acordes (se resaltan).
+// La 3ª y la 7ª son los tonos que cambian entre los cuatro acordes (se resaltan).
 const CHORDS: ChordDef[] = [
   {
     suffix: 'maj7',
@@ -39,6 +41,15 @@ const CHORDS: ChordDef[] = [
       { role: '7', number: 7, quality: 'm', moves: true },
       { role: '5', number: 5, quality: 'P' },
       { role: '3', number: 3, quality: 'M', moves: true },
+      { role: 'T', number: 1, quality: 'P' },
+    ],
+  },
+  {
+    suffix: 'mMaj7',
+    tones: [
+      { role: '7', number: 7, quality: 'M', moves: true },
+      { role: '5', number: 5, quality: 'P' },
+      { role: '3', number: 3, quality: 'm', moves: true },
       { role: 'T', number: 1, quality: 'P' },
     ],
   },
