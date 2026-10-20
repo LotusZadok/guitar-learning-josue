@@ -1,6 +1,7 @@
 // Arnés de verificación de la teoría de T3 (lógica pura de noteCalculations).
 // Se corre con `npm run verify:t3` (node --experimental-strip-types).
 import {
+  FAMILIAS_DIM7,
   acordeDominante,
   progresionIIVI,
   spelledIntervalFromTonic,
@@ -73,6 +74,19 @@ check('vii en C: B(T, tritono, tonal) D(3m) F(5d, tritono, modal) A(7m)', voces(
 check('cifrados', [acordeDominante('C', 'V7').cifrado, acordeDominante('C', 'vii').cifrado], ['G7', 'Bm7♭5']);
 check('romanos (el vii lleva su círculo)', [acordeDominante('C', 'V7').roman, acordeDominante('C', 'vii').roman], ['V7', 'vii°']);
 check('en F el vii es Em7♭5', acordeDominante('F', 'vii').cifrado, 'Em7♭5');
+
+console.log('\n— 3.2 familias dim7 con enarmonías (reunión 19/10/26) —');
+const familias = FAMILIAS_DIM7;
+check(
+  'las tres familias cubren las 12 notas sin repetir',
+  new Set(familias.flatMap((f) => f.miembros.map((m) => m.note))).size,
+  12,
+);
+check('cada familia tiene 4 notas', familias.map((f) => f.miembros.length), [4, 4, 4]);
+const pares = familias.flatMap((f) => f.miembros.filter((m) => m.enarmonia).map((m) => `${m.grafia}/${m.enarmonia}`));
+check('pares enarmónicos', pares.sort(), ['A♭/G♯', 'B♭/A♯', 'C♯/D♭', 'E♭/D♯', 'G♭/F♯'].sort());
+check('las naturales no tienen enarmonía', familias[2].miembros.map((m) => m.enarmonia ?? '-'), ['-', '-', 'G♯', '-']);
+check('símbolo enarmónico de la familia de C♯', familias[1].simboloEnarmonico, 'D♭°');
 
 console.log('\n— 3.1.2 menor Maj7 (reunión 19/10/26) —');
 const caminos312 = BUILDER_312.chords.map((c) => c.path.join('-'));

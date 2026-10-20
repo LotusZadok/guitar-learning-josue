@@ -291,6 +291,45 @@ const NATURAL_DISPLAY: Partial<Record<ChromaticNote, string>> = {
   "A#": "A♯",
 };
 
+// === Familias del dim7 (§3.2) ===
+// Las tres familias, con la grafía que usa el método (G♭ y no F♯ en la de C°,
+// B♭ y no A♯ en la de C♯°). Reunión 19/10/26: cada nota alterada muestra
+// también su enarmonía ("la bemol saldría como sol sostenido también
+// disminuido... yo utilizo a veces más los nombres sostenidos").
+export interface MiembroDim7 {
+  note: ChromaticNote;
+  grafia: string;
+  enarmonia?: string;
+}
+
+function enarmoniaDe(note: ChromaticNote, grafia: string): string | undefined {
+  const bemol = STANDARD_FLAT[note];
+  const sostenido = NATURAL_DISPLAY[note];
+  if (!bemol || !sostenido) return undefined;
+  return grafia === bemol ? sostenido : bemol;
+}
+
+const miembro = (note: ChromaticNote, grafia: string): MiembroDim7 => {
+  const enarmonia = enarmoniaDe(note, grafia);
+  return enarmonia ? { note, grafia, enarmonia } : { note, grafia };
+};
+
+export const FAMILIAS_DIM7: { simbolo: string; simboloEnarmonico?: string; miembros: MiembroDim7[] }[] = [
+  {
+    simbolo: "C°",
+    miembros: [miembro("C", "C"), miembro("D#", "E♭"), miembro("F#", "G♭"), miembro("A", "A")],
+  },
+  {
+    simbolo: "C♯°",
+    simboloEnarmonico: "D♭°",
+    miembros: [miembro("C#", "C♯"), miembro("E", "E"), miembro("G", "G"), miembro("A#", "B♭")],
+  },
+  {
+    simbolo: "D°",
+    miembros: [miembro("D", "D"), miembro("F", "F"), miembro("G#", "A♭"), miembro("B", "B")],
+  },
+];
+
 export function spelledChromaticCircle(tonic: Tonic): CircleStep[] {
   const tonicIdx = ALL.indexOf(tonicChromatic(tonic));
   return Array.from({ length: 13 }, (_, i) => {

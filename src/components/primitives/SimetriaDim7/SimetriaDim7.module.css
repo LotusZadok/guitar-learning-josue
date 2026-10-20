@@ -126,3 +126,10 @@
     max-width: 320px;
   }
 }
+
+/* Enarmonía dentro del nodo (G♯ bajo A♭): mismo glifo de nota, más chico. */
+.noteTextEnarmonia {
+  composes: noteText;
+  font-size: 10px;
+  opacity: 0.85;
+}

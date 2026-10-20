@@ -460,6 +460,11 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
 
+**59ª ola (2026-10-19): §3.2 enarmonías de las familias dim7 (pedido #10):**
+- ✓ **Cada nota alterada de la familia activa muestra su enarmonía** (A♭ con G♯ debajo, más chica), igual en la lectura (`D° = F° = A♭°/G♯° = B°`), en el chip (`C♯°/D♭°`) y en el `aria-label`. La grafía del método sigue primero: el profesor usa a veces los sostenidos, "pero eso depende de la tonalidad".
+- ✓ **Las familias salieron del componente:** `FAMILIAS_DIM7` en `noteCalculations.ts`, con la enarmonía derivada de `STANDARD_FLAT`/`NATURAL_DISPLAY` (CLAUDE.md §6 regla 8). `verify:t3` cubre las 12 notas sin repetir y los cinco pares.
+- Pendiente (#9, bloqueado por la pregunta 4 de la minuta): resaltar la nota que suena.
+
 **58ª ola (2026-10-19): §3.1.2 menor Maj7 y título de §3.5 (pedidos #7, #6):**
 - ✓ **Cuarto acorde con séptima: menor Maj7** (`T + 3m + 5J + 7M`, cifrado `mMaj7` en Plex Mono, D10 del plan del 19/10). Fila en la tabla, pila en `ChordStacks` (a 390 px quedan 2×2) y camino `3m → 5 → 7M` en `BUILDER_312` (la arista ya existía). Textos de §3.1.2 pasan de "los tres" a "los cuatro". `verify:t3` cubre la unicidad de caminos y el deletreo en C, G y B♭.
 - ✓ **§3.5 se llama "Grados armónicos con séptima"** (etiqueta y título, es/de). El número no cambia hasta la reestructura (ola 19 del plan).

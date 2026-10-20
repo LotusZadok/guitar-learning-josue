@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAudioEngine, stopAllNotes } from '../../../hooks/useAudioEngine';
 import { ALL, NOTE_COLORS } from '../../../data/notes';
 import { useUIStore } from '../../../stores/useUIStore';
-import { tonicChromatic } from '../../../utils/noteCalculations';
+import { FAMILIAS_DIM7, tonicChromatic, type MiembroDim7 } from '../../../utils/noteCalculations';
 import type { ChromaticNote } from '../../../types/music';
 import PlaybackButton from '../../shared/PlaybackButton/PlaybackButton';
 import styles from './SimetriaDim7.module.css';
@@ -17,33 +17,11 @@ const NOTE_DURATION = 1.4;
 const ARPEGGIO_GAP_MS = 250;
 const OCTAVE = 4; // identidad absoluta: la familia no depende de la tónica activa
 
-// Grafía de cada familia tal como la escribe el método (G♭ y no F♯ en la
-// primera, B♭ y no A♯ en la segunda): dentro de un acorde la grafía depende del
-// acorde, no de la tecla.
-interface Member { note: ChromaticNote; label: string }
-const FAMILIES: { symbol: string; members: Member[] }[] = [
-  {
-    symbol: 'C°',
-    members: [
-      { note: 'C', label: 'C' }, { note: 'D#', label: 'E♭' },
-      { note: 'F#', label: 'G♭' }, { note: 'A', label: 'A' },
-    ],
-  },
-  {
-    symbol: 'C♯°',
-    members: [
-      { note: 'C#', label: 'C♯' }, { note: 'E', label: 'E' },
-      { note: 'G', label: 'G' }, { note: 'A#', label: 'B♭' },
-    ],
-  },
-  {
-    symbol: 'D°',
-    members: [
-      { note: 'D', label: 'D' }, { note: 'F', label: 'F' },
-      { note: 'G#', label: 'A♭' }, { note: 'B', label: 'B' },
-    ],
-  },
-];
+// Las familias (grafía del método + enarmonía de cada nota alterada) viven en
+// utils: FAMILIAS_DIM7.
+const FAMILIES = FAMILIAS_DIM7;
+
+const conEnarmonia = (m: MiembroDim7) => (m.enarmonia ? `${m.grafia}°/${m.enarmonia}°` : `${m.grafia}°`);
 
 // Grafía neutra de los nodos que no son miembros de la familia activa (misma
 // convención que el círculo de §2.8).
@@ -61,7 +39,7 @@ const NODES = ALL.map((note, i) => ({ note, ...nodePos(i) }));
 // familia de una nota es su índice cromático módulo 3.
 const familyOf = (note: ChromaticNote) => ALL.indexOf(note) % 3;
 const squarePath = (family: number) =>
-  FAMILIES[family].members
+  FAMILIES[family].miembros
     .map((m, i) => `${i === 0 ? 'M' : 'L'} ${nodePos(ALL.indexOf(m.note)).x} ${nodePos(ALL.indexOf(m.note)).y}`)
     .join(' ') + ' Z';
 
@@ -90,10 +68,13 @@ export default function SimetriaDim7() {
   }
 
   const family = FAMILIES[active];
-  const labelOf = useCallback(
-    (note: ChromaticNote) =>
-      family.members.find((m) => m.note === note)?.label ?? IDLE_LABELS[note] ?? note,
+  const miembroDe = useCallback(
+    (note: ChromaticNote) => family.miembros.find((m) => m.note === note),
     [family],
+  );
+  const labelOf = useCallback(
+    (note: ChromaticNote) => miembroDe(note)?.grafia ?? IDLE_LABELS[note] ?? note,
+    [miembroDe],
   );
 
   const scrub = useCallback(
@@ -120,7 +101,7 @@ export default function SimetriaDim7() {
       stopAllNotes();
       setPlaying(mode);
       const gap = mode === 'arpegio' ? ARPEGGIO_GAP_MS : 0;
-      family.members.forEach((m, i) => {
+      family.miembros.forEach((m, i) => {
         timers.current.push(
           window.setTimeout(() => playNote(m.note, OCTAVE, NOTE_DURATION), i * gap),
         );
@@ -128,7 +109,7 @@ export default function SimetriaDim7() {
       timers.current.push(
         window.setTimeout(
           () => setPlaying(null),
-          family.members.length * gap + NOTE_DURATION * 1000,
+          family.miembros.length * gap + NOTE_DURATION * 1000,
         ),
       );
     },
@@ -140,13 +121,14 @@ export default function SimetriaDim7() {
       <div className={styles.selector} role="group" aria-label={isDe ? 'Verminderte Familie' : 'Familia disminuida'}>
         {FAMILIES.map((f, i) => (
           <button
-            key={f.symbol}
+            key={f.simbolo}
             type="button"
             className={i === active ? styles.chipActive : styles.chip}
             aria-pressed={i === active}
             onClick={() => setActive(i)}
           >
-            {f.symbol}
+            {f.simbolo}
+            {f.simboloEnarmonico && `/${f.simboloEnarmonico}`}
           </button>
         ))}
       </div>
@@ -156,8 +138,8 @@ export default function SimetriaDim7() {
         viewBox="0 0 400 400"
         role="group"
         aria-label={isDe
-          ? `Chromatischer Kreis: der verminderte Septakkord ${family.symbol} als eingeschriebenes Quadrat`
-          : `Círculo cromático: el acorde disminuido ${family.symbol} como cuadrado inscrito`}
+          ? `Chromatischer Kreis: der verminderte Septakkord ${family.simbolo} als eingeschriebenes Quadrat`
+          : `Círculo cromático: el acorde disminuido ${family.simbolo} como cuadrado inscrito`}
       >
         {/* Las otras dos familias quedan de fondo: el mismo cuadrado, rotado. */}
         {FAMILIES.map((_, i) =>
@@ -169,6 +151,7 @@ export default function SimetriaDim7() {
 
         {NODES.map(({ note, x, y }) => {
           const member = familyOf(note) === active;
+          const enarmonia = member ? miembroDe(note)?.enarmonia : undefined;
           const isHovered = hovered === note;
           const colored = member || isHovered;
           return (
@@ -179,8 +162,8 @@ export default function SimetriaDim7() {
               tabIndex={0}
               role="button"
               aria-label={isDe
-                ? `${labelOf(note)}${member ? ` (Teil von ${family.symbol})` : ''}: Ton abspielen`
-                : `${labelOf(note)}${member ? ` (parte de ${family.symbol})` : ''}: reproducir nota`}
+                ? `${labelOf(note)}${enarmonia ? `/${enarmonia}` : ''}${member ? ` (Teil von ${family.simbolo})` : ''}: Ton abspielen`
+                : `${labelOf(note)}${enarmonia ? `/${enarmonia}` : ''}${member ? ` (parte de ${family.simbolo})` : ''}: reproducir nota`}
               onMouseEnter={() => { setHovered(note); scrub(note); }}
               onMouseLeave={() => setHovered(null)}
               onFocus={() => setHovered(note)}
@@ -203,12 +186,18 @@ export default function SimetriaDim7() {
               />
               <text
                 x={x}
-                y={y}
+                y={enarmonia ? y - 5 : y}
                 className={styles.noteText}
                 fill={colored ? '#fff' : 'var(--text-body)'}
               >
                 {labelOf(note)}
               </text>
+              {/* Enarmonía de la nota alterada, más chica debajo de la grafía del método. */}
+              {enarmonia && (
+                <text x={x} y={y + 8} className={styles.noteTextEnarmonia} fill="#fff">
+                  {enarmonia}
+                </text>
+              )}
               {note === tonicChrom && (
                 <text x={x} y={y + NODE_R + 13} className={styles.tonicMark}>
                   T
@@ -220,7 +209,7 @@ export default function SimetriaDim7() {
       </svg>
 
       <p className={styles.readout}>
-        {family.members.map((m) => `${m.label}°`).join(' = ')}
+        {family.miembros.map(conEnarmonia).join(' = ')}
       </p>
 
       <div className={styles.audioRow}>
