@@ -21,7 +21,7 @@ export default function ConstructorProgresionesSection() {
   const [modoPendiente, setModoPendiente] = useState<Modo | null>(null);
   const [confirmarLimpiar, setConfirmarLimpiar] = useState(false);
 
-  const { reproduciendo, sonando, play, stop } = useProgressionPlayback({
+  const { reproduciendo, pausado, sonando, play, pause } = useProgressionPlayback({
     grid: s.grid,
     compas: s.compas,
     bpm: s.bpm,
@@ -147,9 +147,13 @@ export default function ConstructorProgresionesSection() {
         onMetronomo={s.toggleMetronomo}
         onLoop={s.toggleLoop}
         onPlay={play}
-        onStop={stop}
+        onPausa={pause}
         onLimpiar={pedirLimpiar}
-        limpiarLabel={t('t4.s41.limpiar')}
+        labels={{
+          reproducir: t(pausado ? 't4.s41.reanudar' : 't4.s41.reproducir'),
+          pausar: t('t4.s41.pausar'),
+          limpiar: t('t4.s41.limpiar'),
+        }}
       />
 
       {confirmarLimpiar && (

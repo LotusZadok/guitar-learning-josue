@@ -171,6 +171,28 @@ export function clicksDeMetronomo(nCasillas: number, compas: Compas): ClickMetro
   }));
 }
 
+// Reanudar después de una pausa (reunión 19/10/26: "por si quiero pausarlo en
+// algún momento y no tener que tragarme toda la progresión"). Los tiempos
+// quedan relativos al punto de reanudación: el acorde que ya estaba sonando
+// arranca en 0 con lo que le quedaba; los que terminaron antes se descartan.
+export function eventosDesde(
+  eventos: EventoAcorde[],
+  desdeCasilla: number,
+  paso: number,
+): EventoAcorde[] {
+  const corte = desdeCasilla * paso;
+  return eventos
+    .filter((ev) => ev.startMs + ev.durMs > corte)
+    .map((ev) => {
+      const inicio = Math.max(ev.startMs, corte);
+      return { ...ev, startMs: inicio - corte, durMs: ev.startMs + ev.durMs - inicio };
+    });
+}
+
+export function clicksDesde(clicks: ClickMetronomo[], desdeCasilla: number): ClickMetronomo[] {
+  return clicks.filter((c) => c.casilla >= desdeCasilla);
+}
+
 // Qué casilla está sonando en un instante dado. Devuelve -1 antes del primer
 // acorde. Lo usa el cabezal visual, que lee el reloj de audio.
 export function casillaEn(ms: number, compas: Compas, bpm: number, total: number): number {

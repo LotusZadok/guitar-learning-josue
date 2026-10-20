@@ -10,3 +10,7 @@
 .tip {
   composes: tip from '../PlaybackButton/PlaybackButton.module.css';
 }
+
+.playing {
+  composes: playing from '../PlaybackButton/PlaybackButton.module.css';
+}

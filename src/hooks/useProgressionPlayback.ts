@@ -5,6 +5,8 @@ import { acordeDeGrado, type Armadura } from '../utils/progresionAcordes';
 import {
   casillaEn,
   clicksDeMetronomo,
+  clicksDesde,
+  eventosDesde,
   duracionTotalMs,
   gridToEvents,
   msPorCasilla,
@@ -35,6 +37,9 @@ export function useProgressionPlayback(op: Opciones) {
   const { playNote, playClick } = useAudioEngine();
   const [reproduciendo, setReproduciendo] = useState(false);
   const [sonando, setSonando] = useState(-1);
+  // Casilla donde se pausó; null = no hay pausa y Play arranca desde el
+  // principio (reunión 19/10/26: Tocar pasa a play/pausa).
+  const [pausadoEn, setPausadoEn] = useState<number | null>(null);
 
   const timers = useRef<number[]>([]);
   const raf = useRef<number | null>(null);
@@ -58,6 +63,19 @@ export function useProgressionPlayback(op: Opciones) {
     stopAllNotes();
     setReproduciendo(false);
     setSonando(-1);
+    setPausadoEn(null);
+  }, [cancelar]);
+
+  const pause = useCallback(() => {
+    const ctx = getAudioContext();
+    const ms = ctx ? (ctx.currentTime - t0.current) * 1000 : 0;
+    const casilla = casillaEn(ms, opActual.current.compas, opActual.current.bpm, opActual.current.grid.length);
+    cancelar();
+    stopAllNotes();
+    setReproduciendo(false);
+    // Sin ámbar en pausa: el ámbar dice "sonando ahora".
+    setSonando(-1);
+    setPausadoEn(Math.max(casilla, 0));
   }, [cancelar]);
 
   const play = useCallback(() => {
@@ -71,12 +89,18 @@ export function useProgressionPlayback(op: Opciones) {
     const ctx = getCtx();
 
     cancelar();
-    const eventos = gridToEvents(op.grid, op.compas, op.bpm);
+    const paso = msPorCasilla(op.compas, op.bpm);
+    const desde = pausadoEn ?? 0;
+    const eventos = eventosDesde(gridToEvents(op.grid, op.compas, op.bpm), desde, paso);
     // Con la grilla vacía igual se puede tocar el metrónomo solo.
     if (eventos.length === 0 && !op.metronomo) return;
 
     const totalMs = duracionTotalMs(op.grid, op.compas, op.bpm);
-    t0.current = ctx.currentTime;
+    const offsetMs = desde * paso;
+    // El reloj del cabezal sigue en tiempo absoluto de la grilla: al reanudar,
+    // t0 se corre hacia atrás lo que ya se había tocado.
+    t0.current = ctx.currentTime - offsetMs / 1000;
+    setPausadoEn(null);
     setReproduciendo(true);
 
     // Acordes: cada voz con su duración exacta.
@@ -91,12 +115,11 @@ export function useProgressionPlayback(op: Opciones) {
     // Metrónomo: acento en el 1, y también en el 4 cuando el compás es 6/8,
     // que es donde el agrupamiento 3+3 se vuelve audible.
     if (op.metronomo) {
-      const paso = msPorCasilla(op.compas, op.bpm);
-      clicksDeMetronomo(op.grid.length, op.compas).forEach(({ casilla, acento }) => {
+      clicksDesde(clicksDeMetronomo(op.grid.length, op.compas), desde).forEach(({ casilla, acento }) => {
         const id = window.setTimeout(() => {
           const ctxAhora = getAudioContext();
           if (ctxAhora) playClick(acento ? 880 : 660, ctxAhora.currentTime);
-        }, casilla * paso);
+        }, (casilla - desde) * paso);
         timers.current.push(id);
       });
     }
@@ -121,9 +144,9 @@ export function useProgressionPlayback(op: Opciones) {
     const fin = window.setTimeout(() => {
       if (opActual.current.loop) playActual.current();
       else stop();
-    }, totalMs);
+    }, totalMs - offsetMs);
     timers.current.push(fin);
-  }, [op, cancelar, stop, playNote, playClick]);
+  }, [op, pausadoEn, cancelar, stop, playNote, playClick]);
 
   useEffect(() => {
     opActual.current = op;
@@ -149,7 +172,7 @@ export function useProgressionPlayback(op: Opciones) {
   // y el setState de `stop` es consecuencia de cortarlos.
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (reproduciendo) stop();
+    if (reproduciendo || pausadoEn !== null) stop();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [op.grid, op.compas, op.bpm, op.armadura, op.modo, op.septimas]);
 
@@ -158,5 +181,5 @@ export function useProgressionPlayback(op: Opciones) {
   // una vez, al desmontar -- no se re-ejecuta en cada render.
   useEffect(() => stop, [stop]);
 
-  return { reproduciendo, sonando, play, stop };
+  return { reproduciendo, pausado: pausadoEn !== null, sonando, play, pause, stop };
 }

@@ -39,7 +39,7 @@
   background: var(--surface);
 }
 
-.chip:focus-visible, .principal:focus-visible, .numero:focus-visible {
+.chip:focus-visible, .numero:focus-visible {
   outline: 2px solid var(--paper);
   outline-offset: 2px;
 }
@@ -76,18 +76,6 @@
   color: var(--paper);
   min-width: 32px;
   text-align: right;
-}
-
-.principal {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  padding: 8px 18px;
-  background: var(--surface);
-  color: var(--paper);
-  border: 1px solid var(--paper);
-  cursor: pointer;
 }
 
 /* Glifos de notación de los IconButton: relleno o trazo en currentColor. */

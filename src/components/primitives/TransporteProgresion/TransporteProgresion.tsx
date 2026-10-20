@@ -13,10 +13,10 @@ interface Props {
   onMetronomo: () => void;
   onLoop: () => void;
   onPlay: () => void;
-  onStop: () => void;
+  onPausa: () => void;
   onLimpiar: () => void;
-  /** Etiqueta del borrador; viene de la sección (i18n). */
-  limpiarLabel: string;
+  /** Etiquetas de los botones con glifo; vienen de la sección (i18n). */
+  labels: { reproducir: string; pausar: string; limpiar: string };
 }
 
 interface MedidaProps {
@@ -72,6 +72,25 @@ function SignoRepeticion() {
       <circle cx="18" cy="12.5" r="1.4" />
       <rect x="21" y="2" width="1" height="16" />
       <rect x="24" y="2" width="3" height="16" />
+    </svg>
+  );
+}
+
+// Play y pausa, los de cualquier reproductor: el profesor pidió "el símbolo de
+// play, y cuando le pongo play que cambie a símbolo de pausa".
+function Play() {
+  return (
+    <svg viewBox="0 0 20 20" className={styles.glifo} aria-hidden="true" focusable="false">
+      <path d="M5 3 L17 10 L5 17 Z" />
+    </svg>
+  );
+}
+
+function Pausa() {
+  return (
+    <svg viewBox="0 0 20 20" className={styles.glifo} aria-hidden="true" focusable="false">
+      <rect x="4" y="3" width="4" height="14" />
+      <rect x="12" y="3" width="4" height="14" />
     </svg>
   );
 }
@@ -158,20 +177,20 @@ export default function TransporteProgresion(p: Props) {
       </fieldset>
 
       <div className={styles.acciones}>
-        <button
-          type="button"
-          className={styles.principal}
-          onClick={p.reproduciendo ? p.onStop : p.onPlay}
+        <IconButton
+          label={p.reproduciendo ? p.labels.pausar : p.labels.reproducir}
+          playing={p.reproduciendo}
+          onClick={p.reproduciendo ? p.onPausa : p.onPlay}
         >
-          {p.reproduciendo ? t('common.stop') : t('common.play')}
-        </button>
+          {p.reproduciendo ? <Pausa /> : <Play />}
+        </IconButton>
         <button type="button" className={styles.chip} aria-pressed={p.metronomo} onClick={p.onMetronomo}>
           {t('t4.s41.metronomo')}
         </button>
         <IconButton label={t('t4.s41.loop')} pressed={p.loop} onClick={p.onLoop}>
           <SignoRepeticion />
         </IconButton>
-        <IconButton label={p.limpiarLabel} onClick={p.onLimpiar}>
+        <IconButton label={p.labels.limpiar} onClick={p.onLimpiar}>
           <Borrador />
         </IconButton>
       </div>

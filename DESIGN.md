@@ -460,6 +460,11 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
 
+**62ª ola (2026-10-19): §4.1 Tocar como play/pausa (pedido #39):**
+- ✓ **Play ▶ / pausa ‖ en un `IconButton`** (que ganó `playing`: ámbar solo mientras suena). La pausa guarda la casilla del reloj de audio; Play reanuda desde ahí con `eventosDesde` (el acorde en curso suena lo que le quedaba) y `clicksDesde` (el metrónomo sigue alineado), ambos puros y cubiertos por `verify:constructor`. El cabezal sigue en tiempo absoluto: `t0` se corre hacia atrás lo ya tocado. Cambiar la grilla, el tempo o la tonalidad en pausa la descarta.
+- ✓ **Claves huérfanas podadas:** `common.play`, `common.stop` y `common.reset` quedaron sin consumidor tras las olas 61 y 62 y se borraron de es/de. Las etiquetas nuevas (`t4.s41.reproducir`/`reanudar`/`pausar`) llegan por props.
+- ⚠ **Ya no hay "Detener" que vuelva al principio.** Desde una pausa solo se puede reanudar; se vuelve a cero al terminar la progresión, al cambiar la grilla o al borrar. El profesor pidió play/pausa, no stop; si hace falta, sumar un botón de volver al inicio.
+
 **61ª ola (2026-10-19): §4.1 orden y controles del transporte (pedidos #30, #33, #35, #37, #40):**
 - ✓ **El compás manda primero.** `MedidaProgresion` (compás y cantidad de compases) salió de `TransporteProgresion` y abre la sección, antes de la armadura ("tengo que saber qué compás estoy"). `t4.s41.intro` describe el orden nuevo.
 - ✓ **Séptimas junto a la tonalidad** (#30): ficha en la fila de `ArmaduraSelector`, con la etiqueta por prop. Condicionado a la pregunta 10 de la minuta: si el profesor quiere solo la séptima arrastrable por acorde, este botón se quita.

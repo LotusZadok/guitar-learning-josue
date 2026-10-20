@@ -16,6 +16,8 @@ import {
   rolDe,
   casillaEn,
   clicksDeMetronomo,
+  clicksDesde,
+  eventosDesde,
   type Grid,
   type Compas,
 } from '../src/utils/progresionArmonica.ts';
@@ -140,5 +142,26 @@ check(
   [true, false, false, false],
 );
 check('cada clic sabe su casilla', clicksDeMetronomo(3, '3/4').map((c) => c.casilla), [0, 1, 2]);
+
+console.log('\n— Pausa y reanudación (reunión 19/10/26) —');
+// 4/4 @120 → 500 ms por casilla. I en 0 (dura 2 casillas), V en 2 (dura 2).
+const gridPausa: Grid = [{ degree: 'I' }, null, { degree: 'V' }, null];
+const evPausa = gridToEvents(gridPausa, '4/4', 120);
+check('desde 0 no cambia nada', eventosDesde(evPausa, 0, 500), evPausa);
+check(
+  'pausa en la casilla 1: el I suena lo que le queda, el V corre al inicio',
+  eventosDesde(evPausa, 1, 500).map((e) => [e.degree, e.startMs, e.durMs]),
+  [['I', 0, 500], ['V', 500, 1000]],
+);
+check(
+  'pausa en la casilla 2: el I ya terminó',
+  eventosDesde(evPausa, 2, 500).map((e) => [e.degree, e.startMs, e.durMs]),
+  [['V', 0, 1000]],
+);
+check(
+  'pausa en la casilla 3: el metrónomo arranca en la 3',
+  clicksDesde(clicksDeMetronomo(4, '4/4'), 3).map((c) => c.casilla),
+  [3],
+);
 
 resumen();
