@@ -2,8 +2,16 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  padding: 64px 0;
+  /* Mismo gutter horizontal que el chrome editorial: sin él, con zoom o en el
+     celular el texto quedaba pegado al borde (reunión 19/10/26). */
+  padding: 64px 60px;
   border-bottom: 1px solid var(--rule);
+}
+
+@media (max-width: 900px) {
+  .section {
+    padding: 36px 24px;
+  }
 }
 
 .text {

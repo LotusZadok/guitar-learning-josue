@@ -349,7 +349,7 @@ La pregunta antes de añadir cualquier shell de módulo: **¿esta superficie nec
 
 Antes de esta ola el bloque vivía redeclarado idéntico en **28** `module.css` de T1/T2/T3, y `.text` en 21. Es el patrón de error que `lessons-learned.md` describe como *"el formato correcto no se busca, se copia del archivo hermano más cercano"*. El test sigue vigente: antes de escribir una clase de presentación en un módulo CSS de sección, grepearla en `src/components` — si aparece en 3+ módulos con el mismo cuerpo, pertenece a `shared/`.
 
-**Quién NO compone:** `ConstructorProgresionesSection` (T4). Su sección es un layout de columnas con `padding: 64px 0` y `gap: 24px` — intención distinta, no una variante del chrome editorial. Extraerla al compartido sería generalizar dos cosas que sólo comparten el nombre de clase.
+**Quién NO compone:** `ConstructorProgresionesSection` (T4). Su sección es un layout de columnas con `gap: 24px` — intención distinta, no una variante del chrome editorial. Desde la 60ª ola sí comparte el **gutter horizontal** (`64px 60px`, y `36px 24px` bajo 900px): con `padding: 64px 0` el texto quedaba pegado al borde con zoom o en el celular. Extraerla al compartido sería generalizar dos cosas que sólo comparten el nombre de clase.
 
 **`@keyframes fadeUp` se declara dentro del propio módulo compartido, no en `global.css`.** CSS Modules hashea el nombre de la animación cuando se lo referencia desde un módulo, así que un `@keyframes` global nunca resolvía: el bundle tenía 23 referencias `_fadeUp_<hash>_1` distintas contra un único `@keyframes fadeUp` sin hashear, y la animación de entrada de **todas** las secciones estaba muerta desde su introducción. Declarar el keyframe en el mismo módulo alinea los dos hashes. `prefers-reduced-motion` lo sigue neutralizando: el reset global actúa por selector `*`, sin mirar el nombre.
 
@@ -459,6 +459,9 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 ### Histórico (resueltas, conservar para contexto)
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
+
+**60ª ola (2026-10-19): gutter horizontal de §4.1 (D7 del plan, relacionado con el pedido #26):**
+- ✓ **El constructor deja de tocar el borde.** `ConstructorProgresionesSection` tenía `padding: 64px 0` y ningún breakpoint: era la única sección sin margen horizontal. Ahora `64px 60px`, y `36px 24px` bajo 900px, los mismos valores del chrome editorial. El pedido #26 sigue abierto (pregunta 8 de la minuta) por si el profesor vio otra página.
 
 **59ª ola (2026-10-19): §3.2 enarmonías de las familias dim7 (pedido #10):**
 - ✓ **Cada nota alterada de la familia activa muestra su enarmonía** (A♭ con G♯ debajo, más chica), igual en la lectura (`D° = F° = A♭°/G♯° = B°`), en el chip (`C♯°/D♭°`) y en el `aria-label`. La grafía del método sigue primero: el profesor usa a veces los sostenidos, "pero eso depende de la tonalidad".
