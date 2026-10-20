@@ -25,9 +25,12 @@ Dar a los estudiantes de Josué una referencia interactiva permanente que:
 
 El éxito se mide cualitativamente: un estudiante abre la app entre dos clases, entiende lo que revisa sin sentirse perdido, y siente que es **continuidad de la clase**, no un producto separado. Si el estudiante percibe la app como "una herramienta entre tantas" en lugar de "el espacio del Profe Josué online", fallamos.
 
-Actualmente cubre dos módulos:
-- **T1 — Fundamentos musicales** (en desarrollo)
-- **T2 — Tonalidades y armonía diatónica** (POC funcional con animación de armaduras, círculos cromáticos, tabla maestra, modo clase)
+Actualmente cubre cinco módulos (orden del profesor del 19/10/26):
+- **T1 · Fundamentos musicales**
+- **T2 · Tonalidades y armonía diatónica**
+- **T3 · Enriqueciendo la armonía**: las séptimas en el mundo mayor, hasta el ii-V-I.
+- **T4 · El mundo menor**: relativas, escala menor, menor armónica, ii°-V-i, sus.
+- **T5 · Armonía en práctica**: constructor de acordes, tonización, modulación y el laboratorio de armonía (constructor de progresiones).
 
 Está protegida por contraseña: no es público, es para los estudiantes de Josué.
 

@@ -6,6 +6,7 @@ import T1Module from './components/modules/t1/T1Module'
 import T2Module from './components/modules/t2/T2Module'
 import T3Module from './components/modules/t3/T3Module'
 import T4Module from './components/modules/t4/T4Module'
+import T5Module from './components/modules/t5/T5Module'
 import './i18n'
 import './global.css'
 
@@ -31,6 +32,7 @@ export default function App() {
         <Route path="/t2/*" element={<T2Module />} />
         <Route path="/t3/*" element={<T3Module />} />
         <Route path="/t4/*" element={<T4Module />} />
+        <Route path="/t5/*" element={<T5Module />} />
         <Route path="*" element={<Navigate to="/t1" replace />} />
       </Routes>
     </AppShell>

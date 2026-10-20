@@ -21,24 +21,29 @@ export const TOC_SECTIONS: Record<string, TocItem[]> = {
     { id: 's-t2-tabla',        labelKey: 't2.s45.label' },
     { id: 's-t2-grados',       labelKey: 't2.s47.label' },
     { id: 's-t2-progresiones', labelKey: 't2.s48.label' },
-    { id: 's-t2-relativas',    labelKey: 't2.s49.label' },
   ],
+  // Orden del profesor (reunión 19/10/26). Las claves i18n e ids de sección
+  // conservan su prefijo viejo (t3.s39 vive en T4): renombrarlos no le cambia
+  // nada al estudiante y rompería enlaces a secciones.
   '/t3': [
     { id: 's-t3-septimas', labelKey: 't3.s311.label' },
     { id: 's-t3-acordes-septima', labelKey: 't3.s312.label' },
     { id: 's-t3-disminuidos', labelKey: 't3.s32.label' },
-    { id: 's-t3-segunda-cuarta', labelKey: 't3.s331.label' },
-    { id: 's-t3-suspendidos', labelKey: 't3.s33.label' },
-    { id: 's-t3-constructor-completo', labelKey: 't3.s34.label' },
     { id: 's-t3-grado-7', labelKey: 't3.s35.label' },
     { id: 's-t3-tritono', labelKey: 't3.s361.label' },
     { id: 's-t3-dominante', labelKey: 't3.s36.label' },
     { id: 's-t3-ii-v-i', labelKey: 't3.s37.label' },
-    { id: 's-t3-tonizacion', labelKey: 't3.s38.label' },
-    { id: 's-t3-escala-menor', labelKey: 't3.s39.label' },
-    { id: 's-t3-progresion-menor', labelKey: 't3.s310.label' },
   ],
   '/t4': [
+    { id: 's-t2-relativas', labelKey: 't2.s49.label' },
+    { id: 's-t3-escala-menor', labelKey: 't3.s39.label' },
+    { id: 's-t3-progresion-menor', labelKey: 't3.s310.label' },
+    { id: 's-t3-segunda-cuarta', labelKey: 't3.s331.label' },
+    { id: 's-t3-suspendidos', labelKey: 't3.s33.label' },
+  ],
+  '/t5': [
+    { id: 's-t3-constructor-completo', labelKey: 't3.s34.label' },
+    { id: 's-t3-tonizacion', labelKey: 't3.s38.label' },
     { id: 's-t4-constructor', labelKey: 't4.s41.label' },
   ],
 };

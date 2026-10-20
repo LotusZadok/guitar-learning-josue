@@ -1,5 +1,7 @@
 # Source of Truth — T3: Enriqueciendo la armonía
 
+> **Renumeración del 19/10/26 (orden del profesor).** Este documento conserva la numeración vieja. Equivalencias: 3.1.1→3.1 · 3.1.2→3.2 · 3.2→3.3 · 3.5→3.4 · 3.6.1→3.5 · 3.6.2→3.6 · 3.7→3.7 (T3); 2.8→4.1 · 3.9→4.2 · 3.10→4.5 · 3.3.1→4.6 · 3.3→4.7 (T4, el mundo menor); 3.4→5.1 · 3.8→5.2 · 4.1→5.4 (T5). Reservados hasta aprobar su contenido: 4.3 acordes aumentados, 4.4 escala menor armónica, 4.8 progresiones en menor, 5.3 modulación.
+
 > Contenido teórico base del módulo **T3**. Reestructurado a partir de `material_T3_T4.md` (que reunía T3 + T4): por decisión del profesor, **todo se trata como T3**, con el orden de subsecciones definido abajo. Las secciones que el material original ubicaba en "T4" (dominantes secundarias, ii–V–I, menor) se integran como 3.6–3.10.
 >
 > Marcadores: 🟢 contenido directo del material subido · 🟡 derivado de teoría estándar consistente con el método (tonal lo computa), **pendiente de revisión del profesor** porque el material no lo detalló.

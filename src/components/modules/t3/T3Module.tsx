@@ -1,34 +1,25 @@
 import SeptimasSection from './components/SeptimasSection';
 import SeptimaAcordesSection from './components/SeptimaAcordesSection';
 import DisminuidosSection from './components/DisminuidosSection';
-import SegundaCuartaSection from './components/SegundaCuartaSection';
-import SuspendidosSection from './components/SuspendidosSection';
-import ConstructorCompletoSection from './components/ConstructorCompletoSection';
 import GradoSeptimoSection from './components/GradoSeptimoSection';
 import TritonoSection from './components/TritonoSection';
 import DominanteSection from './components/DominanteSection';
 import ProgresionIIVISection from './components/ProgresionIIVISection';
-import TonizacionSection from './components/TonizacionSection';
-import SeptimasMenorSection from './components/SeptimasMenorSection';
-import ProgresionMenorSection from './components/ProgresionMenorSection';
 import styles from './T3Module.module.css';
 
+// Orden del profesor (reunión 19/10/26): T3 se queda en el mundo mayor con
+// séptimas, de las séptimas al ii-V-I. Lo menor pasó a T4 y la práctica
+// (constructor, tonización, laboratorio) a T5.
 export default function T3Module() {
   return (
     <div className={styles.main}>
       <SeptimasSection />
       <SeptimaAcordesSection />
       <DisminuidosSection />
-      <SegundaCuartaSection />
-      <SuspendidosSection />
-      <ConstructorCompletoSection />
       <GradoSeptimoSection />
       <TritonoSection />
       <DominanteSection />
       <ProgresionIIVISection />
-      <TonizacionSection />
-      <SeptimasMenorSection />
-      <ProgresionMenorSection />
     </div>
   );
 }

@@ -8,7 +8,7 @@ import { useUIStore } from '../../../../stores/useUIStore';
 import { ALL } from '../../../../data/notes';
 import { tonicChromatic } from '../../../../utils/noteCalculations';
 import type { NoteSpelling, ChromaticNote } from '../../../../types/music';
-import { TONALIDADES } from '../data/tonalidades';
+import { TONALIDADES } from '../../t2/data/tonalidades';
 import type { ProseSegment } from '../../../../types/prose';
 import styles from './RelativasMenoresSection.module.css';
 

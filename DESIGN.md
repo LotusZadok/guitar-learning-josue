@@ -460,6 +460,13 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
 
+**69ª ola (2026-10-19): reestructura de módulos (pedidos #1, #2, #3, #4; orden enviado por el profesor):**
+- ✓ **Cinco módulos.** T3 queda en el mundo mayor con séptimas (3.1 Séptimas · 3.2 Acordes con séptimas · 3.3 Disminuidos · 3.4 Grados armónicos con séptima · 3.5 Tritono · 3.6 Dominante 7 · 3.7 ii-V-I), numeración plana por decisión del dueño. T4 · El mundo menor (4.1 Relativas menores, que sale de T2 · 4.2 Escala menor · 4.5 ii°-V-i · 4.6 Segunda y cuarta · 4.7 Sus). T5 · Armonía en práctica (5.1 Constructor de acordes · 5.2 Tonización · 5.4 Laboratorio de armonía, el constructor de progresiones). La ruta `/t4` pasa a ser el mundo menor y el constructor vive en `/t5`.
+- ✓ **Números reservados sin renumerar** (mismo criterio que la 5ª ola): 4.3 acordes aumentados, 4.4 escala menor armónica, 4.8 progresiones en menor y 5.3 modulación, hasta que el profesor apruebe su contenido (borrador en la carpeta de reuniones).
+- ✓ **Claves i18n e ids de sección conservan el prefijo viejo** (`t3.s39` vive en T4, `s-t4-constructor` en T5): renombrarlos no cambia nada para el estudiante. Los archivos sí se movieron (`git mv`) a la carpeta del módulo que los muestra.
+- ✓ **Referencias cruzadas corregidas** en es/de ("viste en 3.2" → 3.3, "3.9" → 4.2, "3.10" → 4.5, tritono "3.6" → 3.5, "todo lo que viste en T3" → "en T3 y T4") y **`npm run verify:toc`** nuevo: cada clave del índice existe, los números van en orden y pertenecen a su módulo, y ningún texto remite a una sección inexistente. Ya en el estado anterior detectaba dos fallas (3.3.1 antes de 3.3; tres textos citaban "3.6" cuando solo existían 3.6.1 y 3.6.2).
+- ✓ PRODUCT.md lista los cinco módulos (D8).
+
 **68ª ola (2026-10-19): §4.1 sus2 y sus4 por acorde (pedido #31, D11 del plan):**
 - ✓ **Fichas sus2 / sus4** en un grupo "Modificadores" del banco. Gesto tap-tap (ficha → acorde colocado), con arrastre encima y teclado completo; el mismo sus otra vez lo quita, el otro lo reemplaza. Brief aprobado por el dueño. Armar un sus desarma el grado y viceversa (`susArmado` en el store).
 - ✓ **El acorde se construye por intervalos** (`suspender` en `progresionAcordes.ts`): la 3ª se cambia por la 2M o la 4J y la 7ª se conserva. `tonal` devuelve vacío para `G7sus2` o `Dm7sus4`, así que no se le pide el nombre. Cifrado sin calidad (Dm7 + sus4 = `D7sus4`) y `maj7` si la 7ª es mayor (`Cmaj7sus4`). Funciona igual sobre tonizaciones (`V/ii` → `A7sus4`).

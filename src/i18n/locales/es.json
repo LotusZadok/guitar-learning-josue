@@ -4,11 +4,12 @@
     "t1": "T1 · Fundamentos musicales",
     "t2": "T2 · Tonalidades y armonía diatónica",
     "t3": "T3 · Enriqueciendo la armonía",
-    "t4": "T4 · Constructor de progresiones"
+    "t4": "T4 · El mundo menor",
+    "t5": "T5 · Armonía en práctica"
   },
   "t3": {
     "s311": {
-      "label": "3.1.1 · Séptimas",
+      "label": "3.1 · Séptimas",
       "title": "Las séptimas",
       "intro": "Recordando la tabla de intervalos de T1, hay tres calidades de séptima a la hora de armar acordes. La séptima mayor (7M) y la séptima menor (7m) ya las conocías; la novedad es la séptima disminuida (7d).",
       "table_headers": {
@@ -22,7 +23,7 @@
       "legend": "Pasa o toca cada nodo: la 7d está un semitono por debajo de la 7m, y la 7m uno por debajo de la 7M."
     },
     "s312": {
-      "label": "3.1.2 · Acordes con séptimas",
+      "label": "3.2 · Acordes con séptimas",
       "title": "Acordes con séptimas",
       "intro": "Un acorde con séptima agrega una cuarta nota a la tríada, a un intervalo de séptima de la tónica. Combinando las dos terceras (3m, 3M) con las dos séptimas útiles (7m, 7M) salen cuatro acordes con séptima:",
       "table_headers": {
@@ -37,7 +38,7 @@
       "builder_intro": "El árbol crece: ahora la 5J ramifica a la 7M y la 7m. Para en la quinta para una tríada, o sigue hasta la séptima para armar maj7, m7, dominante 7 o menor Maj7."
     },
     "s32": {
-      "label": "3.2 · Acordes disminuidos",
+      "label": "3.3 · Acordes disminuidos",
       "title": "Acordes disminuidos: m7♭5 y dim7",
       "intro": "La quinta disminuida (5d, 6 semitonos) pasa ahora a primer plano: es la que altera la quinta del acorde para producir las dos familias disminuidas. Es el intervalo más característico de la tensión tonal: la única distancia de la escala mayor que aparece una sola vez, entre el 4to y el 7mo grado.",
       "table_headers": {
@@ -54,14 +55,14 @@
       "builder_intro": "La 3m baja a la 5d, y desde ahí eliges la séptima: 7d para el disminuido completo (dim7) o 7m para el semidisminuido (m7♭5). Para en la 5d para la tríada disminuida."
     },
     "s331": {
-      "label": "3.3.1 · Segunda y cuarta",
+      "label": "4.6 · Segunda y cuarta",
       "title": "Segunda mayor y cuarta justa",
       "intro": "Dos intervalos que ya viste en T1, ahora como material para construir acordes (no solo como notas dentro de una escala). La segunda mayor (2M) está a 2 semitonos de la tónica; la cuarta justa (4J), a 5.",
       "ruler_aria": "Regla de intervalos: la segunda y la cuarta alrededor de la tercera",
       "legend": "La 2ª (2 s.t.) queda justo debajo de la tercera menor, y la 4ª (5 s.t.) justo arriba de la tercera mayor. Las terceras, atenuadas, son la referencia que van a reemplazar."
     },
     "s33": {
-      "label": "3.3 · Acordes suspendidos",
+      "label": "4.7 · Acordes suspendidos",
       "title": "Acordes suspendidos: sus2 y sus4",
       "intro": "Los suspendidos reemplazan la tercera por otro intervalo: la segunda mayor (sus2) o la cuarta justa (sus4). Sin la tercera, el acorde no es ni mayor ni menor; queda un sonido abierto, sin género tonal, que pide resolución o se deja flotando.",
       "table_headers": {
@@ -81,26 +82,26 @@
       "builder_intro": "En vez de una tercera, elige la 2ª o la 4ª, y luego la quinta. La 2ª queda más cerca de la tónica; la 4ª, más lejos."
     },
     "s34": {
-      "label": "3.4 · Constructor completo",
+      "label": "5.1 · Constructor de acordes",
       "title": "Constructor de acordes completo",
-      "intro": "El árbol entero, con todo lo que viste en T3. Desde la tónica, elige una segunda, una tercera o una cuarta; luego una quinta (justa o disminuida); y, si quieres, una séptima. Cada camino válido arma uno de los diez acordes del método. La posición sigue codificando lo mismo: más arriba, más cerca de la tónica; más a la izquierda, más grave la calidad.",
+      "intro": "El árbol entero, con todo lo que viste en T3 y T4. Desde la tónica, elige una segunda, una tercera o una cuarta; luego una quinta (justa o disminuida); y, si quieres, una séptima. Cada camino válido arma uno de los diez acordes del método. La posición sigue codificando lo mismo: más arriba, más cerca de la tónica; más a la izquierda, más grave la calidad.",
       "caption": "Diez acordes, un solo árbol. Para en la quinta para una tríada o un suspendido; sigue a la séptima para los acordes de cuatro notas."
     },
     "s35": {
-      "label": "3.5 · Grados armónicos con séptima",
+      "label": "3.4 · Grados armónicos con séptima",
       "title": "Grados armónicos con séptima",
       "intro": "Si armonizas cada grado de la escala mayor con su séptima diatónica (apilando terceras dentro de la tonalidad), cada grado recibe una calidad de séptima fija. El patrón es siempre el mismo, en cualquier tonalidad:",
-      "grado7": "El grado 7 (vii) es el caso nuevo: su tríada era disminuida (°), y al agregarle la séptima diatónica se convierte en un semidisminuido (m7♭5), el acorde que viste en 3.2. Es el único m7♭5 de la tonalidad y nace sobre la sensible. Y el tritono no es exclusivo del V7: el vii también lo lleva adentro, entre su raíz (la sensible) y su 5ª disminuida. Son exactamente las mismas dos notas que forman el tritono del V7, y por eso el vii empuja hacia la tónica igual que él."
+      "grado7": "El grado 7 (vii) es el caso nuevo: su tríada era disminuida (°), y al agregarle la séptima diatónica se convierte en un semidisminuido (m7♭5), el acorde que viste en 3.3. Es el único m7♭5 de la tonalidad y nace sobre la sensible. Y el tritono no es exclusivo del V7: el vii también lo lleva adentro, entre su raíz (la sensible) y su 5ª disminuida. Son exactamente las mismas dos notas que forman el tritono del V7, y por eso el vii empuja hacia la tónica igual que él."
     },
     "s361": {
-      "label": "3.6.1 · El tritono",
+      "label": "3.5 · El tritono",
       "title": "El tritono: las dos notas que empujan",
       "intro": "Antes de verlo dentro de un acorde, mira el tritono solo. En cualquier tonalidad mayor los dos grados tensos —la 4ª y la 7ª— están exactamente a 6 semitonos: eso es un tritono, el intervalo más inestable de la escala. Es el mismo mapa de resoluciones de 1.5, leído desde esas dos notas.",
       "caption": "Las dos notas rojas son el tritono. Cada una resuelve por semitono hacia la nota estable más cercana: la 7ª sube a la tónica y la 4ª baja a la 3ª. Toca un arco para escuchar cada resolución, o el botón para oír las dos notas del tritono juntas.",
       "play_label": "Escuchar el tritono (las dos notas juntas)"
     },
     "s36": {
-      "label": "3.6.2 · Dominante 7",
+      "label": "3.6 · Dominante 7",
       "title": "El dominante 7 (V7)",
       "intro_V7": "El dominante 7 es el acorde con séptima que se arma sobre el 5º grado: combina la 3ª mayor con la 7ª menor. Adentro esconde un tritono (entre su 3ª y su 7ª), el intervalo más inestable, y esa tensión es la que lo empuja a resolver al I.",
       "intro_vii": "El vii° es el acorde con séptima que se arma sobre el 7º grado: un semidisminuido (m7♭5). Lleva el mismo tritono que el V7, pero en otro lugar del acorde: entre su tónica y su 5ª disminuida. Por eso hace el mismo trabajo y también resuelve al I.",
@@ -121,7 +122,7 @@
       "explain": "El ii prepara, el V7 tensa (con su tritono), y el I resuelve. Como el V7 → I ya lo viste en 3.6, el ii solo agrega un paso previo que hace la llegada más satisfactoria. Toca cada acorde o escucha la progresión entera."
     },
     "s38": {
-      "label": "3.8 · Tonización",
+      "label": "5.2 · Tonización",
       "title": "Tonización y dominantes secundarias",
       "intro": "Cualquier acorde de la tonalidad (menos el I) puede tonizarse: tratarlo por un momento como si fuera la tónica. El acorde que hace ese trabajo es su dominante secundaria, y se escribe V/x, donde x es el grado tonizado.",
       "construction": "Se construye igual que el V7, pero apuntando a otro grado: es el dominante 7 que está una quinta justa por encima de ese grado. Casi siempre trae una nota de afuera de la tonalidad (la sensible del grado tonizado), y esa es la que crea el color cromático. Toca cada fila para oír la dominante resolver a su grado.",
@@ -132,26 +133,26 @@
       "generalization": "La idea se amplía insertando el par completo ii-V antes de cualquier grado, no solo el V solo. Por ejemplo, en vez de I, ii, V, I puedes hacer I, ii/ii, V/ii, ii, V, I (Cmaj7, Em7♭5, A7, Dm7, G7, Cmaj7): el Em7♭5 y el A7 tonizan al Dm7 antes de seguir. El ii/ii es semidisminuido porque el grado tonizado es menor."
     },
     "s39": {
-      "label": "3.9 · Escala menor",
+      "label": "4.2 · Escala menor",
       "title": "La escala menor con séptimas (relativa)",
-      "intro": "Toda tonalidad mayor tiene una relativa menor: mismas notas, distinta tónica (el 6to grado). Armonizando esa escala menor natural con séptimas sale el mismo tipo de patrón fijo que viste en 3.5, ahora leído desde la menor:",
-      "harmonic": "Para que la tonalidad menor tenga un dominante funcional (que empuje de verdad hacia la tónica) hace falta subir un semitono el 7mo grado: esa nota alterada es la sensible de la menor armónica, y convierte el v natural en un V7. Con eso quedan listas las dos piezas que arma 3.10: el V7 y el ii° (el semidisminuido que ya viste en 3.2)."
+      "intro": "Toda tonalidad mayor tiene una relativa menor: mismas notas, distinta tónica (el 6to grado). Armonizando esa escala menor natural con séptimas sale el mismo tipo de patrón fijo que viste en 3.4, ahora leído desde la menor:",
+      "harmonic": "Para que la tonalidad menor tenga un dominante funcional (que empuje de verdad hacia la tónica) hace falta subir un semitono el 7mo grado: esa nota alterada es la sensible de la menor armónica, y convierte el v natural en un V7. Con eso quedan listas las dos piezas que arma 4.5: el V7 y el ii° (el semidisminuido que ya viste en 3.3)."
     },
     "s310": {
-      "label": "3.10 · ii°-V7-i (menor)",
+      "label": "4.5 · ii°-V7-i (menor)",
       "title": "Progresiones armónicas en escala menor",
-      "intro": "La tonalidad menor real mezcla la menor natural (3.9) con la armónica: usa el ii natural como semidisminuido (ii°) y sube la sensible solo en el dominante (V7). Esas dos piezas son las que arman el ii°-V7-i menor, el equivalente exacto del ii-V-I de 3.7:",
+      "intro": "La tonalidad menor real mezcla la menor natural (4.2) con la armónica: usa el ii natural como semidisminuido (ii°) y sube la sensible solo en el dominante (V7). Esas dos piezas son las que arman el ii°-V7-i menor, el equivalente exacto del ii-V-I de 3.7:",
       "functions": [
         "Subdominante alterada",
         "Dominante · con la sensible elevada",
         "Tónica menor"
       ],
-      "explain": "El ii° prepara igual que el ii mayor, pero ya nace tenso (es un semidisminuido). El V7 tensa con la misma lógica del tritono que viste en 3.6, solo que esa sensible es una nota prestada de la menor armónica. El i resuelve en menor. Progresiones típicas del folclore y el bolero (i-♭VI-♭VII-i, i-iv-V7-i) usan estas mismas piezas."
+      "explain": "El ii° prepara igual que el ii mayor, pero ya nace tenso (es un semidisminuido). El V7 tensa con la misma lógica del tritono que viste en 3.5, solo que esa sensible es una nota prestada de la menor armónica. El i resuelve en menor. Progresiones típicas del folclore y el bolero (i-♭VI-♭VII-i, i-iv-V7-i) usan estas mismas piezas."
     }
   },
   "t4": {
     "s41": {
-      "label": "4.1 · Constructor de progresiones",
+      "label": "5.4 · Laboratorio de armonía",
       "title": "Arma tu propia progresión",
       "intro": "Primero escoge el compás y cuántos compases quieres. Después elige la tonalidad en el círculo (afuera las mayores, adentro sus relativas menores) y coloca grados sobre los pulsos. Un acorde suena hasta que aparece el siguiente: si dejas un pulso vacío, el acorde anterior lo llena.",
       "explain": "Nada de lo que armes está bien o mal. Toca play y escucha: si la progresión no cierra, el oído te lo va a decir antes que cualquier regla.",
@@ -586,7 +587,7 @@
     },
 
     "s49": {
-      "label": "2.8 · Relativas menores",
+      "label": "4.1 · Relativas menores",
       "title": "Relativas menores",
       "intro_p1": "Toda tonalidad mayor tiene una tonalidad menor relativa que comparte exactamente la misma armadura. La relativa menor se construye sobre el vi grado de la relativa mayor.",
       "intro_p2": "La escala menor natural usa las mismas 7 notas, pero comienza en la 6ta. Los acordes son los mismos en ambos casos, solo cambia el orden:",

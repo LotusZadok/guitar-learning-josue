@@ -6,11 +6,12 @@
     "t1": "T1 · Musikalische Grundlagen",
     "t2": "T2 · Tonarten und diatonische Harmonik",
     "t3": "T3 · Anreicherung der Harmonik",
-    "t4": "T4 · Akkordfolgen-Baukasten"
+    "t4": "T4 · Die Mollwelt",
+    "t5": "T5 · Harmonik in der Praxis"
   },
   "t3": {
     "s311": {
-      "label": "3.1.1 · Septimen",
+      "label": "3.1 · Septimen",
       "title": "Die Septimen",
       "intro": "Aus der Intervalltabelle von T1 gibt es drei Septim-Qualitäten zum Bau von Akkorden. Die große Septime (7M) und die kleine Septime (7m) kennst du bereits; neu ist die verminderte Septime (7d).",
       "table_headers": {
@@ -24,7 +25,7 @@
       "legend": "Fahre über oder tippe jeden Knoten: die 7d liegt einen Halbton unter der 7m, und die 7m einen unter der 7M."
     },
     "s312": {
-      "label": "3.1.2 · Septakkorde",
+      "label": "3.2 · Septakkorde",
       "title": "Akkorde mit Septime",
       "intro": "Ein Septakkord fügt der Dreiklang eine vierte Note im Septimabstand zur Tonika hinzu. Kombiniert man die beiden Terzen (3m, 3M) mit den beiden nützlichen Septimen (7m, 7M), ergeben sich vier Septakkorde:",
       "table_headers": {
@@ -39,7 +40,7 @@
       "builder_intro": "Der Baum wächst: jetzt verzweigt die r. Quinte zur 7M und 7m. Halte bei der Quinte für einen Dreiklang, oder geh weiter bis zur Septime für maj7, m7, Dominant 7 oder Moll Maj7."
     },
     "s32": {
-      "label": "3.2 · Verminderte Akkorde",
+      "label": "3.3 · Verminderte Akkorde",
       "title": "Verminderte Akkorde: m7♭5 und dim7",
       "intro": "Die verminderte Quinte (5d, 6 Halbtöne) rückt nun in den Vordergrund: sie verändert die Quinte des Akkords und erzeugt die beiden verminderten Familien. Sie ist das charakteristischste Intervall tonaler Spannung: der einzige Abstand der Dur-Tonleiter, der nur einmal vorkommt, zwischen der 4. und der 7. Stufe.",
       "table_headers": {
@@ -56,14 +57,14 @@
       "builder_intro": "Die 3m geht zur 5d, und von dort wählst du die Septime: 7d für den voll verminderten (dim7) oder 7m für den halbverminderten (m7♭5). Halte bei der 5d für den verminderten Dreiklang."
     },
     "s331": {
-      "label": "3.3.1 · Sekunde und Quarte",
+      "label": "4.6 · Sekunde und Quarte",
       "title": "Große Sekunde und reine Quarte",
       "intro": "Zwei Intervalle aus T1, jetzt als Baustein für Akkorde (nicht nur als Töne innerhalb einer Tonleiter). Die große Sekunde (2M) liegt 2 Halbtöne von der Tonika entfernt; die reine Quarte (4J) 5.",
       "ruler_aria": "Intervall-Lineal: Sekunde und Quarte rund um die Terz",
       "legend": "Die 2. (2 HT) liegt direkt unter der kleinen Terz, die 4. (5 HT) direkt über der großen Terz. Die Terzen, abgeblendet, sind die Referenz, die sie ersetzen werden."
     },
     "s33": {
-      "label": "3.3 · Sus-Akkorde",
+      "label": "4.7 · Sus-Akkorde",
       "title": "Sus-Akkorde: sus2 und sus4",
       "intro": "Sus-Akkorde ersetzen die Terz durch ein anderes Intervall: die große Sekunde (sus2) oder die reine Quarte (sus4). Ohne Terz ist der Akkord weder Dur noch Moll; es bleibt ein offener Klang ohne tonales Geschlecht, der nach Auflösung verlangt oder schwebend bleibt.",
       "table_headers": {
@@ -83,26 +84,26 @@
       "builder_intro": "Statt einer Terz wähle die 2. oder die 4., danach die Quinte. Die 2. liegt näher an der Tonika, die 4. weiter entfernt."
     },
     "s34": {
-      "label": "3.4 · Vollständiger Konstruktor",
+      "label": "5.1 · Akkord-Konstruktor",
       "title": "Vollständiger Akkord-Konstruktor",
-      "intro": "Der ganze Baum, mit allem aus T3. Von der Tonika aus wähle eine Sekunde, eine Terz oder eine Quarte; dann eine Quinte (rein oder vermindert); und, wenn du willst, eine Septime. Jeder gültige Pfad bildet einen der zehn Akkorde der Methode. Die Position codiert weiterhin dasselbe: weiter oben, näher an der Tonika; weiter links, tiefer die Qualität.",
+      "intro": "Der ganze Baum, mit allem aus T3 und T4. Von der Tonika aus wähle eine Sekunde, eine Terz oder eine Quarte; dann eine Quinte (rein oder vermindert); und, wenn du willst, eine Septime. Jeder gültige Pfad bildet einen der zehn Akkorde der Methode. Die Position codiert weiterhin dasselbe: weiter oben, näher an der Tonika; weiter links, tiefer die Qualität.",
       "caption": "Zehn Akkorde, ein Baum. Halte bei der Quinte für einen Dreiklang oder Sus-Akkord; geh weiter bis zur Septime für die vierstimmigen Akkorde."
     },
     "s35": {
-      "label": "3.5 · Harmonische Stufen mit Septime",
+      "label": "3.4 · Harmonische Stufen mit Septime",
       "title": "Harmonische Stufen mit Septime",
       "intro": "Harmonisierst du jede Stufe der Dur-Tonleiter mit ihrer diatonischen Septime (Terzen innerhalb der Tonart gestapelt), erhält jede Stufe eine feste Septim-Qualität. Das Muster ist in jeder Tonart dasselbe:",
-      "grado7": "Die 7. Stufe (vii) ist der neue Fall: ihr Dreiklang war vermindert (°), und mit der diatonischen Septime wird sie zum halbverminderten (m7♭5), dem Akkord aus 3.2. Es ist der einzige m7♭5 der Tonart und entsteht auf dem Leitton. Und der Tritonus gehört nicht allein dem V7: das vii trägt ihn ebenfalls in sich, zwischen seinem Grundton (dem Leitton) und seiner verminderten Quinte. Es sind genau dieselben zwei Töne wie im Tritonus des V7, und darum drängt das vii genauso zur Tonika."
+      "grado7": "Die 7. Stufe (vii) ist der neue Fall: ihr Dreiklang war vermindert (°), und mit der diatonischen Septime wird sie zum halbverminderten (m7♭5), dem Akkord aus 3.3. Es ist der einzige m7♭5 der Tonart und entsteht auf dem Leitton. Und der Tritonus gehört nicht allein dem V7: das vii trägt ihn ebenfalls in sich, zwischen seinem Grundton (dem Leitton) und seiner verminderten Quinte. Es sind genau dieselben zwei Töne wie im Tritonus des V7, und darum drängt das vii genauso zur Tonika."
     },
     "s361": {
-      "label": "3.6.1 · Der Tritonus",
+      "label": "3.5 · Der Tritonus",
       "title": "Der Tritonus: die zwei Töne, die drängen",
       "intro": "Bevor du ihn im Akkord siehst, schau dir den Tritonus allein an. In jeder Durtonart liegen die beiden gespannten Stufen — die 4. und die 7. — genau 6 Halbtöne auseinander: das ist ein Tritonus, das instabilste Intervall der Tonleiter. Es ist dieselbe Auflösungskarte aus 1.5, von diesen zwei Tönen aus gelesen.",
       "caption": "Die beiden roten Töne sind der Tritonus. Jeder löst sich per Halbton zum nächsten stabilen Ton auf: die 7. steigt zur Tonika, die 4. sinkt zur 3. Tippe einen Bogen an, um jede Auflösung zu hören, oder die Taste, um die beiden Tritonus-Töne zusammen zu hören.",
       "play_label": "Den Tritonus hören (beide Töne zusammen)"
     },
     "s36": {
-      "label": "3.6.2 · Dominant 7",
+      "label": "3.6 · Dominant 7",
       "title": "Der Dominant 7 (V7)",
       "intro_V7": "Der Dominant 7 ist der Septakkord auf der 5. Stufe: er verbindet die große Terz mit der kleinen Septime. In sich birgt er einen Tritonus (zwischen seiner 3. und seiner 7.), das instabilste Intervall, und diese Spannung treibt ihn zur Auflösung nach I.",
       "intro_vii": "Der vii° ist der Septakkord auf der 7. Stufe: ein halbverminderter Akkord (m7♭5). Er enthält denselben Tritonus wie der V7, aber an einer anderen Stelle des Akkords: zwischen seinem Grundton und seiner verminderten Quinte. Deshalb erfüllt er dieselbe Aufgabe und löst sich ebenfalls nach I auf.",
@@ -123,7 +124,7 @@
       "explain": "Das ii bereitet vor, das V7 spannt (mit seinem Tritonus), und das I löst auf. Da du V7 → I schon in 3.6 gesehen hast, fügt das ii nur einen vorbereitenden Schritt hinzu, der die Ankunft befriedigender macht. Tippe jeden Akkord an oder höre die ganze Verbindung."
     },
     "s38": {
-      "label": "3.8 · Tonikalisierung",
+      "label": "5.2 · Tonikalisierung",
       "title": "Tonikalisierung und Zwischendominanten",
       "intro": "Jeder Akkord der Tonart (außer dem I) kann tonikalisiert werden: ihn für einen Moment wie die Tonika behandeln. Der Akkord, der das leistet, ist seine Zwischendominante, geschrieben V/x, wobei x die tonikalisierte Stufe ist.",
       "construction": "Sie wird wie das V7 gebildet, zielt aber auf eine andere Stufe: der Dominant 7 eine reine Quinte über dieser Stufe. Fast immer bringt er einen leiterfremden Ton mit (den Leitton der tonikalisierten Stufe), und der erzeugt die chromatische Farbe. Tippe jede Zeile an, um die Dominante zu ihrer Stufe auflösen zu hören.",
@@ -134,26 +135,26 @@
       "generalization": "Die Idee erweitert sich, indem man das ganze ii-V-Paar vor jede Stufe einfügt, nicht nur das V allein. Zum Beispiel statt I, ii, V, I: I, ii/ii, V/ii, ii, V, I (Cmaj7, Em7♭5, A7, Dm7, G7, Cmaj7): Em7♭5 und A7 tonikalisieren das Dm7, bevor es weitergeht. Die ii/ii ist halbvermindert, weil die tonikalisierte Stufe Moll ist."
     },
     "s39": {
-      "label": "3.9 · Moll-Tonleiter",
+      "label": "4.2 · Moll-Tonleiter",
       "title": "Die Moll-Tonleiter mit Septimen (Paralleltonart)",
-      "intro": "Jede Dur-Tonart hat eine parallele Molltonart: gleiche Töne, andere Tonika (die 6. Stufe). Harmonisiert man diese natürliche Molltonleiter mit Septimen, ergibt sich dasselbe feste Muster wie in 3.5, jetzt von Moll aus gelesen:",
-      "harmonic": "Damit die Molltonart eine funktionale Dominante bekommt (die wirklich zur Tonika drängt), muss die 7. Stufe um einen Halbton angehoben werden: dieser veränderte Ton ist der Leitton der harmonischen Moll und macht aus dem natürlichen v ein V7. Damit stehen die zwei Bausteine für 3.10 bereit: das V7 und das ii° (der Halbverminderte aus 3.2)."
+      "intro": "Jede Dur-Tonart hat eine parallele Molltonart: gleiche Töne, andere Tonika (die 6. Stufe). Harmonisiert man diese natürliche Molltonleiter mit Septimen, ergibt sich dasselbe feste Muster wie in 3.4, jetzt von Moll aus gelesen:",
+      "harmonic": "Damit die Molltonart eine funktionale Dominante bekommt (die wirklich zur Tonika drängt), muss die 7. Stufe um einen Halbton angehoben werden: dieser veränderte Ton ist der Leitton der harmonischen Moll und macht aus dem natürlichen v ein V7. Damit stehen die zwei Bausteine für 4.5 bereit: das V7 und das ii° (der Halbverminderte aus 3.3)."
     },
     "s310": {
-      "label": "3.10 · ii°-V7-i (Moll)",
+      "label": "4.5 · ii°-V7-i (Moll)",
       "title": "Harmonische Verbindungen in Moll",
-      "intro": "Die reale Molltonart mischt die natürliche Moll (3.9) mit der harmonischen: sie nutzt das natürliche ii als Halbverminderten (ii°) und hebt den Leitton nur bei der Dominante an (V7). Diese beiden Bausteine bilden das ii°-V7-i in Moll, das genaue Gegenstück zum ii-V-I aus 3.7:",
+      "intro": "Die reale Molltonart mischt die natürliche Moll (4.2) mit der harmonischen: sie nutzt das natürliche ii als Halbverminderten (ii°) und hebt den Leitton nur bei der Dominante an (V7). Diese beiden Bausteine bilden das ii°-V7-i in Moll, das genaue Gegenstück zum ii-V-I aus 3.7:",
       "functions": [
         "Veränderte Subdominante",
         "Dominante · mit angehobenem Leitton",
         "Tonika in Moll"
       ],
-      "explain": "Das ii° bereitet wie das Dur-ii vor, ist aber von Anfang an gespannt (ein Halbverminderter). Das V7 spannt nach derselben Tritonus-Logik aus 3.6, nur ist dieser Leitton ein Ton, der aus der harmonischen Moll entlehnt ist. Das i löst in Moll auf. Typische Verbindungen aus Folklore und Bolero (i-♭VI-♭VII-i, i-iv-V7-i) nutzen genau diese Bausteine."
+      "explain": "Das ii° bereitet wie das Dur-ii vor, ist aber von Anfang an gespannt (ein Halbverminderter). Das V7 spannt nach derselben Tritonus-Logik aus 3.5, nur ist dieser Leitton ein Ton, der aus der harmonischen Moll entlehnt ist. Das i löst in Moll auf. Typische Verbindungen aus Folklore und Bolero (i-♭VI-♭VII-i, i-iv-V7-i) nutzen genau diese Bausteine."
     }
   },
   "t4": {
     "s41": {
-      "label": "4.1 · Akkordfolgen-Baukasten",
+      "label": "5.4 · Harmonie-Labor",
       "title": "Baue deine eigene Akkordfolge",
       "intro": "Wähle zuerst die Taktart und wie viele Takte du willst. Wähle danach die Tonart im Kreis (außen Dur, innen die parallelen Molltonarten) und setze Stufen auf die Schläge. Ein Akkord klingt, bis der nächste erscheint: lässt du einen Schlag leer, füllt ihn der vorige Akkord.",
       "explain": "Nichts, was du baust, ist richtig oder falsch. Drücke Play und höre zu: klingt die Folge nicht rund, sagt dir das Ohr das früher als jede Regel.",
@@ -588,7 +589,7 @@
     },
 
     "s49": {
-      "label": "2.8 · Paralleltonarten",
+      "label": "4.1 · Paralleltonarten",
       "title": "Moll-Paralleltonarten",
       "intro_p1": "Jede Durtonart hat eine Moll-Paralleltonart, die genau dieselben Vorzeichen teilt. Die Paralleltonart wird auf der 6. Stufe der Durtonart aufgebaut.",
       "intro_p2": "Die natürliche Molltonleiter wird mit denselben 7 Tönen der Durtonleiter gebildet, beginnt aber auf dem 6. Ton. Die sieben Akkorde sind in beiden Fällen dieselben — nur die Reihenfolge ändert sich:",
