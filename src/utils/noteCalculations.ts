@@ -98,6 +98,36 @@ export function relativeMinorScaleSpelled(majorTonic: Tonic): string[] {
   return [...major.slice(5), ...major.slice(0, 5)];
 }
 
+// La menor armónica de la relativa: la natural con la 7ª subida un semitono
+// (reunión 19/10/26: "sólo voy a cambiar la séptima nota un semitono arriba").
+// La sensible se deletrea como 7M de la tónica menor, así que conserva su
+// letra (G♯ y no A♭; Fx en Sol♯ menor).
+export function harmonicMinorScaleSpelled(majorTonic: Tonic): string[] {
+  const natural = relativeMinorScaleSpelled(majorTonic);
+  const tonicaMenor = natural[0].replace("♯", "#").replace("♭", "b") as Tonic;
+  return [...natural.slice(0, 6), spelledIntervalFromTonic(tonicaMenor, 7, "M")];
+}
+
+// Los siete grados con séptima de la menor armónica, terceras apiladas sobre
+// la escala. El cifrado del III aumentado con 7M (maj7♯5) y el del menor con
+// 7M (mMaj7, D10 del plan del 19/10) siguen la convención del resto de la app.
+const MENOR_ARMONICA = {
+  romanos: ["i", "ii°", "III+", "iv", "V", "VI", "vii°"],
+  sufijos: ["mMaj7", "m7♭5", "maj7♯5", "m7", "7", "maj7", "°7"],
+} as const;
+
+export function acordeMenorArmonica(
+  majorTonic: Tonic,
+  grado: number,
+): { romano: string; cifrado: string; notas: string[] } {
+  const escala = harmonicMinorScaleSpelled(majorTonic);
+  return {
+    romano: MENOR_ARMONICA.romanos[grado],
+    cifrado: escala[grado] + MENOR_ARMONICA.sufijos[grado],
+    notas: [0, 2, 4, 6].map((k) => escala[(grado + k) % 7]),
+  };
+}
+
 export type ChordType = "M" | "m" | "aug" | "dim";
 
 export interface ChordMember {
@@ -425,20 +455,16 @@ export function progresionIIVI({
   septimaEnI: boolean;
 }): AcordeIIVI[] {
   const escala = modo === "mayor" ? majorScaleSpelled(tonica) : relativeMinorScaleSpelled(tonica);
+  const sensible = harmonicMinorScaleSpelled(tonica)[6];
   const defs =
     modo === "mayor" ? IIVI_MAYOR : [...IIVI_MENOR, septimaEnI ? I_MENOR_SEPTIMA : I_MENOR_TRIADA];
   return defs.map((d) => ({
     cifrado: escala[d.grado] + d.sufijo,
     notas: d.voces.map((v) =>
-      d.sensibleElevada && v === 6 ? sensibleMenorArmonica(escala[0]) : escala[v],
+      d.sensibleElevada && v === 6 ? sensible : escala[v],
     ),
     rol: d.rol,
   }));
-}
-
-function sensibleMenorArmonica(tonicaMenor: string): string {
-  const ascii = tonicaMenor.replace("♯", "#").replace("♭", "b") as Tonic;
-  return spelledIntervalFromTonic(ascii, 7, "M");
 }
 
 // === Dominante y vii° (§3.6.2) ===

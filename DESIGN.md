@@ -460,6 +460,12 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
 
+**65ª ola (2026-10-19): la menor armónica como lógica pura (pedido #8, sin cambio visible):**
+- ✓ **`harmonicMinorScaleSpelled(tonicaMayor)`** en `noteCalculations.ts`: la relativa natural con la 7ª subida, deletreada como 7M de la tónica menor (G♯ y no A♭; Fx en Sol♯ menor). **`acordeMenorArmonica(tonica, grado)`** apila terceras y da romano y cifrado: `i mMaj7 · iiø m7♭5 · III+ maj7♯5 · iv m7 · V 7 · VI maj7 · vii° °7`.
+- ✓ **El ii°-V7-i usa la escala nueva** para su sensible (antes la calculaba aparte); §3.10 queda igual, verificado.
+- ✓ **`npm run verify:menor`** nuevo: 14 tonalidades (igual a la natural salvo la 7ª, que sube un semitono), `pitchClass('Fx') === 7` y los cuatro acordes característicos de La menor armónica.
+- La sección visible (ola 20 del plan) sigue bloqueada por la reestructura de módulos.
+
 **64ª ola (2026-10-19): §4.1 modulación (pedido #28, D3 del plan):**
 - ✓ **Cada casilla guarda su tonalidad** (`Slot = { degree, tonalidad }`). Cambiar de armadura o de modo cambia solo la tonalidad activa, la que recibe el próximo acorde: lo ya colocado sigue sonando donde se puso. Verificado en browser: I-IV-V en Re, modular a Sol, I → `D · G · A · G`. Revierte la decisión de la 44ª ola ("los grados sobreviven al cambio de tonalidad"): el profesor dijo "¿quién dijo que no se puede cambiar de tonalidad? Eso se llama modulación".
 - ✓ **"¿Seguro que quieres modular a G?"** en un `<dialog>` (mismo patrón que el borrado de la 63ª ola) cuando la grilla tiene acordes; con la grilla vacía la tonalidad cambia directo. Cancelar o Esc no cambia nada.
