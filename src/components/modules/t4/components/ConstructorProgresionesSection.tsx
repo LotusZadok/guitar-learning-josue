@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
 import ArmaduraSelector from '../../../primitives/ArmaduraSelector/ArmaduraSelector';
@@ -6,9 +6,9 @@ import BancoGrados from '../../../primitives/BancoGrados/BancoGrados';
 import GrillaProgresion from '../../../primitives/GrillaProgresion/GrillaProgresion';
 import TransporteProgresion, { MedidaProgresion } from '../../../primitives/TransporteProgresion/TransporteProgresion';
 import { useProgressionPlayback } from '../../../../hooks/useProgressionPlayback';
-import { contarHuerfanas, useConstructorStore } from '../../../../stores/useConstructorStore';
-import { armaduraPorId } from '../../../../utils/progresionAcordes';
-import type { GradoId, Modo } from '../../../../utils/progresionArmonica';
+import { useConstructorStore } from '../../../../stores/useConstructorStore';
+import { armaduraPorId, etiquetaTonalidad } from '../../../../utils/progresionAcordes';
+import { mismaTonalidad, type GradoId, type Tonalidad } from '../../../../utils/progresionArmonica';
 import styles from './ConstructorProgresionesSection.module.css';
 
 // 4.1 · Constructor de progresiones. Sandbox puro: se arma y se oye. No evalúa,
@@ -18,15 +18,14 @@ export default function ConstructorProgresionesSection() {
   const { t } = useTranslation();
   const s = useConstructorStore();
   const armadura = armaduraPorId(s.armaduraId);
-  const [modoPendiente, setModoPendiente] = useState<Modo | null>(null);
+  const [modulacionPendiente, setModulacionPendiente] = useState<Tonalidad | null>(null);
   const dialogoLimpiarRef = useRef<HTMLDialogElement>(null);
+  const dialogoModularRef = useRef<HTMLDialogElement>(null);
 
   const { reproduciendo, pausado, sonando, play, pause } = useProgressionPlayback({
     grid: s.grid,
     compas: s.compas,
     bpm: s.bpm,
-    armadura,
-    modo: s.modo,
     septimas: s.septimas,
     metronomo: s.metronomo,
     loop: s.loop,
@@ -34,16 +33,24 @@ export default function ConstructorProgresionesSection() {
 
   const hayContenido = s.grid.some((c) => c !== null);
 
-  // Cambiar de modo reescribe los romanos, así que las casillas cuyo grado no
-  // existe en el modo destino se vacían. Se avisa ANTES, no se deshace después.
-  const pedirModo = (modo: Modo) => {
-    if (modo === s.modo) return;
-    const huerfanas = contarHuerfanas(s.grid, modo);
-    if (huerfanas === 0) {
-      s.setModo(modo);
+  const aplicarTonalidad = ({ armaduraId, modo }: Tonalidad) => {
+    s.setArmadura(armaduraId);
+    s.setModo(modo);
+  };
+
+  // Reunión 19/10/26: "¿quién dijo que no se puede cambiar de tonalidad? Eso
+  // se llama modulación". Con acordes ya puestos, cambiar de tonalidad
+  // pregunta antes; lo puesto queda en su tonalidad y lo que sigue se coloca
+  // en la nueva. Con la grilla vacía no hay nada que modular.
+  const pedirTonalidad = (destino: Tonalidad) => {
+    const actual = { armaduraId: s.armaduraId, modo: s.modo };
+    if (mismaTonalidad(destino, actual)) return;
+    if (!hayContenido) {
+      aplicarTonalidad(destino);
       return;
     }
-    setModoPendiente(modo);
+    setModulacionPendiente(destino);
+    dialogoModularRef.current?.showModal();
   };
 
   // Limpiar no tiene deshacer ni persistencia: un click accidental borra el
@@ -52,7 +59,6 @@ export default function ConstructorProgresionesSection() {
   // igual). `showModal()` trae foco, Esc y fondo bloqueado nativos.
   const pedirLimpiar = () => {
     if (!hayContenido) return;
-    setModoPendiente(null);
     dialogoLimpiarRef.current?.showModal();
   };
 
@@ -60,13 +66,6 @@ export default function ConstructorProgresionesSection() {
     s.armarGrado(id);
     s.colocarEn(slotIndex);
   };
-
-  // Un alertdialog que no recibe foco es invisible para un lector de
-  // pantalla: al aparecer, el foco se mueve a su primera acción.
-  const primeraAccionModoRef = useRef<HTMLButtonElement>(null);
-  useEffect(() => {
-    if (modoPendiente) primeraAccionModoRef.current?.focus();
-  }, [modoPendiente]);
 
   return (
     <section id="s-t4-constructor" className={styles.section}>
@@ -85,30 +84,37 @@ export default function ConstructorProgresionesSection() {
       <ArmaduraSelector
         armaduraId={s.armaduraId}
         modo={s.modo}
-        onArmadura={s.setArmadura}
-        onModo={pedirModo}
+        onArmadura={(armaduraId) => pedirTonalidad({ armaduraId, modo: s.modo })}
+        onModo={(modo) => pedirTonalidad({ armaduraId: s.armaduraId, modo })}
         septimas={{ activas: s.septimas, etiqueta: t('t4.s41.septimas'), onToggle: s.toggleSeptimas }}
       />
 
-      {modoPendiente && (
-        <div className={styles.aviso} role="alertdialog" aria-labelledby="aviso-modo">
-          <p id="aviso-modo" className={styles.text}>
-            {t('t4.s41.aviso_modo', { count: contarHuerfanas(s.grid, modoPendiente) })}
-          </p>
-          <div className={styles.avisoAcciones}>
-            <button
-              ref={primeraAccionModoRef}
-              type="button"
-              onClick={() => { s.setModo(modoPendiente); setModoPendiente(null); }}
-            >
-              {t('t4.s41.aviso_continuar')}
-            </button>
-            <button type="button" onClick={() => setModoPendiente(null)}>
-              {t('t4.s41.aviso_cancelar')}
-            </button>
-          </div>
-        </div>
-      )}
+      <dialog
+        ref={dialogoModularRef}
+        className={styles.dialogo}
+        aria-labelledby="aviso-modular"
+        onClose={() => setModulacionPendiente(null)}
+      >
+        <p id="aviso-modular" className={styles.text}>
+          {modulacionPendiente &&
+            t('t4.s41.aviso_modular', {
+              tonalidad: etiquetaTonalidad(armaduraPorId(modulacionPendiente.armaduraId), modulacionPendiente.modo),
+              actual: etiquetaTonalidad(armadura, s.modo),
+            })}
+        </p>
+        <form method="dialog" className={styles.avisoAcciones}>
+          <button
+            type="submit"
+            value="modular"
+            onClick={() => modulacionPendiente && aplicarTonalidad(modulacionPendiente)}
+          >
+            {t('t4.s41.aviso_modular_si')}
+          </button>
+          <button type="submit" value="cancelar">
+            {t('t4.s41.aviso_cancelar')}
+          </button>
+        </form>
+      </dialog>
 
       <BancoGrados
         armadura={armadura}
@@ -123,14 +129,13 @@ export default function ConstructorProgresionesSection() {
         grid={s.grid}
         compas={s.compas}
         nCompases={s.nCompases}
-        armadura={armadura}
-        modo={s.modo}
         septimas={s.septimas}
         sonando={sonando}
         hayGradoArmado={s.gradoArmado !== null}
         onColocar={s.colocarEn}
         onVaciar={s.vaciarSlot}
         onSoltar={soltar}
+        etiquetaModulacion={(tonalidad) => t('t4.s41.casilla_tonalidad', { tonalidad })}
       />
 
       <TransporteProgresion

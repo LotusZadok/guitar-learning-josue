@@ -180,9 +180,9 @@
       "reproducir": "Tocar",
       "reanudar": "Seguir desde la pausa",
       "pausar": "Pausar",
-      "aviso_modo_one": "Cambiar de modo reescribe los grados. 1 acorde de tu progresión no existe en la otra tonalidad y se va a vaciar.",
-      "aviso_modo_other": "Cambiar de modo reescribe los grados. {{count}} acordes de tu progresión no existen en la otra tonalidad y se van a vaciar.",
-      "aviso_continuar": "Cambiar igual",
+      "aviso_modular": "¿Seguro que quieres modular a {{tonalidad}}? Lo que ya pusiste se queda en {{actual}}; lo que coloques desde ahora va a estar en {{tonalidad}}.",
+      "aviso_modular_si": "Modular",
+      "casilla_tonalidad": "En {{tonalidad}}",
       "aviso_cancelar": "Dejarlo así",
       "aviso_limpiar": "Vas a borrar la progresión entera. No se puede deshacer.",
       "aviso_limpiar_si": "Borrar"

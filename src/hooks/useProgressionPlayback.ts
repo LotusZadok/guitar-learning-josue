@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAudioEngine, stopAllNotes, getCtx } from './useAudioEngine';
 import { getAudioContext } from './audioEngineShared';
-import { acordeDeGrado, type Armadura } from '../utils/progresionAcordes';
+import { acordeDeSlot } from '../utils/progresionAcordes';
 import {
   casillaEn,
   clicksDeMetronomo,
@@ -12,15 +12,12 @@ import {
   msPorCasilla,
   type Compas,
   type Grid,
-  type Modo,
 } from '../utils/progresionArmonica';
 
 interface Opciones {
   grid: Grid;
   compas: Compas;
   bpm: number;
-  armadura: Armadura;
-  modo: Modo;
   septimas: boolean;
   metronomo: boolean;
   loop: boolean;
@@ -105,7 +102,7 @@ export function useProgressionPlayback(op: Opciones) {
 
     // Acordes: cada voz con su duración exacta.
     eventos.forEach((ev) => {
-      const acorde = acordeDeGrado(op.armadura, op.modo, ev.degree, op.septimas);
+      const acorde = acordeDeSlot(op.grid[ev.slotIndex]!, op.septimas);
       const id = window.setTimeout(() => {
         acorde.notas.forEach((n) => playNote(n.chromatic, n.octave, ev.durMs / 1000));
       }, ev.startMs);
@@ -174,7 +171,7 @@ export function useProgressionPlayback(op: Opciones) {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (reproduciendo || pausadoEn !== null) stop();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [op.grid, op.compas, op.bpm, op.armadura, op.modo, op.septimas]);
+  }, [op.grid, op.compas, op.bpm, op.septimas]);
 
   // Cleanup de desmontaje. `stop` es estable (depende solo de `cancelar`,
   // que no tiene deps), así que este efecto monta una vez y su cleanup corre

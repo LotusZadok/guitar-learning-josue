@@ -40,7 +40,7 @@ export default function BancoGrados({
   const grados = gradosDe(modo);
 
   const chip = (id: GradoId, extra?: string) => {
-    const acorde = acordeDeGrado(armadura, modo, id, septimas);
+    const acorde = acordeDeGrado({ armadura, modo, id, septimas });
     const armado = gradoArmado === id;
     return (
       <button

@@ -1,11 +1,11 @@
 // Arnés de la resolución grado → acorde sonante. Carga la cadena real
 // (progresionAcordes → noteCalculations → data/notes) desde Node.
-import { acordeDeGrado, armaduraPorId, etiquetaTonalidad, ARMADURAS } from '../src/utils/progresionAcordes.ts';
+import { acordeDeGrado, acordeDeSlot, armaduraPorId, etiquetaTonalidad, ARMADURAS } from '../src/utils/progresionAcordes.ts';
 import { gradosDe, type GradoId, type Modo } from '../src/utils/progresionArmonica.ts';
 import { check, resumen } from './verify-helpers.ts';
 
 const cif = (arm: string, modo: Modo, g: GradoId, sept: boolean) =>
-  acordeDeGrado(armaduraPorId(arm), modo, g, sept).cifrado;
+  acordeDeGrado({ armadura: armaduraPorId(arm), modo, id: g, septimas: sept }).cifrado;
 
 console.log('\n— Do mayor, triadas —');
 check('I',    cif('C', 'mayor', 'I', false),    'C');
@@ -71,7 +71,7 @@ for (const arm of ARMADURAS) {
       const ids: GradoId[] = [gs[i], `V/${gs[i]}`, `ii/${gs[i]}`];
       for (const id of ids) {
         for (const sept of [false, true]) {
-          const c = acordeDeGrado(arm, modo, id, sept).cifrado;
+          const c = acordeDeGrado({ armadura: arm, modo, id, septimas: sept }).cifrado;
           if (c.includes('♯♯')) dobles.push(`${arm.id}/${modo}/${id} -> ${c}`);
         }
       }
@@ -94,7 +94,7 @@ for (const arm of ARMADURAS) {
       const ids: GradoId[] = [gs[i], `V/${gs[i]}`, `ii/${gs[i]}`];
       for (const id of ids) {
         for (const sept of [false, true]) {
-          const a = acordeDeGrado(arm, modo, id, sept);
+          const a = acordeDeGrado({ armadura: arm, modo, id, septimas: sept });
           if (a.notas.length < 3 || a.notas.some((n) => !n.chromatic)) {
             rotos.push(`${arm.id}/${modo}/${id}/${sept ? '7' : '3'}`);
           }
@@ -110,7 +110,7 @@ const desordenados: string[] = [];
 for (const arm of ARMADURAS) {
   for (const modo of ['mayor', 'menor'] as Modo[]) {
     for (const g of gradosDe(modo)) {
-      const a = acordeDeGrado(arm, modo, g, true);
+      const a = acordeDeGrado({ armadura: arm, modo, id: g, septimas: true });
       for (let k = 1; k < a.notas.length; k++) {
         const prev = a.notas[k - 1], cur = a.notas[k];
         if (cur.octave < prev.octave) desordenados.push(`${arm.id}/${modo}/${g}`);
@@ -119,5 +119,12 @@ for (const arm of ARMADURAS) {
   }
 }
 check('ninguna nota baja de octava respecto de la anterior', desordenados.slice(0, 12), []);
+
+console.log('\n— Cada casilla suena en su tonalidad (reunión 19/10/26) —');
+const iEnDo = { degree: 'I' as const, tonalidad: { armaduraId: 'C', modo: 'mayor' as const } };
+const iEnSol = { degree: 'I' as const, tonalidad: { armaduraId: 'G', modo: 'mayor' as const } };
+check('el I colocado en Do sigue siendo C aunque después se module', acordeDeSlot(iEnDo, false).cifrado, 'C');
+check('el I colocado en Sol es G', acordeDeSlot(iEnSol, false).cifrado, 'G');
+check('el V7 en Sol con séptimas', acordeDeSlot({ degree: 'V', tonalidad: iEnSol.tonalidad }, true).cifrado, 'D7');
 
 resumen();

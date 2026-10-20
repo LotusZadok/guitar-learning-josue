@@ -182,9 +182,9 @@
       "reproducir": "Abspielen",
       "reanudar": "Ab der Pause weiterspielen",
       "pausar": "Pausieren",
-      "aviso_modo_one": "Der Wechsel des Modus schreibt die Stufen neu. 1 Akkord deiner Folge existiert nicht in der anderen Tonart und wird geleert.",
-      "aviso_modo_other": "Der Wechsel des Modus schreibt die Stufen neu. {{count}} Akkorde deiner Folge existieren nicht in der anderen Tonart und werden geleert.",
-      "aviso_continuar": "Trotzdem wechseln",
+      "aviso_modular": "Willst du wirklich nach {{tonalidad}} modulieren? Was du schon gesetzt hast, bleibt in {{actual}}; was du ab jetzt setzt, steht in {{tonalidad}}.",
+      "aviso_modular_si": "Modulieren",
+      "casilla_tonalidad": "In {{tonalidad}}",
       "aviso_cancelar": "So lassen",
       "aviso_limpiar": "Du löschst die gesamte Folge. Das lässt sich nicht rückgängig machen.",
       "aviso_limpiar_si": "Löschen"

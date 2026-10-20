@@ -84,3 +84,27 @@
 /* Ligadura de relleno: la línea que dice "acá sigue sonando el anterior". */
 .ligadura { display: block; width: 100%; height: 1px; }
 .casilla[data-continua='true'] .ligadura { background: var(--muted); }
+
+/* Modulación: rótulo de la tonalidad de cada tramo, arriba a la izquierda de
+   su primera casilla, y doble barra antes de la casilla donde cambia (así se
+   marca un cambio de tonalidad en la partitura). Dos trazos de 1px, no una
+   franja de color: es notación, no decoración. */
+.tonalidad {
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: var(--paper);
+}
+
+.casilla[data-modula='true']::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  bottom: -6px;
+  left: -6px;
+  width: 2px;
+  border-left: 1px solid var(--paper);
+  border-right: 1px solid var(--paper);
+}

@@ -18,10 +18,17 @@ import {
   clicksDeMetronomo,
   clicksDesde,
   eventosDesde,
+  colocarSlot,
+  puntosDeModulacion,
   type Grid,
+  type Tonalidad,
   type Compas,
 } from '../src/utils/progresionArmonica.ts';
 import { check, checkCasi, resumen } from './verify-helpers.ts';
+
+const DO: Tonalidad = { armaduraId: 'C', modo: 'mayor' };
+const SOL: Tonalidad = { armaduraId: 'G', modo: 'mayor' };
+const slot = (degree: string, tonalidad: Tonalidad = DO) => ({ degree, tonalidad }) as NonNullable<Grid[number]>;
 
 console.log('\n— Compases —');
 check('casillas 2/4', CASILLAS_POR_COMPAS['2/4'], 2);
@@ -44,7 +51,7 @@ console.log('\n— Grilla —');
 check('crearGrid 4/4 x2 = 8 casillas vacias', crearGrid('4/4', 2), new Array(8).fill(null));
 
 console.log('\n— Relleno y corte —');
-const g1: Grid = [{ degree: 'I' }, null, null, { degree: 'V' }];
+const g1: Grid = [slot('I'), null, null, slot('V')];
 check(
   'el acorde se sostiene hasta el siguiente y el ultimo llega al final',
   gridToEvents(g1, '4/4', 120),
@@ -54,7 +61,7 @@ check(
   ],
 );
 
-const g2: Grid = [null, { degree: 'I' }, null, null];
+const g2: Grid = [null, slot('I'), null, null];
 check(
   'casilla vacia inicial = silencio, no adelanta el acorde',
   gridToEvents(g2, '4/4', 120),
@@ -63,7 +70,7 @@ check(
 
 check('grilla vacia no produce eventos', gridToEvents([null, null], '2/4', 120), []);
 
-const g3: Grid = [{ degree: 'I' }, { degree: 'ii' }, { degree: 'V' }];
+const g3: Grid = [slot('I'), slot('ii'), slot('V')];
 check(
   'acordes contiguos duran una casilla cada uno',
   gridToEvents(g3, '3/4', 60),
@@ -74,7 +81,7 @@ check(
   ],
 );
 
-const g4: Grid = [{ degree: 'I' }, null, null, null, null, null];
+const g4: Grid = [slot('I'), null, null, null, null, null];
 check(
   'un solo acorde ocupa el compas entero de 6/8',
   gridToEvents(g4, '6/8', 90).map((e) => ({ d: e.degree, ms: Math.round(e.durMs) })),
@@ -145,7 +152,7 @@ check('cada clic sabe su casilla', clicksDeMetronomo(3, '3/4').map((c) => c.casi
 
 console.log('\n— Pausa y reanudación (reunión 19/10/26) —');
 // 4/4 @120 → 500 ms por casilla. I en 0 (dura 2 casillas), V en 2 (dura 2).
-const gridPausa: Grid = [{ degree: 'I' }, null, { degree: 'V' }, null];
+const gridPausa: Grid = [slot('I'), null, slot('V'), null];
 const evPausa = gridToEvents(gridPausa, '4/4', 120);
 check('desde 0 no cambia nada', eventosDesde(evPausa, 0, 500), evPausa);
 check(
@@ -163,5 +170,19 @@ check(
   clicksDesde(clicksDeMetronomo(4, '4/4'), 3).map((c) => c.casilla),
   [3],
 );
+
+console.log('\n— Modulación (reunión 19/10/26) —');
+const vacia: Grid = [null, null, null, null];
+const conI = colocarSlot(vacia, 1, slot('I', DO));
+check('colocarSlot guarda grado y tonalidad', conI[1], { degree: 'I', tonalidad: DO });
+check('colocarSlot no muta la grilla original', vacia[1], null);
+const modulada: Grid = [slot('I', DO), null, slot('IV', DO), slot('V', SOL), slot('I', SOL)];
+check(
+  'puntosDeModulacion: el primer acorde y cada cambio de tonalidad',
+  puntosDeModulacion(modulada),
+  [{ indice: 0, tonalidad: DO }, { indice: 3, tonalidad: SOL }],
+);
+check('sin modulación hay un solo tramo', puntosDeModulacion([slot('I'), slot('V')]).length, 1);
+check('grilla vacía: sin tramos', puntosDeModulacion(vacia), []);
 
 resumen();

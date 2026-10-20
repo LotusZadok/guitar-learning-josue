@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import {
   CASILLAS_POR_COMPAS,
+  colocarSlot,
   crearGrid,
-  gradosDe,
   type Compas,
   type GradoId,
   type Grid,
@@ -43,28 +43,6 @@ interface ConstructorState {
   limpiarGrid: () => void;
 }
 
-// Qué grados del grid dejan de existir al cambiar de modo. Los romanos son
-// distintos entre mayor y menor ('I' no existe en menor), así que cambiar de
-// modo deja casillas huérfanas. Quién avisa al usuario es la sección, no el
-// store; el store solo sabe contarlas y limpiarlas.
-export function contarHuerfanas(grid: Grid, modoDestino: Modo): number {
-  const validos = new Set<string>(gradosDe(modoDestino));
-  return grid.filter((s) => {
-    if (!s) return false;
-    const base = s.degree.includes('/') ? s.degree.split('/')[1] : s.degree;
-    return !validos.has(base);
-  }).length;
-}
-
-function limpiarHuerfanas(grid: Grid, modoDestino: Modo): Grid {
-  const validos = new Set<string>(gradosDe(modoDestino));
-  return grid.map((s) => {
-    if (!s) return null;
-    const base = s.degree.includes('/') ? s.degree.split('/')[1] : s.degree;
-    return validos.has(base) ? s : null;
-  });
-}
-
 export const useConstructorStore = create<ConstructorState>()((set) => ({
   armaduraId: 'C',
   modo: 'mayor',
@@ -77,14 +55,11 @@ export const useConstructorStore = create<ConstructorState>()((set) => ({
   grid: crearGrid('4/4', COMPASES_DEFAULT),
   gradoArmado: null,
 
-  // Cambiar de armadura NO borra la grilla: los grados son independientes de la
-  // tonalidad, y ese es medio punto de la lección.
+  // Armadura y modo son la tonalidad ACTIVA: la que recibe el próximo acorde.
+  // Lo ya colocado conserva su tonalidad (modulación, reunión 19/10/26); la
+  // pregunta "¿seguro que quieres modular?" la hace la sección antes.
   setArmadura: (armaduraId) => set({ armaduraId }),
-
-  // Cambiar de modo SÍ reescribe los romanos, así que las casillas cuyo grado no
-  // existe en el modo destino se vacían. La confirmación la pide la sección
-  // ANTES de llamar acá (ver contarHuerfanas).
-  setModo: (modo) => set((s) => ({ modo, grid: limpiarHuerfanas(s.grid, modo) })),
+  setModo: (modo) => set({ modo }),
 
   // Cambiar el compás re-arma la grilla: cambia cuántas casillas tiene cada
   // compás, así que los índices viejos no significan lo mismo.
@@ -113,9 +88,11 @@ export const useConstructorStore = create<ConstructorState>()((set) => ({
   colocarEn: (slotIndex) =>
     set((s) => {
       if (!s.gradoArmado) return {};
-      const grid = s.grid.slice();
-      grid[slotIndex] = { degree: s.gradoArmado };
-      return { grid, gradoArmado: null };
+      const tonalidad = { armaduraId: s.armaduraId, modo: s.modo };
+      return {
+        grid: colocarSlot(s.grid, slotIndex, { degree: s.gradoArmado, tonalidad }),
+        gradoArmado: null,
+      };
     }),
 
   vaciarSlot: (slotIndex) =>

@@ -18,6 +18,7 @@ import {
   type GradoId,
   type Modo,
   type RolArmonico,
+  type Slot,
 } from './progresionArmonica.ts';
 
 export interface Armadura {
@@ -99,12 +100,17 @@ function raicesDe(armadura: Armadura, modo: Modo): string[] {
   return escala.map(ASCII);
 }
 
-export function acordeDeGrado(
-  armadura: Armadura,
-  modo: Modo,
-  id: GradoId,
-  septimas: boolean,
-): AcordeSonante {
+export function acordeDeGrado({
+  armadura,
+  modo,
+  id,
+  septimas,
+}: {
+  armadura: Armadura;
+  modo: Modo;
+  id: GradoId;
+  septimas: boolean;
+}): AcordeSonante {
   const raices = raicesDe(armadura, modo);
   const grados = gradosDe(modo);
   const calidades = calidadesDe(modo);
@@ -146,4 +152,15 @@ export function acordeDeGrado(
     rol: rolDe(modo, id),
     notas: seq.map((s) => ({ chromatic: s.name, octave: s.octave })),
   };
+}
+
+// El acorde de una casilla colocada: se resuelve en la tonalidad en la que se
+// colocó, no en la activa (modulación, reunión 19/10/26).
+export function acordeDeSlot(slot: NonNullable<Slot>, septimas: boolean): AcordeSonante {
+  return acordeDeGrado({
+    armadura: armaduraPorId(slot.tonalidad.armaduraId),
+    modo: slot.tonalidad.modo,
+    id: slot.degree,
+    septimas,
+  });
 }

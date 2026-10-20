@@ -111,8 +111,39 @@ export function rolDe(modo: Modo, id: GradoId): RolArmonico {
   return ROL_POR_INDICE[i];
 }
 
-export type Slot = { degree: GradoId } | null;
+// Reunión 19/10/26 (modulación): cada casilla guarda la tonalidad en la que
+// se colocó. Cambiar de tonalidad ya no transpone lo que estaba puesto: lo que
+// sigue se coloca en la nueva, y la grilla marca dónde cambió.
+export interface Tonalidad {
+  armaduraId: string;
+  modo: Modo;
+}
+export type Slot = { degree: GradoId; tonalidad: Tonalidad } | null;
 export type Grid = Slot[];
+
+export function mismaTonalidad(a: Tonalidad, b: Tonalidad): boolean {
+  return a.armaduraId === b.armaduraId && a.modo === b.modo;
+}
+
+export function colocarSlot(grid: Grid, indice: number, slot: Slot): Grid {
+  const nueva = grid.slice();
+  nueva[indice] = slot;
+  return nueva;
+}
+
+// Dónde empieza cada tramo de tonalidad: el primer acorde y cada acorde cuya
+// tonalidad difiere de la del acorde anterior. Las casillas vacías no cortan.
+export function puntosDeModulacion(grid: Grid): { indice: number; tonalidad: Tonalidad }[] {
+  const puntos: { indice: number; tonalidad: Tonalidad }[] = [];
+  grid.forEach((slot, indice) => {
+    if (!slot) return;
+    const previo = puntos[puntos.length - 1];
+    if (!previo || !mismaTonalidad(previo.tonalidad, slot.tonalidad)) {
+      puntos.push({ indice, tonalidad: slot.tonalidad });
+    }
+  });
+  return puntos;
+}
 
 export function crearGrid(compas: Compas, nCompases: number): Grid {
   return new Array<Slot>(nCompases * CASILLAS_POR_COMPAS[compas]).fill(null);
