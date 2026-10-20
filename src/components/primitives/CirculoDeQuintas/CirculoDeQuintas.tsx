@@ -4,6 +4,7 @@ import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { NOTE_COLORS, NOTE_ES, NOTE_DE } from '../../../data/notes';
 
 import { perfectFifth, noteShort } from '../../../utils/noteCalculations';
+import { anguloEnCirculo, puntoEnCirculo } from '../../../utils/circuloQuintas';
 import type { ChromaticNote } from '../../../types/music';
 import styles from './CirculoDeQuintas.module.css';
 
@@ -53,13 +54,11 @@ export default function CirculoDeQuintas() {
 
   const nodes = useMemo<NodeData[]>(() =>
     COF_ORDER.map((note, i) => {
-      const angleDeg = i * 30 - 90;
-      const angleRad = angleDeg * Math.PI / 180;
+      const angleDeg = anguloEnCirculo(i);
       const fifth = perfectFifth(note);
       return {
         note,
-        x: CX + R * Math.cos(angleRad),
-        y: CY + R * Math.sin(angleRad),
+        ...puntoEnCirculo(i, R, { x: CX, y: CY }),
         angleDeg,
         fifthChromatic: fifth.chromatic,
         fifthOctave: fifth.octave,

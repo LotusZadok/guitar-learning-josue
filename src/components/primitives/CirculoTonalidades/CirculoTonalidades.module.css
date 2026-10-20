@@ -1,0 +1,117 @@
+.wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px;
+}
+
+/* El círculo es un cuadrado; los nodos se ubican en % desde el centro. */
+.circulo {
+  position: relative;
+  width: min(340px, 100%);
+  aspect-ratio: 1;
+}
+
+/* Guía del anillo exterior: el círculo de quintas que el profesor dibujó. */
+.anillo {
+  position: absolute;
+  inset: 9%;
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+}
+
+/* Los nodos son tonalidades, no notas: sin los colores de nota
+   (Note-Color Quarantine) y sin ámbar (no suenan). */
+.mayor,
+.menor {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--text-body);
+  font-family: 'IBM Plex Mono', monospace;
+  cursor: pointer;
+  transition: border-color 160ms ease, color 160ms ease;
+}
+
+.mayor {
+  width: 44px;
+  height: 44px;
+  font-size: 14px;
+}
+
+.menor {
+  width: 38px;
+  height: 38px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.mayor:hover,
+.menor:hover {
+  border-color: var(--muted);
+  color: var(--paper);
+}
+
+/* Elegida: anillo de tinta, el mismo patrón que la ficha armada del banco. */
+.mayor[aria-pressed='true'],
+.menor[aria-pressed='true'] {
+  border-color: var(--paper);
+  box-shadow: inset 0 0 0 1px var(--paper);
+  background: var(--surface);
+  color: var(--paper);
+}
+
+.mayor:focus-visible,
+.menor:focus-visible,
+.septimas:focus-visible {
+  outline: 2px solid var(--paper);
+  outline-offset: 2px;
+}
+
+/* Centro: la tonalidad elegida y su armadura, como lectura. */
+.centro {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  color: var(--paper);
+  pointer-events: none;
+}
+
+.armadura {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.septimas {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  min-width: 64px;
+  padding: 6px 14px;
+  background: transparent;
+  color: var(--text-body);
+  border: 1px solid var(--rule);
+  cursor: pointer;
+}
+
+.septimas[aria-pressed='true'] {
+  border-color: var(--paper);
+  color: var(--paper);
+  background: var(--surface);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mayor,
+  .menor { transition: none; }
+}

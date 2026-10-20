@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
-import ArmaduraSelector from '../../../primitives/ArmaduraSelector/ArmaduraSelector';
+import CirculoTonalidades from '../../../primitives/CirculoTonalidades/CirculoTonalidades';
 import BancoGrados from '../../../primitives/BancoGrados/BancoGrados';
 import GrillaProgresion from '../../../primitives/GrillaProgresion/GrillaProgresion';
 import TransporteProgresion, { MedidaProgresion } from '../../../primitives/TransporteProgresion/TransporteProgresion';
@@ -81,11 +81,14 @@ export default function ConstructorProgresionesSection() {
         onNCompases={s.setNCompases}
       />
 
-      <ArmaduraSelector
+      <CirculoTonalidades
         armaduraId={s.armaduraId}
         modo={s.modo}
-        onArmadura={(armaduraId) => pedirTonalidad({ armaduraId, modo: s.modo })}
-        onModo={(modo) => pedirTonalidad({ armaduraId: s.armaduraId, modo })}
+        onTonalidad={pedirTonalidad}
+        labels={{
+          grupo: t('t4.s41.tonalidad_label'),
+          tonalidad: (tonica, modo) => t(`t4.s41.tonalidad_${modo}`, { tonica }),
+        }}
         septimas={{ activas: s.septimas, etiqueta: t('t4.s41.septimas'), onToggle: s.toggleSeptimas }}
       />
 

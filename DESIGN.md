@@ -460,6 +460,13 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
 
+**67ª ola (2026-10-19): §4.1 círculo de tonalidades (pedido #29 selector):**
+- ✓ **`CirculoTonalidades` reemplaza a `ArmaduraSelector`** (borrado: quedó sin consumidores, junto con sus claves `armadura_label`, `sostenidos` y `bemoles`). Afuera las 12 mayores, adentro su relativa menor; un clic fija armadura y modo a la vez, y con acordes puestos pasa por la pregunta de modular (ola 64). En el centro, la tonalidad elegida y su armadura. Brief aprobado por el dueño: enarmónicas como F♯ (6♯), D♭ (5♭) y B (5♯).
+- ✓ **Botones HTML reales** (`<button aria-pressed>` con `aria-label` "E menor"), ubicados en % alrededor del centro: alcanzables con Tab y lector de pantalla, a diferencia del SVG de §1.8. La posición es el único estilo en línea (valor calculado en render, anti-checklist 14).
+- ✓ **Sin colores de nota ni ámbar** (Note-Color Quarantine: los nodos son tonalidades, no notas; no suenan). Elegida = anillo de tinta, el mismo patrón que la ficha armada del banco.
+- ✓ **Geometría compartida con §1.8:** `utils/circuloQuintas.ts` (`anguloEnCirculo`, `puntoEnCirculo`), usada ahora por `CirculoDeQuintas` y por el selector (CLAUDE.md §6 regla 7). §1.8 verificado sin cambios visuales.
+- Pendiente: la marca "T" de tonizaciones en el círculo (#42) sigue bloqueada por la pregunta 14 de la minuta.
+
 **66ª ola (2026-10-19): §4.1 banco menor con la menor armónica + token de texto tenso (pedido #29 banco, D4 y D15 del plan):**
 - ✓ **En tonalidad menor el banco suma V y vii° de la menor armónica** ("se desbloquean dos acordes: el quinto mayor y el séptimo disminuido"), en un grupo aparte con filete y rótulo "De la menor armónica", además de los siete naturales (el v menor sigue). Con séptimas: V7 (en Mi menor, B7) y vii°7 disminuido completo (D♯dim7). El V se toniza (V/V, ii/V); el vii° no ("excepto el disminuido"). El III+ queda fuera (D4).
 - ✓ **Lógica con tests:** `gradosArmonicosDe`, `esGradoArmonico` y `tonizacionesDeGrado` en `progresionArmonica.ts`; `rolDe` los marca tensos; `acordeDeGrado` resuelve raíz y calidad con `harmonicMinorScaleSpelled` (ola 65) a través de `raizDeGrado`, también para las tonizaciones del V.
