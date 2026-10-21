@@ -123,6 +123,25 @@ export function aplicarSus(grid: Grid, indice: number, sus: Sus): Grid {
   return colocarSlot(grid, indice, actual === sus ? resto : { ...resto, sus });
 }
 
+// La 7 la admite cualquier acorde; los sus, solo los que no tienen 5ª disminuida.
+export function admiteModificador(modo: Modo, id: GradoId, modificador: Modificador): boolean {
+  return modificador === '7' || admiteSus(modo, id);
+}
+
+// Reunión 19/10/26: "puede que no quiera yo todos con séptima, solo unos
+// cuantos". La ficha 7 alterna la séptima de un solo acorde.
+export function aplicarModificador(grid: Grid, indice: number, modificador: Modificador): Grid {
+  if (modificador !== '7') return aplicarSus(grid, indice, modificador);
+  const slot = grid[indice];
+  if (!slot) return grid;
+  return colocarSlot(grid, indice, { ...slot, septima: !slot.septima });
+}
+
+// El botón general de séptimas: "si yo toco séptima, todos se pusieron séptimas".
+export function fijarSeptimas(grid: Grid, septima: boolean): Grid {
+  return grid.map((slot) => slot && { ...slot, septima });
+}
+
 // "Cada uno con sus tonizaciones, excepto el disminuido."
 export function tonizacionesDeGrado(grado: GradoDiatonico): GradoId[] {
   return grado.endsWith('°') ? [] : [`V/${grado}`, `ii/${grado}`];
@@ -189,7 +208,9 @@ export interface Tonalidad {
 // Reunión 19/10/26: sus2 / sus4 se aplican sobre un acorde ya colocado,
 // independientes de la séptima ("una cosa es la séptima y otra la tríada").
 export type Sus = 'sus2' | 'sus4';
-export type Slot = { degree: GradoId; tonalidad: Tonalidad; sus?: Sus } | null;
+export type Slot = { degree: GradoId; tonalidad: Tonalidad; sus?: Sus; septima?: boolean } | null;
+/** Fichas que cambian un acorde ya colocado: los sus y la séptima. */
+export type Modificador = Sus | '7';
 export type Grid = Slot[];
 
 export function mismaTonalidad(a: Tonalidad, b: Tonalidad): boolean {

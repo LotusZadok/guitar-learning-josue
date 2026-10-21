@@ -460,6 +460,12 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
 
+**77ª ola (2026-10-20): §5.4 séptima acorde por acorde (pedido #32, pregunta 10; brief aprobado por el dueño):**
+- ✓ **Ficha 7** en "Modificadores", junto a sus2 y sus4, con el mismo gesto (ficha → acorde colocado, arrastre, teclado). Pone o quita la séptima de un solo acorde; la admite cualquier acorde, también el vii°.
+- ✓ **Cada casilla guarda su séptima** (`Slot.septima`); `acordeDeSlot` la lee de la casilla. El botón general dice cómo entran los próximos acordes y, al tocarlo, pisa a todos los colocados (`fijarSeptimas`): "si yo toco séptima, todos se pusieron séptimas". No muestra estado mixto: la mezcla se lee en los cifrados de la grilla.
+- ✓ **El sus y la séptima se combinan** (G7sus4 ↔ Gsus4). Lógica pura `aplicarModificador`, `admiteModificador` y `fijarSeptimas`, cubierta por `verify:constructor` y `verify:acordes`.
+- ✓ Renombres por exactitud (CLAUDE.md §6.1): `susArmado` → `modificadorArmado`, `armarSus`/`suspenderEn` → `armarModificador`/`modificarEn`, `.chipSus` → `.chipModificador`, clave `casilla_suspender` → `casilla_modificar`. `useProgressionPlayback` ya no recibe `septimas`: viven en la grilla.
+
 **76ª ola (2026-10-20): dinámica según la tensión (pedido #22, pregunta 7):**
 - ✓ **`GANANCIA_POR_ROL`** en `progresionArmonica.ts` (test en `verify:constructor`): `tense` 1 · `mediumTense` y `medium` 0.85 · `stable` 0.72. Es un factor sobre el `GainNode` de cada voz, por debajo del master de `DynamicsSelector`: pp…ff sigue mandando y la diferencia se mantiene. Sutil a propósito (≈ −1.4 dB y −2.9 dB), como pidió el profesor.
 - ✓ **Firma (D5):** `playNote(nombre, octava, { duracion, ganancia })`; `ChordNote` y los ítems de `playSequence` suman `ganancia?`. Se migraron todos los llamadores; sin `ganancia` la voz queda en 1, así que lo que no tiene color de tensión suena igual que antes.

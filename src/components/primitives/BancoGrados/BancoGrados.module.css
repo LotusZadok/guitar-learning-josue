@@ -122,13 +122,13 @@
   gap: 8px;
 }
 
-/* Modificadores (sus2 / sus4): no son grados, así que sin tinte de rol; el
+/* Modificadores (sus2 / sus4 / 7): no son grados, así que sin tinte de rol; el
    cifrado en Plex Mono (minúsculas con significado). */
 .modificadores {
   composes: armonica;
 }
 
-.chipSus {
+.chipModificador {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 13px;
   color: var(--paper);

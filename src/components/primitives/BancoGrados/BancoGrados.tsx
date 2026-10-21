@@ -10,7 +10,7 @@ import {
   esTonizable,
   type GradoId,
   type Modo,
-  type Sus,
+  type Modificador,
 } from '../../../utils/progresionArmonica';
 import styles from './BancoGrados.module.css';
 
@@ -25,12 +25,12 @@ interface Props {
   menorArmonicaLabel: string;
   expandirLabel: string;
   etiquetaArmar: (datos: { grado: GradoId; acorde: string }) => string;
-  /** Fichas sus2 / sus4: se tocan y después el acorde colocado. */
-  sus: {
-    armado: Sus | null;
-    onArmar: (sus: Sus | null) => void;
+  /** Fichas sus2 / sus4 / 7: se tocan y después el acorde colocado. */
+  modificadores: {
+    armado: Modificador | null;
+    onArmar: (modificador: Modificador | null) => void;
     rotulo: string;
-    etiqueta: (sus: Sus) => string;
+    etiqueta: (modificador: Modificador) => string;
   };
 }
 
@@ -49,7 +49,7 @@ export default function BancoGrados({
   menorArmonicaLabel,
   expandirLabel,
   etiquetaArmar,
-  sus,
+  modificadores,
 }: Props) {
   const [abierto, setAbierto] = useState<number | null>(null);
   const grados = gradosDe(modo);
@@ -141,24 +141,24 @@ export default function BancoGrados({
           <span className={styles.rotulo} aria-hidden="true">{menorArmonicaLabel}</span>
         </div>
       )}
-      <div className={styles.modificadores} role="group" aria-label={sus.rotulo}>
+      <div className={styles.modificadores} role="group" aria-label={modificadores.rotulo}>
         <div className={styles.armonicaGrados}>
-          {(['sus2', 'sus4'] as const).map((m) => (
+          {(['sus2', 'sus4', '7'] as const).map((m) => (
             <button
               key={m}
               type="button"
-              className={`${styles.chip} ${styles.chipSus}`}
-              aria-pressed={sus.armado === m}
-              aria-label={sus.etiqueta(m)}
+              className={`${styles.chip} ${styles.chipModificador}`}
+              aria-pressed={modificadores.armado === m}
+              aria-label={modificadores.etiqueta(m)}
               draggable
-              onDragStart={(e) => e.dataTransfer.setData('text/plain', `sus:${m}`)}
-              onClick={() => sus.onArmar(sus.armado === m ? null : m)}
+              onDragStart={(e) => e.dataTransfer.setData('text/plain', `mod:${m}`)}
+              onClick={() => modificadores.onArmar(modificadores.armado === m ? null : m)}
             >
               {m}
             </button>
           ))}
         </div>
-        <span className={styles.rotulo} aria-hidden="true">{sus.rotulo}</span>
+        <span className={styles.rotulo} aria-hidden="true">{modificadores.rotulo}</span>
       </div>
     </div>
   );

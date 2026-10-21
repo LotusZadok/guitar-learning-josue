@@ -1,14 +1,15 @@
 import { create } from 'zustand';
 import {
   CASILLAS_POR_COMPAS,
-  aplicarSus,
+  aplicarModificador,
+  fijarSeptimas,
   colocarSlot,
   crearGrid,
   type Compas,
   type GradoId,
   type Grid,
   type Modo,
-  type Sus,
+  type Modificador,
 } from '../utils/progresionArmonica';
 
 export const BPM_MIN = 40;
@@ -31,9 +32,9 @@ interface ConstructorState {
   grid: Grid;
   /** El grado tocado en el banco, esperando una casilla. Null = nada armado. */
   gradoArmado: GradoId | null;
-  /** El sus tocado en el banco, esperando un acorde colocado. Excluye a
-   *  gradoArmado: armar uno desarma el otro. */
-  susArmado: Sus | null;
+  /** La ficha (sus2, sus4 o 7) tocada en el banco, esperando un acorde
+   *  colocado. Excluye a gradoArmado: armar uno desarma el otro. */
+  modificadorArmado: Modificador | null;
 
   setArmadura: (id: string) => void;
   setModo: (modo: Modo) => void;
@@ -44,8 +45,8 @@ interface ConstructorState {
   toggleMetronomo: () => void;
   toggleLoop: () => void;
   armarGrado: (id: GradoId | null) => void;
-  armarSus: (sus: Sus | null) => void;
-  suspenderEn: (slotIndex: number) => void;
+  armarModificador: (modificador: Modificador | null) => void;
+  modificarEn: (slotIndex: number) => void;
   colocarEn: (slotIndex: number) => void;
   vaciarSlot: (slotIndex: number) => void;
   limpiarGrid: () => void;
@@ -62,7 +63,7 @@ export const useConstructorStore = create<ConstructorState>()((set) => ({
   loop: false,
   grid: crearGrid('4/4', COMPASES_DEFAULT),
   gradoArmado: null,
-  susArmado: null,
+  modificadorArmado: null,
 
   // Armadura y modo son la tonalidad ACTIVA: la que recibe el próximo acorde.
   // Lo ya colocado conserva su tonalidad (modulación, reunión 19/10/26); la
@@ -86,16 +87,22 @@ export const useConstructorStore = create<ConstructorState>()((set) => ({
     }),
 
   setBpm: (bpm) => set({ bpm: Math.min(BPM_MAX, Math.max(BPM_MIN, bpm)) }),
-  toggleSeptimas: () => set((s) => ({ septimas: !s.septimas })),
+  // El general decide cómo entran los próximos acordes y pisa a todos los
+  // colocados, incluidas las séptimas puestas una por una con la ficha 7.
+  toggleSeptimas: () => set((s) => ({ septimas: !s.septimas, grid: fijarSeptimas(s.grid, !s.septimas) })),
   toggleMetronomo: () => set((s) => ({ metronomo: !s.metronomo })),
   toggleLoop: () => set((s) => ({ loop: !s.loop })),
 
-  armarGrado: (gradoArmado) => set({ gradoArmado, susArmado: null }),
-  armarSus: (susArmado) => set({ susArmado, gradoArmado: null }),
+  armarGrado: (gradoArmado) => set({ gradoArmado, modificadorArmado: null }),
+  armarModificador: (modificadorArmado) => set({ modificadorArmado, gradoArmado: null }),
 
-  // Igual que colocar: el sus se consume al aplicarlo.
-  suspenderEn: (slotIndex) =>
-    set((s) => (s.susArmado ? { grid: aplicarSus(s.grid, slotIndex, s.susArmado), susArmado: null } : {})),
+  // Igual que colocar: la ficha se consume al aplicarla.
+  modificarEn: (slotIndex) =>
+    set((s) =>
+      s.modificadorArmado
+        ? { grid: aplicarModificador(s.grid, slotIndex, s.modificadorArmado), modificadorArmado: null }
+        : {},
+    ),
 
   // Colocar consume el grado armado: el gesto es tocar-grado → tocar-casilla, y
   // dejarlo armado invitaría a llenar la grilla del mismo acorde sin querer.
@@ -104,7 +111,7 @@ export const useConstructorStore = create<ConstructorState>()((set) => ({
       if (!s.gradoArmado) return {};
       const tonalidad = { armaduraId: s.armaduraId, modo: s.modo };
       return {
-        grid: colocarSlot(s.grid, slotIndex, { degree: s.gradoArmado, tonalidad }),
+        grid: colocarSlot(s.grid, slotIndex, { degree: s.gradoArmado, tonalidad, septima: s.septimas }),
         gradoArmado: null,
       };
     }),
@@ -116,5 +123,5 @@ export const useConstructorStore = create<ConstructorState>()((set) => ({
       return { grid };
     }),
 
-  limpiarGrid: () => set((s) => ({ grid: crearGrid(s.compas, s.nCompases), gradoArmado: null, susArmado: null })),
+  limpiarGrid: () => set((s) => ({ grid: crearGrid(s.compas, s.nCompases), gradoArmado: null, modificadorArmado: null })),
 }));

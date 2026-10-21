@@ -8,7 +8,7 @@ import TransporteProgresion, { MedidaProgresion } from '../../../primitives/Tran
 import { useProgressionPlayback } from '../../../../hooks/useProgressionPlayback';
 import { useConstructorStore } from '../../../../stores/useConstructorStore';
 import { armaduraPorId, etiquetaTonalidad } from '../../../../utils/progresionAcordes';
-import { mismaTonalidad, type GradoId, type Sus, type Tonalidad } from '../../../../utils/progresionArmonica';
+import { mismaTonalidad, type GradoId, type Modificador, type Tonalidad } from '../../../../utils/progresionArmonica';
 import styles from './ConstructorProgresionesSection.module.css';
 
 // 4.1 · Constructor de progresiones. Sandbox puro: se arma y se oye. No evalúa,
@@ -26,7 +26,6 @@ export default function ConstructorProgresionesSection() {
     grid: s.grid,
     compas: s.compas,
     bpm: s.bpm,
-    septimas: s.septimas,
     metronomo: s.metronomo,
     loop: s.loop,
   });
@@ -62,11 +61,11 @@ export default function ConstructorProgresionesSection() {
     dialogoLimpiarRef.current?.showModal();
   };
 
-  // Lo que se suelta puede ser un grado o una ficha sus ("sus:sus4").
+  // Lo que se suelta puede ser un grado o una ficha modificadora ("mod:sus4", "mod:7").
   const soltar = (slotIndex: number, dato: string) => {
-    if (dato.startsWith('sus:')) {
-      s.armarSus(dato.slice(4) as Sus);
-      s.suspenderEn(slotIndex);
+    if (dato.startsWith('mod:')) {
+      s.armarModificador(dato.slice(4) as Modificador);
+      s.modificarEn(slotIndex);
       return;
     }
     s.armarGrado(dato as GradoId);
@@ -140,11 +139,11 @@ export default function ConstructorProgresionesSection() {
         menorArmonicaLabel={t('t4.s41.menor_armonica')}
         expandirLabel={t('t4.s41.tonizaciones')}
         etiquetaArmar={(datos) => t('t4.s41.armar_grado', datos)}
-        sus={{
-          armado: s.susArmado,
-          onArmar: s.armarSus,
+        modificadores={{
+          armado: s.modificadorArmado,
+          onArmar: s.armarModificador,
           rotulo: t('t4.s41.modificadores'),
-          etiqueta: (sus) => t(`t4.s41.armar_${sus}`),
+          etiqueta: (m) => t(`t4.s41.armar_${m === '7' ? 'septima' : m}`),
         }}
       />
 
@@ -152,12 +151,16 @@ export default function ConstructorProgresionesSection() {
         grid={s.grid}
         compas={s.compas}
         nCompases={s.nCompases}
-        septimas={s.septimas}
         sonando={sonando}
         hayGradoArmado={s.gradoArmado !== null}
-        susArmado={s.susArmado}
-        onSuspender={s.suspenderEn}
-        etiquetaSuspender={(datos) => t('t4.s41.casilla_suspender', datos)}
+        modificadorArmado={s.modificadorArmado}
+        onModificar={s.modificarEn}
+        etiquetaModificar={({ modificador, ...datos }) =>
+          t('t4.s41.casilla_modificar', {
+            ...datos,
+            modificador: modificador === '7' ? t('t4.s41.la_septima') : modificador,
+          })
+        }
         onColocar={s.colocarEn}
         onVaciar={s.vaciarSlot}
         onSoltar={soltar}

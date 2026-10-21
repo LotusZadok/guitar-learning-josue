@@ -193,12 +193,12 @@ function suspender(notas: string[], sus: Sus): { notas: string[]; cifrado: strin
 
 // El acorde de una casilla colocada: se resuelve en la tonalidad en la que se
 // colocó, no en la activa (modulación, reunión 19/10/26).
-export function acordeDeSlot(slot: NonNullable<Slot>, septimas: boolean): AcordeSonante {
+export function acordeDeSlot(slot: NonNullable<Slot>): AcordeSonante {
   return acordeDeGrado({
     armadura: armaduraPorId(slot.tonalidad.armaduraId),
     modo: slot.tonalidad.modo,
     id: slot.degree,
-    septimas,
+    septimas: slot.septima ?? false,
     sus: slot.sus,
   });
 }

@@ -24,6 +24,9 @@ import {
   tonizacionesDeGrado,
   admiteSus,
   aplicarSus,
+  aplicarModificador,
+  admiteModificador,
+  fijarSeptimas,
   GANANCIA_POR_ROL,
   type Grid,
   type Tonalidad,
@@ -216,6 +219,20 @@ check('el otro sus lo reemplaza', aplicarSus(susV, 0, 'sus2')[0], { degree: 'V',
 check('sobre una casilla vacía no hace nada', aplicarSus(conV, 1, 'sus4'), conV);
 check('sobre un acorde que no lo admite no hace nada', aplicarSus([slot('vii°')], 0, 'sus4'), [slot('vii°')]);
 check('aplicarSus no muta la grilla', conV[0], { degree: 'V', tonalidad: DO });
+
+console.log('\n— Séptima acorde por acorde (reunión 19/10/26) —');
+const tres: Grid = [slot('I'), slot('IV'), null, slot('V')];
+const conSeptimaEnV = aplicarModificador(tres, 3, '7');
+check('la ficha 7 pone la séptima solo en ese acorde', conSeptimaEnV.map((c) => c?.septima ?? false), [false, false, false, true]);
+check('otra vez la quita', aplicarModificador(conSeptimaEnV, 3, '7')[3]?.septima, false);
+check('sobre una casilla vacía no hace nada', aplicarModificador(tres, 2, '7'), tres);
+check('la séptima sobrevive al sus', aplicarModificador(conSeptimaEnV, 3, 'sus4')[3], { degree: 'V', tonalidad: DO, septima: true, sus: 'sus4' });
+check('el vii° admite la 7 aunque no admita sus', admiteModificador('mayor', 'vii°', '7'), true);
+check('el vii° sigue sin admitir sus', admiteModificador('mayor', 'vii°', 'sus4'), false);
+const todas = fijarSeptimas(conSeptimaEnV, true);
+check('el general encendido pone séptima a todas', todas.map((c) => c?.septima ?? null), [true, true, null, true]);
+check('el general apagado las quita todas', fijarSeptimas(todas, false).map((c) => c?.septima ?? null), [false, false, null, false]);
+check('aplicarModificador no muta la grilla', tres[3], { degree: 'V', tonalidad: DO });
 
 console.log('\n— Dinámica según la tensión (reunión 19/10/26) —');
 const g = GANANCIA_POR_ROL;

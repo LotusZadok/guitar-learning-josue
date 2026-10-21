@@ -19,13 +19,12 @@ interface Opciones {
   grid: Grid;
   compas: Compas;
   bpm: number;
-  septimas: boolean;
   metronomo: boolean;
   loop: boolean;
 }
 
-// El único dueño del reloj. La progresión es corta y acotada (máx. 8 compases ×
-// 6 casillas = 48 eventos), así que se agenda entera de una vez: no hace falta
+// El único dueño del reloj. La progresión es corta y acotada (máx. 30 compases ×
+// 6 casillas = 180 eventos), así que se agenda entera de una vez: no hace falta
 // un scheduler con lookahead.
 //
 // El corte de un acorde por el siguiente sale GRATIS de la duración: cada voz se
@@ -103,7 +102,7 @@ export function useProgressionPlayback(op: Opciones) {
 
     // Acordes: cada voz con su duración exacta.
     eventos.forEach((ev) => {
-      const acorde = acordeDeSlot(op.grid[ev.slotIndex]!, op.septimas);
+      const acorde = acordeDeSlot(op.grid[ev.slotIndex]!);
       const id = window.setTimeout(() => {
         acorde.notas.forEach((n) =>
           playNote(n.chromatic, n.octave, { duracion: ev.durMs / 1000, ganancia: GANANCIA_POR_ROL[acorde.rol] }),
@@ -156,7 +155,7 @@ export function useProgressionPlayback(op: Opciones) {
   // Deps intencionalmente NO son [op]: `op` es un objeto literal armado en
   // cada render de la sección, así que cambia de identidad aunque nada haya
   // cambiado. Se depende de los campos que realmente vienen del store
-  // (grid, compas, bpm, armadura, modo, septimas), que sí son estables por
+  // (grid, compas, bpm, armadura, modo; las séptimas viven en la grilla), que sí son estables por
   // referencia entre renders cuando su valor no cambió (grid es el mismo
   // array hasta que una acción del store lo reemplaza; armadura es el mismo
   // objeto de ARMADURAS hasta que cambia armaduraId). Así el efecto solo
@@ -174,7 +173,7 @@ export function useProgressionPlayback(op: Opciones) {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (reproduciendo || pausadoEn !== null) stop();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [op.grid, op.compas, op.bpm, op.septimas]);
+  }, [op.grid, op.compas, op.bpm]);
 
   // Cleanup de desmontaje. `stop` es estable (depende solo de `cancelar`,
   // que no tiene deps), así que este efecto monta una vez y su cleanup corre

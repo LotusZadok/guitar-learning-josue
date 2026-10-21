@@ -3,13 +3,13 @@ import { acordeDeSlot, armaduraPorId, etiquetaTonalidad } from '../../../utils/p
 import {
   ACENTOS,
   CASILLAS_POR_COMPAS,
-  admiteSus,
+  admiteModificador,
   puntosDeModulacion,
   rolDe,
   type Compas,
   type GradoId,
   type Grid,
-  type Sus,
+  type Modificador,
 } from '../../../utils/progresionArmonica';
 import styles from './GrillaProgresion.module.css';
 
@@ -17,17 +17,16 @@ interface Props {
   grid: Grid;
   compas: Compas;
   nCompases: number;
-  septimas: boolean;
   /** Casilla que suena ahora, o -1. */
   sonando: number;
   /** Si el banco tiene un grado armado. Decide qué hace tocar una casilla:
    *  con grado armado coloca, sin grado armado vacía la casilla ocupada. */
   hayGradoArmado: boolean;
-  /** Con un sus armado, tocar un acorde que lo admite lo suspende. */
-  susArmado: Sus | null;
-  onSuspender: (slotIndex: number) => void;
-  /** aria-label de una casilla suspendible; viene de la sección (i18n). */
-  etiquetaSuspender: (datos: { compas: number; pulso: number; acorde: string; sus: Sus }) => string;
+  /** Con una ficha armada (sus2, sus4 o 7), tocar un acorde que la admite la aplica. */
+  modificadorArmado: Modificador | null;
+  onModificar: (slotIndex: number) => void;
+  /** aria-label de una casilla modificable; viene de la sección (i18n). */
+  etiquetaModificar: (datos: { compas: number; pulso: number; acorde: string; modificador: Modificador }) => string;
   onColocar: (slotIndex: number) => void;
   onVaciar: (slotIndex: number) => void;
   onSoltar: (slotIndex: number, id: GradoId) => void;
@@ -46,7 +45,7 @@ interface Props {
 // ligadura que se extiende desde él: así la regla de relleno se ve antes de
 // oírse.
 export default function GrillaProgresion({
-  grid, compas, nCompases, septimas, sonando, hayGradoArmado, susArmado, onSuspender, etiquetaSuspender,
+  grid, compas, nCompases, sonando, hayGradoArmado, modificadorArmado, onModificar, etiquetaModificar,
   onColocar, onVaciar, onSoltar, etiquetaModulacion, etiquetaCasilla,
 }: Props) {
   const porCompas = CASILLAS_POR_COMPAS[compas];
@@ -80,7 +79,7 @@ export default function GrillaProgresion({
             {Array.from({ length: porCompas }, (_, p) => {
               const i = c * porCompas + p;
               const slot = grid[i];
-              const acorde = slot ? acordeDeSlot(slot, septimas) : null;
+              const acorde = slot ? acordeDeSlot(slot) : null;
               const rotulo = rotulos.get(i);
               const modula = rotulo !== undefined && i !== tramos[0].indice;
               const continua = !slot && dueno[i] >= 0;
@@ -89,13 +88,14 @@ export default function GrillaProgresion({
               // ocupada se vacía y una vacía no hace nada. El estudiante
               // necesita anticipar esto — por eso alimenta tanto el aria-label
               // como el cursor (`data-accion`), no solo el handler.
-              const suspendible = slot !== null && admiteSus(slot.tonalidad.modo, slot.degree);
-              const accion = susArmado
-                ? (suspendible ? 'suspender' : 'ninguna')
+              const modificable =
+                slot !== null && modificadorArmado !== null && admiteModificador(slot.tonalidad.modo, slot.degree, modificadorArmado);
+              const accion = modificadorArmado
+                ? (modificable ? 'modificar' : 'ninguna')
                 : hayGradoArmado ? (slot ? 'reemplazar' : 'colocar') : (slot ? 'vaciar' : 'ninguna');
               const ariaAccion =
-                accion === 'suspender'
-                  ? etiquetaSuspender({ compas: c + 1, pulso: p + 1, acorde: acorde?.cifrado ?? '', sus: susArmado! })
+                accion === 'modificar'
+                  ? etiquetaModificar({ compas: c + 1, pulso: p + 1, acorde: acorde?.cifrado ?? '', modificador: modificadorArmado! })
                   : etiquetaCasilla(accion, { compas: c + 1, pulso: p + 1, acorde: acorde?.cifrado });
               const ariaLabel = rotulo ? `${ariaAccion}. ${etiquetaModulacion(rotulo)}` : ariaAccion;
               return (
@@ -111,8 +111,8 @@ export default function GrillaProgresion({
                   data-accion={accion}
                   aria-label={ariaLabel}
                   onClick={() => {
-                    if (susArmado) {
-                      if (suspendible) onSuspender(i);
+                    if (modificadorArmado) {
+                      if (modificable) onModificar(i);
                     } else if (hayGradoArmado) onColocar(i);
                     else if (slot) onVaciar(i);
                   }}

@@ -123,9 +123,11 @@ check('ninguna nota baja de octava respecto de la anterior', desordenados.slice(
 console.log('\n— Cada casilla suena en su tonalidad (reunión 19/10/26) —');
 const iEnDo = { degree: 'I' as const, tonalidad: { armaduraId: 'C', modo: 'mayor' as const } };
 const iEnSol = { degree: 'I' as const, tonalidad: { armaduraId: 'G', modo: 'mayor' as const } };
-check('el I colocado en Do sigue siendo C aunque después se module', acordeDeSlot(iEnDo, false).cifrado, 'C');
-check('el I colocado en Sol es G', acordeDeSlot(iEnSol, false).cifrado, 'G');
-check('el V7 en Sol con séptimas', acordeDeSlot({ degree: 'V', tonalidad: iEnSol.tonalidad }, true).cifrado, 'D7');
+check('el I colocado en Do sigue siendo C aunque después se module', acordeDeSlot(iEnDo).cifrado, 'C');
+check('el I colocado en Sol es G', acordeDeSlot(iEnSol).cifrado, 'G');
+check('el V7 en Sol con séptimas', acordeDeSlot({ degree: 'V', tonalidad: iEnSol.tonalidad, septima: true }).cifrado, 'D7');
+check('cada casilla decide su séptima', acordeDeSlot({ degree: 'V', tonalidad: iEnSol.tonalidad, septima: false }).cifrado, 'D');
+check('séptima y sus4 juntas', acordeDeSlot({ degree: 'V', tonalidad: iEnSol.tonalidad, septima: true, sus: 'sus4' }).cifrado, 'D7sus4');
 
 console.log('\n— Banco menor: V y vii° de la menor armónica (reunión 19/10/26) —');
 const enLa = (g: GradoId, sept: boolean) => cif('C', 'menor', g, sept);
