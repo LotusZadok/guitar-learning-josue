@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next';
 import RomanGlyph from '../../shared/RomanGlyph/RomanGlyph';
 import { acordeDeSlot, armaduraPorId, etiquetaTonalidad } from '../../../utils/progresionAcordes';
 import {
@@ -35,6 +34,11 @@ interface Props {
   /** Texto accesible de una casilla donde cambia la tonalidad ("en Sol");
    *  viene de la sección (i18n). */
   etiquetaModulacion: (tonalidad: string) => string;
+  /** aria-label de una casilla según lo que hará tocarla; viene de la sección (i18n). */
+  etiquetaCasilla: (
+    accion: 'colocar' | 'reemplazar' | 'vaciar' | 'ninguna',
+    datos: { compas: number; pulso: number; acorde?: string },
+  ) => string;
 }
 
 // La grilla. Cada compás es un grupo con su barra; el último cierra con la
@@ -43,9 +47,8 @@ interface Props {
 // oírse.
 export default function GrillaProgresion({
   grid, compas, nCompases, septimas, sonando, hayGradoArmado, susArmado, onSuspender, etiquetaSuspender,
-  onColocar, onVaciar, onSoltar, etiquetaModulacion,
+  onColocar, onVaciar, onSoltar, etiquetaModulacion, etiquetaCasilla,
 }: Props) {
-  const { t } = useTranslation();
   const porCompas = CASILLAS_POR_COMPAS[compas];
   const acentos = ACENTOS[compas];
 
@@ -91,15 +94,9 @@ export default function GrillaProgresion({
                 ? (suspendible ? 'suspender' : 'ninguna')
                 : hayGradoArmado ? (slot ? 'reemplazar' : 'colocar') : (slot ? 'vaciar' : 'ninguna');
               const ariaAccion =
-                accion === 'colocar'
-                  ? t('t4.s41.casilla_colocar', { compas: c + 1, pulso: p + 1 })
-                  : accion === 'reemplazar'
-                    ? t('t4.s41.casilla_reemplazar', { compas: c + 1, pulso: p + 1, acorde: acorde?.cifrado })
-                    : accion === 'suspender' && susArmado
-                      ? etiquetaSuspender({ compas: c + 1, pulso: p + 1, acorde: acorde?.cifrado ?? '', sus: susArmado })
-                    : accion === 'vaciar'
-                      ? t('t4.s41.casilla_vaciar', { compas: c + 1, pulso: p + 1, acorde: acorde?.cifrado })
-                      : t('t4.s41.casilla_vacia', { compas: c + 1, pulso: p + 1 });
+                accion === 'suspender'
+                  ? etiquetaSuspender({ compas: c + 1, pulso: p + 1, acorde: acorde?.cifrado ?? '', sus: susArmado! })
+                  : etiquetaCasilla(accion, { compas: c + 1, pulso: p + 1, acorde: acorde?.cifrado });
               const ariaLabel = rotulo ? `${ariaAccion}. ${etiquetaModulacion(rotulo)}` : ariaAccion;
               return (
                 <button

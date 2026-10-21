@@ -107,6 +107,10 @@ En táctil, un tap emite `mouseenter` + `focus` + `click` casi en el mismo milis
 
 El navegador suspende el `AudioContext` al cambiar de pestaña, bloquear la pantalla o recibir una llamada (iOS lo deja en `interrupted`), y puede cerrarlo. `getCtx()` llamaba a `ctx.resume()` sin `.catch` y desde handlers que no siempre cuentan como gesto (`mouseenter` emulado, `setTimeout`): el rechazo quedaba silenciado y el profesor reportó "vuelvo a la página y ya no suena". Regla: todo `resume()` lleva `.catch` visible, el contexto se reanuda en `visibilitychange`/`pageshow`, un contexto `closed` se recrea, y el clic de AUDIO ON crea o reanuda el contexto. En iOS, además, `navigator.audioSession.type = 'playback'` o el interruptor de silencio apaga Web Audio.
 
+### `display` le gana a `hidden` (70ª ola)
+
+El atributo `hidden` es solo `display: none` en la hoja del navegador: cualquier clase con `display: flex` lo pisa. Los paneles de tonización de §5.4 (`BancoGrados`) nunca se cerraron desde `a322b1c` y el botón "Tonizaciones" alternaba `aria-expanded` sin cambiar nada visible: el lector de pantalla decía "contraído" sobre un panel abierto. Regla: toda clase con `display` que se use junto a `hidden` lleva su `.clase[hidden] { display: none; }`.
+
 ### Anti-checklist antes de commit
 
 Pasar cada surface por estas preguntas antes de aprobar el cambio:

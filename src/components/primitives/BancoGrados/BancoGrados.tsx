@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import RomanGlyph from '../../shared/RomanGlyph/RomanGlyph';
 import { acordeDeGrado, type Armadura } from '../../../utils/progresionAcordes';
 import {
@@ -24,6 +23,8 @@ interface Props {
   /** Rótulos; vienen de la sección (i18n). */
   tonizacionesLabel: string;
   menorArmonicaLabel: string;
+  expandirLabel: string;
+  etiquetaArmar: (datos: { grado: GradoId; acorde: string }) => string;
   /** Fichas sus2 / sus4: se tocan y después el acorde colocado. */
   sus: {
     armado: Sus | null;
@@ -46,9 +47,10 @@ export default function BancoGrados({
   onArmar,
   tonizacionesLabel,
   menorArmonicaLabel,
+  expandirLabel,
+  etiquetaArmar,
   sus,
 }: Props) {
-  const { t } = useTranslation();
   const [abierto, setAbierto] = useState<number | null>(null);
   const grados = gradosDe(modo);
   const armonicos = gradosArmonicosDe(modo);
@@ -63,7 +65,7 @@ export default function BancoGrados({
         className={`${styles.chip} ${extra ?? ''}`}
         data-role={rolDe(modo, id)}
         aria-pressed={armado}
-        aria-label={t('t4.s41.armar_grado', { grado: id, acorde: acorde.cifrado })}
+        aria-label={etiquetaArmar({ grado: id, acorde: acorde.cifrado })}
         draggable
         onDragStart={(e) => e.dataTransfer.setData('text/plain', id)}
         onClick={() => onArmar(armado ? null : id)}
@@ -98,7 +100,7 @@ export default function BancoGrados({
                 aria-controls={`toniz-${i}`}
                 onClick={() => setAbierto(abierto === i ? null : i)}
               >
-                {t('t4.s41.tonizaciones')}
+                {expandirLabel}
               </button>
               <div id={`toniz-${i}`} className={styles.tonizaciones} hidden={abierto !== i}>
                 {tonizacionesDe(modo, i).map((id) => chip(id, styles.chipToniz))}
@@ -125,7 +127,7 @@ export default function BancoGrados({
                         aria-controls={`toniz-${clave}`}
                         onClick={() => setAbierto(abierto === clave ? null : clave)}
                       >
-                        {t('t4.s41.tonizaciones')}
+                        {expandirLabel}
                       </button>
                       <div id={`toniz-${clave}`} className={styles.tonizaciones} hidden={abierto !== clave}>
                         {tonizaciones.map((id) => chip(id, styles.chipToniz))}

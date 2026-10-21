@@ -1,5 +1,4 @@
-import { useTranslation } from 'react-i18next';
-import { COMPASES, MUNDO_POR_COMPAS, type Compas } from '../../../utils/progresionArmonica';
+import { COMPASES, MUNDO_POR_COMPAS, type Compas, type Mundo } from '../../../utils/progresionArmonica';
 import { BPM_MAX, BPM_MIN, COMPASES_MAX, COMPASES_MIN } from '../../../stores/useConstructorStore';
 import IconButton from '../../shared/IconButton/IconButton';
 import styles from './TransporteProgresion.module.css';
@@ -16,7 +15,16 @@ interface Props {
   onPausa: () => void;
   onLimpiar: () => void;
   /** Etiquetas de los botones con glifo; vienen de la sección (i18n). */
-  labels: { reproducir: string; pausar: string; limpiar: string };
+  labels: {
+    reproducir: string;
+    pausar: string;
+    limpiar: string;
+    metronomo: string;
+    loop: string;
+    velocidad: string;
+    bpm: string;
+    bpmValor: (bpm: number) => string;
+  };
 }
 
 interface MedidaProps {
@@ -24,6 +32,8 @@ interface MedidaProps {
   nCompases: number;
   onCompas: (c: Compas) => void;
   onNCompases: (n: number) => void;
+  /** Rótulos; vienen de la sección (i18n). */
+  labels: { compas: string; compases: string; mundo: (mundo: Mundo) => string };
 }
 
 // Tortuga y conejo: los extremos del slider, como pidió el profesor. SVG lineal
@@ -110,12 +120,10 @@ function Borrador() {
 // qué compás estoy". El compás y la cantidad de compases van al principio de
 // la sección, separados del transporte.
 export function MedidaProgresion(p: MedidaProps) {
-  const { t } = useTranslation();
-
   return (
     <div className={styles.wrap}>
       <fieldset className={styles.grupo}>
-        <legend className={styles.legend}>{t('t4.s41.compas_label')}</legend>
+        <legend className={styles.legend}>{p.labels.compas}</legend>
         <div className={styles.fila}>
           {COMPASES.map((c) => (
             <button
@@ -126,14 +134,14 @@ export function MedidaProgresion(p: MedidaProps) {
               onClick={() => p.onCompas(c)}
             >
               <span className={styles.cifra}>{c}</span>
-              <span className={styles.mundo}>{t(`t4.s41.mundo_${MUNDO_POR_COMPAS[c]}`)}</span>
+              <span className={styles.mundo}>{p.labels.mundo(MUNDO_POR_COMPAS[c])}</span>
             </button>
           ))}
         </div>
       </fieldset>
 
       <fieldset className={styles.grupo}>
-        <legend className={styles.legend}>{t('t4.s41.compases_label')}</legend>
+        <legend className={styles.legend}>{p.labels.compases}</legend>
         <input
           type="number"
           className={styles.numero}
@@ -148,12 +156,10 @@ export function MedidaProgresion(p: MedidaProps) {
 }
 
 export default function TransporteProgresion(p: Props) {
-  const { t } = useTranslation();
-
   return (
     <div className={styles.wrap}>
       <fieldset className={styles.grupo}>
-        <legend className={styles.legend}>{t('t4.s41.velocidad_label')}</legend>
+        <legend className={styles.legend}>{p.labels.velocidad}</legend>
         <div className={styles.slider}>
           <Tortuga />
           <input
@@ -162,8 +168,8 @@ export default function TransporteProgresion(p: Props) {
             max={BPM_MAX}
             step={1}
             value={p.bpm}
-            aria-label={t('t4.s41.bpm_aria')}
-            aria-valuetext={t('t4.s41.bpm_valuetext', { bpm: p.bpm })}
+            aria-label={p.labels.bpm}
+            aria-valuetext={p.labels.bpmValor(p.bpm)}
             onChange={(e) => p.onBpm(Number(e.target.value))}
           />
           <Conejo />
@@ -185,9 +191,9 @@ export default function TransporteProgresion(p: Props) {
           {p.reproduciendo ? <Pausa /> : <Play />}
         </IconButton>
         <button type="button" className={styles.chip} aria-pressed={p.metronomo} onClick={p.onMetronomo}>
-          {t('t4.s41.metronomo')}
+          {p.labels.metronomo}
         </button>
-        <IconButton label={t('t4.s41.loop')} pressed={p.loop} onClick={p.onLoop}>
+        <IconButton label={p.labels.loop} pressed={p.loop} onClick={p.onLoop}>
           <SignoRepeticion />
         </IconButton>
         <IconButton label={p.labels.limpiar} onClick={p.onLimpiar}>

@@ -83,6 +83,10 @@
   gap: 4px;
 }
 
+.tonizaciones[hidden] {
+  display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .chip { transition: none; }
 }

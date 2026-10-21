@@ -56,6 +56,11 @@ export const useUIStore = create<UIState>()(
       setOctave: (o) =>
         set({ octave: Math.min(OCTAVE_MAX, Math.max(OCTAVE_MIN, o)) }),
     }),
-    { name: "apuntes-ui", partialize: (state) => ({ theme: state.theme }) },
+    {
+      name: "apuntes-ui",
+      // D1 (19/10/26): el celular descarta la pestaña en segundo plano y la
+      // recarga; sin persistir, el audio volvía a OFF sin aviso.
+      partialize: (state) => ({ theme: state.theme, audioMuted: state.audioMuted }),
+    },
   ),
 );

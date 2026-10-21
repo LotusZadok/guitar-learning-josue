@@ -85,6 +85,11 @@ export default function ConstructorProgresionesSection() {
         nCompases={s.nCompases}
         onCompas={s.setCompas}
         onNCompases={s.setNCompases}
+        labels={{
+          compas: t('t4.s41.compas_label'),
+          compases: t('t4.s41.compases_label'),
+          mundo: (mundo) => t(`t4.s41.mundo_${mundo}`),
+        }}
       />
 
       <CirculoTonalidades
@@ -133,6 +138,8 @@ export default function ConstructorProgresionesSection() {
         onArmar={s.armarGrado}
         tonizacionesLabel={t('t4.s41.tonizaciones_rotulo')}
         menorArmonicaLabel={t('t4.s41.menor_armonica')}
+        expandirLabel={t('t4.s41.tonizaciones')}
+        etiquetaArmar={(datos) => t('t4.s41.armar_grado', datos)}
         sus={{
           armado: s.susArmado,
           onArmar: s.armarSus,
@@ -155,6 +162,9 @@ export default function ConstructorProgresionesSection() {
         onVaciar={s.vaciarSlot}
         onSoltar={soltar}
         etiquetaModulacion={(tonalidad) => t('t4.s41.casilla_tonalidad', { tonalidad })}
+        etiquetaCasilla={(accion, datos) =>
+          t(`t4.s41.casilla_${accion === 'ninguna' ? 'vacia' : accion}`, datos)
+        }
       />
 
       <TransporteProgresion
@@ -172,6 +182,11 @@ export default function ConstructorProgresionesSection() {
           reproducir: t(pausado ? 't4.s41.reanudar' : 't4.s41.reproducir'),
           pausar: t('t4.s41.pausar'),
           limpiar: t('t4.s41.limpiar'),
+          metronomo: t('t4.s41.metronomo'),
+          loop: t('t4.s41.loop'),
+          velocidad: t('t4.s41.velocidad_label'),
+          bpm: t('t4.s41.bpm_aria'),
+          bpmValor: (bpm) => t('t4.s41.bpm_valuetext', { bpm }),
         }}
       />
 
