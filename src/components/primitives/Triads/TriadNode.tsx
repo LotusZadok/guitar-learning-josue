@@ -35,7 +35,7 @@ export default function TriadNode({ note, index, cx, cy, r, onHover, onPlay }: P
     onHover(note);
     if (!fire()) return;
     if (onPlay) onPlay();
-    else playNote(note, 4, 2);
+    else playNote(note, 4, { duracion: 2 });
   }, [note, onHover, onPlay, playNote, fire]);
 
   const handleLeave = useCallback(() => {
@@ -47,7 +47,7 @@ export default function TriadNode({ note, index, cx, cy, r, onHover, onPlay }: P
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       if (onPlay) onPlay();
-      else playNote(note, 4, 2);
+      else playNote(note, 4, { duracion: 2 });
     }
   }, [note, onPlay, playNote]);
 

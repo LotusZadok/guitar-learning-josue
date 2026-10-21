@@ -128,10 +128,10 @@ export default function TriadaProceso() {
     lastAudioStep.current = s;
     const ta = takenAscRef.current;
     const pn = playNoteRef.current;
-    if (s === 1) pn(ta[0].name, ta[0].octave, 1.6);
-    else if (s === 3) pn(ta[1].name, ta[1].octave, 1.6);
-    else if (s === 5) pn(ta[2].name, ta[2].octave, 1.6);
-    else if (s === 6) ta.forEach((nt) => pn(nt.name, nt.octave, 2.2));
+    if (s === 1) pn(ta[0].name, ta[0].octave, { duracion: 1.6 });
+    else if (s === 3) pn(ta[1].name, ta[1].octave, { duracion: 1.6 });
+    else if (s === 5) pn(ta[2].name, ta[2].octave, { duracion: 1.6 });
+    else if (s === 6) ta.forEach((nt) => pn(nt.name, nt.octave, { duracion: 2.2 }));
   }, [anim.currentStep]);
 
   const current = anim.currentStep;

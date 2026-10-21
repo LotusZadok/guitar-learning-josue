@@ -14,6 +14,27 @@ export type Modo = 'mayor' | 'menor';
 // sí por ser unions de literales idénticos.
 export type RolArmonico = 'stable' | 'medium' | 'mediumTense' | 'tense';
 
+// Reunión 19/10/26: "el rojo suena más fuerte que todos; el morado y el
+// amarillo más fuerte que el verde… de alguna manera sutil". Factor sobre la
+// voz, por debajo de la dinámica general (pp…ff) que elige el estudiante.
+export const GANANCIA_POR_ROL: Record<RolArmonico, number> = {
+  tense: 1,
+  mediumTense: 0.85,
+  medium: 0.85,
+  stable: 0.72,
+};
+
+/** Los nodos de escala de §1.4 y §1.5 usan su propio vocabulario de color. */
+export type RolDeNotaEnEscala = 'tonic' | 'stable' | 'intermediate' | 'tense';
+const ROL_ARMONICO_DE_NOTA: Record<RolDeNotaEnEscala, RolArmonico> = {
+  tonic: 'stable',
+  stable: 'stable',
+  intermediate: 'medium',
+  tense: 'tense',
+};
+export const gananciaDeNotaEnEscala = (rol: RolDeNotaEnEscala) =>
+  GANANCIA_POR_ROL[ROL_ARMONICO_DE_NOTA[rol]];
+
 // Orden de presentación: los dos binarios primero, luego los dos ternarios —
 // los "dos mundos" del profesor.
 export const COMPASES: Compas[] = ['2/4', '4/4', '3/4', '6/8'];

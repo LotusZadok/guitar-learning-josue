@@ -113,7 +113,7 @@ export default function AcordesBuilder({ config = BUILDER_17, path, playingRole,
   const scrub = useCallback(
     (mem: IntervalMember) => {
       if (!fire()) return;
-      playNote(mem.chromatic, mem.octave, NOTE_DURATION);
+      playNote(mem.chromatic, mem.octave, { duracion: NOTE_DURATION });
     },
     [playNote, fire],
   );
@@ -142,7 +142,7 @@ export default function AcordesBuilder({ config = BUILDER_17, path, playingRole,
     if (playing || !chordMembers) return;
     setPlaying(true);
     setPlayIdx(-1);
-    chordMembers.forEach((m) => playNote(m.chromatic, m.octave, NOTE_DURATION));
+    chordMembers.forEach((m) => playNote(m.chromatic, m.octave, { duracion: NOTE_DURATION }));
     setTimeout(() => {
       setPlaying(false);
       setPlayIdx(null);
@@ -155,7 +155,7 @@ export default function AcordesBuilder({ config = BUILDER_17, path, playingRole,
     stopAllNotes();
     chordMembers.forEach((m, i) => {
       setTimeout(() => {
-        playNote(m.chromatic, m.octave, NOTE_DURATION);
+        playNote(m.chromatic, m.octave, { duracion: NOTE_DURATION });
         setPlayIdx(i);
       }, i * ARPEGGIO_GAP_MS);
     });

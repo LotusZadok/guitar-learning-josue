@@ -26,7 +26,7 @@ export default function AudioButtons({ escala, tonica, disabled }: Props) {
   const playTonica = useCallback(() => {
     if (playing) return;
     setPlayingAction('tonica');
-    playNote(ALL[pitchClass(tonica)], 4, 1.5);
+    playNote(ALL[pitchClass(tonica)], 4, { duracion: 1.5 });
     setTimeout(() => setPlayingAction(null), 1500);
   }, [tonica, playNote, playing]);
 

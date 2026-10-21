@@ -48,7 +48,7 @@ export default function MasterTriad() {
   // Cortar la nota anterior al pasar a la siguiente (scrub limpio, sin acumular).
   const playChainNote = (octave: number, note: NaturalNote) => {
     stopAllNotes();
-    playNote(note, octave, 2);
+    playNote(note, octave, { duracion: 2 });
   };
 
   return (

@@ -242,8 +242,8 @@ export default function AcordeProceso({ eyebrow }: Props) {
     lastAudioStep.current = s;
     const ms = chordRef.current;
     const pn = playNoteRef.current;
-    if (s >= 1 && s <= 3) pn(ms[s - 1].chromatic, ms[s - 1].octave, 1.6);
-    else if (s === 4) ms.forEach((m) => pn(m.chromatic, m.octave, 2.2));
+    if (s >= 1 && s <= 3) pn(ms[s - 1].chromatic, ms[s - 1].octave, { duracion: 1.6 });
+    else if (s === 4) ms.forEach((m) => pn(m.chromatic, m.octave, { duracion: 2.2 }));
   }, [anim.currentStep]);
 
   // El estudiante tocó un nodo: soltamos el control y callamos las notas del

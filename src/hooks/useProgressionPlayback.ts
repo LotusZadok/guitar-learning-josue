@@ -3,6 +3,7 @@ import { useAudioEngine, stopAllNotes, getCtx } from './useAudioEngine';
 import { getAudioContext } from './audioEngineShared';
 import { acordeDeSlot } from '../utils/progresionAcordes';
 import {
+  GANANCIA_POR_ROL,
   casillaEn,
   clicksDeMetronomo,
   clicksDesde,
@@ -104,7 +105,9 @@ export function useProgressionPlayback(op: Opciones) {
     eventos.forEach((ev) => {
       const acorde = acordeDeSlot(op.grid[ev.slotIndex]!, op.septimas);
       const id = window.setTimeout(() => {
-        acorde.notas.forEach((n) => playNote(n.chromatic, n.octave, ev.durMs / 1000));
+        acorde.notas.forEach((n) =>
+          playNote(n.chromatic, n.octave, { duracion: ev.durMs / 1000, ganancia: GANANCIA_POR_ROL[acorde.rol] }),
+        );
       }, ev.startMs);
       timers.current.push(id);
     });

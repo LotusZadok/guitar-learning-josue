@@ -9,6 +9,7 @@ import {
   octaveAboveTonic,
   tonicChromatic,
 } from "../../../utils/noteCalculations";
+import { GANANCIA_POR_ROL } from "../../../utils/progresionArmonica";
 import type { NoteSpelling, ChromaticNote } from "../../../types/music";
 import styles from "./NoteToken.module.css";
 
@@ -92,7 +93,10 @@ export default function NoteToken({
   const isTonic = chromatic === tonicChromatic(tonic);
 
   const handlePlay = () => {
-    if (fire()) playNote(note, octave ?? octaveAboveTonic(tonic, note));
+    if (!fire()) return;
+    playNote(note, octave ?? octaveAboveTonic(tonic, note), {
+      ganancia: diatonicRole ? GANANCIA_POR_ROL[diatonicRole] : 1,
+    });
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLSpanElement>) => {

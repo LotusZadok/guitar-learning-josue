@@ -69,10 +69,10 @@ export default function TriadsSection() {
       const { notes } = TRIADS[note];
       const ascending = toAscending(notes);
       if (playMode === 'bloque') {
-        ascending.forEach(({ note: n, octave }) => playNote(n, octave, PLAY_DURATION));
+        ascending.forEach(({ note: n, octave }) => playNote(n, octave, { duracion: PLAY_DURATION }));
       } else {
         ascending.forEach(({ note: n, octave }, i) =>
-          setTimeout(() => playNote(n, octave, PLAY_DURATION), i * ARPEGGIO_GAP_MS),
+          setTimeout(() => playNote(n, octave, { duracion: PLAY_DURATION }), i * ARPEGGIO_GAP_MS),
         );
       }
     },

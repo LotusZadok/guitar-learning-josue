@@ -56,7 +56,7 @@ export default function IntervalRuler({ stops, ariaLabel, maxSemis }: Props) {
   const scrub = useCallback(
     (m: IntervalMember) => {
       if (!fire()) return;
-      playNote(m.chromatic, m.octave, NOTE_DURATION);
+      playNote(m.chromatic, m.octave, { duracion: NOTE_DURATION });
     },
     [playNote, fire],
   );

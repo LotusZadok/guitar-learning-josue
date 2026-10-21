@@ -6,6 +6,7 @@ import { useUIStore } from '../../../stores/useUIStore';
 import { ALL, NOTE_COLORS, NOTE_ES, NOTE_DE } from '../../../data/notes';
 
 import { majorScaleSpelled, spelledNameES, tonicChromatic } from '../../../utils/noteCalculations';
+import { gananciaDeNotaEnEscala, type RolDeNotaEnEscala } from '../../../utils/progresionArmonica';
 import type { ChromaticNote } from '../../../types/music';
 import styles from './EscalaMayor.module.css';
 
@@ -77,10 +78,10 @@ export default function EscalaMayor() {
   }, [tonic]);
 
   const handlePlay = useCallback(
-    (chromatic: ChromaticNote, octaveAdj: number) => {
+    (chromatic: ChromaticNote, octaveAdj: number, rol: RolDeNotaEnEscala) => {
       // Cortar la nota anterior para que al recorrer la escala no se acumulen.
       stopAllNotes();
-      playNote(chromatic, 4 + octaveAdj, 1.4);
+      playNote(chromatic, 4 + octaveAdj, { duracion: 1.4, ganancia: gananciaDeNotaEnEscala(rol) });
     },
     [playNote],
   );
@@ -112,7 +113,7 @@ export default function EscalaMayor() {
 
 interface ScaleNodeProps {
   data: NodeData;
-  onPlay: (chromatic: ChromaticNote, octaveAdj: number) => void;
+  onPlay: (chromatic: ChromaticNote, octaveAdj: number, rol: RolDeNotaEnEscala) => void;
   isDe?: boolean;
 }
 
@@ -140,16 +141,16 @@ function ScaleNode({ data, onPlay, isDe }: ScaleNodeProps) {
   // Tap = mouseenter + focus casi simultáneos: la compuerta deja sonar uno.
   const fire = useFireGate();
   const handleEnter = useCallback(() => {
-    if (isOnScale && fire()) onPlay(chromatic, octaveAdj);
-  }, [chromatic, octaveAdj, onPlay, isOnScale, fire]);
+    if (isOnScale && fire()) onPlay(chromatic, octaveAdj, role as RolDeNotaEnEscala);
+  }, [chromatic, octaveAdj, role, onPlay, isOnScale, fire]);
   const handleKey = useCallback(
     (e: KeyboardEvent<SVGGElement>) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        if (isOnScale) onPlay(chromatic, octaveAdj);
+        if (isOnScale) onPlay(chromatic, octaveAdj, role as RolDeNotaEnEscala);
       }
     },
-    [chromatic, octaveAdj, onPlay, isOnScale],
+    [chromatic, octaveAdj, role, onPlay, isOnScale],
   );
 
   return (

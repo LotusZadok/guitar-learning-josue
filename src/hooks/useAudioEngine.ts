@@ -86,9 +86,15 @@ export const setMasterVolume = (v: number) => {
 
 export { stopAllNotes };
 
+/** `ganancia`: factor de la voz (GANANCIA_POR_ROL), por debajo del master. */
+export interface OpcionesNota {
+  duracion?: number;
+  ganancia?: number;
+}
+
 export const useAudioEngine = () => {
   const playNote = useCallback(
-    (noteName: string, octave: number, duration = 2.0) => {
+    (noteName: string, octave: number, { duracion: duration = 2.0, ganancia = 1 }: OpcionesNota = {}) => {
       if (useUIStore.getState().audioMuted) return;
       const ctx = getCtx();
       const ascii = noteName.replace(/♯/g, "#").replace(/♭/g, "b");
@@ -103,6 +109,7 @@ export const useAudioEngine = () => {
       // Nodo por voz: es lo que stopAllNotes() atenúa. El timbre lo pone el
       // banco activo (ver src/audio), que cuelga su envelope debajo de aquí.
       const voice = ctx.createGain();
+      voice.gain.value = ganancia;
       voice.connect(getMasterVolumeNode() ?? ctx.destination);
       registerActiveGain(voice);
       setTimeout(() => unregisterActiveGain(voice), (duration + 0.1) * 1000);
@@ -118,10 +125,10 @@ export const useAudioEngine = () => {
   // tocan" (traslape mínimo), sin ensuciar. Acordes/arpegios NO usan esto:
   // ahí el traslape es deliberado para oír el acorde.
   const playSequence = useCallback(
-    (notes: { name: string; octave: number }[], gapMs = 320, tailMs = 150) => {
-      const dur = (gapMs + tailMs) / 1000;
+    (notes: { name: string; octave: number; ganancia?: number }[], gapMs = 320, tailMs = 150) => {
+      const duracion = (gapMs + tailMs) / 1000;
       notes.forEach((n, i) => {
-        setTimeout(() => playNote(n.name, n.octave, dur), i * gapMs);
+        setTimeout(() => playNote(n.name, n.octave, { duracion, ganancia: n.ganancia }), i * gapMs);
       });
     },
     [playNote],

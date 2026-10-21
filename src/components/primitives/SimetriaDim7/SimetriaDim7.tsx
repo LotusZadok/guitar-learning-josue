@@ -80,7 +80,7 @@ export default function SimetriaDim7() {
   );
 
   const scrub = useCallback(
-    (note: ChromaticNote) => playNote(note, OCTAVE, NOTE_DURATION),
+    (note: ChromaticNote) => playNote(note, OCTAVE, { duracion: NOTE_DURATION }),
     [playNote],
   );
 
@@ -109,7 +109,7 @@ export default function SimetriaDim7() {
       family.miembros.forEach((m, i) => {
         timers.current.push(
           window.setTimeout(() => {
-            playNote(m.note, OCTAVE, NOTE_DURATION);
+            playNote(m.note, OCTAVE, { duracion: NOTE_DURATION });
             if (mode === 'arpegio') setSonando([m.note]);
           }, i * gap),
         );

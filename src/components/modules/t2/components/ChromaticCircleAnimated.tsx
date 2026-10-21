@@ -79,7 +79,7 @@ export default function ChromaticCircleAnimated({ notes, arrow, compact, playOnC
     const label = notes[pos]?.label;
     if (playOnClick && label) {
       const { name, octave } = resolveNote(label);
-      playNote(name, octave, 1.5);
+      playNote(name, octave, { duracion: 1.5 });
     }
     if (isControlled && onMarkedNotesChange && label) {
       const exists = markedNotes!.includes(label);

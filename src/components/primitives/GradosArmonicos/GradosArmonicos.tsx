@@ -6,6 +6,7 @@ import { ALL } from '../../../data/notes';
 import { majorScaleSpelled, relativeMinorScaleSpelled, spelledSequenceAscending, tonicChromatic } from '../../../utils/noteCalculations';
 import NoteToken, { type DiatonicRole } from '../../shared/NoteToken/NoteToken';
 import RomanGlyph from '../../shared/RomanGlyph/RomanGlyph';
+import { GANANCIA_POR_ROL } from '../../../utils/progresionArmonica';
 import type { ChromaticNote, NoteSpelling, Tonic } from '../../../types/music';
 import styles from './GradosArmonicos.module.css';
 
@@ -147,10 +148,11 @@ export default function GradosArmonicos({ tonalidad, initialStep = 1, relativeMi
       const thirdOct = chordMemberOctave(diatonic, gradeIdx, 2);
       const fifthOct = chordMemberOctave(diatonic, gradeIdx, 4);
 
+      const ganancia = GANANCIA_POR_ROL[HARMONIC_ROLE[gradeIdx]];
       setPlayingCell(gradeIdx);
-      playNote(root.chromatic, rootOct, NOTE_DURATION);
-      setTimeout(() => playNote(third.chromatic, thirdOct, NOTE_DURATION), ARPEGGIO_GAP_MS);
-      setTimeout(() => playNote(fifth.chromatic, fifthOct, NOTE_DURATION), ARPEGGIO_GAP_MS * 2);
+      playNote(root.chromatic, rootOct, { duracion: NOTE_DURATION, ganancia });
+      setTimeout(() => playNote(third.chromatic, thirdOct, { duracion: NOTE_DURATION, ganancia }), ARPEGGIO_GAP_MS);
+      setTimeout(() => playNote(fifth.chromatic, fifthOct, { duracion: NOTE_DURATION, ganancia }), ARPEGGIO_GAP_MS * 2);
 
       const totalMs = step >= 4
         ? ARPEGGIO_GAP_MS * 3 + NOTE_DURATION * 1000
@@ -159,7 +161,7 @@ export default function GradosArmonicos({ tonalidad, initialStep = 1, relativeMi
       if (step >= 4) {
         const seventh = diatonic[(gradeIdx + 6) % 7];
         const seventhOct = chordMemberOctave(diatonic, gradeIdx, 6);
-        setTimeout(() => playNote(seventh.chromatic, seventhOct, NOTE_DURATION), ARPEGGIO_GAP_MS * 3);
+        setTimeout(() => playNote(seventh.chromatic, seventhOct, { duracion: NOTE_DURATION, ganancia }), ARPEGGIO_GAP_MS * 3);
       }
 
       // Un disparo nuevo cancela el apagado del anterior: si no, el timer viejo

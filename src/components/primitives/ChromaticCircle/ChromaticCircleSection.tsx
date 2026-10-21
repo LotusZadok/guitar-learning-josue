@@ -19,7 +19,7 @@ export default function ChromaticCircleSection() {
   const { playNote } = useAudioEngine();
 
   const makePlayFn = useCallback(
-    (note: ChromaticNote) => () => playNote(note, 4, NOTE_DURATION),
+    (note: ChromaticNote) => () => playNote(note, 4, { duracion: NOTE_DURATION }),
     [playNote],
   );
 

@@ -460,6 +460,12 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
 
+**76ª ola (2026-10-20): dinámica según la tensión (pedido #22, pregunta 7):**
+- ✓ **`GANANCIA_POR_ROL`** en `progresionArmonica.ts` (test en `verify:constructor`): `tense` 1 · `mediumTense` y `medium` 0.85 · `stable` 0.72. Es un factor sobre el `GainNode` de cada voz, por debajo del master de `DynamicsSelector`: pp…ff sigue mandando y la diferencia se mantiene. Sutil a propósito (≈ −1.4 dB y −2.9 dB), como pidió el profesor.
+- ✓ **Firma (D5):** `playNote(nombre, octava, { duracion, ganancia })`; `ChordNote` y los ítems de `playSequence` suman `ganancia?`. Se migraron todos los llamadores; sin `ganancia` la voz queda en 1, así que lo que no tiene color de tensión suena igual que antes.
+- ✓ **Alcance (todo lo que suena con código de tensión):** `GradosArmonicos` (2.6, 3.4, 4.2), `ProgresionesArmonicas` (2.7), `ProgresionIIVI` (3.7, 4.5), `TensionResolucion` (1.5, 3.5: resoluciones y tritono), `EscalaMayor` (1.4), `NoteToken` con `diatonicRole` y el laboratorio de 5.4 (`useProgressionPlayback`, por el rol de cada casilla). Los nodos de escala usan su propio vocabulario (`tonic`/`stable`/`intermediate`/`tense`): `gananciaDeNotaEnEscala` los traduce, compartido por §1.4 y §1.5.
+- Consecuencia aceptada: los acordes y notas en reposo (verde) suenan algo más bajo que antes; el techo sigue siendo el rojo, al mismo nivel que siempre.
+
 **75ª ola (2026-10-20): §5.1 el menor Maj7 en el árbol completo (pedido #41, pregunta 13):**
 - ✓ **`BUILDER_34` suma el camino `3m → 5 → 7M`** (mMaj7), igual que `BUILDER_312` desde la Ola 8: la tercera menor ya no restringe la séptima a 7m. Los nodos existían; no cambian `R`, el anillo ni el ancho.
 - ✓ **Contenido (es/de):** "diez acordes" → "once acordes" en la intro y el caption (`elf Akkorde`). `verify:t3` cubre el camino nuevo y que el árbol arme once.

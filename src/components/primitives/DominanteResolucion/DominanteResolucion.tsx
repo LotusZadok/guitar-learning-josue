@@ -130,7 +130,7 @@ export default function DominanteResolucion({ origen, onOrigenChange, labels }: 
   const scrub = useCallback(
     (v: Voice) => {
       if (!fire()) return;
-      playNote(v.chromatic, v.octave, NOTE_DURATION);
+      playNote(v.chromatic, v.octave, { duracion: NOTE_DURATION });
     },
     [playNote, fire],
   );

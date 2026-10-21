@@ -6,6 +6,7 @@ import { useFireGate } from '../../../hooks/useFireGate';
 import { ALL } from '../../../data/notes';
 import { majorScaleSpelled, tonicChromatic } from '../../../utils/noteCalculations';
 import type { DiatonicRole } from '../../shared/NoteToken/NoteToken';
+import { GANANCIA_POR_ROL } from '../../../utils/progresionArmonica';
 import type { ChromaticNote, DiatonicDegree, Tonic } from '../../../types/music';
 import PlaybackButton from '../../shared/PlaybackButton/PlaybackButton';
 import styles from './ProgresionesArmonicas.module.css';
@@ -30,6 +31,7 @@ const HARMONIC_ROLE: Record<DiatonicDegree, DiatonicRole> = {
   'I': 'stable', 'ii': 'medium', 'iii': 'medium',
   'IV': 'mediumTense', 'V': 'tense', 'vi': 'stable', 'vii°': 'tense',
 };
+const ROLE_BY_IDX = Object.values(HARMONIC_ROLE);
 
 interface Props {
   tonalidad: Tonic;
@@ -139,6 +141,7 @@ export default function ProgresionesArmonicas({ tonalidad }: Props) {
 
       grados.forEach((degree, chordIdx) => {
         const chordStart = chordIdx * CHORD_GAP_MS;
+        const ganancia = GANANCIA_POR_ROL[HARMONIC_ROLE[degree]];
 
         const gradeIdx = DEGREE_TO_IDX[degree];
         const root = diatonic[gradeIdx];
@@ -156,14 +159,14 @@ export default function ProgresionesArmonicas({ tonalidad }: Props) {
 
         if (playMode === 'bloque') {
           schedule(() => {
-            playNote(root.chromatic, rootOct, NOTE_DURATION);
-            playNote(third.chromatic, thirdOct, NOTE_DURATION);
-            playNote(fifth.chromatic, fifthOct, NOTE_DURATION);
+            playNote(root.chromatic, rootOct, { duracion: NOTE_DURATION, ganancia });
+            playNote(third.chromatic, thirdOct, { duracion: NOTE_DURATION, ganancia });
+            playNote(fifth.chromatic, fifthOct, { duracion: NOTE_DURATION, ganancia });
           }, chordStart + 30);
         } else {
-          schedule(() => playNote(root.chromatic, rootOct, NOTE_DURATION), chordStart + 30);
-          schedule(() => playNote(third.chromatic, thirdOct, NOTE_DURATION), chordStart + 30 + ARPEGGIO_GAP_MS);
-          schedule(() => playNote(fifth.chromatic, fifthOct, NOTE_DURATION), chordStart + 30 + ARPEGGIO_GAP_MS * 2);
+          schedule(() => playNote(root.chromatic, rootOct, { duracion: NOTE_DURATION, ganancia }), chordStart + 30);
+          schedule(() => playNote(third.chromatic, thirdOct, { duracion: NOTE_DURATION, ganancia }), chordStart + 30 + ARPEGGIO_GAP_MS);
+          schedule(() => playNote(fifth.chromatic, fifthOct, { duracion: NOTE_DURATION, ganancia }), chordStart + 30 + ARPEGGIO_GAP_MS * 2);
         }
       });
 
@@ -183,6 +186,7 @@ export default function ProgresionesArmonicas({ tonalidad }: Props) {
       clearAll();
       stopAllNotes(50);
 
+      const ganancia = GANANCIA_POR_ROL[ROLE_BY_IDX[gradeIdx]];
       const root = diatonic[gradeIdx];
       const third = diatonic[(gradeIdx + 2) % 7];
       const fifth = diatonic[(gradeIdx + 4) % 7];
@@ -192,14 +196,14 @@ export default function ProgresionesArmonicas({ tonalidad }: Props) {
 
       if (playMode === 'bloque') {
         schedule(() => {
-          playNote(root.chromatic, rootOct, NOTE_DURATION);
-          playNote(third.chromatic, thirdOct, NOTE_DURATION);
-          playNote(fifth.chromatic, fifthOct, NOTE_DURATION);
+          playNote(root.chromatic, rootOct, { duracion: NOTE_DURATION, ganancia });
+          playNote(third.chromatic, thirdOct, { duracion: NOTE_DURATION, ganancia });
+          playNote(fifth.chromatic, fifthOct, { duracion: NOTE_DURATION, ganancia });
         }, 60);
       } else {
-        schedule(() => playNote(root.chromatic, rootOct, NOTE_DURATION), 60);
-        schedule(() => playNote(third.chromatic, thirdOct, NOTE_DURATION), 60 + ARPEGGIO_GAP_MS);
-        schedule(() => playNote(fifth.chromatic, fifthOct, NOTE_DURATION), 60 + ARPEGGIO_GAP_MS * 2);
+        schedule(() => playNote(root.chromatic, rootOct, { duracion: NOTE_DURATION, ganancia }), 60);
+        schedule(() => playNote(third.chromatic, thirdOct, { duracion: NOTE_DURATION, ganancia }), 60 + ARPEGGIO_GAP_MS);
+        schedule(() => playNote(fifth.chromatic, fifthOct, { duracion: NOTE_DURATION, ganancia }), 60 + ARPEGGIO_GAP_MS * 2);
       }
     },
     [diatonic, playMode, playNote, clearAll, schedule, fire],

@@ -17,6 +17,7 @@ import {
   tonicChromatic,
 } from "../../../utils/noteCalculations";
 
+import { gananciaDeNotaEnEscala, type RolDeNotaEnEscala } from "../../../utils/progresionArmonica";
 import type { ChromaticNote, Tonic } from "../../../types/music";
 import styles from "./TensionResolucion.module.css";
 
@@ -29,8 +30,11 @@ interface TensionNode {
   spelled: string; // para display (con ♯/♭ correcto según escala mayor)
   octaveAdj: number;
   grade: string;
-  role: "tonic" | "stable" | "intermediate" | "tense";
+  role: RolDeNotaEnEscala;
 }
+
+// El color de cada nodo (verde, naranja, rojo) es el que fija su volumen.
+const gananciaDe = (n: TensionNode) => gananciaDeNotaEnEscala(n.role);
 
 const SCALE_POS = [0, 2, 4, 5, 7, 9, 11, 12] as const;
 const GRADE_NAMES = ["T", "2", "3", "4", "5", "6", "7", "T"] as const;
@@ -148,8 +152,8 @@ export default function TensionResolucion({ focus, tritonoPlayLabel }: Props = {
       // Dirección melódica de la resolución (tensa → estable), no se reordena.
       playSequence(
         [
-          { name: from.note, octave: 4 + from.octaveAdj },
-          { name: to.note, octave: 4 + to.octaveAdj },
+          { name: from.note, octave: 4 + from.octaveAdj, ganancia: gananciaDe(from) },
+          { name: to.note, octave: 4 + to.octaveAdj, ganancia: gananciaDe(to) },
         ],
         ARPEGGIO_GAP_MS,
         NOTE_TAIL_MS,
@@ -163,7 +167,11 @@ export default function TensionResolucion({ focus, tritonoPlayLabel }: Props = {
     clear();
     setTritonoSonando(true);
     playChord(
-      TRITONO_IDX.map((i) => ({ chromatic: nodes[i].note, octave: 4 + nodes[i].octaveAdj })),
+      TRITONO_IDX.map((i) => ({
+        chromatic: nodes[i].note,
+        octave: 4 + nodes[i].octaveAdj,
+        ganancia: gananciaDe(nodes[i]),
+      })),
       0,
     );
     at(() => setTritonoSonando(false), TRITONO_DURATION * 1000);

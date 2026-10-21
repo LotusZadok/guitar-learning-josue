@@ -79,7 +79,7 @@ function ChordColumn({ chord, tonic }: ChordColumnProps) {
   const scrub = useCallback(
     (m: IntervalMember) => {
       if (!fire()) return;
-      playNote(m.chromatic, m.octave, NOTE_DURATION);
+      playNote(m.chromatic, m.octave, { duracion: NOTE_DURATION });
     },
     [playNote, fire],
   );
@@ -88,7 +88,7 @@ function ChordColumn({ chord, tonic }: ChordColumnProps) {
     if (playing) return;
     setPlaying(true);
     setPlayIdx(-1);
-    ascending.forEach(({ m }) => playNote(m.chromatic, m.octave, NOTE_DURATION));
+    ascending.forEach(({ m }) => playNote(m.chromatic, m.octave, { duracion: NOTE_DURATION }));
     setTimeout(() => {
       setPlaying(false);
       setPlayIdx(null);
@@ -100,7 +100,7 @@ function ChordColumn({ chord, tonic }: ChordColumnProps) {
     setPlaying(true);
     ascending.forEach(({ m }, i) => {
       setTimeout(() => {
-        playNote(m.chromatic, m.octave, NOTE_DURATION);
+        playNote(m.chromatic, m.octave, { duracion: NOTE_DURATION });
         setPlayIdx(i);
       }, i * ARPEGGIO_GAP_MS);
     });

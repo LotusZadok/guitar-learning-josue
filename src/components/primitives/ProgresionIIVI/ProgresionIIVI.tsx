@@ -8,6 +8,7 @@ import {
   progresionIIVI,
   spelledSequenceAscending,
 } from '../../../utils/noteCalculations';
+import { GANANCIA_POR_ROL } from '../../../utils/progresionArmonica';
 import styles from './ProgresionIIVI.module.css';
 
 interface Props {
@@ -47,7 +48,11 @@ export default function ProgresionIIVI({ functions, relativeMinor = false }: Pro
         roman: romans[i],
         role: a.rol,
         cifrado: a.cifrado,
-        members: a.notas.map((sp, j) => ({ chromatic: ALL[pitchClass(sp)], octave: seq[j].octave })),
+        members: a.notas.map((sp, j) => ({
+          chromatic: ALL[pitchClass(sp)],
+          octave: seq[j].octave,
+          ganancia: GANANCIA_POR_ROL[a.rol],
+        })),
       };
     });
   }, [tonic, relativeMinor]);

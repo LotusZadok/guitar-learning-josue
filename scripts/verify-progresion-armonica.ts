@@ -24,6 +24,7 @@ import {
   tonizacionesDeGrado,
   admiteSus,
   aplicarSus,
+  GANANCIA_POR_ROL,
   type Grid,
   type Tonalidad,
   type Compas,
@@ -215,5 +216,13 @@ check('el otro sus lo reemplaza', aplicarSus(susV, 0, 'sus2')[0], { degree: 'V',
 check('sobre una casilla vacía no hace nada', aplicarSus(conV, 1, 'sus4'), conV);
 check('sobre un acorde que no lo admite no hace nada', aplicarSus([slot('vii°')], 0, 'sus4'), [slot('vii°')]);
 check('aplicarSus no muta la grilla', conV[0], { degree: 'V', tonalidad: DO });
+
+console.log('\n— Dinámica según la tensión (reunión 19/10/26) —');
+const g = GANANCIA_POR_ROL;
+check('el rojo suena más fuerte que el morado', g.tense > g.mediumTense, true);
+check('morado y amarillo en el mismo nivel', g.mediumTense, g.medium);
+check('el amarillo más fuerte que el verde', g.medium > g.stable, true);
+check('ningún factor pasa de 1 (sin saturar)', Object.values(g).every((v) => v <= 1), true);
+check('sutil: el verde no baja de 0.6', g.stable >= 0.6, true);
 
 resumen();

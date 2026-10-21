@@ -41,7 +41,7 @@ export default function RelativasMenores({ tonic }: Props) {
   const arcPath = `M ${tonicP.x} ${tonicP.y} Q ${CX} ${CY} ${relP.x} ${relP.y}`;
 
   const handleAudio = useCallback(
-    (note: ChromaticNote) => playNote(note, 4, NOTE_DURATION),
+    (note: ChromaticNote) => playNote(note, 4, { duracion: NOTE_DURATION }),
     [playNote],
   );
 

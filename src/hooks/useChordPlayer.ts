@@ -5,6 +5,7 @@ import type { ChromaticNote } from '../types/music';
 export interface ChordNote {
   chromatic: ChromaticNote;
   octave: number;
+  ganancia?: number;
 }
 
 // El scheduler de acordes que las secciones con bloque/arpegio compartían
@@ -36,7 +37,10 @@ export function useChordPlayer(noteDuration: number) {
   const playChord = useCallback(
     (notes: readonly ChordNote[], gap: number, delay = 0) => {
       notes.forEach((n, i) =>
-        at(() => playNote(n.chromatic, n.octave, noteDuration), delay + i * gap),
+        at(
+          () => playNote(n.chromatic, n.octave, { duracion: noteDuration, ganancia: n.ganancia }),
+          delay + i * gap,
+        ),
       );
     },
     [at, playNote, noteDuration],
