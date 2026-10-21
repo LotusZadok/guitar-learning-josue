@@ -424,6 +424,8 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
   - Consecuencia aceptada: la guitarra tiene decaimiento **dependiente del registro** (una nota aguda muere mucho más rápido que una grave), a diferencia del sintético que sonaba parejo. Es el comportamiento físico real del instrumento y es deseable pedagógicamente, pero implica que en registros altos las duraciones largas (`NOTE_DURATION`, acordes en bloque) suenan más cortas de lo que dice el parámetro. No es un bug; si molesta, la salida es subir el rango de samples, no alargar el envelope.
   - `playClick` (metrónomo) sigue siendo un oscilador en el hook y **no** pasa por `Instrument`: es una señal de tiempo, no timbre del método.
 - **Con AUDIO ON guardado, el primer sonido tras recargar puede no salir en iOS (70ª ola).** Desde D1 el estado del mute sobrevive a la recarga, así que ya no hace falta el clic de AUDIO ON, que era el gesto que desbloqueaba el contexto. Si lo primero que toca el estudiante es un nodo que suena con `mouseenter` emulado, el contexto se crea suspendido; el siguiente clic lo reanuda (`getCtx()` llama a `resume()` en cada nota). Si en el celular del profesor se nota, sumar un `pointerdown` de una vez que llame a `getCtx()`.
+- **Cambiar el compás borra la grilla sin avisar (D16 del plan del 19/10, sin decidir).** `setCompas` rehace la grilla vacía; con 30 compases (73ª ola) un clic tira mucho trabajo. Recomendación: preguntar con el mismo `<dialog>` de "Borrar" cuando hay acordes. Decisión del dueño.
+- **Un compás de 6/8 desborda en 390px (73ª ola).** Seis casillas de 68px y el hueco del agrupado miden ≈454px; con el tramo de repetición (78ª ola) el compás suma 32px por lado. Salida: casillas más angostas bajo 480px.
 - **Recrear el `AudioContext` en plena reproducción de T4 (51ª ola).** Si el contexto pasa a `closed` mientras suena el constructor, `getCtx()` crea otro y los timers de `useProgressionPlayback` siguen con el `t0` del viejo: el cabezal salta. Caso raro (un contexto solo se cierra por el navegador); si aparece, cortar la reproducción al recrear.
 - **Tokens semánticos sugeridos por agentes pero no creados:**
   - `--text-faded` para `.stepPast` y similares ("este paso ya pasó / atenuado"). Hoy usa `var(--muted)` que es fuente de luminancia distinta. Si la diferencia visual es importante, vale la pena el token nuevo.
@@ -459,6 +461,12 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 ### Histórico (resueltas, conservar para contexto)
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
+
+**78ª ola (2026-10-20): §5.4 repetición por compases y loop con flechas (pedido #36, pregunta 12; brief aprobado por el dueño):**
+- ✓ **Fichas ‖: y :‖** en un grupo propio "Repetición" del banco (marcan compases, no cambian acordes). Gesto: ficha → compás; tras ‖: queda armada :‖ ("¿dónde quiere poner el otro?"). También con arrastre y teclado. Un solo tramo; ‖: sola termina en su compás, :‖ sola repite desde el principio, extremos al revés se intercambian.
+- ✓ **En la grilla**, barras de partitura (gruesa, fina y dos puntos) en el borde del compás inicial y final, en `--paper`, sin ámbar; el compás se abre 32px para no tapar casillas. Tocar una barra quita el tramo. Recortar compases ajusta el final o quita el tramo (`ajustarRepeticion`).
+- ✓ **La reproducción expande la grilla** (`expandirRepeticion`): el tramo se copia detrás de sí mismo y `origen` devuelve al cabezal la casilla real. Reloj, metrónomo, pausa y loop no cambiaron: trabajan sobre la grilla expandida. Tests en `verify:constructor`.
+- ✓ **El loop de toda la pieza** pasa del glifo ‖: :‖ a flechas en círculo (`repeat` de Lucide) y su etiqueta a "Repetir toda la pieza": el signo de repetición significa una sola cosa.
 
 **77ª ola (2026-10-20): §5.4 séptima acorde por acorde (pedido #32, pregunta 10; brief aprobado por el dueño):**
 - ✓ **Ficha 7** en "Modificadores", junto a sus2 y sus4, con el mismo gesto (ficha → acorde colocado, arrastre, teclado). Pone o quita la séptima de un solo acorde; la admite cualquier acorde, también el vii°.
@@ -515,7 +523,7 @@ Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabr
 - ✓ **Botones HTML reales** (`<button aria-pressed>` con `aria-label` "E menor"), ubicados en % alrededor del centro: alcanzables con Tab y lector de pantalla, a diferencia del SVG de §1.8. La posición es el único estilo en línea (valor calculado en render, anti-checklist 14).
 - ✓ **Sin colores de nota ni ámbar** (Note-Color Quarantine: los nodos son tonalidades, no notas; no suenan). Elegida = anillo de tinta, el mismo patrón que la ficha armada del banco.
 - ✓ **Geometría compartida con §1.8:** `utils/circuloQuintas.ts` (`anguloEnCirculo`, `puntoEnCirculo`), usada ahora por `CirculoDeQuintas` y por el selector (CLAUDE.md §6 regla 7). §1.8 verificado sin cambios visuales.
-- Pendiente: la marca "T" de tonizaciones en el círculo (#42) sigue bloqueada por la pregunta 14 de la minuta.
+- Pendiente: la marca "T" de tonizaciones en el círculo (#42) sigue bloqueada por la pregunta 14 de la minuta. **Cerrado el 2026-10-20:** la "T" era el rótulo "Toniz" de las filas de tonización (#40, 61ª ola), no una marca en el círculo.
 
 **66ª ola (2026-10-19): §4.1 banco menor con la menor armónica + token de texto tenso (pedido #29 banco, D4 y D15 del plan):**
 - ✓ **En tonalidad menor el banco suma V y vii° de la menor armónica** ("se desbloquean dos acordes: el quinto mayor y el séptimo disminuido"), en un grupo aparte con filete y rótulo "De la menor armónica", además de los siete naturales (el v menor sigue). Con séptimas: V7 (en Mi menor, B7) y vii°7 disminuido completo (D♯dim7). El V se toniza (V/V, ii/V); el vii° no ("excepto el disminuido"). El III+ queda fuera (D4).

@@ -14,7 +14,31 @@
   gap: 4px;
   padding: 0 12px;
   border-left: 2px solid var(--rule);
+  position: relative;
 }
+
+/* Reunión 19/10/26: barras de repetición como en la partitura, en el borde del
+   compás. El compás se abre para que la barra no tape la primera o la última
+   casilla. Tocar una barra quita el tramo. */
+.compas[data-rep-inicio='true'] { padding-left: 32px; }
+.compas[data-rep-fin='true'] { padding-right: 32px; }
+
+.barraRepeticion {
+  position: absolute;
+  bottom: 0;
+  width: 24px;
+  height: 60px;
+  padding: 0 6px;
+  border: 0;
+  background: none;
+  color: var(--paper);
+  cursor: pointer;
+}
+
+.barraRepeticion[data-lado='inicio'] { left: 2px; }
+.barraRepeticion[data-lado='fin'] { right: 2px; }
+.barraRepeticion svg { display: block; width: 100%; height: 100%; fill: currentColor; }
+.barraRepeticion:focus-visible { outline: 2px solid var(--paper); outline-offset: 2px; }
 
 /* El último compás cierra la grilla con la doble barra de fin: el
    border-right normal + una segunda línea desplazada 3px vía box-shadow

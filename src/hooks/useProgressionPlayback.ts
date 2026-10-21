@@ -3,22 +3,26 @@ import { useAudioEngine, stopAllNotes, getCtx } from './useAudioEngine';
 import { getAudioContext } from './audioEngineShared';
 import { acordeDeSlot } from '../utils/progresionAcordes';
 import {
+  CASILLAS_POR_COMPAS,
   GANANCIA_POR_ROL,
   casillaEn,
   clicksDeMetronomo,
   clicksDesde,
   eventosDesde,
+  expandirRepeticion,
   duracionTotalMs,
   gridToEvents,
   msPorCasilla,
   type Compas,
   type Grid,
+  type Repeticion,
 } from '../utils/progresionArmonica';
 
 interface Opciones {
   grid: Grid;
   compas: Compas;
   bpm: number;
+  repeticion: Repeticion;
   metronomo: boolean;
   loop: boolean;
 }
@@ -30,6 +34,10 @@ interface Opciones {
 // El corte de un acorde por el siguiente sale GRATIS de la duración: cada voz se
 // pide con la duración exacta hasta el acorde que la reemplaza, y se extingue
 // sola. No hay que apagar nada.
+// La grilla tal como suena: con el tramo de repetición ya duplicado.
+const enOrdenDeReproduccion = (o: Opciones) =>
+  expandirRepeticion(o.grid, CASILLAS_POR_COMPAS[o.compas], o.repeticion);
+
 export function useProgressionPlayback(op: Opciones) {
   const { playNote, playClick } = useAudioEngine();
   const [reproduciendo, setReproduciendo] = useState(false);
@@ -66,7 +74,8 @@ export function useProgressionPlayback(op: Opciones) {
   const pause = useCallback(() => {
     const ctx = getAudioContext();
     const ms = ctx ? (ctx.currentTime - t0.current) * 1000 : 0;
-    const casilla = casillaEn(ms, opActual.current.compas, opActual.current.bpm, opActual.current.grid.length);
+    const { grid } = enOrdenDeReproduccion(opActual.current);
+    const casilla = casillaEn(ms, opActual.current.compas, opActual.current.bpm, grid.length);
     cancelar();
     stopAllNotes();
     setReproduciendo(false);
@@ -86,13 +95,14 @@ export function useProgressionPlayback(op: Opciones) {
     const ctx = getCtx();
 
     cancelar();
+    const { grid, origen } = enOrdenDeReproduccion(op);
     const paso = msPorCasilla(op.compas, op.bpm);
     const desde = pausadoEn ?? 0;
-    const eventos = eventosDesde(gridToEvents(op.grid, op.compas, op.bpm), desde, paso);
+    const eventos = eventosDesde(gridToEvents(grid, op.compas, op.bpm), desde, paso);
     // Con la grilla vacía igual se puede tocar el metrónomo solo.
     if (eventos.length === 0 && !op.metronomo) return;
 
-    const totalMs = duracionTotalMs(op.grid, op.compas, op.bpm);
+    const totalMs = duracionTotalMs(grid, op.compas, op.bpm);
     const offsetMs = desde * paso;
     // El reloj del cabezal sigue en tiempo absoluto de la grilla: al reanudar,
     // t0 se corre hacia atrás lo que ya se había tocado.
@@ -102,7 +112,7 @@ export function useProgressionPlayback(op: Opciones) {
 
     // Acordes: cada voz con su duración exacta.
     eventos.forEach((ev) => {
-      const acorde = acordeDeSlot(op.grid[ev.slotIndex]!);
+      const acorde = acordeDeSlot(grid[ev.slotIndex]!);
       const id = window.setTimeout(() => {
         acorde.notas.forEach((n) =>
           playNote(n.chromatic, n.octave, { duracion: ev.durMs / 1000, ganancia: GANANCIA_POR_ROL[acorde.rol] }),
@@ -114,7 +124,7 @@ export function useProgressionPlayback(op: Opciones) {
     // Metrónomo: acento en el 1, y también en el 4 cuando el compás es 6/8,
     // que es donde el agrupamiento 3+3 se vuelve audible.
     if (op.metronomo) {
-      clicksDesde(clicksDeMetronomo(op.grid.length, op.compas), desde).forEach(({ casilla, acento }) => {
+      clicksDesde(clicksDeMetronomo(grid.length, op.compas), desde).forEach(({ casilla, acento }) => {
         const id = window.setTimeout(() => {
           const ctxAhora = getAudioContext();
           if (ctxAhora) playClick(acento ? 880 : 660, ctxAhora.currentTime);
@@ -131,7 +141,9 @@ export function useProgressionPlayback(op: Opciones) {
       const ctxAhora = getAudioContext();
       if (!ctxAhora) return;
       const ms = (ctxAhora.currentTime - t0.current) * 1000;
-      setSonando(casillaEn(ms, op.compas, op.bpm, op.grid.length));
+      // El cabezal marca la casilla real: en la segunda vuelta del tramo
+      // vuelve a los mismos compases.
+      setSonando(origen[casillaEn(ms, op.compas, op.bpm, grid.length)] ?? -1);
       if (ms < totalMs) raf.current = requestAnimationFrame(tick);
     };
     raf.current = requestAnimationFrame(tick);
@@ -155,7 +167,7 @@ export function useProgressionPlayback(op: Opciones) {
   // Deps intencionalmente NO son [op]: `op` es un objeto literal armado en
   // cada render de la sección, así que cambia de identidad aunque nada haya
   // cambiado. Se depende de los campos que realmente vienen del store
-  // (grid, compas, bpm, armadura, modo; las séptimas viven en la grilla), que sí son estables por
+  // (grid, compas, bpm, repetición, armadura, modo; las séptimas viven en la grilla), que sí son estables por
   // referencia entre renders cuando su valor no cambió (grid es el mismo
   // array hasta que una acción del store lo reemplaza; armadura es el mismo
   // objeto de ARMADURAS hasta que cambia armaduraId). Así el efecto solo
@@ -173,7 +185,7 @@ export function useProgressionPlayback(op: Opciones) {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (reproduciendo || pausadoEn !== null) stop();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [op.grid, op.compas, op.bpm]);
+  }, [op.grid, op.compas, op.bpm, op.repeticion]);
 
   // Cleanup de desmontaje. `stop` es estable (depende solo de `cancelar`,
   // que no tiene deps), así que este efecto monta una vez y su cleanup corre

@@ -38,7 +38,7 @@ interface MedidaProps {
 
 // Tortuga y conejo: los extremos del slider, como pidió el profesor. SVG lineal
 // monocromo — no emoji, no color (PRODUCT.md: sin gamificación, paleta austera).
-// Trazos de Lucide v0.460.0 (`turtle`, `rabbit`), copiados en línea para no
+// Trazos de Lucide v0.460.0 (`turtle`, `rabbit`, `repeat`), copiados en línea para no
 // sumar una dependencia por dos iconos. Licencia ISC: ver LUCIDE-LICENSE.txt
 // en esta carpeta. Decisión del dueño (20/10/26), aunque el profesor elogió
 // los dibujados a mano.
@@ -65,19 +65,16 @@ function Conejo() {
   );
 }
 
-// Signo de repetición de la partitura (‖: :‖): barra gruesa, barra fina y
-// los dos puntos, a cada lado.
-function SignoRepeticion() {
+// Repetir toda la pieza: flechas en círculo ("algún simbolito que termina y
+// comienza… como en loop", reunión 19/10/26). El signo ‖: :‖ quedó para los
+// tramos de compases en la grilla. Trazo `repeat` de Lucide (ver arriba).
+function FlechasLoop() {
   return (
-    <svg viewBox="0 0 28 20" className={styles.glifo} aria-hidden="true" focusable="false">
-      <rect x="1" y="2" width="3" height="16" />
-      <rect x="6" y="2" width="1" height="16" />
-      <circle cx="10" cy="7.5" r="1.4" />
-      <circle cx="10" cy="12.5" r="1.4" />
-      <circle cx="18" cy="7.5" r="1.4" />
-      <circle cx="18" cy="12.5" r="1.4" />
-      <rect x="21" y="2" width="1" height="16" />
-      <rect x="24" y="2" width="3" height="16" />
+    <svg viewBox="0 0 24 24" className={styles.glifoLinea} strokeLinecap="round" aria-hidden="true" focusable="false">
+      <path d="m17 2 4 4-4 4" />
+      <path d="M3 11v-1a4 4 0 0 1 4-4h14" />
+      <path d="m7 22-4-4 4-4" />
+      <path d="M21 13v1a4 4 0 0 1-4 4H3" />
     </svg>
   );
 }
@@ -190,7 +187,7 @@ export default function TransporteProgresion(p: Props) {
           {p.labels.metronomo}
         </button>
         <IconButton label={p.labels.loop} pressed={p.loop} onClick={p.onLoop}>
-          <SignoRepeticion />
+          <FlechasLoop />
         </IconButton>
         <IconButton label={p.labels.limpiar} onClick={p.onLimpiar}>
           <Borrador />

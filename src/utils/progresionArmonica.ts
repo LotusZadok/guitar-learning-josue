@@ -137,6 +137,44 @@ export function aplicarModificador(grid: Grid, indice: number, modificador: Modi
   return colocarSlot(grid, indice, { ...slot, septima: !slot.septima });
 }
 
+// Reunión 19/10/26: "agarro este botón y lo arrastro acá… va a sonar una, va a
+// sonar dos, y luego va a seguir adelante". Un solo tramo de compases (base 0)
+// que suena dos veces.
+export type Repeticion = { inicio: number; fin: number } | null;
+export type ExtremoRepeticion = 'inicio' | 'fin';
+
+// Poner un extremo completa el tramo con el otro: ‖: solo termina en su propio
+// compás; :‖ solo repite desde el principio, como en la partitura. Si quedan
+// al revés, se intercambian.
+export function marcarRepeticion(rep: Repeticion, extremo: ExtremoRepeticion, compas: number): NonNullable<Repeticion> {
+  const otro = extremo === 'inicio' ? (rep?.fin ?? compas) : (rep?.inicio ?? 0);
+  return { inicio: Math.min(compas, otro), fin: Math.max(compas, otro) };
+}
+
+// Al bajar la cantidad de compases el tramo se ajusta al último; si su inicio
+// queda fuera, se quita.
+export function ajustarRepeticion(rep: Repeticion, nCompases: number): Repeticion {
+  if (!rep || rep.inicio >= nCompases) return null;
+  return { inicio: rep.inicio, fin: Math.min(rep.fin, nCompases - 1) };
+}
+
+// La grilla en orden de reproducción: el tramo se copia detrás de sí mismo.
+// `origen[i]` dice qué casilla real suena en la posición i (para el cabezal).
+// El reloj, el metrónomo y la pausa trabajan sobre la grilla expandida sin
+// saber que existe la repetición.
+export function expandirRepeticion(
+  grid: Grid,
+  casillasPorCompas: number,
+  rep: Repeticion,
+): { grid: Grid; origen: number[] } {
+  const origen = grid.map((_, i) => i);
+  if (rep) {
+    const finTramo = (rep.fin + 1) * casillasPorCompas;
+    origen.splice(finTramo, 0, ...origen.slice(rep.inicio * casillasPorCompas, finTramo));
+  }
+  return { grid: origen.map((i) => grid[i]), origen };
+}
+
 // El botón general de séptimas: "si yo toco séptima, todos se pusieron séptimas".
 export function fijarSeptimas(grid: Grid, septima: boolean): Grid {
   return grid.map((slot) => slot && { ...slot, septima });

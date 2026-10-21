@@ -7,9 +7,11 @@ import {
   puntosDeModulacion,
   rolDe,
   type Compas,
+  type ExtremoRepeticion,
   type GradoId,
   type Grid,
   type Modificador,
+  type Repeticion,
 } from '../../../utils/progresionArmonica';
 import styles from './GrillaProgresion.module.css';
 
@@ -38,6 +40,40 @@ interface Props {
     accion: 'colocar' | 'reemplazar' | 'vaciar' | 'ninguna',
     datos: { compas: number; pulso: number; acorde?: string },
   ) => string;
+  /** El tramo que suena dos veces y la ficha ‖: / :‖ armada; textos desde la
+   *  sección (i18n). Compases en base 0. */
+  repeticion: {
+    tramo: Repeticion;
+    armada: ExtremoRepeticion | null;
+    onMarcar: (compas: number) => void;
+    onQuitar: () => void;
+    etiquetaMarcar: (extremo: ExtremoRepeticion, compas: number) => string;
+    etiquetaBarra: (inicio: number, fin: number) => string;
+  };
+}
+
+// Barra de repetición de la partitura: gruesa, fina y los dos puntos del lado
+// de adentro del tramo.
+function BarraRepeticion({ lado }: { lado: ExtremoRepeticion }) {
+  return (
+    <svg viewBox="0 0 12 60" aria-hidden="true" focusable="false">
+      {lado === 'inicio' ? (
+        <>
+          <rect x="0" y="0" width="3" height="60" />
+          <rect x="5" y="0" width="1" height="60" />
+          <circle cx="9.5" cy="24" r="1.6" />
+          <circle cx="9.5" cy="36" r="1.6" />
+        </>
+      ) : (
+        <>
+          <circle cx="2.5" cy="24" r="1.6" />
+          <circle cx="2.5" cy="36" r="1.6" />
+          <rect x="6" y="0" width="1" height="60" />
+          <rect x="9" y="0" width="3" height="60" />
+        </>
+      )}
+    </svg>
+  );
 }
 
 // La grilla. Cada compás es un grupo con su barra; el último cierra con la
@@ -46,8 +82,9 @@ interface Props {
 // oírse.
 export default function GrillaProgresion({
   grid, compas, nCompases, sonando, hayGradoArmado, modificadorArmado, onModificar, etiquetaModificar,
-  onColocar, onVaciar, onSoltar, etiquetaModulacion, etiquetaCasilla,
+  onColocar, onVaciar, onSoltar, etiquetaModulacion, etiquetaCasilla, repeticion,
 }: Props) {
+  const { tramo } = repeticion;
   const porCompas = CASILLAS_POR_COMPAS[compas];
   const acentos = ACENTOS[compas];
 
@@ -73,8 +110,28 @@ export default function GrillaProgresion({
   return (
     <div className={styles.pentagrama}>
       {Array.from({ length: nCompases }, (_, c) => (
-        <div key={c} className={styles.compas}>
+        <div
+          key={c}
+          className={styles.compas}
+          data-rep-inicio={tramo?.inicio === c}
+          data-rep-fin={tramo?.fin === c}
+        >
           <span className={styles.numeroCompas} aria-hidden="true">{c + 1}</span>
+          {tramo && (tramo.inicio === c || tramo.fin === c) &&
+            (['inicio', 'fin'] as const)
+              .filter((lado) => tramo[lado] === c)
+              .map((lado) => (
+                <button
+                  key={lado}
+                  type="button"
+                  className={styles.barraRepeticion}
+                  data-lado={lado}
+                  aria-label={repeticion.etiquetaBarra(tramo.inicio + 1, tramo.fin + 1)}
+                  onClick={repeticion.onQuitar}
+                >
+                  <BarraRepeticion lado={lado} />
+                </button>
+              ))}
           <div className={styles.casillas} data-agrupado={porCompas === 6}>
             {Array.from({ length: porCompas }, (_, p) => {
               const i = c * porCompas + p;
@@ -90,11 +147,15 @@ export default function GrillaProgresion({
               // como el cursor (`data-accion`), no solo el handler.
               const modificable =
                 slot !== null && modificadorArmado !== null && admiteModificador(slot.tonalidad.modo, slot.degree, modificadorArmado);
-              const accion = modificadorArmado
+              const accion = repeticion.armada
+                ? 'marcar'
+                : modificadorArmado
                 ? (modificable ? 'modificar' : 'ninguna')
                 : hayGradoArmado ? (slot ? 'reemplazar' : 'colocar') : (slot ? 'vaciar' : 'ninguna');
               const ariaAccion =
-                accion === 'modificar'
+                accion === 'marcar'
+                  ? repeticion.etiquetaMarcar(repeticion.armada!, c + 1)
+                  : accion === 'modificar'
                   ? etiquetaModificar({ compas: c + 1, pulso: p + 1, acorde: acorde?.cifrado ?? '', modificador: modificadorArmado! })
                   : etiquetaCasilla(accion, { compas: c + 1, pulso: p + 1, acorde: acorde?.cifrado });
               const ariaLabel = rotulo ? `${ariaAccion}. ${etiquetaModulacion(rotulo)}` : ariaAccion;
@@ -111,7 +172,8 @@ export default function GrillaProgresion({
                   data-accion={accion}
                   aria-label={ariaLabel}
                   onClick={() => {
-                    if (modificadorArmado) {
+                    if (repeticion.armada) repeticion.onMarcar(c);
+                    else if (modificadorArmado) {
                       if (modificable) onModificar(i);
                     } else if (hayGradoArmado) onColocar(i);
                     else if (slot) onVaciar(i);

@@ -1,15 +1,19 @@
 import { create } from 'zustand';
 import {
   CASILLAS_POR_COMPAS,
+  ajustarRepeticion,
   aplicarModificador,
   fijarSeptimas,
+  marcarRepeticion,
   colocarSlot,
   crearGrid,
   type Compas,
   type GradoId,
   type Grid,
   type Modo,
+  type ExtremoRepeticion,
   type Modificador,
+  type Repeticion,
 } from '../utils/progresionArmonica';
 
 export const BPM_MIN = 40;
@@ -35,6 +39,10 @@ interface ConstructorState {
   /** La ficha (sus2, sus4 o 7) tocada en el banco, esperando un acorde
    *  colocado. Excluye a gradoArmado: armar uno desarma el otro. */
   modificadorArmado: Modificador | null;
+  /** El tramo que suena dos veces (compases base 0), o null. */
+  repeticion: Repeticion;
+  /** La ficha ‖: o :‖ tocada en el banco, esperando un compás. */
+  repeticionArmada: ExtremoRepeticion | null;
 
   setArmadura: (id: string) => void;
   setModo: (modo: Modo) => void;
@@ -47,6 +55,9 @@ interface ConstructorState {
   armarGrado: (id: GradoId | null) => void;
   armarModificador: (modificador: Modificador | null) => void;
   modificarEn: (slotIndex: number) => void;
+  armarRepeticion: (extremo: ExtremoRepeticion | null) => void;
+  marcarRepeticionEn: (compas: number) => void;
+  quitarRepeticion: () => void;
   colocarEn: (slotIndex: number) => void;
   vaciarSlot: (slotIndex: number) => void;
   limpiarGrid: () => void;
@@ -64,6 +75,8 @@ export const useConstructorStore = create<ConstructorState>()((set) => ({
   grid: crearGrid('4/4', COMPASES_DEFAULT),
   gradoArmado: null,
   modificadorArmado: null,
+  repeticion: null,
+  repeticionArmada: null,
 
   // Armadura y modo son la tonalidad ACTIVA: la que recibe el próximo acorde.
   // Lo ya colocado conserva su tonalidad (modulación, reunión 19/10/26); la
@@ -83,7 +96,7 @@ export const useConstructorStore = create<ConstructorState>()((set) => ({
       const largo = nCompases * CASILLAS_POR_COMPAS[s.compas];
       const grid = crearGrid(s.compas, nCompases);
       for (let i = 0; i < Math.min(largo, s.grid.length); i++) grid[i] = s.grid[i];
-      return { nCompases, grid };
+      return { nCompases, grid, repeticion: ajustarRepeticion(s.repeticion, nCompases) };
     }),
 
   setBpm: (bpm) => set({ bpm: Math.min(BPM_MAX, Math.max(BPM_MIN, bpm)) }),
@@ -93,8 +106,21 @@ export const useConstructorStore = create<ConstructorState>()((set) => ({
   toggleMetronomo: () => set((s) => ({ metronomo: !s.metronomo })),
   toggleLoop: () => set((s) => ({ loop: !s.loop })),
 
-  armarGrado: (gradoArmado) => set({ gradoArmado, modificadorArmado: null }),
-  armarModificador: (modificadorArmado) => set({ modificadorArmado, gradoArmado: null }),
+  armarGrado: (gradoArmado) => set({ gradoArmado, modificadorArmado: null, repeticionArmada: null }),
+  armarModificador: (modificadorArmado) => set({ modificadorArmado, gradoArmado: null, repeticionArmada: null }),
+  armarRepeticion: (repeticionArmada) => set({ repeticionArmada, gradoArmado: null, modificadorArmado: null }),
+
+  // Tras poner ‖: queda armada :‖ ("¿dónde quiere poner el otro?"); tras :‖, nada.
+  marcarRepeticionEn: (compas) =>
+    set((s) =>
+      s.repeticionArmada
+        ? {
+            repeticion: marcarRepeticion(s.repeticion, s.repeticionArmada, compas),
+            repeticionArmada: s.repeticionArmada === 'inicio' ? 'fin' : null,
+          }
+        : {},
+    ),
+  quitarRepeticion: () => set({ repeticion: null }),
 
   // Igual que colocar: la ficha se consume al aplicarla.
   modificarEn: (slotIndex) =>
@@ -123,5 +149,5 @@ export const useConstructorStore = create<ConstructorState>()((set) => ({
       return { grid };
     }),
 
-  limpiarGrid: () => set((s) => ({ grid: crearGrid(s.compas, s.nCompases), gradoArmado: null, modificadorArmado: null })),
+  limpiarGrid: () => set((s) => ({ grid: crearGrid(s.compas, s.nCompases), gradoArmado: null, modificadorArmado: null, repeticion: null, repeticionArmada: null })),
 }));

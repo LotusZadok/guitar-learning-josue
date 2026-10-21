@@ -27,6 +27,9 @@ import {
   aplicarModificador,
   admiteModificador,
   fijarSeptimas,
+  expandirRepeticion,
+  marcarRepeticion,
+  ajustarRepeticion,
   GANANCIA_POR_ROL,
   type Grid,
   type Tonalidad,
@@ -233,6 +236,22 @@ const todas = fijarSeptimas(conSeptimaEnV, true);
 check('el general encendido pone séptima a todas', todas.map((c) => c?.septima ?? null), [true, true, null, true]);
 check('el general apagado las quita todas', fijarSeptimas(todas, false).map((c) => c?.septima ?? null), [false, false, null, false]);
 check('aplicarModificador no muta la grilla', tres[3], { degree: 'V', tonalidad: DO });
+
+console.log('\n— Repetición por compases (reunión 19/10/26) —');
+// Cuatro compases de una casilla: I IV V I.
+const cuatro: Grid = [slot('I'), slot('IV'), slot('V'), slot('I')];
+const tramo12 = { inicio: 0, fin: 1 };
+check('el tramo 1–2 suena dos veces y sigue', expandirRepeticion(cuatro, 1, tramo12).origen, [0, 1, 0, 1, 2, 3]);
+check('la grilla expandida trae los acordes en ese orden', expandirRepeticion(cuatro, 1, tramo12).grid.map((c) => c?.degree), ['I', 'IV', 'I', 'IV', 'V', 'I']);
+check('sin tramo, igual que hoy', expandirRepeticion(cuatro, 1, null).origen, [0, 1, 2, 3]);
+check('con dos casillas por compás copia el compás entero', expandirRepeticion([slot('I'), null, slot('V'), null], 2, { inicio: 1, fin: 1 }).origen, [0, 1, 2, 3, 2, 3]);
+check('‖: sin :‖ termina en el mismo compás', marcarRepeticion(null, 'inicio', 2), { inicio: 2, fin: 2 });
+check(':‖ sin ‖: repite desde el principio', marcarRepeticion(null, 'fin', 3), { inicio: 0, fin: 3 });
+check('poner el final completa el tramo', marcarRepeticion({ inicio: 1, fin: 1 }, 'fin', 4), { inicio: 1, fin: 4 });
+check('un final antes del inicio se intercambia', marcarRepeticion({ inicio: 3, fin: 3 }, 'fin', 1), { inicio: 1, fin: 3 });
+check('recortar ajusta el final al último compás', ajustarRepeticion({ inicio: 2, fin: 5 }, 4), { inicio: 2, fin: 3 });
+check('si el inicio queda fuera, el tramo se quita', ajustarRepeticion({ inicio: 4, fin: 5 }, 4), null);
+check('un tramo que cabe no cambia', ajustarRepeticion(tramo12, 4), tramo12);
 
 console.log('\n— Dinámica según la tensión (reunión 19/10/26) —');
 const g = GANANCIA_POR_ROL;

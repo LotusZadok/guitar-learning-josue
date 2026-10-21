@@ -8,7 +8,14 @@ import TransporteProgresion, { MedidaProgresion } from '../../../primitives/Tran
 import { useProgressionPlayback } from '../../../../hooks/useProgressionPlayback';
 import { useConstructorStore } from '../../../../stores/useConstructorStore';
 import { armaduraPorId, etiquetaTonalidad } from '../../../../utils/progresionAcordes';
-import { mismaTonalidad, type GradoId, type Modificador, type Tonalidad } from '../../../../utils/progresionArmonica';
+import {
+  CASILLAS_POR_COMPAS,
+  mismaTonalidad,
+  type ExtremoRepeticion,
+  type GradoId,
+  type Modificador,
+  type Tonalidad,
+} from '../../../../utils/progresionArmonica';
 import styles from './ConstructorProgresionesSection.module.css';
 
 // 4.1 · Constructor de progresiones. Sandbox puro: se arma y se oye. No evalúa,
@@ -26,6 +33,7 @@ export default function ConstructorProgresionesSection() {
     grid: s.grid,
     compas: s.compas,
     bpm: s.bpm,
+    repeticion: s.repeticion,
     metronomo: s.metronomo,
     loop: s.loop,
   });
@@ -63,6 +71,11 @@ export default function ConstructorProgresionesSection() {
 
   // Lo que se suelta puede ser un grado o una ficha modificadora ("mod:sus4", "mod:7").
   const soltar = (slotIndex: number, dato: string) => {
+    if (dato.startsWith('rep:')) {
+      s.armarRepeticion(dato.slice(4) as ExtremoRepeticion);
+      s.marcarRepeticionEn(Math.floor(slotIndex / CASILLAS_POR_COMPAS[s.compas]));
+      return;
+    }
     if (dato.startsWith('mod:')) {
       s.armarModificador(dato.slice(4) as Modificador);
       s.modificarEn(slotIndex);
@@ -145,6 +158,12 @@ export default function ConstructorProgresionesSection() {
           rotulo: t('t4.s41.modificadores'),
           etiqueta: (m) => t(`t4.s41.armar_${m === '7' ? 'septima' : m}`),
         }}
+        repeticion={{
+          armada: s.repeticionArmada,
+          onArmar: s.armarRepeticion,
+          rotulo: t('t4.s41.repeticion'),
+          etiqueta: (extremo) => t(`t4.s41.armar_rep_${extremo}`),
+        }}
       />
 
       <GrillaProgresion
@@ -165,6 +184,14 @@ export default function ConstructorProgresionesSection() {
         onVaciar={s.vaciarSlot}
         onSoltar={soltar}
         etiquetaModulacion={(tonalidad) => t('t4.s41.casilla_tonalidad', { tonalidad })}
+        repeticion={{
+          tramo: s.repeticion,
+          armada: s.repeticionArmada,
+          onMarcar: s.marcarRepeticionEn,
+          onQuitar: s.quitarRepeticion,
+          etiquetaMarcar: (extremo, compas) => t(`t4.s41.casilla_rep_${extremo}`, { compas }),
+          etiquetaBarra: (inicio, fin) => t('t4.s41.barra_repeticion', { inicio, fin }),
+        }}
         etiquetaCasilla={(accion, datos) =>
           t(`t4.s41.casilla_${accion === 'ninguna' ? 'vacia' : accion}`, datos)
         }

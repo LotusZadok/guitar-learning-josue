@@ -10,6 +10,7 @@ import {
   esTonizable,
   type GradoId,
   type Modo,
+  type ExtremoRepeticion,
   type Modificador,
 } from '../../../utils/progresionArmonica';
 import styles from './BancoGrados.module.css';
@@ -32,6 +33,13 @@ interface Props {
     rotulo: string;
     etiqueta: (modificador: Modificador) => string;
   };
+  /** Fichas ‖: / :‖: se tocan y después un compás de la grilla. */
+  repeticion: {
+    armada: ExtremoRepeticion | null;
+    onArmar: (extremo: ExtremoRepeticion | null) => void;
+    rotulo: string;
+    etiqueta: (extremo: ExtremoRepeticion) => string;
+  };
 }
 
 // El banco: los 7 grados del modo activo. Cada grado tonizable expande sus dos
@@ -50,6 +58,7 @@ export default function BancoGrados({
   expandirLabel,
   etiquetaArmar,
   modificadores,
+  repeticion,
 }: Props) {
   const [abierto, setAbierto] = useState<number | null>(null);
   const grados = gradosDe(modo);
@@ -159,6 +168,27 @@ export default function BancoGrados({
           ))}
         </div>
         <span className={styles.rotulo} aria-hidden="true">{modificadores.rotulo}</span>
+      </div>
+      {/* Reunión 19/10/26: los signos de repetición marcan compases, no cambian
+          un acorde; por eso van en su propio grupo. */}
+      <div className={styles.modificadores} role="group" aria-label={repeticion.rotulo}>
+        <div className={styles.armonicaGrados}>
+          {([['inicio', '‖:'], ['fin', ':‖']] as const).map(([extremo, signo]) => (
+            <button
+              key={extremo}
+              type="button"
+              className={`${styles.chip} ${styles.chipModificador}`}
+              aria-pressed={repeticion.armada === extremo}
+              aria-label={repeticion.etiqueta(extremo)}
+              draggable
+              onDragStart={(e) => e.dataTransfer.setData('text/plain', `rep:${extremo}`)}
+              onClick={() => repeticion.onArmar(repeticion.armada === extremo ? null : extremo)}
+            >
+              {signo}
+            </button>
+          ))}
+        </div>
+        <span className={styles.rotulo} aria-hidden="true">{repeticion.rotulo}</span>
       </div>
     </div>
   );

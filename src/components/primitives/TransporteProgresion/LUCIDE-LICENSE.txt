@@ -1,4 +1,4 @@
-Iconos turtle y rabbit de Lucide (lucide-static v0.460.0), copiados en TransporteProgresion.tsx.
+Iconos turtle, rabbit y repeat de Lucide (lucide-static v0.460.0), copiados en TransporteProgresion.tsx.
 
 ISC License
 
