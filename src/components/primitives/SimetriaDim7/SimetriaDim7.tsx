@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState, type KeyboardEvent } from 'react';
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAudioEngine, stopAllNotes } from '../../../hooks/useAudioEngine';
 import { ALL, NOTE_COLORS } from '../../../data/notes';
@@ -51,7 +51,9 @@ export default function SimetriaDim7() {
   const [active, setActive] = useState(() => familyOf(tonicChrom));
   const [hovered, setHovered] = useState<ChromaticNote | null>(null);
   const [playing, setPlaying] = useState<'bloque' | 'arpegio' | null>(null);
+  const [sonando, setSonando] = useState<ChromaticNote[]>([]);
   const timers = useRef<number[]>([]);
+  useEffect(() => () => timers.current.forEach(clearTimeout), []);
 
   // Las tres familias son absolutas (el dim7 es simétrico: existen tres y no
   // dependen de la tonalidad), así que la tónica global no re-ancla el círculo.
@@ -101,14 +103,23 @@ export default function SimetriaDim7() {
       stopAllNotes();
       setPlaying(mode);
       const gap = mode === 'arpegio' ? ARPEGGIO_GAP_MS : 0;
+      // Reunión 19/10/26: la nota que suena lleva el contorno dorado de los
+      // constructores; en arpegio de a una, en bloque las cuatro.
+      if (mode === 'bloque') setSonando(family.miembros.map((m) => m.note));
       family.miembros.forEach((m, i) => {
         timers.current.push(
-          window.setTimeout(() => playNote(m.note, OCTAVE, NOTE_DURATION), i * gap),
+          window.setTimeout(() => {
+            playNote(m.note, OCTAVE, NOTE_DURATION);
+            if (mode === 'arpegio') setSonando([m.note]);
+          }, i * gap),
         );
       });
       timers.current.push(
         window.setTimeout(
-          () => setPlaying(null),
+          () => {
+            setPlaying(null);
+            setSonando([]);
+          },
           family.miembros.length * gap + NOTE_DURATION * 1000,
         ),
       );
@@ -154,10 +165,11 @@ export default function SimetriaDim7() {
           const enarmonia = member ? miembroDe(note)?.enarmonia : undefined;
           const isHovered = hovered === note;
           const colored = member || isHovered;
+          const suena = sonando.includes(note);
           return (
             <g
               key={note}
-              className={styles.node}
+              className={suena ? `${styles.node} ${styles.nodeSonando}` : styles.node}
               style={{ transformOrigin: `${x}px ${y}px` }}
               tabIndex={0}
               role="button"
@@ -176,6 +188,9 @@ export default function SimetriaDim7() {
                 }
               }}
             >
+              {suena && (
+                <circle cx={x} cy={y} r={NODE_R + 6} fill="none" stroke="var(--amber)" strokeWidth={3} />
+              )}
               <circle
                 cx={x}
                 cy={y}

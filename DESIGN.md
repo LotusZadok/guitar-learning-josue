@@ -460,6 +460,10 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
 
+**71ª ola (2026-10-20): §3.3 la nota que suena se marca en la simetría del dim7 (pedido #9, pregunta 4 resuelta por el dueño con el video):**
+- ✓ **Contorno dorado en `SimetriaDim7`** mientras suena: una nota a la vez en arpegio, las cuatro en bloque. Mismo anillo que `AcordesBuilder` (`r = NODE_R + 6`, `--amber`, 3px) y el mismo pulso `scale(1.12)`. Amber-Means-Sounding: al terminar no queda ninguna marcada; el borde `--paper` de miembro no cambia. Alcance del anillo ≈ 375 en el viewBox de 400: no recorta.
+- ✓ Los timers se limpian al desmontar.
+
 **70ª ola (2026-10-20): decisiones D1 y D13 del plan del 19/10 y paneles de tonización:**
 - ✓ **El mute se persiste (D1).** `audioMuted` entra en el `partialize` de `useUIStore` junto al tema. Arranca en OFF solo la primera vez (9ª ola); después recuerda lo último que eligió el estudiante. No hay autoplay: el navegador igual exige un gesto para crear el contexto.
 - ✓ **Los paneles de tonización se cierran.** `.tonizaciones[hidden] { display: none; }` en `BancoGrados`: el botón "Tonizaciones" abre uno a la vez, como dice su `aria-expanded`. Decisión del dueño, aunque el profesor los vio y elogió todos abiertos.

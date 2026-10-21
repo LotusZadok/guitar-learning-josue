@@ -69,6 +69,11 @@
   outline: none;
 }
 
+/* Mismo pulso que la nota que suena en AcordesBuilder. */
+.nodeSonando {
+  transform: scale(1.12);
+}
+
 .node > circle {
   transition: fill 0.12s, stroke 0.12s;
 }
