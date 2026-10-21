@@ -15,7 +15,8 @@ export const BPM_MIN = 40;
 export const BPM_MAX = 200;
 const BPM_DEFAULT = 90;
 export const COMPASES_MIN = 1;
-export const COMPASES_MAX = 8;
+// Reunión 19/10/26: "un blues necesita mínimo 12 compases… mínimo 30".
+export const COMPASES_MAX = 30;
 const COMPASES_DEFAULT = 4;
 
 interface ConstructorState {

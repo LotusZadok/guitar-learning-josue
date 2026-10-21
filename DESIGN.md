@@ -460,6 +460,10 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
 
+**73ª ola (2026-10-20): §5.4 hasta 30 compases (pedido #27, pregunta 9):**
+- ✓ **`COMPASES_MAX` pasa de 8 a 30**; arranca en 4. La grilla ya envuelve por compás (`flex-wrap`), así que 30 compases bajan en filas sin scroll horizontal en 4/4, 3/4 y 2/4. Sin test nuevo: la lógica de recorte de `setNCompases` no cambió, solo el tope.
+- ⚠ **Preexistente, no corregido:** un compás de 6/8 mide ≈454px (seis casillas de 68px y el hueco del agrupado) y en 390px desborda el ancho útil. Pasa igual con 1 compás que con 30.
+
 **72ª ola (2026-10-20): §3.5 la marca del tritono deja de tachar el 4 y el 7 (pedido #21, pregunta 6):**
 - ✓ **La marca baja de `NODE_Y + 42` a `NODE_Y + 60`**, por debajo de los números de grado (`NODE_Y + radio + 22`). Sus extremos iban de y=187 a y=197 y el "4" y el "7" están en y=190: se tachaban en cualquier pantalla, porque el SVG escala entero. El `viewBox` crece solo con `focus="tritono"`; §1.5 queda idéntica.
 
