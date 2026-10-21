@@ -460,6 +460,10 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
 
+**75ª ola (2026-10-20): §5.1 el menor Maj7 en el árbol completo (pedido #41, pregunta 13):**
+- ✓ **`BUILDER_34` suma el camino `3m → 5 → 7M`** (mMaj7), igual que `BUILDER_312` desde la Ola 8: la tercera menor ya no restringe la séptima a 7m. Los nodos existían; no cambian `R`, el anillo ni el ancho.
+- ✓ **Contenido (es/de):** "diez acordes" → "once acordes" en la intro y el caption (`elf Akkorde`). `verify:t3` cubre el camino nuevo y que el árbol arme once.
+
 **74ª ola (2026-10-20): §5.4 tortuga y conejo de Lucide (pedido #34, decisión del dueño):**
 - ✓ **Los extremos del slider usan `turtle` y `rabbit` de Lucide v0.460.0**, copiados en línea (sin dependencia nueva) con su licencia ISC en `TransporteProgresion/LUCIDE-LICENSE.txt`. Siguen monocromos en `--muted`, `aria-hidden`, a 20×20.
 - Decisión del dueño **contra la decisión 8 de la minuta del 19/10**: el profesor había elogiado los dibujados a mano ("me encantan los pies de la tortuga"). Si pregunta por ellos, están en el historial de git (`TransporteProgresion.tsx` antes de esta ola).

@@ -7,7 +7,7 @@ import {
   spelledIntervalFromTonic,
   tonizacionEscenarios,
 } from '../src/utils/noteCalculations.ts';
-import { BUILDER_312 } from '../src/components/primitives/AcordesBuilder/configs.ts';
+import { BUILDER_312, BUILDER_34 } from '../src/components/primitives/AcordesBuilder/configs.ts';
 import { check, resumen } from './verify-helpers.ts';
 
 const cifrados = (gs: { chord: { cifrado: string } }[]) => gs.map((g) => g.chord.cifrado);
@@ -102,5 +102,11 @@ const deletreo = (tonica: 'C' | 'G' | 'Bb', camino: readonly string[]) => [
 check('mMaj7 en C', deletreo('C', ['3m', '5', '7M']), ['C', 'E♭', 'G', 'B']);
 check('mMaj7 en G', deletreo('G', ['3m', '5', '7M']), ['G', 'B♭', 'D', 'F♯']);
 check('mMaj7 en B♭', deletreo('Bb', ['3m', '5', '7M']), ['B♭', 'D♭', 'F', 'A']);
+
+console.log('\n— 5.1 árbol completo con el menor Maj7 (reunión 19/10/26) —');
+const caminos34 = BUILDER_34.chords.map((c) => c.path.join('-'));
+check('cada camino de BUILDER_34 es único', new Set(caminos34).size, caminos34.length);
+check('BUILDER_34 incluye el menor Maj7', BUILDER_34.chords.find((c) => c.cifrado === 'mMaj7')?.path, ['3m', '5', '7M']);
+check('BUILDER_34 arma once acordes', BUILDER_34.chords.length, 11);
 
 resumen();

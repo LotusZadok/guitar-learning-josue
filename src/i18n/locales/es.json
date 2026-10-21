@@ -84,8 +84,8 @@
     "s34": {
       "label": "5.1 · Constructor de acordes",
       "title": "Constructor de acordes completo",
-      "intro": "El árbol entero, con todo lo que viste en T3 y T4. Desde la tónica, elige una segunda, una tercera o una cuarta; luego una quinta (justa o disminuida); y, si quieres, una séptima. Cada camino válido arma uno de los diez acordes del método. La posición sigue codificando lo mismo: más arriba, más cerca de la tónica; más a la izquierda, más grave la calidad.",
-      "caption": "Diez acordes, un solo árbol. Para en la quinta para una tríada o un suspendido; sigue a la séptima para los acordes de cuatro notas."
+      "intro": "El árbol entero, con todo lo que viste en T3 y T4. Desde la tónica, elige una segunda, una tercera o una cuarta; luego una quinta (justa o disminuida); y, si quieres, una séptima. Cada camino válido arma uno de los once acordes del método. La posición sigue codificando lo mismo: más arriba, más cerca de la tónica; más a la izquierda, más grave la calidad.",
+      "caption": "Once acordes, un solo árbol. Para en la quinta para una tríada o un suspendido; sigue a la séptima para los acordes de cuatro notas."
     },
     "s35": {
       "label": "3.4 · Grados armónicos con séptima",

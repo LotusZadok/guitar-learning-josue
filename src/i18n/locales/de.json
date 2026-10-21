@@ -86,8 +86,8 @@
     "s34": {
       "label": "5.1 · Akkord-Konstruktor",
       "title": "Vollständiger Akkord-Konstruktor",
-      "intro": "Der ganze Baum, mit allem aus T3 und T4. Von der Tonika aus wähle eine Sekunde, eine Terz oder eine Quarte; dann eine Quinte (rein oder vermindert); und, wenn du willst, eine Septime. Jeder gültige Pfad bildet einen der zehn Akkorde der Methode. Die Position codiert weiterhin dasselbe: weiter oben, näher an der Tonika; weiter links, tiefer die Qualität.",
-      "caption": "Zehn Akkorde, ein Baum. Halte bei der Quinte für einen Dreiklang oder Sus-Akkord; geh weiter bis zur Septime für die vierstimmigen Akkorde."
+      "intro": "Der ganze Baum, mit allem aus T3 und T4. Von der Tonika aus wähle eine Sekunde, eine Terz oder eine Quarte; dann eine Quinte (rein oder vermindert); und, wenn du willst, eine Septime. Jeder gültige Pfad bildet einen der elf Akkorde der Methode. Die Position codiert weiterhin dasselbe: weiter oben, näher an der Tonika; weiter links, tiefer die Qualität.",
+      "caption": "Elf Akkorde, ein Baum. Halte bei der Quinte für einen Dreiklang oder Sus-Akkord; geh weiter bis zur Septime für die vierstimmigen Akkorde."
     },
     "s35": {
       "label": "3.4 · Harmonische Stufen mit Septime",

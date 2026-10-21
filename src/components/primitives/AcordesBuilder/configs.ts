@@ -132,6 +132,8 @@ export const BUILDER_34: BuilderConfig = {
     { path: ['3M', '5', '7m'], nombre: 'dominante 7', cifrado: '7' },
     { path: ['3m', '5d', '7m'], nombre: 'semidisminuido', cifrado: 'm7♭5' },
     { path: ['3m', '5d', '7d'], nombre: 'disminuido 7', cifrado: 'dim7' },
+    // Reunión 19/10/26: la 3m también desbloquea la 7M ("desbloquear un filtro").
+    { path: ['3m', '5', '7M'], nombre: 'menor Maj7', cifrado: 'mMaj7' },
   ],
 };
 
