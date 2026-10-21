@@ -460,6 +460,10 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
 
+**74ª ola (2026-10-20): §5.4 tortuga y conejo de Lucide (pedido #34, decisión del dueño):**
+- ✓ **Los extremos del slider usan `turtle` y `rabbit` de Lucide v0.460.0**, copiados en línea (sin dependencia nueva) con su licencia ISC en `TransporteProgresion/LUCIDE-LICENSE.txt`. Siguen monocromos en `--muted`, `aria-hidden`, a 20×20.
+- Decisión del dueño **contra la decisión 8 de la minuta del 19/10**: el profesor había elogiado los dibujados a mano ("me encantan los pies de la tortuga"). Si pregunta por ellos, están en el historial de git (`TransporteProgresion.tsx` antes de esta ola).
+
 **73ª ola (2026-10-20): §5.4 hasta 30 compases (pedido #27, pregunta 9):**
 - ✓ **`COMPASES_MAX` pasa de 8 a 30**; arranca en 4. La grilla ya envuelve por compás (`flex-wrap`), así que 30 compases bajan en filas sin scroll horizontal en 4/4, 3/4 y 2/4. Sin test nuevo: la lógica de recorte de `setNCompases` no cambió, solo el tope.
 - ⚠ **Preexistente, no corregido:** un compás de 6/8 mide ≈454px (seis casillas de 68px y el hueco del agrupado) y en 390px desborda el ancho útil. Pasa igual con 1 compás que con 30.

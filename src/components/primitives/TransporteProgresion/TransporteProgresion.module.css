@@ -61,11 +61,12 @@
 .slider input[type='range'] { width: 160px; accent-color: var(--paper); }
 
 .bicho {
-  width: 24px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
   fill: none;
   stroke: var(--muted);
-  stroke-width: 1.2;
+  stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
 }

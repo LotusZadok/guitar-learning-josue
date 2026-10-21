@@ -38,33 +38,29 @@ interface MedidaProps {
 
 // Tortuga y conejo: los extremos del slider, como pidió el profesor. SVG lineal
 // monocromo — no emoji, no color (PRODUCT.md: sin gamificación, paleta austera).
-//
-// Redibujados a mano tras verlos renderizados (el primer intento era
-// irreconocible a 24x16: la tortuga parecía un puente y el conejo un garabato
-// con dos lazos). El contraste de silueta es lo que los distingue de un
-// vistazo, no el detalle: la tortuga es un domo ancho y bajo con patas
-// colgando; el conejo es un cuerpo compacto y alto con orejas verticales.
+// Trazos de Lucide v0.460.0 (`turtle`, `rabbit`), copiados en línea para no
+// sumar una dependencia por dos iconos. Licencia ISC: ver LUCIDE-LICENSE.txt
+// en esta carpeta. Decisión del dueño (20/10/26), aunque el profesor elogió
+// los dibujados a mano.
 function Tortuga() {
   return (
-    <svg viewBox="0 0 24 16" className={styles.bicho} aria-hidden="true" focusable="false">
-      <path d="M4 11 Q10.5 4 17 11" />
-      <path d="M6 11.5V14M9.3 11.5V14.3M13.3 11.5V14.3M16 11.5V14" />
-      <path d="M17 10 L22 9" />
-      <circle cx="22.6" cy="8.7" r="1.3" />
-      <path d="M4 11 L2 12.3" />
+    <svg viewBox="0 0 24 24" className={styles.bicho} aria-hidden="true" focusable="false">
+      <path d="m12 10 2 4v3a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-3a8 8 0 1 0-16 0v3a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-3l2-4h4Z" />
+      <path d="M4.82 7.9 8 10" />
+      <path d="M15.18 7.9 12 10" />
+      <path d="M16.93 10H20a2 2 0 0 1 0 4H2" />
     </svg>
   );
 }
 
 function Conejo() {
   return (
-    <svg viewBox="0 0 24 16" className={styles.bicho} aria-hidden="true" focusable="false">
-      <path d="M3 14 Q3 9 8 9 Q13 9 13 14" />
-      <circle cx="13.5" cy="7" r="1.6" />
-      <path d="M12.3 6 Q11.6 2 11 1" />
-      <path d="M14.3 6 Q15.2 2 16 1" />
-      <path d="M3 13 Q2 12.3 2.7 11.4" />
-      <path d="M4 14 Q3.3 15.2 4.6 15.3" />
+    <svg viewBox="0 0 24 24" className={styles.bicho} aria-hidden="true" focusable="false">
+      <path d="M13 16a3 3 0 0 1 2.24 5" />
+      <path d="M18 12h.01" />
+      <path d="M18 21h-8a4 4 0 0 1-4-4 7 7 0 0 1 7-7h.2L9.6 6.4a1 1 0 1 1 2.8-2.8L15.8 7h.2c3.3 0 6 2.7 6 6v1a2 2 0 0 1-2 2h-1a3 3 0 0 0-3 3" />
+      <path d="M20 8.54V4a2 2 0 1 0-4 0v3" />
+      <path d="M7.612 12.524a3 3 0 1 0-1.6 4.3" />
     </svg>
   );
 }
