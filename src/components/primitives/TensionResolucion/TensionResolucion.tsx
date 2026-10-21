@@ -85,7 +85,10 @@ const RADIUS_STABLE = 18;
 const RADIUS_TENSE = 18;
 const ARC_BASELINE = NODE_Y - RADIUS_TONIC - 6; // top of node circle
 const ARC_RISE = 52; // how far above baseline the arc peaks
-const TRITONO_Y = NODE_Y + 42; // vano del tritono, bajo los nodos (§3.6.1)
+// Vano del tritono (§3.5), por debajo de los números de grado (NODE_Y + radio
+// + 22): a NODE_Y + 42 sus extremos tachaban el "4" y el "7" (reunión 19/10/26).
+const TRITONO_Y = NODE_Y + 60;
+const SVG_H_TRITONO = TRITONO_Y + 32;
 // Reunión 6/7/26: separar/alargar las 2 notas de cada flecha para que la
 // resolución se oiga clara (antes 260ms se encimaban demasiado).
 const ARPEGGIO_GAP_MS = 430;
@@ -170,7 +173,7 @@ export default function TensionResolucion({ focus, tritonoPlayLabel }: Props = {
     <div className={styles.wrap}>
       <svg
         className={styles.svg}
-        viewBox={`0 0 ${SVG_W} ${SVG_H}`}
+        viewBox={`0 0 ${SVG_W} ${focus === 'tritono' ? SVG_H_TRITONO : SVG_H}`}
         role="img"
         aria-label={
           isDe

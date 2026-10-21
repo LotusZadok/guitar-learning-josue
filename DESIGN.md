@@ -460,6 +460,9 @@ Esta sección lista deudas que las auditorías y pasadas de resolución identifi
 
 Esta sub-sección lista deudas que **sí** fueron resueltas. Útil para no reabrirlas y para entender el camino de la doctrina.
 
+**72ª ola (2026-10-20): §3.5 la marca del tritono deja de tachar el 4 y el 7 (pedido #21, pregunta 6):**
+- ✓ **La marca baja de `NODE_Y + 42` a `NODE_Y + 60`**, por debajo de los números de grado (`NODE_Y + radio + 22`). Sus extremos iban de y=187 a y=197 y el "4" y el "7" están en y=190: se tachaban en cualquier pantalla, porque el SVG escala entero. El `viewBox` crece solo con `focus="tritono"`; §1.5 queda idéntica.
+
 **71ª ola (2026-10-20): §3.3 la nota que suena se marca en la simetría del dim7 (pedido #9, pregunta 4 resuelta por el dueño con el video):**
 - ✓ **Contorno dorado en `SimetriaDim7`** mientras suena: una nota a la vez en arpegio, las cuatro en bloque. Mismo anillo que `AcordesBuilder` (`r = NODE_R + 6`, `--amber`, 3px) y el mismo pulso `scale(1.12)`. Amber-Means-Sounding: al terminar no queda ninguna marcada; el borde `--paper` de miembro no cambia. Alcance del anillo ≈ 375 en el viewBox de 400: no recorta.
 - ✓ Los timers se limpian al desmontar.
