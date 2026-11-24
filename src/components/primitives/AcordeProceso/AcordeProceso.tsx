@@ -14,6 +14,7 @@ import {
   type PasoCromatico,
 } from '../../../utils/noteCalculations';
 import { useProcessAnimation } from '../../modules/t2/hooks/useProcessAnimation';
+import { caminoPorPaso } from '../../../utils/procesos';
 import ProcessControls from '../../shared/ProcessControls/ProcessControls';
 import Prose from '../../shared/Prose/Prose';
 import AcordesBuilder, { PLAYING_ALL } from '../AcordesBuilder/AcordesBuilder';
@@ -242,7 +243,6 @@ export default function AcordeProceso({ eyebrow }: Props) {
   );
 
   // Recorrido del walkthrough, derivado de la selección vigente.
-  const pathByStep: string[][] = [[], [tercera], [tercera, quinta], [tercera, quinta]];
   const playingByStep: (string | null)[] = ['T', tercera, quinta, PLAYING_ALL];
 
   const current = anim.currentStep;
@@ -263,7 +263,7 @@ export default function AcordeProceso({ eyebrow }: Props) {
       <div className={styles.layout}>
         <AcordesBuilder
           config={BUILDER_17}
-          path={running ? pathByStep[current - 1] : undefined}
+          path={caminoPorPaso(current, tercera, quinta)}
           playingRole={running ? playingByStep[current - 1] : null}
           onUserPick={releaseControl}
         />

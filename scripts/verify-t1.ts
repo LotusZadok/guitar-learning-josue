@@ -1,6 +1,6 @@
 // Arnés de verificación de la lógica pura de T1.
 // Se corre con `npm run verify:t1` (node --experimental-strip-types).
-import { estadoAlIniciar, estadoTrasTick } from '../src/utils/procesos.ts';
+import { caminoPorPaso, estadoAlIniciar, estadoTrasTick } from '../src/utils/procesos.ts';
 import type { EstadoProceso } from '../src/utils/procesos.ts';
 import {
   aAscii,
@@ -103,5 +103,10 @@ check('paso 1 en Do: letras por número de intervalo, tritono con dos letras', f
   ['C', 'D', 'D', 'E', 'E', 'F', 'F-G', 'G', 'A', 'A', 'B', 'B', 'C']);
 check('paso 2 en Fa♯ empieza en F# y tiene los dos nombres', filasDeIntervalos('F#').cromatico.slice(0, 2), [['F#', 'Gb'], ['G']]);
 check('Resultado en Fa: la 4J es Bb, el tritono B / Cb no: B', filasDeIntervalos('F').resultado.slice(5, 7), [['Bb'], ['B']]);
+
+console.log('\n· 1.7 el árbol conserva la tercera elegida (reunión 22/11/26, #20) ·');
+check('paso 1 (la tónica) conserva 3m y 5J', caminoPorPaso(1, '3m', '5'), ['3m', '5']);
+check('en reposo el árbol queda libre', caminoPorPaso(0, '3m', '5'), undefined);
+check('pasos 2 a 4 sin cambios', [2, 3, 4].map((p) => caminoPorPaso(p, '3m', '5d')), [['3m'], ['3m', '5d'], ['3m', '5d']]);
 
 resumen();

@@ -3,6 +3,15 @@
 // decoración, y cada paso hace sonar su nota (reunión 22/11/26, #14). Lo que
 // reduce-motion neutraliza son las transiciones CSS, vía el reset de global.css.
 
+// §1.7: el camino que muestra el árbol en cada paso del recorrido. El paso 1
+// (la tónica) conserva la tercera y la quinta elegidas: antes devolvía [] y el
+// árbol "se reiniciaba desde la tónica" (reunión 22/11/26, #20). En reposo
+// (paso 0) el árbol queda libre para que el estudiante elija.
+export function caminoPorPaso(paso: number, tercera: string, quinta: string): string[] | undefined {
+  if (paso === 0) return undefined;
+  return paso === 2 ? [tercera] : [tercera, quinta];
+}
+
 export interface EstadoProceso {
   currentStep: number; // 0 = idle, 1..maxSteps = process steps
   mode: 'idle' | 'playing' | 'paused';
