@@ -71,14 +71,6 @@
   stroke-linejoin: round;
 }
 
-.bpm {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 13px;
-  color: var(--paper);
-  min-width: 32px;
-  text-align: right;
-}
-
 /* Glifos de notación de los IconButton: relleno o trazo en currentColor. */
 .glifo {
   width: 22px;

@@ -216,6 +216,7 @@ export default function ConstructorProgresionesSection() {
           loop: t('t4.s41.loop'),
           velocidad: t('t4.s41.velocidad_label'),
           bpm: t('t4.s41.bpm_aria'),
+          bpmEscribir: t('t4.s41.bpm_input_aria'),
           bpmValor: (bpm) => t('t4.s41.bpm_valuetext', { bpm }),
         }}
       />

@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { COMPASES, MUNDO_POR_COMPAS, type Compas, type Mundo } from '../../../utils/progresionArmonica';
+import { parsearBpm } from '../../../utils/tempo';
 import { BPM_MAX, BPM_MIN, COMPASES_MAX, COMPASES_MIN } from '../../../stores/useConstructorStore';
 import IconButton from '../../shared/IconButton/IconButton';
 import styles from './TransporteProgresion.module.css';
@@ -23,6 +25,7 @@ interface Props {
     loop: string;
     velocidad: string;
     bpm: string;
+    bpmEscribir: string;
     bpmValor: (bpm: number) => string;
   };
 }
@@ -149,6 +152,16 @@ export function MedidaProgresion(p: MedidaProps) {
 }
 
 export default function TransporteProgresion(p: Props) {
+  // Reunión 22/11/26 (#2): el tempo también se escribe. El borrador vive aquí y
+  // se confirma en blur o Enter: escribir en el store por tecla acotaría "1" a
+  // 40 antes de llegar a "120", y cada cambio de tempo corta la reproducción.
+  const [borrador, setBorrador] = useState<string | null>(null);
+  const confirmarBpm = () => {
+    if (borrador === null) return;
+    p.onBpm(parsearBpm(borrador, p.bpm));
+    setBorrador(null);
+  };
+
   return (
     <div className={styles.wrap}>
       <fieldset className={styles.grupo}>
@@ -166,12 +179,21 @@ export default function TransporteProgresion(p: Props) {
             onChange={(e) => p.onBpm(Number(e.target.value))}
           />
           <Conejo />
-          {/* aria-hidden: es un eco visual del mismo valor que ya anuncia
-              aria-valuetext del slider. Sin esto, <output> (role="status"
-              implícito) narraría el BPM una segunda vez en cada cambio. */}
-          <output className={styles.bpm} aria-hidden="true">
-            {p.bpm}
-          </output>
+          <input
+            type="number"
+            className={styles.numero}
+            min={BPM_MIN}
+            max={BPM_MAX}
+            step={1}
+            inputMode="numeric"
+            aria-label={p.labels.bpmEscribir}
+            value={borrador ?? p.bpm}
+            onChange={(e) => setBorrador(e.target.value)}
+            onBlur={confirmarBpm}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') confirmarBpm();
+            }}
+          />
         </div>
       </fieldset>
 

@@ -16,8 +16,8 @@ import {
   type Repeticion,
 } from '../utils/progresionArmonica';
 
-export const BPM_MIN = 40;
-export const BPM_MAX = 200;
+import { acotarBpm } from '../utils/tempo';
+export { BPM_MAX, BPM_MIN } from '../utils/tempo';
 const BPM_DEFAULT = 90;
 export const COMPASES_MIN = 1;
 // Reunión 19/10/26: "un blues necesita mínimo 12 compases… mínimo 30".
@@ -99,7 +99,7 @@ export const useConstructorStore = create<ConstructorState>()((set) => ({
       return { nCompases, grid, repeticion: ajustarRepeticion(s.repeticion, nCompases) };
     }),
 
-  setBpm: (bpm) => set({ bpm: Math.min(BPM_MAX, Math.max(BPM_MIN, bpm)) }),
+  setBpm: (bpm) => set({ bpm: acotarBpm(bpm) }),
   // El general decide cómo entran los próximos acordes y pisa a todos los
   // colocados, incluidas las séptimas puestas una por una con la ficha 7.
   toggleSeptimas: () => set((s) => ({ septimas: !s.septimas, grid: fijarSeptimas(s.grid, !s.septimas) })),

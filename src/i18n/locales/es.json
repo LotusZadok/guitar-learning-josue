@@ -186,6 +186,7 @@
       "velocidad_label": "Velocidad",
       "bpm_aria": "Velocidad en pulsos por minuto",
       "bpm_valuetext": "{{bpm}} pulsos por minuto",
+      "bpm_input_aria": "Escribir la velocidad en pulsos por minuto",
       "septimas": "Séptimas",
       "metronomo": "Metrónomo",
       "loop": "Repetir toda la pieza",

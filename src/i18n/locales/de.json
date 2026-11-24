@@ -188,6 +188,7 @@
       "velocidad_label": "Geschwindigkeit",
       "bpm_aria": "Geschwindigkeit in Schlägen pro Minute",
       "bpm_valuetext": "{{bpm}} Schläge pro Minute",
+      "bpm_input_aria": "Geschwindigkeit in Schlägen pro Minute eingeben",
       "septimas": "Septimen",
       "metronomo": "Metronom",
       "loop": "Ganzes Stück wiederholen",
