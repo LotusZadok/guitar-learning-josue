@@ -15,14 +15,14 @@ export function parsearBpm(texto: string, anterior: number): number {
 }
 
 // Reunión 22/11/26 (#4): la tabla de términos que mandó el profesor el 24/11.
-// El límite inferior es inclusivo; Allegro (120–168) y Vivace (140–168+) se
-// solapan, así que entre 140 y 168 se muestran los dos.
+// El límite inferior es inclusivo. Su tabla solapaba Allegro y Vivace; él
+// aclaró que Allegro llega hasta 140.
 const TERMINOS: { termino: string; desde: number; hasta: number }[] = [
   { termino: 'Largo', desde: 40, hasta: 60 },
   { termino: 'Adagio', desde: 60, hasta: 76 },
   { termino: 'Andante', desde: 76, hasta: 108 },
   { termino: 'Moderato', desde: 108, hasta: 120 },
-  { termino: 'Allegro', desde: 120, hasta: 169 },
+  { termino: 'Allegro', desde: 120, hasta: 140 },
   { termino: 'Vivace', desde: 140, hasta: Infinity },
 ];
 

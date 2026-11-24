@@ -15,9 +15,9 @@ console.log('\n· término del tempo por rango (reunión 22/11/26, #4; tabla del
 const casos: [number, string[]][] = [
   [40, ['Largo']], [59, ['Largo']], [60, ['Adagio']], [75, ['Adagio']], [76, ['Andante']], [107, ['Andante']],
   [108, ['Moderato']], [119, ['Moderato']], [120, ['Allegro']], [139, ['Allegro']],
-  [140, ['Allegro', 'Vivace']], [168, ['Allegro', 'Vivace']], [169, ['Vivace']], [200, ['Vivace']],
+  [140, ['Vivace']], [168, ['Vivace']], [200, ['Vivace']],
 ];
-check('cada BPM cae en su término; entre 140 y 168 se solapan Allegro y Vivace',
+check('cada BPM cae en un solo término; Allegro llega hasta 140 (el profesor, 24/11)',
   casos.filter(([bpm, esperado]) => JSON.stringify(terminoTempo(bpm)) !== JSON.stringify(esperado)).map(([b]) => b), []);
 
 resumen();
