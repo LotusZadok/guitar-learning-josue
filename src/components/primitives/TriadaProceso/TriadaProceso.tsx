@@ -23,10 +23,10 @@ const SVG_H = 168;
 const PAD_X = 44;
 const STEP_X = (SVG_W - 2 * PAD_X) / 4;
 const NODE_Y = 96;
-// Subido respecto a los nodos para no traslapar las etiquetas de nota
-// (noteName) que aparecen sobre el círculo de la raíz y la quinta.
-const BRACKET_Y = NODE_Y - 64;
-const BRACKET_BOTTOM = NODE_Y - 46;
+// Sin la letra encima de cada nota (reunión 22/11/26, #11), el corchete baja
+// hasta quedar 8px sobre el círculo de la raíz (radio 22).
+const BRACKET_Y = NODE_Y - 48;
+const BRACKET_BOTTOM = NODE_Y - 30;
 
 function nodeX(i: number): number {
   return PAD_X + i * STEP_X;
@@ -221,13 +221,6 @@ export default function TriadaProceso() {
 
             return (
               <g key={i} className={styles.node}>
-                <text
-                  x={cx}
-                  y={NODE_Y - radius - 14}
-                  className={styles.noteName}
-                >
-                  {isDe ? NOTE_DE[note] : note}
-                </text>
                 <circle
                   cx={cx}
                   cy={NODE_Y}

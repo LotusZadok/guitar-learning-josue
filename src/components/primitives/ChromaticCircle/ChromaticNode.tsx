@@ -69,12 +69,6 @@ export default function ChromaticNode({ note, index, cx, cy, r, onPlay }: Chroma
         onMouseLeave={handleLeave}
       />
       {/* Reunión 24/5/26: monocromo en reposo, color solo en hover. */}
-      <line
-        x1={cx} y1={cy} x2={x} y2={y}
-        stroke={hovered ? NOTE_COLORS[note] : 'var(--rule)'}
-        strokeWidth={hovered ? 2 : 0.5}
-        opacity={hovered ? 0.5 : 0.15}
-      />
       <circle
         cx={x} cy={y}
         r={hovered ? (isNat ? 26 : 21) : (isNat ? 22 : 17)}

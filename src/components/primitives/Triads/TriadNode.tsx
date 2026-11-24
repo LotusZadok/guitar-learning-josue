@@ -73,12 +73,6 @@ export default function TriadNode({ note, index, cx, cy, r, onHover, onPlay }: P
         onMouseLeave={handleLeave}
       />
       {/* Reunión 24/5/26: monocromo en reposo, color sólo en hover. */}
-      <line
-        x1={cx} y1={cy} x2={x} y2={y}
-        stroke={hovered ? NOTE_COLORS[note] : 'var(--rule)'}
-        strokeWidth={hovered ? 2 : 0.5}
-        opacity={hovered ? 0.4 : 0.12}
-      />
       <circle
         cx={x} cy={y}
         r={hovered ? 28 : 24}

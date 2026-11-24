@@ -176,13 +176,6 @@ function ScaleNode({ data, onPlay, isDe }: ScaleNodeProps) {
         />
       )}
 
-      {/* Spelled note name above (scale notes only) */}
-      {spelled && (
-        <text x={cx} y={NODE_Y - radius - 30} className={styles.noteName}>
-          {spelled}
-        </text>
-      )}
-
       {/* Visible node */}
       <circle
         cx={cx}
