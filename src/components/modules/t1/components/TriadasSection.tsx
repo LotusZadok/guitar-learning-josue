@@ -7,10 +7,10 @@ import Prose from '../../../shared/Prose/Prose';
 import TriadsSection from '../../../primitives/Triads/TriadsSection';
 import TriadaProceso from '../../../primitives/TriadaProceso/TriadaProceso';
 import type { NaturalNote, NoteSpelling, Tonic } from '../../../../types/music';
-import type { ProseSegment } from '../../../../types/prose';
+import type { ProseFragment, ProseSegment } from '../../../../types/prose';
 import { useUIStore } from '../../../../stores/useUIStore';
 import { NATURALS } from '../../../../data/notes';
-import { octavasDesdeRaiz } from '../../../../utils/noteCalculations';
+import { cadenaDeTerceras, octavasDesdeRaiz } from '../../../../utils/noteCalculations';
 import styles from './TriadasSection.module.css';
 
 // Datos musicales (§1.6): las 7 tríadas de las notas naturales, rotadas desde la
@@ -41,8 +41,19 @@ export default function TriadasSection() {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
   const procedure = t('t1.s02.procedure', { returnObjects: true }) as string[];
-  const maestra = t('t1.s02.master_triad', { returnObjects: true }) as ProseSegment;
   const tonic = useUIStore((s) => s.tonic);
+  // #16: la cadena de terceras se arma desde la letra de la tónica global.
+  const maestra = useMemo<ProseSegment>(
+    () => [
+      { type: 'text', value: `${t('t1.s02.master_triad_body')} ` },
+      ...cadenaDeTerceras(tonic).flatMap((letra, i): ProseFragment[] => [
+        ...(i > 0 ? [{ type: 'text', value: ' ' } as const] : []),
+        { type: 'note', value: letra as NoteSpelling },
+      ]),
+      { type: 'text', value: '.' },
+    ],
+    [t, tonic],
+  );
   const { head, row } = useMemo(() => buildTriadTable(tonic[0] as NaturalNote), [tonic]);
 
   return (

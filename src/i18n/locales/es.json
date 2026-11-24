@@ -246,17 +246,6 @@
       "table_title": "Las 7 tríadas de las notas naturales:",
       "master_triad_label": "Tríada maestra",
       "master_triad_body": "Si seguimos el patrón sin pausa, hasta llegar a la misma nota, conseguimos la tríada maestra:",
-      "master_triad": [
-        { "type": "text", "value": "Si seguimos el patrón sin pausa, hasta llegar a la misma nota, conseguimos la tríada maestra: " },
-        { "type": "note", "value": "F" }, { "type": "text", "value": " " },
-        { "type": "note", "value": "A" }, { "type": "text", "value": " " },
-        { "type": "note", "value": "C" }, { "type": "text", "value": " " },
-        { "type": "note", "value": "E" }, { "type": "text", "value": " " },
-        { "type": "note", "value": "G" }, { "type": "text", "value": " " },
-        { "type": "note", "value": "B" }, { "type": "text", "value": " " },
-        { "type": "note", "value": "D" }, { "type": "text", "value": " " },
-        { "type": "note", "value": "F" }, { "type": "text", "value": "." }
-      ],
       "tip": "Consejo del método: memorizar las 7 tríadas. Son la estructura de todo acorde y el fundamento de la armonía. También son herramienta para leer partitura."
     },
 

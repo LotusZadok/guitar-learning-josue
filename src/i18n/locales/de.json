@@ -248,17 +248,6 @@
       "table_title": "Die 7 Dreiklänge der natürlichen Töne:",
       "master_triad_label": "Meisterdreiklang",
       "master_triad_body": "Wenn man das Muster ohne Unterbrechung weiterführt, bis man wieder beim Ausgangston ankommt, erhält man den Meisterdreiklang:",
-      "master_triad": [
-        { "type": "text", "value": "Wenn wir das Muster ohne Pause weiterführen, bis wir wieder beim Ausgangston ankommen, erhalten wir den Meisterdreiklang: " },
-        { "type": "note", "value": "F" }, { "type": "text", "value": " " },
-        { "type": "note", "value": "A" }, { "type": "text", "value": " " },
-        { "type": "note", "value": "C" }, { "type": "text", "value": " " },
-        { "type": "note", "value": "E" }, { "type": "text", "value": " " },
-        { "type": "note", "value": "G" }, { "type": "text", "value": " " },
-        { "type": "note", "value": "B" }, { "type": "text", "value": " " },
-        { "type": "note", "value": "D" }, { "type": "text", "value": " " },
-        { "type": "note", "value": "F" }, { "type": "text", "value": "." }
-      ],
       "tip": "Methodentipp: die 7 Dreiklänge auswendig lernen. Sie sind die Struktur jedes Akkords und das Fundament der Harmonik. Außerdem sind sie ein Werkzeug zum Lesen von Partituren."
     },
 

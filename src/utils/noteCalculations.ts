@@ -484,6 +484,13 @@ export function otrasGrafias(tonic: Tonic, semis: number, grafia: string): strin
   return [sharp, flat].filter((n): n is string => n !== null && n !== grafia);
 }
 
+// Reunión 22/11/26 (#16; D4): la tríada maestra de §1.6 sigue la letra de la
+// tónica global: ocho letras de dos en dos, hasta volver a la misma letra.
+export function cadenaDeTerceras(tonic: Tonic): string[] {
+  const inicio = LETTERS.indexOf(tonic[0] as (typeof LETTERS)[number]);
+  return Array.from({ length: 8 }, (_, i) => LETTERS[(inicio + 2 * i) % 7]);
+}
+
 // Reunión 22/11/26 (#19): el paso 1 de §1.7 escribe solo las letras de la tríada.
 export function letrasDeTriada(tonic: Tonic): string[] {
   return chordSpelled(tonic, "M").map((m) => m.spelled[0]);

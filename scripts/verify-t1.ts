@@ -4,6 +4,7 @@ import { caminoPorPaso, estadoAlIniciar, estadoTrasTick } from '../src/utils/pro
 import type { EstadoProceso } from '../src/utils/procesos.ts';
 import {
   aAscii,
+  cadenaDeTerceras,
   letrasDeTriada,
   majorScaleSpelled,
   octavasDesdeLaPrimera,
@@ -108,5 +109,10 @@ console.log('\n· 1.7 el árbol conserva la tercera elegida (reunión 22/11/26, 
 check('paso 1 (la tónica) conserva 3m y 5J', caminoPorPaso(1, '3m', '5'), ['3m', '5']);
 check('en reposo el árbol queda libre', caminoPorPaso(0, '3m', '5'), undefined);
 check('pasos 2 a 4 sin cambios', [2, 3, 4].map((p) => caminoPorPaso(p, '3m', '5d')), [['3m'], ['3m', '5d'], ['3m', '5d']]);
+
+console.log('\n· 1.6 la cadena de terceras empieza en la tónica (reunión 22/11/26, #16; D4) ·');
+check('Fa da F A C E G B D F', cadenaDeTerceras('F'), ['F', 'A', 'C', 'E', 'G', 'B', 'D', 'F']);
+check('Do da C E G B D F A C', cadenaDeTerceras('C'), ['C', 'E', 'G', 'B', 'D', 'F', 'A', 'C']);
+check('Si♭ empieza en la letra B', cadenaDeTerceras('Bb')[0], 'B');
 
 resumen();
