@@ -6,7 +6,7 @@ import ChordStacks, { type ChordDef } from '../../../primitives/ChordStacks/Chor
 import AcordesBuilder from '../../../primitives/AcordesBuilder/AcordesBuilder';
 import { BUILDER_33 } from '../../../primitives/AcordesBuilder/configs';
 import { useUIStore } from '../../../../stores/useUIStore';
-import { intervalMemberFromTonic } from '../../../../utils/noteCalculations';
+import { aAscii, intervalMemberFromTonic } from '../../../../utils/noteCalculations';
 import type { NoteSpelling } from '../../../../types/music';
 import type { ProseSegment } from '../../../../types/prose';
 import styles from './SuspendidosSection.module.css';
@@ -39,7 +39,7 @@ const CHORDS: ChordDef[] = [
 ];
 
 // NoteToken espera grafía ASCII; los cifrados en prosa van con el glifo real.
-const ASCII = (v: string) => v.replace('♯', '#').replace('♭', 'b') as NoteSpelling;
+const ASCII = (v: string) => aAscii(v) as NoteSpelling;
 
 export default function SuspendidosSection() {
   const { t } = useTranslation();

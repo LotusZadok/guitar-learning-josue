@@ -12,6 +12,7 @@ import { useFireGate } from "../../../hooks/useFireGate";
 import { useUIStore } from "../../../stores/useUIStore";
 import { ALL, NOTE_ES, NOTE_DE } from "../../../data/notes";
 import {
+  formatNote,
   majorScaleSpelled,
   spelledNameES,
   tonicChromatic,
@@ -190,7 +191,7 @@ export default function TensionResolucion({ focus, tritonoPlayLabel }: Props = {
         role="img"
         aria-label={
           isDe
-            ? `Karte der Spannungsauflösungen in ${NOTE_DE[tonicChromatic(tonic)] ?? tonic}-Dur`
+            ? `Karte der Spannungsauflösungen in ${formatNote(tonic, 'de')}-Dur`
             : `Mapa de resoluciones de tensión en ${spelledNameES(tonic)} mayor`
         }
       >

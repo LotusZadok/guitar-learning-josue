@@ -1,8 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import { NOTE_DE } from "../../../data/notes";
 import IntervalRow from './IntervalRow';
 import { useUIStore } from '../../../stores/useUIStore';
-import { noteShort, spelledIntervalFromTonic, spelledNameES, tonicChromatic } from '../../../utils/noteCalculations';
+import { formatNote, noteShort, spelledIntervalFromTonic, spelledNameES } from '../../../utils/noteCalculations';
 import styles from './Intervals.module.css';
 
 
@@ -18,7 +17,7 @@ export default function IntervalsSection() {
   const quinta = spelledIntervalFromTonic(root, 5, 'P');
   const rootSpelled = noteShort(root);
   const rootES = spelledNameES(root);
-  const rootDE = NOTE_DE[tonicChromatic(root)];
+  const rootDE = formatNote(root, 'de');
 
   const intervals = isDe
     ? [

@@ -5,7 +5,7 @@ import NoteToken from '../../../shared/NoteToken/NoteToken';
 import Prose from '../../../shared/Prose/Prose';
 import EscalaMayor from '../../../primitives/EscalaMayor/EscalaMayor';
 import { useUIStore } from '../../../../stores/useUIStore';
-import { majorScaleSpelled, octavasDesdeRaiz } from '../../../../utils/noteCalculations';
+import { aAscii, majorScaleSpelled, octavasDesdeRaiz } from '../../../../utils/noteCalculations';
 import type { NoteSpelling } from '../../../../types/music';
 import type { ProseSegment } from '../../../../types/prose';
 // Cast tonicAscii (string) to NoteSpelling at the prose boundary.
@@ -28,7 +28,7 @@ export default function EscalaMayorSection() {
 
   // ASCII form of tonic (e.g. 'Bb' for A#, 'G' for G) for the NoteToken label.
   const tonicAscii = useMemo(
-    () => spelledScale[0].replace('♯', '#').replace('♭', 'b'),
+    () => aAscii(spelledScale[0]),
     [spelledScale],
   );
   // Dynamic intro: "Ejemplo en {T} mayor:" / "Beispiel in {T} Dur:"
@@ -49,7 +49,7 @@ export default function EscalaMayorSection() {
   // Notes row: 7 spelled + octave repeat. Glyph → ASCII for NoteToken.
   const notasRow = useMemo(
     () => [
-      ...spelledScale.map((n) => n.replace('♯', '#').replace('♭', 'b')),
+      ...spelledScale.map((n) => aAscii(n)),
       tonicAscii,
     ],
     [spelledScale, tonicAscii],

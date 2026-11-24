@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { useFireGate } from '../../../hooks/useFireGate';
 import { ALL } from '../../../data/notes';
-import { majorScaleSpelled, relativeMinorScaleSpelled, spelledSequenceAscending, tonicChromatic } from '../../../utils/noteCalculations';
+import { aAscii, majorScaleSpelled, relativeMinorScaleSpelled, spelledSequenceAscending, tonicChromatic } from '../../../utils/noteCalculations';
 import NoteToken, { type DiatonicRole } from '../../shared/NoteToken/NoteToken';
 import RomanGlyph from '../../shared/RomanGlyph/RomanGlyph';
 import { GANANCIA_POR_ROL } from '../../../utils/progresionArmonica';
@@ -85,7 +85,7 @@ function buildDiatonic(tonic: Tonic, relativeMinor: boolean): DiatonicNote[] {
     // grave) se recalcula con `spelledSequenceAscending` porque la rotación
     // por sí sola no preserva el ascenso (ver noteCalculations.ts).
     const spelled = relativeMinorScaleSpelled(tonic);
-    const ascii = spelled.map((s) => s.replace('♯', '#').replace('♭', 'b'));
+    const ascii = spelled.map((s) => aAscii(s));
     const seq = spelledSequenceAscending(ascii, 4);
     return spelled.map((sp, i) => ({
       spelled: sp,
@@ -98,7 +98,7 @@ function buildDiatonic(tonic: Tonic, relativeMinor: boolean): DiatonicNote[] {
   const spelled = majorScaleSpelled(tonic);
   return MAJOR_INTERVALS.map((semis, i) => ({
     spelled: spelled[i],
-    ascii: spelled[i].replace('♯', '#').replace('♭', 'b'),
+    ascii: aAscii(spelled[i]),
     chromatic: ALL[(tIdx + semis) % 12],
     octave: 4 + Math.floor((tIdx + semis) / 12),
   }));
@@ -131,7 +131,7 @@ export default function GradosArmonicos({ tonalidad, initialStep = 1, relativeMi
   const diatonic = useMemo(() => buildDiatonic(tonalidad, relativeMinor), [tonalidad, relativeMinor]);
   // Step 1 (letras solas) parte de la tónica que se muestra en pantalla: la
   // global en mayor, o la relativa menor (1er elemento ya rotado) en menor.
-  const displayTonic = relativeMinor ? (diatonic[0].spelled.replace('♯', '#').replace('♭', 'b') as Tonic) : tonalidad;
+  const displayTonic = relativeMinor ? (aAscii(diatonic[0].spelled) as Tonic) : tonalidad;
   const naturals = useMemo(() => naturalRoots(displayTonic), [displayTonic]);
   const QUALITIES_ACTIVE = relativeMinor ? QUALITIES_MINOR : QUALITIES;
   const SEVENTH_QUALITIES_ACTIVE = relativeMinor ? SEVENTH_QUALITIES_MINOR : SEVENTH_QUALITIES;

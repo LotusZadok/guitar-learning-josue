@@ -1,16 +1,15 @@
 import { useMemo } from 'react';
-import { NOTE_DE } from "../../../../data/notes";
 import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
 import Prose from '../../../shared/Prose/Prose';
 import TensionResolucion from '../../../primitives/TensionResolucion/TensionResolucion';
 import { useUIStore } from '../../../../stores/useUIStore';
-import { majorScaleSpelled, spelledNameES, tonicChromatic } from '../../../../utils/noteCalculations';
+import { aAscii, formatNote, majorScaleSpelled, spelledNameES } from '../../../../utils/noteCalculations';
 import type { NoteSpelling, Tonic } from '../../../../types/music';
 import type { ProseSegment } from '../../../../types/prose';
 
-const ASCII = (s: string) => s.replace('♯', '#').replace('♭', 'b') as NoteSpelling;
+const ASCII = (s: string) => aAscii(s) as NoteSpelling;
 
 // Reunión 24/5/26: las reglas de tensión deben renderizar la tónica activa, no quedarse en C.
 function buildReglas(tonic: Tonic, isDe: boolean): { titulo: string; cuerpo: ProseSegment }[] {
@@ -96,7 +95,7 @@ export default function TensionResolucionSection() {
       </ol>
 
       <h3 className={styles.subheading}>{locale === 'de'
-        ? `Karte der Auflösungen in ${NOTE_DE[tonicChromatic(tonic)] ?? tonic} Dur`
+        ? `Karte der Auflösungen in ${formatNote(tonic, 'de')} Dur`
         : `Mapa de resoluciones en ${spelledNameES(tonic)} mayor`}</h3>
       <p className={styles.text}>{t('t1.s05.map_instruction')}</p>
       <TensionResolucion />

@@ -6,6 +6,7 @@ import NoteToken from "../../../shared/NoteToken/NoteToken";
 import IntervalsSection from "../../../primitives/Intervals/IntervalsSection";
 import { useUIStore } from "../../../../stores/useUIStore";
 import {
+  aAscii,
   majorScaleSpelled,
   octavasDesdeRaiz,
   filasDeIntervalos,
@@ -111,7 +112,7 @@ export default function IntervalosSection() {
 
   // tonicAscii: ASCII form of spelled tonic (e.g. 'Bb' for A#, 'G' for G).
   const tonicAscii = useMemo(
-    () => spelledScale[0].replace("♯", "#").replace("♭", "b"),
+    () => aAscii(spelledScale[0]),
     [spelledScale],
   );
   const filas = useMemo(() => filasDeIntervalos(tonic), [tonic]);

@@ -4,7 +4,7 @@ import { useAudioEngine, stopAllNotes } from '../../../hooks/useAudioEngine';
 import { useChordPlayer } from '../../../hooks/useChordPlayer';
 import { useFireGate } from '../../../hooks/useFireGate';
 import { ALL } from '../../../data/notes';
-import { majorScaleSpelled, tonicChromatic } from '../../../utils/noteCalculations';
+import { aAscii, majorScaleSpelled, tonicChromatic } from '../../../utils/noteCalculations';
 import type { DiatonicRole } from '../../shared/NoteToken/NoteToken';
 import { GANANCIA_POR_ROL } from '../../../utils/progresionArmonica';
 import type { ChromaticNote, DiatonicDegree, Tonic } from '../../../types/music';
@@ -63,7 +63,7 @@ function buildDiatonic(tonic: Tonic): DiatonicNote[] {
   const spelled = majorScaleSpelled(tonic);
   return MAJOR_INTERVALS.map((semis, i) => ({
     spelled: spelled[i],
-    ascii: spelled[i].replace('♯', '#').replace('♭', 'b'),
+    ascii: aAscii(spelled[i]),
     chromatic: ALL[(tIdx + semis) % 12],
     octave: 4 + Math.floor((tIdx + semis) / 12),
   }));

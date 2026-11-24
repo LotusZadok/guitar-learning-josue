@@ -5,7 +5,7 @@ import { useFireGate } from '../../../hooks/useFireGate';
 import { useUIStore } from '../../../stores/useUIStore';
 import { ALL, NOTE_COLORS, NOTE_ES, NOTE_DE } from '../../../data/notes';
 
-import { majorScaleSpelled, spelledNameES, tonicChromatic } from '../../../utils/noteCalculations';
+import { formatNote, majorScaleSpelled, spelledNameES, tonicChromatic } from '../../../utils/noteCalculations';
 import { gananciaDeNotaEnEscala, type RolDeNotaEnEscala } from '../../../utils/progresionArmonica';
 import type { ChromaticNote } from '../../../types/music';
 import styles from './EscalaMayor.module.css';
@@ -92,7 +92,7 @@ export default function EscalaMayor() {
         className={styles.svg}
         viewBox={`0 0 ${SVG_W} ${SVG_H}`}
         role="img"
-        aria-label={isDe ? `Dur-Tonleiter von ${NOTE_DE[tonicChromatic(tonic)] ?? tonic}` : `Escala mayor de ${spelledNameES(tonic)}`}
+        aria-label={isDe ? `Dur-Tonleiter von ${formatNote(tonic, 'de')}` : `Escala mayor de ${spelledNameES(tonic)}`}
       >
         {/* Subtle baseline rule between nodes */}
         <line

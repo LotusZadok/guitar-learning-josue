@@ -14,6 +14,7 @@
     "verify:toc": "node --experimental-strip-types scripts/verify-toc.ts",
     "verify:t1": "node --experimental-strip-types scripts/verify-t1.ts",
     "verify:tempo": "node --experimental-strip-types scripts/verify-tempo.ts",
+    "verify:notacion": "node --experimental-strip-types scripts/verify-notacion.ts",
     "preview": "vite preview"
   },
   "dependencies": {

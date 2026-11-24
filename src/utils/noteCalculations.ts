@@ -2,21 +2,32 @@ import { Note, Interval, Scale, Key, Chord } from "tonal";
 import { ALL } from "../data/notes.ts";
 import type { ChromaticNote, NoteSpelling, Tonic } from "../types/music";
 
-export function noteShort(n: string): string {
-  return n.replace("#", "♯").replace(/^([A-G])b$/, "$1♭");
+// Reunión 22/11/26 (#8, #5; D5): un solo formateador para mostrar una nota.
+// Acepta grafía ASCII o con glifo (F#, F♯, Bb, B♭, Bbb, Fx) y devuelve letra +
+// glifo. En alemán solo cambia la letra B: B → H y B♭ → B (H♯, H♭♭). Nunca se
+// pasa a playNote: Note.freq('H4') es null.
+const ALTERACION_GLIFO: Record<string, string> = {
+  "": "", "#": "♯", "♯": "♯", b: "♭", "♭": "♭", bb: "♭♭", "♭♭": "♭♭", x: "x", "##": "x", "♯♯": "x",
+};
+
+export function formatNote(grafia: string, lang: string): string {
+  const m = /^([A-G])(.*)$/.exec(grafia);
+  const alteracion = m ? ALTERACION_GLIFO[m[2]] : undefined;
+  if (!m || alteracion === undefined) {
+    console.warn(`formatNote: grafía no reconocida "${grafia}"`);
+    return grafia;
+  }
+  const letra = m[1];
+  if (lang === "de" && letra === "B") return alteracion === "♭" ? "B" : `H${alteracion}`;
+  return letra + alteracion;
 }
 
-// German note naming: B → H, A#/Bb → B
+export function noteShort(n: string): string {
+  return formatNote(n, "es");
+}
+
 export function noteShortDE(n: string): string {
-  // First convert B → H, Bb → B
-  let result = n.replace(/^B([#b]?)$/, (_match, acc) => {
-    if (acc === "#") return "H♯";
-    if (acc === "b") return "B";
-    return "H";
-  });
-  // For all others, convert # to ♯ and b to ♭
-  result = result.replace("#", "♯").replace(/^([A-G])b$/, "$1♭");
-  return result;
+  return formatNote(n, "de");
 }
 
 // Nombre en latín (solfeo) que RESPETA la grafía elegida: Db → "Re♭", no "Do♯".
@@ -114,7 +125,7 @@ export function relativeMinorScaleSpelled(majorTonic: Tonic): string[] {
 // letra (G♯ y no A♭; Fx en Sol♯ menor).
 export function harmonicMinorScaleSpelled(majorTonic: Tonic): string[] {
   const natural = relativeMinorScaleSpelled(majorTonic);
-  const tonicaMenor = natural[0].replace("♯", "#").replace("♭", "b") as Tonic;
+  const tonicaMenor = aAscii(natural[0]) as Tonic;
   return [...natural.slice(0, 6), spelledIntervalFromTonic(tonicaMenor, 7, "M")];
 }
 
@@ -428,7 +439,9 @@ export function spelledChromaticCircle(tonic: Tonic): CircleStep[] {
   });
 }
 
-export const aAscii = (s: string) => s.replace(/♯/g, "#").replace(/♭/g, "b");
+export function aAscii(s: string): string {
+  return s.replace(/♯/g, "#").replace(/♭/g, "b");
+}
 
 // Las grafías que NoteToken sabe colorear y sonar; el resto (B♭♭, F♭, E♯…) va
 // como texto plano con glifo (DESIGN §5 "NoteToken en Tablas").
