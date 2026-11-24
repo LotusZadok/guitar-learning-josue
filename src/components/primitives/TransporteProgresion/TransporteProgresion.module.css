@@ -57,7 +57,7 @@
   border: 1px solid var(--rule);
 }
 
-.slider { display: flex; align-items: center; gap: 8px; }
+.slider { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .slider input[type='range'] { width: 160px; accent-color: var(--paper); }
 
 .bicho {
@@ -86,4 +86,14 @@
   stroke-width: 1.5;
   stroke-linejoin: round;
   stroke-linecap: round;
+}
+
+/* Término del tempo (reunión 22/11/26, #4): etiqueta chica junto al número.
+   Texto, no región viva: el slider ya lo anuncia en aria-valuetext. */
+.termino {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  white-space: nowrap;
 }

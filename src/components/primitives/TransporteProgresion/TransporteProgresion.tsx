@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { COMPASES, MUNDO_POR_COMPAS, type Compas, type Mundo } from '../../../utils/progresionArmonica';
-import { parsearBpm } from '../../../utils/tempo';
+import { parsearBpm, terminoTempo } from '../../../utils/tempo';
 import { BPM_MAX, BPM_MIN, COMPASES_MAX, COMPASES_MIN } from '../../../stores/useConstructorStore';
 import IconButton from '../../shared/IconButton/IconButton';
 import styles from './TransporteProgresion.module.css';
@@ -162,6 +162,9 @@ export default function TransporteProgresion(p: Props) {
     setBorrador(null);
   };
 
+  // #4: el término italiano del tempo (Largo, Adagio…), según la tabla del profesor.
+  const termino = terminoTempo(p.bpm).join(' · ');
+
   return (
     <div className={styles.wrap}>
       <fieldset className={styles.grupo}>
@@ -175,7 +178,7 @@ export default function TransporteProgresion(p: Props) {
             step={1}
             value={p.bpm}
             aria-label={p.labels.bpm}
-            aria-valuetext={p.labels.bpmValor(p.bpm)}
+            aria-valuetext={`${p.labels.bpmValor(p.bpm)} · ${termino}`}
             onChange={(e) => p.onBpm(Number(e.target.value))}
           />
           <Conejo />
@@ -194,6 +197,7 @@ export default function TransporteProgresion(p: Props) {
               if (e.key === 'Enter') confirmarBpm();
             }}
           />
+          <span className={styles.termino}>{termino}</span>
         </div>
       </fieldset>
 
