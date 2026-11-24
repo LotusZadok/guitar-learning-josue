@@ -2,6 +2,8 @@
 // Se corre con `npm run verify:t1` (node --experimental-strip-types).
 import { estadoAlIniciar, estadoTrasTick } from '../src/utils/procesos.ts';
 import type { EstadoProceso } from '../src/utils/procesos.ts';
+import { tablaCromaticaDesdeTonica, tonicChromatic } from '../src/utils/noteCalculations.ts';
+import type { Tonic } from '../src/types/music.ts';
 import { check, resumen } from './verify-helpers.ts';
 
 console.log('\n— procesos paso a paso (reunión 22/11/26, #14) —');
@@ -22,5 +24,16 @@ while (s.mode === 'playing') {
 }
 check('el tick recorre los pasos de a uno', recorrido, [1, 2, 3, 4, 5, 6, 6]);
 check('al llegar al final se pausa', s.mode, 'paused');
+
+console.log('\n· 1.2 la tabla cromática empieza en la tónica (reunión 22/11/26, #6) ·');
+// El desplazamiento iba con el signo cambiado: solo acertaban La y Re♯/Mi♭.
+const TONICAS: Tonic[] = ['C', 'C#', 'Db', 'D', 'D#', 'Eb', 'E', 'F', 'F#', 'Gb', 'G', 'G#', 'Ab', 'A', 'A#', 'Bb', 'B'];
+check('con las 17 tónicas la celda 0 es la tónica',
+  TONICAS.filter((t) => !tablaCromaticaDesdeTonica(t)[0].split('/').includes(tonicChromatic(t))), []);
+check('Fa♯ empieza en F#/Gb', tablaCromaticaDesdeTonica('F#')[0], 'F#/Gb');
+check('Si♭ empieza en A#/Bb', tablaCromaticaDesdeTonica('Bb')[0], 'A#/Bb');
+check('Fa empieza en F y sigue F#/Gb', tablaCromaticaDesdeTonica('F').slice(0, 2), ['F', 'F#/Gb']);
+check('La sigue empezando en A', tablaCromaticaDesdeTonica('A')[0], 'A');
+check('siempre 12 notas distintas', new Set(tablaCromaticaDesdeTonica('Db')).size, 12);
 
 resumen();

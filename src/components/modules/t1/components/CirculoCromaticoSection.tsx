@@ -6,16 +6,10 @@ import NoteToken from "../../../shared/NoteToken/NoteToken";
 import Prose from "../../../shared/Prose/Prose";
 import ChromaticCircleSection from "../../../primitives/ChromaticCircle/ChromaticCircleSection";
 import { useUIStore } from "../../../../stores/useUIStore";
-import { ALL } from "../../../../data/notes";
-import { tonicChromatic } from "../../../../utils/noteCalculations";
+import { tablaCromaticaDesdeTonica } from "../../../../utils/noteCalculations";
 import type { NoteSpelling } from "../../../../types/music";
 import type { ProseSegment } from "../../../../types/prose";
 import styles from "./CirculoCromaticoSection.module.css";
-
-// Datos musicales (§1.2): las 12 notas del círculo cromático, no UI copy.
-const CC_TABLA = [
-  "A", "A#/Bb", "B", "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab",
-] as const;
 
 function renderCcCell(cell: string) {
   const parts = cell.split("/") as NoteSpelling[];
@@ -33,16 +27,7 @@ export default function CirculoCromaticoSection() {
   const tonic = useUIStore((s) => s.tonic);
   const ccNoAlterada = t("t1.s03.rule", { returnObjects: true }) as ProseSegment;
 
-  // Rotate CC_TABLA to start from the active tonic
-  const rotatedCcTabla = useMemo(() => {
-    const tonicIdx = ALL.indexOf(tonicChromatic(tonic));
-    // CC_TABLA starts at A (index 9 in ALL), so offset is (tonicIdx - 9 + 12) % 12
-    const offset = (tonicIdx - ALL.indexOf("A")) % 12;
-    return Array.from(
-      { length: 12 },
-      (_, i) => CC_TABLA[(i - offset + 12) % 12],
-    );
-  }, [tonic]);
+  const rotatedCcTabla = useMemo(() => tablaCromaticaDesdeTonica(tonic), [tonic]);
 
   return (
     <section id="s-circulo" className={styles.section}>

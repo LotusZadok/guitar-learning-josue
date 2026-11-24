@@ -48,6 +48,16 @@ export function tonicChromatic(tonic: Tonic): ChromaticNote {
   return (tonic.includes("b") ? Note.enharmonic(tonic) : tonic) as ChromaticNote;
 }
 
+// Datos musicales (§1.2): las 12 notas del círculo cromático, desde La.
+const CC_TABLA = [
+  "A", "A#/Bb", "B", "C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab",
+] as const;
+
+export function tablaCromaticaDesdeTonica(tonic: Tonic): string[] {
+  const offset = ALL.indexOf(tonicChromatic(tonic)) - ALL.indexOf("A");
+  return CC_TABLA.map((_, i) => CC_TABLA[(i + offset + 12) % 12]);
+}
+
 const LETTERS = ["C", "D", "E", "F", "G", "A", "B"] as const;
 const MAJOR_INTERVALS = Scale.get("major").intervals.map(
   (iv) => Interval.semitones(iv) ?? 0,
