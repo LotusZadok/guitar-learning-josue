@@ -1,17 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-
-interface ProcessAnimationState {
-  currentStep: number; // 0 = idle, 1..maxSteps = process steps
-  mode: 'idle' | 'playing' | 'paused';
-  speed: 'normal' | 'slow';
-}
-
-const prefersReducedMotion = () =>
-  typeof window !== 'undefined' &&
-  window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+import { estadoAlIniciar, estadoTrasTick, type EstadoProceso } from '../../../../utils/procesos';
 
 export function useProcessAnimation(maxSteps: number) {
-  const [state, setState] = useState<ProcessAnimationState>({
+  const [state, setState] = useState<EstadoProceso>({
     currentStep: 0,
     mode: 'idle',
     speed: 'normal',
@@ -20,36 +11,17 @@ export function useProcessAnimation(maxSteps: number) {
   useEffect(() => {
     if (state.mode !== 'playing') return;
     // Todos los cambios de estado salen por el timer, nunca sincronos en el
-    // cuerpo del efecto (react-hooks/set-state-in-effect). Con delay 0 el
-    // salto al final sigue siendo inmediato en la practica.
+    // cuerpo del efecto (react-hooks/set-state-in-effect).
     const done = state.currentStep >= maxSteps;
-    const reduced = prefersReducedMotion();
-    // `reduced` se re-evalua acá y no sólo en play(): cubre al usuario que
-    // activa reduce-motion en el sistema con la animación ya corriendo.
-    const ms = done || reduced ? 0 : state.speed === 'normal' ? 2000 : 4000;
+    const ms = done ? 0 : state.speed === 'normal' ? 2000 : 4000;
     const timer = setTimeout(() => {
-      setState(prev =>
-        reduced
-          ? { ...prev, currentStep: maxSteps, mode: 'paused' }
-          : done
-            ? { ...prev, mode: 'paused' }
-            : { ...prev, currentStep: prev.currentStep + 1 },
-      );
+      setState(prev => estadoTrasTick(prev, maxSteps));
     }, ms);
     return () => clearTimeout(timer);
   }, [state.mode, state.currentStep, state.speed, maxSteps]);
 
   const play = useCallback(() => {
-    if (prefersReducedMotion()) {
-      setState(prev => ({ ...prev, currentStep: maxSteps, mode: 'paused' }));
-      return;
-    }
-    setState(prev => {
-      if (prev.currentStep === 0 || prev.currentStep >= maxSteps) {
-        return { ...prev, currentStep: 1, mode: 'playing' };
-      }
-      return { ...prev, mode: 'playing' };
-    });
+    setState(prev => estadoAlIniciar(prev, maxSteps));
   }, [maxSteps]);
 
   const pause = useCallback(() => {

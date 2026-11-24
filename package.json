@@ -12,6 +12,7 @@
     "verify:t3": "node --experimental-strip-types scripts/verify-t3.ts",
     "verify:menor": "node --experimental-strip-types scripts/verify-escalas-menores.ts",
     "verify:toc": "node --experimental-strip-types scripts/verify-toc.ts",
+    "verify:t1": "node --experimental-strip-types scripts/verify-t1.ts",
     "preview": "vite preview"
   },
   "dependencies": {

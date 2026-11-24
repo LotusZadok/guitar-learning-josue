@@ -79,7 +79,7 @@ Cinco principios estratégicos que guían cualquier decisión visual o de intera
 Objetivo: **WCAG 2.1 AA**.
 
 - **Audio nunca es obligatorio para entender.** Todo lo que se transmite por sonido tiene representación visual paralela (texto, color, posición). Un usuario sordo o con audio desactivado puede usar la app completa, perdiendo solo el refuerzo auditivo.
-- **`prefers-reduced-motion` respetado.** Animaciones (especialmente las de armaduras paso a paso en T2) saltan a estado final cuando el usuario lo tiene activado. La animación es decorativa-pedagógica, nunca el único portador de información.
+- **`prefers-reduced-motion` respetado.** Con reduce activo se quitan las transiciones y animaciones CSS. Un proceso paso a paso que el estudiante arranca (armaduras de T2, tríada de 1.6, acorde de 1.7) **no salta al estado final**: avanza paso a paso igual, porque los pasos son contenido y cada uno suena (decisión 2026-11-23, reunión del 22/11, #14). La animación nunca es el único portador de información.
 - **Color no es el único discriminador.** Las 12 notas se distinguen por color + letra (`A`, `B♭`, etc.) + posición fija en el círculo cromático. Daltónicos pueden navegar sin problemas.
 - **Volumen razonable** y, como principio para iteraciones futuras, **mute global** disponible siempre que la app emita sonido.
 - **Tipografía mínima cómoda**: el cuerpo actual está en 13px; en una pasada futura de polish, considerar subir a 16px para mejorar legibilidad en usuarios mayores y pantallas pequeñas. Los tamaños de display (Bebas Neue) ya son suficientemente grandes.
