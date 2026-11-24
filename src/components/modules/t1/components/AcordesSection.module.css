@@ -68,15 +68,29 @@
   color: var(--text-body);
 }
 
-.resultado {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 13px;
-  line-height: 1.8;
-  color: var(--paper);
-  font-weight: 600;
+/* Resumen (reunión 22/11/26, #22): las tres filas comparten columnas
+   (subgrid), así el "=" y las notas quedan alineados en los tres acordes. */
+.resumen {
+  display: grid;
+  grid-template-columns: repeat(4, max-content);
+  gap: 8px 14px;
+  align-items: center;
+  margin: 0 0 16px;
+  padding: 12px 18px;
+  list-style: none;
   background: var(--surface);
   border: 1px solid var(--rule);
-  padding: 12px 18px;
-  margin: 16px 0;
+}
+
+.resumenFila {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  align-items: center;
+  max-width: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--paper);
 }
 

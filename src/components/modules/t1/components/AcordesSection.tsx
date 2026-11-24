@@ -1,11 +1,18 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import SectionLabel from "../../../shared/SectionLabel";
 import AcordeProceso from "../../../primitives/AcordeProceso/AcordeProceso";
+import PlaybackButton from "../../../shared/PlaybackButton/PlaybackButton";
+import { useChordPlayer } from "../../../../hooks/useChordPlayer";
 import { useUIStore } from "../../../../stores/useUIStore";
 import { spelledToES } from "../../../../data/notes";
 import { chordSpelled } from "../../../../utils/noteCalculations";
 import styles from "./AcordesSection.module.css";
+
+// Reunión 22/11/26 (#22): el Resumen compara los tres acordes; cada uno se
+// escucha arpegiado, de la raíz hacia arriba.
+const NOTE_DURATION = 1.4;
+const ARPEGGIO_GAP_MS = 250;
 
 export default function AcordesSection() {
   const { t, i18n } = useTranslation();
@@ -23,6 +30,21 @@ export default function AcordesSection() {
   );
 
   const procedure = t("t1.s07.procedure", { returnObjects: true }) as string[];
+
+  const resumen = [
+    { nombre: `${chordM[0].spelled} ${t("common.major")}`, notas: chordM },
+    { nombre: `${chordm[0].spelled} ${t("common.minor")}`, notas: chordm },
+    { nombre: `${chordDim[0].spelled} ${t("common.diminished")}`, notas: chordDim },
+  ];
+  const [sonando, setSonando] = useState<number | null>(null);
+  const { playChord, at, clear } = useChordPlayer(NOTE_DURATION);
+  const tocarFila = (i: number) => {
+    clear();
+    setSonando(i);
+    const notas = resumen[i].notas;
+    playChord(notas, ARPEGGIO_GAP_MS);
+    at(() => setSonando(null), (notas.length - 1) * ARPEGGIO_GAP_MS + NOTE_DURATION * 1000);
+  };
 
   return (
     <section id="s-acordes" className={styles.section}>
@@ -75,18 +97,22 @@ export default function AcordesSection() {
 
       <AcordeProceso eyebrow={t("t1.s07.process_eyebrow")} />
 
-      <p className={styles.resultado}>
-        {chordM[0].spelled} {t("common.major")} ={" "}
-        {chordM.map((m) => m.spelled).join("  ")}
-      </p>
-      <p className={styles.text}>
-        {chordm[0].spelled} {t("common.minor")} ={" "}
-        {chordm.map((m) => m.spelled).join("  ")}
-      </p>
-      <p className={styles.text}>
-        {chordDim[0].spelled} {t("common.diminished")} ={" "}
-        {chordDim.map((m) => m.spelled).join("  ")}
-      </p>
+      <h3 className={styles.subheading}>{t("t1.s07.resumen_titulo")}</h3>
+      <ul className={styles.resumen}>
+        {resumen.map((fila, i) => (
+          <li key={fila.nombre} className={styles.resumenFila}>
+            <span>{fila.nombre}</span>
+            <span aria-hidden="true">=</span>
+            <span>{fila.notas.map((m) => m.spelled).join("  ")}</span>
+            <PlaybackButton
+              mode="arpegio"
+              label={t("t1.s07.resumen_play", { acorde: fila.nombre })}
+              playing={sonando === i}
+              onClick={() => tocarFila(i)}
+            />
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }
