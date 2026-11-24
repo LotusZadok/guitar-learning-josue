@@ -6,7 +6,7 @@ import PlaybackButton from "../../../shared/PlaybackButton/PlaybackButton";
 import { useChordPlayer } from "../../../../hooks/useChordPlayer";
 import { useUIStore } from "../../../../stores/useUIStore";
 import { spelledToES } from "../../../../data/notes";
-import { chordSpelled } from "../../../../utils/noteCalculations";
+import { chordSpelled, formatNote } from "../../../../utils/noteCalculations";
 import styles from "./AcordesSection.module.css";
 
 // Reunión 22/11/26 (#22): el Resumen compara los tres acordes; cada uno se
@@ -25,16 +25,16 @@ export default function AcordesSection() {
 
   // §1.7: la nomenclatura se ancla a la tónica global, no a una nota fija.
   const notation = useMemo(
-    () => ({ sym: chordM[0].spelled, name: spelledToES(chordM[0].spelled) }),
-    [chordM],
+    () => ({ sym: formatNote(chordM[0].spelled, locale), name: spelledToES(chordM[0].spelled) }),
+    [chordM, locale],
   );
 
   const procedure = t("t1.s07.procedure", { returnObjects: true }) as string[];
 
   const resumen = [
-    { nombre: `${chordM[0].spelled} ${t("common.major")}`, notas: chordM },
-    { nombre: `${chordm[0].spelled} ${t("common.minor")}`, notas: chordm },
-    { nombre: `${chordDim[0].spelled} ${t("common.diminished")}`, notas: chordDim },
+    { nombre: `${formatNote(chordM[0].spelled, locale)} ${t("common.major")}`, notas: chordM },
+    { nombre: `${formatNote(chordm[0].spelled, locale)} ${t("common.minor")}`, notas: chordm },
+    { nombre: `${formatNote(chordDim[0].spelled, locale)} ${t("common.diminished")}`, notas: chordDim },
   ];
   const [sonando, setSonando] = useState<number | null>(null);
   const { playChord, at, clear } = useChordPlayer(NOTE_DURATION);
@@ -78,7 +78,7 @@ export default function AcordesSection() {
       <p className={styles.text}>
         {locale === "de" ? (
           <>
-            Aktive Tonika: <strong>{tonic}</strong> · folge dem Baum von der
+            Aktive Tonika: <strong>{formatNote(tonic, locale)}</strong> · folge dem Baum von der
             Tonika nach außen: wähle die kleine oder große Terz und dann eine
             erreichbare Quinte. Links liegt das Kleine/Verminderte, rechts das
             Große/Reine; je höher ein Knoten, desto näher sein Intervall. Höre
@@ -86,7 +86,7 @@ export default function AcordesSection() {
           </>
         ) : (
           <>
-            Tónica activa: <strong>{tonic}</strong> · recorre el árbol desde la
+            Tónica activa: <strong>{formatNote(tonic, locale)}</strong> · recorre el árbol desde la
             tónica hacia afuera: elige la tercera menor o la mayor y luego una
             quinta alcanzable. A la izquierda queda lo menor/disminuido, a la
             derecha lo mayor/justo; cuanto más arriba está un nodo, más cercano
@@ -103,7 +103,7 @@ export default function AcordesSection() {
           <li key={fila.nombre} className={styles.resumenFila}>
             <span>{fila.nombre}</span>
             <span aria-hidden="true">=</span>
-            <span>{fila.notas.map((m) => m.spelled).join("  ")}</span>
+            <span>{fila.notas.map((m) => formatNote(m.spelled, locale)).join("  ")}</span>
             <PlaybackButton
               mode="arpegio"
               label={t("t1.s07.resumen_play", { acorde: fila.nombre })}

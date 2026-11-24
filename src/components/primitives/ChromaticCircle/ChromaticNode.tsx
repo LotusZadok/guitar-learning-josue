@@ -1,7 +1,8 @@
 import { useState, useCallback, type KeyboardEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useFireGate } from '../../../hooks/useFireGate';
 import { NOTE_COLORS, NOTE_ES } from '../../../data/notes';
-import { noteShort } from '../../../utils/noteCalculations';
+import { formatNote } from '../../../utils/noteCalculations';
 import type { ChromaticNote } from '../../../types/music';
 import styles from './ChromaticCircle.module.css';
 
@@ -25,6 +26,7 @@ interface ChromaticNodeProps {
 
 export default function ChromaticNode({ note, index, cx, cy, r, onPlay }: ChromaticNodeProps) {
   const [hovered, setHovered] = useState(false);
+  const lang = useTranslation().i18n.language;
 
   const angle = (index * 30 - 90) * Math.PI / 180;
   const x = cx + r * Math.cos(angle);
@@ -88,14 +90,14 @@ export default function ChromaticNode({ note, index, cx, cy, r, onPlay }: Chroma
                 textAnchor="middle" dominantBaseline="middle"
                 fill={textColor} fontSize={10} fontWeight={700}
               >
-                {pair.sharp}
+                {formatNote(pair.sharp, lang)}
               </text>
               <text
                 x={x} y={y + 7}
                 textAnchor="middle" dominantBaseline="middle"
                 fill={textColor} fontSize={10} fontWeight={700}
               >
-                {pair.flat}
+                {formatNote(pair.flat, lang)}
               </text>
             </>
           );
@@ -106,7 +108,7 @@ export default function ChromaticNode({ note, index, cx, cy, r, onPlay }: Chroma
             textAnchor="middle" dominantBaseline="middle"
             fill={textColor} fontSize={15} fontWeight={700}
           >
-            {noteShort(note)}
+            {formatNote(note, lang)}
           </text>
         );
       })()}

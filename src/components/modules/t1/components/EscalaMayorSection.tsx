@@ -5,7 +5,7 @@ import NoteToken from '../../../shared/NoteToken/NoteToken';
 import Prose from '../../../shared/Prose/Prose';
 import EscalaMayor from '../../../primitives/EscalaMayor/EscalaMayor';
 import { useUIStore } from '../../../../stores/useUIStore';
-import { aAscii, majorScaleSpelled, octavasDesdeRaiz } from '../../../../utils/noteCalculations';
+import { aAscii, formatNote, majorScaleSpelled, octavasDesdeRaiz } from '../../../../utils/noteCalculations';
 import type { NoteSpelling } from '../../../../types/music';
 import type { ProseSegment } from '../../../../types/prose';
 // Cast tonicAscii (string) to NoteSpelling at the prose boundary.
@@ -82,7 +82,7 @@ export default function EscalaMayorSection() {
                 <td key={i}>
                   {VALID_NOTE_SPELLINGS.has(n)
                     ? <NoteToken note={n as NoteSpelling} octave={notasOctavas[i]} />
-                    : <span>{n}</span>}
+                    : <span>{formatNote(n, i18n.language)}</span>}
                 </td>
               ))}
             </tr>

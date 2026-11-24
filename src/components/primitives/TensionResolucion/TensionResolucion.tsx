@@ -372,6 +372,7 @@ interface ScaleNodeProps {
 }
 
 function ScaleNode({ data, sounding }: ScaleNodeProps) {
+  const lang = useTranslation().i18n.language;
   const { pos, spelled, role } = data;
   const cx = nodeX(pos);
   const radius =
@@ -407,7 +408,7 @@ function ScaleNode({ data, sounding }: ScaleNodeProps) {
         y={NODE_Y + 1}
         className={isLargeLetter ? styles.innerLetterLarge : styles.innerLetter}
       >
-        {spelled}
+        {formatNote(spelled, lang)}
       </text>
       <text x={cx} y={NODE_Y + radius + 22} className={styles.gradeLabel}>
         {data.grade}

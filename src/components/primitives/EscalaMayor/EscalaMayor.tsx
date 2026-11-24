@@ -194,7 +194,7 @@ function ScaleNode({ data, onPlay, isDe }: ScaleNodeProps) {
           y={NODE_Y + 1}
           className={role === 'tonic' ? styles.innerLetterLarge : styles.innerLetter}
         >
-          {spelled}
+          {formatNote(spelled, isDe ? 'de' : 'es')}
         </text>
       )}
 

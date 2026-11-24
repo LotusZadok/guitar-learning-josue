@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useUIStore } from '../../stores/useUIStore';
-import { noteShort } from '../../utils/noteCalculations';
+import { formatNote } from '../../utils/noteCalculations';
 import type { Tonic } from '../../types/music';
 import styles from './TonicSelector.module.css';
 
@@ -30,7 +30,7 @@ export default function TonicSelector() {
       >
         {TONIC_OPTIONS.map((note) => (
           <option key={note} value={note}>
-            {noteShort(note)}
+            {formatNote(note, isDe ? 'de' : 'es')}
           </option>
         ))}
       </select>

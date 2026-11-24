@@ -1,4 +1,5 @@
-import { noteShort } from '../../utils/noteCalculations';
+import { useTranslation } from 'react-i18next';
+import { formatNote } from '../../utils/noteCalculations';
 import styles from './NoteSelector.module.css';
 
 interface NoteSelectorProps {
@@ -8,6 +9,7 @@ interface NoteSelectorProps {
 }
 
 export default function NoteSelector({ notes, selected, onSelect }: NoteSelectorProps) {
+  const { i18n } = useTranslation();
   return (
     <div className={styles.selector}>
       {notes.map((n) => (
@@ -17,7 +19,7 @@ export default function NoteSelector({ notes, selected, onSelect }: NoteSelector
           onClick={() => onSelect(n)}
           aria-pressed={n === selected}
         >
-          {noteShort(n)}
+          {formatNote(n, i18n.language)}
         </button>
       ))}
     </div>

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { NOTE_COLORS, NOTE_ES, NOTE_DE } from '../../../data/notes';
 
-import { perfectFifth, noteShort } from '../../../utils/noteCalculations';
+import { perfectFifth, formatNote } from '../../../utils/noteCalculations';
 import { anguloEnCirculo, puntoEnCirculo } from '../../../utils/circuloQuintas';
 import type { ChromaticNote } from '../../../types/music';
 import styles from './CirculoDeQuintas.module.css';
@@ -21,9 +21,9 @@ const ENHARMONIC_PAIRS: Partial<Record<ChromaticNote, { sharp: string; flat: str
   'A#': { sharp: 'A♯', flat: 'B♭' },
 };
 // Single-line fallback for accessibility labels and the center display.
-const noteLabel = (n: ChromaticNote) => {
+const noteLabel = (n: ChromaticNote, lang: string) => {
   const pair = ENHARMONIC_PAIRS[n];
-  return pair ? `${pair.sharp}/${pair.flat}` : noteShort(n);
+  return pair ? `${formatNote(pair.sharp, lang)}/${formatNote(pair.flat, lang)}` : formatNote(n, lang);
 };
 
 // Excepciones a la regla 5J: B → F♯ (no F) y A♯(Bb) → F (no F♭). Marcadas con *.
@@ -48,6 +48,7 @@ interface NodeData {
 export default function CirculoDeQuintas() {
   const { i18n } = useTranslation();
   const isDe = i18n.language === 'de';
+  const lang = i18n.language;
   const [hovered, setHovered] = useState<ChromaticNote | null>(null);
   const [playing, setPlaying] = useState(false);
   const { playSequence } = useAudioEngine();
@@ -131,8 +132,8 @@ export default function CirculoDeQuintas() {
               tabIndex={0}
               role="button"
               aria-label={isDe
-                ? `${NOTE_DE[node.note] ?? node.note}: reine Quinte → ${noteLabel(node.fifthChromatic)}${node.isException ? ' (Ausnahme)' : ''}`
-                : `${NOTE_ES[node.note]}: quinta justa → ${noteLabel(node.fifthChromatic)}${node.isException ? ' (excepción)' : ''}`}
+                ? `${NOTE_DE[node.note] ?? node.note}: reine Quinte → ${noteLabel(node.fifthChromatic, lang)}${node.isException ? ' (Ausnahme)' : ''}`
+                : `${NOTE_ES[node.note]}: quinta justa → ${noteLabel(node.fifthChromatic, lang)}${node.isException ? ' (excepción)' : ''}`}
               onMouseEnter={() => setHovered(node.note)}
               onMouseLeave={() => setHovered(null)}
               onFocus={() => setHovered(node.note)}
@@ -172,7 +173,7 @@ export default function CirculoDeQuintas() {
                         opacity={dim ? 0.3 : 1}
                         fontSize={11}
                       >
-                        {pair.sharp}
+                        {formatNote(pair.sharp, lang)}
                       </text>
                       <text
                         x={node.x} y={node.y + 9}
@@ -182,7 +183,7 @@ export default function CirculoDeQuintas() {
                         opacity={dim ? 0.3 : 1}
                         fontSize={11}
                       >
-                        {pair.flat}
+                        {formatNote(pair.flat, lang)}
                       </text>
                     </>
                   );
@@ -195,7 +196,7 @@ export default function CirculoDeQuintas() {
                     fill={fillC}
                     opacity={dim ? 0.3 : 1}
                   >
-                    {noteShort(node.note)}
+                    {formatNote(node.note, lang)}
                   </text>
                 );
               })()}
@@ -226,14 +227,14 @@ export default function CirculoDeQuintas() {
         {hoveredNode ? (
           <>
             <text x={CX} y={CY - 14} textAnchor="middle" className={styles.centerNote}>
-              {noteLabel(hoveredNode.note)}
+              {noteLabel(hoveredNode.note, lang)}
             </text>
             <text x={CX} y={CY + 4} textAnchor="middle" className={styles.centerArrow}>
               →
             </text>
             <text x={CX} y={CY + 22} textAnchor="middle" className={styles.centerNote}
               fill={NOTE_COLORS[hoveredNode.fifthChromatic]}>
-              {noteLabel(hoveredNode.fifthChromatic)}
+              {noteLabel(hoveredNode.fifthChromatic, lang)}
             </text>
           </>
         ) : (
