@@ -1,6 +1,6 @@
 import { Note, Interval, Scale, Key, Chord } from "tonal";
 import { ALL } from "../data/notes.ts";
-import type { ChromaticNote, Tonic } from "../types/music";
+import type { ChromaticNote, NoteSpelling, Tonic } from "../types/music";
 
 export function noteShort(n: string): string {
   return n.replace("#", "♯").replace(/^([A-G])b$/, "$1♭");
@@ -405,6 +405,58 @@ export function spelledChromaticCircle(tonic: Tonic): CircleStep[] {
     const flat = STANDARD_FLAT[note] ?? null;
     const sharp = NATURAL_DISPLAY[note] ?? note;
     return { semitones: i, sharp, flat };
+  });
+}
+
+export const aAscii = (s: string) => s.replace(/♯/g, "#").replace(/♭/g, "b");
+
+// Las grafías que NoteToken sabe colorear y sonar; el resto (B♭♭, F♭, E♯…) va
+// como texto plano con glifo (DESIGN §5 "NoteToken en Tablas").
+const NOTE_SPELLINGS = new Set<string>([
+  "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B",
+  "Db", "Eb", "Gb", "Ab", "Bb",
+]);
+
+export function esNoteSpelling(s: string): s is NoteSpelling {
+  return NOTE_SPELLINGS.has(s);
+}
+
+// Las grafías del círculo cromático en esa posición que no son la correcta: la
+// aclaración del paso 2 de §1.7 ("es B♭♭, no A").
+export function otrasGrafias(tonic: Tonic, semis: number, grafia: string): string[] {
+  const { sharp, flat } = spelledChromaticCircle(tonic)[semis];
+  return [sharp, flat].filter((n): n is string => n !== null && n !== grafia);
+}
+
+// Reunión 22/11/26 (#19): el paso 1 de §1.7 escribe solo las letras de la tríada.
+export function letrasDeTriada(tonic: Tonic): string[] {
+  return chordSpelled(tonic, "M").map((m) => m.spelled[0]);
+}
+
+// Reunión 22/11/26 (#21): el conteo cromático de §1.7, de la tónica a su tercera
+// o quinta. La tónica conserva su grafía ("Sol bemol no es Fa sostenido") y la
+// llegada respeta la letra del paso 1 (3m de Sol♭ = Si♭♭); en el medio quedan
+// las dos grafías del círculo cromático.
+export interface PasoCromatico {
+  notas: string[];
+  semis: number;
+  octava: number;
+}
+
+export function pasoSemitonos(
+  tonic: Tonic,
+  numero: IntervalNumber,
+  calidad: IntervalQuality,
+): PasoCromatico[] {
+  const llegada = intervalSemitones(numero, calidad);
+  const tonicIdx = ALL.indexOf(tonicChromatic(tonic));
+  const circulo = spelledChromaticCircle(tonic);
+  return Array.from({ length: llegada + 1 }, (_, semis) => {
+    const notas =
+      semis === 0 ? [noteShort(tonic)]
+      : semis === llegada ? [spelledIntervalFromTonic(tonic, numero, calidad)]
+      : [circulo[semis].sharp, circulo[semis].flat].filter((n): n is string => n !== null);
+    return { notas, semis, octava: 4 + Math.floor((tonicIdx + semis) / 12) };
   });
 }
 

@@ -115,6 +115,10 @@ El atributo `hidden` es solo `display: none` en la hoja del navegador: cualquier
 
 `useProcessAnimation` saltaba a `maxSteps` cuando el sistema reportaba `prefers-reduced-motion: reduce`. Windows 11 lo reporta con "Efectos de animación" apagado, así que al profesor "el botón de pasos salta al resultado", y como `TriadaProceso` y `AcordeProceso` suenan solo en el paso al que llegan, los play parecían rotos. A Sebastián le funcionaba porque no tenía reduce activo. Lección doble: (1) reduce-motion quita *movimiento*, no *contenido*; si cada paso enseña o suena, el recorrido se respeta y solo se neutralizan las transiciones CSS. (2) Un bug que "solo le pasa a otra persona" pide revisar las media queries de preferencias del sistema (`prefers-reduced-motion`, `prefers-color-scheme`, `prefers-contrast`) antes de culpar a la caché o al despliegue. Se reproduce con DevTools > Rendering > "Emulate prefers-reduced-motion".
 
+### Un `p` o `li` anidado no hereda la tipografía del paso (ola 4, reunión del 22/11)
+
+La regla global `p, li` fija `font-size: 16px` y `color: var(--text-body)` en cada elemento, no en el contenedor. Un `<p>` o `<li>` metido dentro de un paso de `processChrome` (13px, `--muted`, más claro en `.stepActive`) sale a 16px y con el color del cuerpo, aunque el paso que lo rodea esté apagado. **Regla:** todo `p`/`li` anidado en un componente con tipografía propia lleva `font-size: inherit; line-height: inherit; color: inherit`, o se usa `span`/`div`.
+
 ### Anti-checklist antes de commit
 
 Pasar cada surface por estas preguntas antes de aprobar el cambio:

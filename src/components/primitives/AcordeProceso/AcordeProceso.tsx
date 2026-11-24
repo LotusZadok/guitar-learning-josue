@@ -1,19 +1,24 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAudioEngine, stopAllNotes } from '../../../hooks/useAudioEngine';
 import { useUIStore } from '../../../stores/useUIStore';
 import {
+  aAscii,
   chordSpelled,
-  spelledChromaticCircle,
-  spelledIntervalFromTonic,
+  esNoteSpelling,
+  letrasDeTriada,
+  otrasGrafias,
+  pasoSemitonos,
   type ChordType,
+  type IntervalQuality,
+  type PasoCromatico,
 } from '../../../utils/noteCalculations';
 import { useProcessAnimation } from '../../modules/t2/hooks/useProcessAnimation';
 import ProcessControls from '../../shared/ProcessControls/ProcessControls';
 import Prose from '../../shared/Prose/Prose';
 import AcordesBuilder, { PLAYING_ALL } from '../AcordesBuilder/AcordesBuilder';
 import { BUILDER_17 } from '../AcordesBuilder/configs';
-import type { NoteSpelling, Tonic } from '../../../types/music';
+import type { Tonic } from '../../../types/music';
 import type { ProseSegment, ProseFragment } from '../../../types/prose';
 import chrome from '../../shared/processChrome.module.css';
 import styles from './AcordeProceso.module.css';
@@ -41,43 +46,53 @@ type Quinta = '5' | '5d';
 const TIPO_POR_SELECCION = (t: Tercera, q: Quinta): ChordType =>
   t === '3M' ? 'M' : q === '5d' ? 'dim' : 'm';
 
-const SEMIS_TERCERA: Record<Tercera, number> = { '3m': 3, '3M': 4 };
-const SEMIS_QUINTA: Record<Quinta, number> = { '5d': 6, '5': 7 };
+// Un paso es su texto y, en los pasos 2 y 3, la fila cromática con los
+// semitonos debajo y la aclaración de la letra (reunión 22/11/26, #21).
+interface Paso {
+  texto: ProseSegment;
+  fila?: PasoCromatico[];
+  aclaracion?: ProseSegment;
+}
 
-const ASCII = (s: string) => s.replace('♯', '#').replace('♭', 'b');
+// Las grafías que NoteToken no conoce (B♭♭, F♭…) van como texto con glifo.
+const fragmentoNota = (grafia: string, octave?: number): ProseFragment => {
+  const ascii = aAscii(grafia);
+  return esNoteSpelling(ascii)
+    ? { type: 'note', value: ascii, octave }
+    : { type: 'text', value: grafia };
+};
 
 // Los ProseSegment se aplanan a texto para la región viva: aria-live necesita
 // un cambio de texto real, no un cambio de clase.
 const segmentText = (seg: ProseSegment): string =>
   seg.map((f) => f.value).join('');
 
-function buildPasoLetras(tonic: Tonic, locale: string): ProseSegment {
-  const [t1, t3, t5] = chordSpelled(tonic, 'M').map(
-    (m) => ASCII(m.spelled) as NoteSpelling,
-  );
+const pasoText = (paso: Paso): string =>
+  [
+    segmentText(paso.texto),
+    paso.fila?.map((c) => c.notas.join('/')).join(' '),
+    paso.aclaracion && segmentText(paso.aclaracion),
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+// #19: solo letras, como texto plano. Una letra natural como NoteToken sonaría
+// y se colorearía como la nota equivocada (La en vez de La♭).
+function buildPasoLetras(tonic: Tonic, locale: string): Paso {
   const prefix =
     locale === 'de' ? 'Buchstaben der Trias: ' : 'Letras de la tríada: ';
-  return [
-    { type: 'text', value: prefix },
-    { type: 'note', value: t1 },
-    { type: 'text', value: ' ' },
-    { type: 'note', value: t3 },
-    { type: 'text', value: ' ' },
-    { type: 'note', value: t5 },
-    { type: 'text', value: '.' },
-  ];
+  return { texto: [{ type: 'text', value: `${prefix}${letrasDeTriada(tonic).join(' ')}.` }] };
 }
 
 function buildPasoSemitonos(
   tonic: Tonic,
-  targetSemis: number,
-  targetSpelled: string,
-  letterRuleNote: string,
+  numero: 3 | 5,
+  calidad: IntervalQuality,
   locale: string,
-): ProseSegment {
-  const circle = spelledChromaticCircle(tonic);
-  const tonicAscii = ASCII(circle[0].sharp) as NoteSpelling;
-  const isTercera = targetSemis <= 4;
+): Paso {
+  const fila = pasoSemitonos(tonic, numero, calidad);
+  const llegada = fila[fila.length - 1];
+  const grafia = llegada.notas[0];
   // El nombre del intervalo sigue a la selección del árbol: 3m/3M, 5d/5J.
   const nombreES: Record<number, string> = { 3: '3m', 4: '3M', 6: '5d', 7: '5J' };
   const nombreDE: Record<number, string> = {
@@ -88,59 +103,32 @@ function buildPasoSemitonos(
   };
   const prefix =
     locale === 'de'
-      ? `Halbtöne bis zur ${nombreDE[targetSemis]}: `
-      : `Semitonos hasta la ${nombreES[targetSemis]}: `;
+      ? `Halbtöne bis zur ${nombreDE[llegada.semis]}:`
+      : `Semitonos hasta la ${nombreES[llegada.semis]}:`;
 
-  const seg: ProseFragment[] = [
-    { type: 'text', value: prefix },
-    { type: 'note', value: tonicAscii },
-  ];
-  for (let i = 1; i <= targetSemis; i++) {
-    const step = circle[i];
-    seg.push({ type: 'text', value: ' → ' });
-    const sharpAscii = ASCII(step.sharp) as NoteSpelling;
-    if (step.flat) {
-      const flatAscii = ASCII(step.flat) as NoteSpelling;
-      seg.push(
-        { type: 'note', value: sharpAscii },
-        { type: 'text', value: '/' },
-        { type: 'note', value: flatAscii },
-      );
-    } else {
-      seg.push({ type: 'note', value: sharpAscii });
-    }
-    seg.push({ type: 'text', value: ` (${i})` });
-  }
+  // La aclaración aparece cuando el círculo ofrece otra grafía en la llegada:
+  // la letra del paso 1 decide (3m de Sol♭ = B♭♭, no A).
+  const otras = otrasGrafias(tonic, llegada.semis, grafia);
+  const aclaracion: ProseFragment[] | undefined = otras.length
+    ? [
+        {
+          type: 'text',
+          value:
+            locale === 'de'
+              ? `Nach der Regel aus Schritt 1 ist der Buchstabe ${grafia[0]}, also ist es `
+              : `Por la regla del paso 1, la letra es ${grafia[0]}, entonces es `,
+        },
+        fragmentoNota(grafia, llegada.octava),
+        { type: 'text', value: locale === 'de' ? ' (nicht ' : ' (no ' },
+        ...otras.flatMap((o, i): ProseFragment[] => [
+          ...(i > 0 ? [{ type: 'text', value: '/' } as const] : []),
+          fragmentoNota(o, llegada.octava),
+        ]),
+        { type: 'text', value: ').' },
+      ]
+    : undefined;
 
-  // Solo añadimos la caveat de la "regla del paso 1" en la 3M cuando hay ambigüedad enarmónica.
-  const finalStep = circle[targetSemis];
-  if (isTercera && finalStep.flat) {
-    const correctAscii = ASCII(targetSpelled) as NoteSpelling;
-    const altAscii = ASCII(
-      correctAscii.length === 2 && correctAscii[1] === '#'
-        ? (finalStep.flat as string)
-        : (finalStep.sharp as string),
-    ) as NoteSpelling;
-    seg.push({
-      type: 'text',
-      value:
-        locale === 'de'
-          ? '. Nach der Regel aus Schritt 1 ist der Buchstabe '
-          : '. Por la regla del paso 1, la letra es ',
-    });
-    seg.push({ type: 'note', value: ASCII(letterRuleNote) as NoteSpelling });
-    seg.push({
-      type: 'text',
-      value: locale === 'de' ? ', also ist es ' : ', entonces es ',
-    });
-    seg.push({ type: 'note', value: correctAscii });
-    seg.push({ type: 'text', value: locale === 'de' ? ' (nicht ' : ' (no ' });
-    seg.push({ type: 'note', value: altAscii });
-    seg.push({ type: 'text', value: ').' });
-  } else {
-    seg.push({ type: 'text', value: '.' });
-  }
-  return seg;
+  return { texto: [{ type: 'text', value: prefix }], fila, aclaracion };
 }
 
 const NOMBRE_ACORDE: Record<ChordType, { es: string; de: string }> = {
@@ -150,7 +138,7 @@ const NOMBRE_ACORDE: Record<ChordType, { es: string; de: string }> = {
   aug: { es: 'el acorde aumentado', de: 'der übermäßige Akkord' },
 };
 
-function buildPasoResultado(tonic: Tonic, tipo: ChordType, locale: string): ProseSegment {
+function buildPasoResultado(tonic: Tonic, tipo: ChordType, locale: string): Paso {
   const members = chordSpelled(tonic, tipo);
   const prefix = locale === 'de' ? 'Ergebnis: ' : 'Resultado: ';
   const nombre = NOMBRE_ACORDE[tipo];
@@ -158,10 +146,10 @@ function buildPasoResultado(tonic: Tonic, tipo: ChordType, locale: string): Pros
   const seg: ProseFragment[] = [{ type: 'text', value: prefix }];
   members.forEach((m, i) => {
     if (i > 0) seg.push({ type: 'text', value: ' ' });
-    seg.push({ type: 'note', value: ASCII(m.spelled) as NoteSpelling });
+    seg.push(fragmentoNota(m.spelled, m.octave));
   });
   seg.push({ type: 'text', value: suffix });
-  return seg;
+  return { texto: seg };
 }
 
 interface Props {
@@ -186,27 +174,15 @@ export default function AcordeProceso({ eyebrow }: Props) {
 
   const chordM = useMemo(() => chordSpelled(tonic, tipo), [tonic, tipo]);
 
-  const steps = useMemo<ProseSegment[]>(() => {
-    const terceraSpelled = spelledIntervalFromTonic(tonic, 3, tercera === '3M' ? 'M' : 'm');
-    return [
+  const steps = useMemo<Paso[]>(
+    () => [
       buildPasoLetras(tonic, locale),
-      buildPasoSemitonos(
-        tonic,
-        SEMIS_TERCERA[tercera],
-        terceraSpelled,
-        terceraSpelled[0],
-        locale,
-      ),
-      buildPasoSemitonos(
-        tonic,
-        SEMIS_QUINTA[quinta],
-        spelledIntervalFromTonic(tonic, 5, quinta === '5' ? 'P' : 'dim'),
-        '',
-        locale,
-      ),
+      buildPasoSemitonos(tonic, 3, tercera === '3M' ? 'M' : 'm', locale),
+      buildPasoSemitonos(tonic, 5, quinta === '5' ? 'P' : 'dim', locale),
       buildPasoResultado(tonic, tipo, locale),
-    ];
-  }, [tonic, locale, tercera, quinta, tipo]);
+    ],
+    [tonic, locale, tercera, quinta, tipo],
+  );
 
   // Refs para leer los valores más recientes sin que su cambio de referencia
   // re-dispare el efecto de audio: ese efecto sólo debe sonar cuando cambia el
@@ -281,7 +257,7 @@ export default function AcordeProceso({ eyebrow }: Props) {
           ['3M'] no completan un acorde). Sin esto, los pasos 1 y 2 suenan sin
           par textual anunciado. */}
       <p className={styles.srOnly} role="status" aria-live="polite">
-        {running ? segmentText(steps[current - 1]) : ''}
+        {running ? pasoText(steps[current - 1]) : ''}
       </p>
 
       <div className={styles.layout}>
@@ -293,7 +269,7 @@ export default function AcordeProceso({ eyebrow }: Props) {
         />
 
         <ol className={chrome.steps}>
-          {steps.map((seg, i) => {
+          {steps.map((paso, i) => {
             const stepNum = i + 1;
             const active = stepNum === current;
             const past = stepNum < current;
@@ -305,7 +281,31 @@ export default function AcordeProceso({ eyebrow }: Props) {
                 aria-current={active ? 'step' : undefined}
               >
                 <span className={chrome.stepNum}>{stepNum}</span>
-                <span><Prose segment={seg} /></span>
+                <div className={styles.cuerpo}>
+                  <Prose segment={paso.texto} />
+                  {paso.fila && (
+                    <ol className={styles.fila}>
+                      {paso.fila.map((c) => (
+                        <li key={c.semis} className={styles.celda}>
+                          <span>
+                            {c.notas.map((n, j) => (
+                              <Fragment key={n}>
+                                {j > 0 && '/'}
+                                <Prose segment={[fragmentoNota(n, c.octava)]} />
+                              </Fragment>
+                            ))}
+                          </span>
+                          <span className={styles.semis}>{c.semis > 0 ? `+${c.semis}` : ''}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  )}
+                  {paso.aclaracion && (
+                    <p className={styles.aclaracion}>
+                      <Prose segment={paso.aclaracion} />
+                    </p>
+                  )}
+                </div>
               </li>
             );
           })}

@@ -3,11 +3,16 @@
 import { estadoAlIniciar, estadoTrasTick } from '../src/utils/procesos.ts';
 import type { EstadoProceso } from '../src/utils/procesos.ts';
 import {
+  aAscii,
+  letrasDeTriada,
   majorScaleSpelled,
   octavasDesdeLaPrimera,
   octavasDesdeRaiz,
   octavasLetrasDeIntervalos,
+  otrasGrafias,
+  pasoSemitonos,
   pitchClass,
+  spelledIntervalFromTonic,
   tablaCromaticaDesdeTonica,
   tonicChromatic,
 } from '../src/utils/noteCalculations.ts';
@@ -76,5 +81,23 @@ check('1.3 paso 1 en Fa♯: la letra Fa es el piso', octavasLetrasDeIntervalos([
 check('conOctavas pone la octava solo en las notas, en orden',
   conOctavas([{ type: 'note', value: 'D' }, { type: 'text', value: ' → ' }, { type: 'note', value: 'A' }], [4, 5]),
   [{ type: 'note', value: 'D', octave: 4 }, { type: 'text', value: ' → ' }, { type: 'note', value: 'A', octave: 5 }]);
+
+console.log('\n· 1.7 pasos 1 y 2: solo letras y la tercera respeta la letra (reunión 22/11/26, #19, #21) ·');
+check('#19 Re♭ da D F A', letrasDeTriada('Db'), ['D', 'F', 'A']);
+check('#19 Fa♯ da F A C', letrasDeTriada('F#'), ['F', 'A', 'C']);
+check('#19 Si♭ da B D F', letrasDeTriada('Bb'), ['B', 'D', 'F']);
+const ultima = (p: ReturnType<typeof pasoSemitonos>) => p[p.length - 1];
+check('#21 3m de Sol♭: empieza en G♭ y llega a B♭♭ con +3',
+  [pasoSemitonos('Gb', 3, 'm')[0].notas, ultima(pasoSemitonos('Gb', 3, 'm'))], [['G♭'], { notas: ['B♭♭'], semis: 3, octava: 4 }]);
+check('#21 3M de Do llega a E con +4', ultima(pasoSemitonos('C', 3, 'M')).notas, ['E']);
+check('#21 3m de Si♭ llega a D♭', ultima(pasoSemitonos('Bb', 3, 'm')).notas, ['D♭']);
+check('#21 los semitonos van de 0 a la llegada', pasoSemitonos('C', 5, 'P').map((p) => p.semis), [0, 1, 2, 3, 4, 5, 6, 7]);
+check('#21 la 5J de Si sube de octava', ultima(pasoSemitonos('B', 5, 'P')), { notas: ['F♯'], semis: 7, octava: 5 });
+check('#21 con las 17 tónicas la llegada coincide con spelledIntervalFromTonic',
+  TONICAS.flatMap((t) => (['M', 'm'] as const).filter((q) => ultima(pasoSemitonos(t, 3, q)).notas[0] !== spelledIntervalFromTonic(t, 3, q)).map((q) => `${t} 3${q}`)), []);
+check('#21 aclaración: 3m de Sol♭ es B♭♭, no A', otrasGrafias('Gb', 3, 'B♭♭'), ['A']);
+check('#21 aclaración: 3M de La es C♯, no D♭', otrasGrafias('A', 4, 'C♯'), ['D♭']);
+check('#21 sin aclaración: 3M de Do', otrasGrafias('C', 4, 'E'), []);
+check('aAscii reemplaza todas las alteraciones', [aAscii('A♭♭'), aAscii('F♯')], ['Abb', 'F#']);
 
 resumen();

@@ -34,3 +34,44 @@
     gap: 16px;
   }
 }
+
+/* Pasos 2 y 3 (reunión 22/11/26, #21): las notas en una línea, cada una con
+   sus semitonos debajo. Sin color de nota en los +n (Note-Color Quarantine). */
+.cuerpo {
+  min-width: 0;
+}
+
+.fila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 14px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* `p, li` global fija 16px y --text-body: aquí heredan el tamaño y el color
+   del paso (activo, pasado) como el resto del texto. */
+.celda,
+.aclaracion {
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+.celda {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.semis {
+  min-height: 1.4em;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.aclaracion {
+  margin: 6px 0 0;
+}
