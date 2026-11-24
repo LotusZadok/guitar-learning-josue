@@ -13,7 +13,7 @@ export default function Prose({ segment }: ProseProps) {
         frag.type === 'text' ? (
           <Fragment key={i}>{frag.value}</Fragment>
         ) : (
-          <NoteToken key={i} note={frag.value} />
+          <NoteToken key={i} note={frag.value} octave={frag.octave} />
         ),
       )}
     </>

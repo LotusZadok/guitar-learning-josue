@@ -229,6 +229,34 @@ export function octaveAboveTonic(tonic: Tonic, note: string, base = 4): number {
   return pitchClass(note) >= pitchClass(tonic) ? base : base + 1;
 }
 
+// Reunión 22/11/26 (#15, "planetas"; #12): un acorde, intervalo o escala escrito
+// sube desde su primera nota. La primera se ancla a la tónica y cada nota
+// siguiente sube; una nota repetida (la 8J) suena una octava arriba.
+export function octavasDesdeRaiz(tonic: Tonic, notas: string[]): number[] {
+  if (notas.length === 0) return [];
+  return spelledSequenceAscending(notas, octaveAboveTonic(tonic, notas[0])).map((n) => n.octave);
+}
+
+// Reunión 22/11/26 (#24): en los ejemplos de quintas cada nota se mide contra la
+// raíz (la primera), no contra la anterior: "Si → Fa♯ (no Fa)" deja las dos
+// quintas sobre Si, y una raíz enarmónica nueva (La♯ tras Si♭ → Fa) vuelve abajo.
+export function octavasDesdeLaPrimera(tonic: Tonic, notas: string[]): number[] {
+  if (notas.length === 0) return [];
+  const raiz = notas[0] as Tonic;
+  const base = octaveAboveTonic(tonic, raiz);
+  return notas.map((n) => octaveAboveTonic(raiz, n, base));
+}
+
+// Paso 1 de §1.3: las letras de los 13 intervalos se repiten (2m y 2M son la
+// misma letra), así que se miden contra la raíz; solo la última (8J) sube. La
+// letra de la tónica es el piso (con Fa♯, la letra Fa en octava 4, no en 5).
+export function octavasLetrasDeIntervalos(letras: string[]): number[] {
+  if (letras.length === 0) return [];
+  const octavas = octavasDesdeLaPrimera(letras[0] as Tonic, letras);
+  if (octavas.length > 1) octavas[octavas.length - 1] = octavas[0] + 1;
+  return octavas;
+}
+
 // === Generalized enharmonic interval spelling (reunión 24/5/26) ===
 // Regla: el número del intervalo determina la LETRA; la calidad la alteración.
 // Una 3ra de G es siempre B (B♭ o B). Una 4ta de F es siempre B (B♭ o B), nunca A#.

@@ -4,6 +4,9 @@ import RuleNote from '../../../shared/RuleNote';
 import Prose from '../../../shared/Prose/Prose';
 import CirculoDeQuintas from '../../../primitives/CirculoDeQuintas/CirculoDeQuintas';
 import type { ProseSegment } from '../../../../types/prose';
+import { useUIStore } from '../../../../stores/useUIStore';
+import { octavasDesdeLaPrimera } from '../../../../utils/noteCalculations';
+import { conOctavas, notasDe } from '../../../../utils/prose';
 import styles from './ReglaQuintaSection.module.css';
 
 interface ReglaBullet {
@@ -15,6 +18,10 @@ interface ReglaBullet {
 export default function ReglaQuintaSection() {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
+  const tonic = useUIStore((s) => s.tonic);
+  // #24: cada ejemplo sube desde su raíz (la primera nota), con cualquier tónica.
+  const anclar = (segment: ProseSegment) =>
+    conOctavas(segment, octavasDesdeLaPrimera(tonic, notasDe(segment)));
 
   const bullets = t('t1.s08.bullets', { returnObjects: true }) as ReglaBullet[];
   const excepcionB = t('t1.s08.exception_b', { returnObjects: true }) as ProseSegment;
@@ -34,22 +41,22 @@ export default function ReglaQuintaSection() {
           <li key={i}>
             <strong>{b.regla}</strong> · {b.desc}
             {/* Reunión 9/6/26: el ejemplo baja a una línea propia, separada de la idea. */}
-            <span className={styles.ejemplo}>{locale === 'de' ? 'Beispiel' : 'Ejemplo'}: <Prose segment={b.ejemplo} /></span>
+            <span className={styles.ejemplo}>{locale === 'de' ? 'Beispiel' : 'Ejemplo'}: <Prose segment={anclar(b.ejemplo)} /></span>
           </li>
         ))}
       </ul>
 
       <h3 className={styles.subheading}>{locale === 'de' ? 'Ausnahmen' : 'Excepciones'}</h3>
       <ul className={styles.bullets}>
-        <li><Prose segment={excepcionB} /></li>
-        <li><Prose segment={excepcionBb} /></li>
+        <li><Prose segment={anclar(excepcionB)} /></li>
+        <li><Prose segment={anclar(excepcionBb)} /></li>
       </ul>
 
       <h3 className={styles.subheading}>{t('t1.s08.fifths_title')}</h3>
-      <p className={styles.text}><Prose segment={primitiva} /></p>
+      <p className={styles.text}><Prose segment={anclar(primitiva)} /></p>
       <CirculoDeQuintas />
 
-      <p className={styles.footnote}><Prose segment={notaBemoles} /></p>
+      <p className={styles.footnote}><Prose segment={anclar(notaBemoles)} /></p>
 
       <RuleNote>{t('t1.s08.tip')}</RuleNote>
     </section>

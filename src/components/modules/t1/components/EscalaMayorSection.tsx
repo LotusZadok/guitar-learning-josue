@@ -5,7 +5,7 @@ import NoteToken from '../../../shared/NoteToken/NoteToken';
 import Prose from '../../../shared/Prose/Prose';
 import EscalaMayor from '../../../primitives/EscalaMayor/EscalaMayor';
 import { useUIStore } from '../../../../stores/useUIStore';
-import { majorScaleSpelled } from '../../../../utils/noteCalculations';
+import { majorScaleSpelled, octavasDesdeRaiz } from '../../../../utils/noteCalculations';
 import type { NoteSpelling } from '../../../../types/music';
 import type { ProseSegment } from '../../../../types/prose';
 // Cast tonicAscii (string) to NoteSpelling at the prose boundary.
@@ -54,6 +54,7 @@ export default function EscalaMayorSection() {
     ],
     [spelledScale, tonicAscii],
   );
+  const notasOctavas = useMemo(() => octavasDesdeRaiz(tonic, notasRow), [tonic, notasRow]);
 
   return (
     <section id="s-escala" className={styles.section}>
@@ -80,7 +81,7 @@ export default function EscalaMayorSection() {
               {notasRow.map((n, i) => (
                 <td key={i}>
                   {VALID_NOTE_SPELLINGS.has(n)
-                    ? <NoteToken note={n as NoteSpelling} />
+                    ? <NoteToken note={n as NoteSpelling} octave={notasOctavas[i]} />
                     : <span>{n}</span>}
                 </td>
               ))}

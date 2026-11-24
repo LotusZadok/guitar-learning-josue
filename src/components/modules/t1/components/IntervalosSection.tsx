@@ -8,9 +8,12 @@ import { useUIStore } from "../../../../stores/useUIStore";
 import { ALL } from "../../../../data/notes";
 import {
   majorScaleSpelled,
+  octavasDesdeRaiz,
+  octavasLetrasDeIntervalos,
   tonicChromatic,
 } from "../../../../utils/noteCalculations";
-import type { NoteSpelling } from "../../../../types/music";
+import { conOctavas, notasDe } from "../../../../utils/prose";
+import type { NoteSpelling, Tonic } from "../../../../types/music";
 import type { ProseSegment, ProseFragment } from "../../../../types/prose";
 import styles from "./IntervalosSection.module.css";
 
@@ -83,7 +86,16 @@ function buildStep1(letterIdx: number, locale: string): StepWithBreak {
   return { prefix, notes };
 }
 
-function buildStep2(tonicIdx: number, locale: string): StepWithBreak {
+// #12 y #15: la fila sube desde la tónica y la 8J suena una octava arriba.
+function anclarDesdeRaiz(tonic: Tonic, segment: ProseSegment): ProseSegment {
+  return conOctavas(segment, octavasDesdeRaiz(tonic, notasDe(segment)));
+}
+
+function buildStep2(
+  tonicIdx: number,
+  octavas: number[],
+  locale: string,
+): StepWithBreak {
   const prefix: ProseSegment = [
     {
       type: "text",
@@ -99,12 +111,12 @@ function buildStep2(tonicIdx: number, locale: string): StepWithBreak {
     const flat = SHARP_TO_FLAT_ASCII[note];
     if (flat) {
       notes.push(
-        { type: "note", value: note },
+        { type: "note", value: note, octave: octavas[i] },
         { type: "text", value: "/" },
-        { type: "note", value: flat as NoteSpelling },
+        { type: "note", value: flat as NoteSpelling, octave: octavas[i] },
       );
     } else {
-      notes.push({ type: "note", value: note });
+      notes.push({ type: "note", value: note, octave: octavas[i] });
     }
     notes.push({ type: "text", value: i < 12 ? " " : "." });
   }
@@ -202,6 +214,11 @@ export default function IntervalosSection() {
     [tonicAscii],
   );
   const tonicIdx = useMemo(() => ALL.indexOf(tonicChromatic(tonic)), [tonic]);
+  // Octava de cada una de las 13 posiciones cromáticas desde la tónica (T…8J).
+  const octavasCromaticas = useMemo(
+    () => octavasDesdeRaiz(tonic, Array.from({ length: 13 }, (_, i) => ALL[(tonicIdx + i) % 12])),
+    [tonic, tonicIdx],
+  );
   // letter-rule explanation (generic, keeps B/Bb example) + closing step.
   const letterRule = t("t1.s04.step_letter_rule", {
     returnObjects: true,
@@ -213,21 +230,27 @@ export default function IntervalosSection() {
     [tonicAscii, locale],
   );
   const procedimientoPasos = useMemo(
-    () => [
-      buildStep1(tonicLetterIdx, locale),
-      buildStep2(tonicIdx, locale),
-      letterRule,
-      stepUpdate,
-    ],
-    [tonicLetterIdx, tonicIdx, locale, letterRule, stepUpdate],
+    () => {
+      const step1 = buildStep1(tonicLetterIdx, locale);
+      return [
+        {
+          ...step1,
+          notes: conOctavas(step1.notes, octavasLetrasDeIntervalos(notasDe(step1.notes))),
+        },
+        buildStep2(tonicIdx, octavasCromaticas, locale),
+        letterRule,
+        stepUpdate,
+      ];
+    },
+    [tonicLetterIdx, tonicIdx, octavasCromaticas, locale, letterRule, stepUpdate],
   );
   const resultadoCells = useMemo(
     () => buildResultadoCells(tonicIdx, tonicLetterIdx),
     [tonicIdx, tonicLetterIdx],
   );
   const octava = useMemo(
-    () => buildOctava(tonicAscii, locale),
-    [tonicAscii, locale],
+    () => anclarDesdeRaiz(tonic, buildOctava(tonicAscii, locale)),
+    [tonic, tonicAscii, locale],
   );
 
   return (
@@ -315,7 +338,7 @@ export default function IntervalosSection() {
                   {spellings.map((s, j) => (
                     <Fragment key={j}>
                       {j > 0 && " / "}
-                      <NoteToken note={s} />
+                      <NoteToken note={s} octave={octavasCromaticas[i]} />
                     </Fragment>
                   ))}
                 </td>

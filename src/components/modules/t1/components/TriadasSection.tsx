@@ -6,10 +6,11 @@ import NoteToken from '../../../shared/NoteToken/NoteToken';
 import Prose from '../../../shared/Prose/Prose';
 import TriadsSection from '../../../primitives/Triads/TriadsSection';
 import TriadaProceso from '../../../primitives/TriadaProceso/TriadaProceso';
-import type { NaturalNote, NoteSpelling } from '../../../../types/music';
+import type { NaturalNote, NoteSpelling, Tonic } from '../../../../types/music';
 import type { ProseSegment } from '../../../../types/prose';
 import { useUIStore } from '../../../../stores/useUIStore';
 import { NATURALS } from '../../../../data/notes';
+import { octavasDesdeRaiz } from '../../../../utils/noteCalculations';
 import styles from './TriadasSection.module.css';
 
 // Datos musicales (§1.6): las 7 tríadas de las notas naturales, rotadas desde la
@@ -25,12 +26,13 @@ function buildTriadTable(root: NaturalNote): { head: NaturalNote[]; row: string[
   return { head, row };
 }
 
-function renderTriadCell(cell: string) {
+function renderTriadCell(cell: string, tonic: Tonic) {
   const parts = cell.split(' ') as NoteSpelling[];
+  const octavas = octavasDesdeRaiz(tonic, parts);
   return parts.map((p, i) => (
     <Fragment key={i}>
       {i > 0 && ' '}
-      <NoteToken note={p} />
+      <NoteToken note={p} octave={octavas[i]} />
     </Fragment>
   ));
 }
@@ -81,7 +83,7 @@ export default function TriadasSection() {
           <tbody>
             <tr>
               {row.map((c, i) => (
-                <td key={i}>{renderTriadCell(c)}</td>
+                <td key={i}>{renderTriadCell(c, tonic)}</td>
               ))}
             </tr>
           </tbody>
