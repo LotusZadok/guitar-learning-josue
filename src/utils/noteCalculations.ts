@@ -247,14 +247,34 @@ export function octavasDesdeLaPrimera(tonic: Tonic, notas: string[]): number[] {
   return notas.map((n) => octaveAboveTonic(raiz, n, base));
 }
 
-// Paso 1 de §1.3: las letras de los 13 intervalos se repiten (2m y 2M son la
-// misma letra), así que se miden contra la raíz; solo la última (8J) sube. La
-// letra de la tónica es el piso (con Fa♯, la letra Fa en octava 4, no en 5).
-export function octavasLetrasDeIntervalos(letras: string[]): number[] {
-  if (letras.length === 0) return [];
-  const octavas = octavasDesdeLaPrimera(letras[0] as Tonic, letras);
-  if (octavas.length > 1) octavas[octavas.length - 1] = octavas[0] + 1;
-  return octavas;
+// §1.3 (reunión 22/11/26, #7): los pasos 1 y 2 del procedimiento y el
+// Resultado, como tres filas de 13 celdas alineadas con T…8J.
+// Letra de cada intervalo (0–12 semitonos); el tritono lleva las dos letras.
+const LETTER_OFFSETS_13 = [0, 1, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6, 0] as const;
+const TRITONO = 6;
+
+export interface FilasDeIntervalos {
+  letras: string[];
+  cromatico: NoteSpelling[][];
+  resultado: NoteSpelling[][];
+}
+
+export function filasDeIntervalos(tonic: Tonic): FilasDeIntervalos {
+  const letra0 = LETTERS.indexOf(tonic[0] as (typeof LETTERS)[number]);
+  const letraEn = (offset: number) => LETTERS[(letra0 + offset) % 7];
+  const letras = LETTER_OFFSETS_13.map((o, i) =>
+    i === TRITONO ? `${letraEn(3)}-${letraEn(4)}` : letraEn(o),
+  );
+  const cromatico = spelledChromaticCircle(tonic).map(({ sharp, flat }) =>
+    [sharp, flat].filter((n): n is string => n !== null).map((n) => aAscii(n) as NoteSpelling),
+  );
+  // Resultado: la grafía cuya letra coincide con el paso 1; el tritono muestra las dos.
+  const resultado = cromatico.map((grafias, i) =>
+    grafias.length === 1 || i === TRITONO
+      ? grafias
+      : [grafias.find((g) => g[0] === letras[i]) ?? grafias[0]],
+  );
+  return { letras, cromatico, resultado };
 }
 
 // === Generalized enharmonic interval spelling (reunión 24/5/26) ===

@@ -5,16 +5,14 @@ import Prose from "../../../shared/Prose/Prose";
 import NoteToken from "../../../shared/NoteToken/NoteToken";
 import IntervalsSection from "../../../primitives/Intervals/IntervalsSection";
 import { useUIStore } from "../../../../stores/useUIStore";
-import { ALL } from "../../../../data/notes";
 import {
   majorScaleSpelled,
   octavasDesdeRaiz,
-  octavasLetrasDeIntervalos,
-  tonicChromatic,
+  filasDeIntervalos,
 } from "../../../../utils/noteCalculations";
 import { conOctavas, notasDe } from "../../../../utils/prose";
 import type { NoteSpelling, Tonic } from "../../../../types/music";
-import type { ProseSegment, ProseFragment } from "../../../../types/prose";
+import type { ProseSegment } from "../../../../types/prose";
 import styles from "./IntervalosSection.module.css";
 
 // Datos musicales (§1.3): los 13 intervalos dentro de una octava y sus
@@ -30,18 +28,6 @@ const INTERVALOS_13_SEMIS = [
 // These replace the hardcoded G exports. Each function returns a ProseSegment
 // (or a step array) derived from the active tonic.
 
-const NATURAL_LETTERS_7 = ["C", "D", "E", "F", "G", "A", "B"] as const;
-const SHARP_TO_FLAT_ASCII: Record<string, string> = {
-  "C#": "Db",
-  "D#": "Eb",
-  "F#": "Gb",
-  "G#": "Ab",
-  "A#": "Bb",
-};
-// Letter offset for each of the 13 interval positions (0–12 semitones).
-// Position 6 = tritone: rendered with both adjacent letters (handled separately).
-const LETTER_OFFSETS_13 = [0, 1, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6, 0] as const;
-
 function buildTitulo(tonicAscii: string, locale: string): ProseSegment {
   const text =
     locale === "de"
@@ -53,101 +39,32 @@ function buildTitulo(tonicAscii: string, locale: string): ProseSegment {
   ];
 }
 
-// Reunión 24/5/26: el prefijo de texto y la lista de notas van en líneas separadas.
-// Devolvemos un tuple [prefix, notes] que el render coloca con <br/> entre medio.
-type StepWithBreak = { prefix: ProseSegment; notes: ProseSegment };
-
-function buildStep1(letterIdx: number, locale: string): StepWithBreak {
-  const prefix: ProseSegment = [
-    {
-      type: "text",
-      value:
-        locale === "de"
-          ? "Die Buchstaben nach der Intervallnummer aufschreiben (Alterierungen ignorieren):"
-          : "Escribir las letras según el número del intervalo (ignorando alteraciones):",
-    },
-  ];
-  const notes: ProseFragment[] = [];
-  for (let i = 0; i <= 12; i++) {
-    if (i === 6) {
-      const l3 = NATURAL_LETTERS_7[(letterIdx + 3) % 7];
-      const l4 = NATURAL_LETTERS_7[(letterIdx + 4) % 7];
-      notes.push(
-        { type: "note", value: l3 },
-        { type: "text", value: "-" },
-        { type: "note", value: l4 },
-      );
-    } else {
-      const letter = NATURAL_LETTERS_7[(letterIdx + LETTER_OFFSETS_13[i]) % 7];
-      notes.push({ type: "note", value: letter });
-    }
-    notes.push({ type: "text", value: i < 12 ? " " : "." });
+// Reunión 22/11/26 (#7): las notas de los pasos 1 y 2 dejan el párrafo y pasan a
+// filas de la tabla de intervalos, alineadas con T…8J (supera la decisión del
+// 24/5/26 de poner el prefijo y la lista en líneas separadas).
+function textoPaso(paso: 1 | 2, locale: string): string {
+  if (paso === 1) {
+    return locale === "de"
+      ? "Die Buchstaben nach der Intervallnummer aufschreiben (Alterierungen ignorieren)."
+      : "Escribir las letras según el número del intervalo (ignorando alteraciones).";
   }
-  return { prefix, notes };
+  return locale === "de"
+    ? "Den chromatischen Kreis ab der Tonika aufschreiben."
+    : "Escribir el círculo cromático desde la tónica.";
 }
 
-// #12 y #15: la fila sube desde la tónica y la 8J suena una octava arriba.
+// #12 y #15: la prosa de la 8J sube desde la tónica.
 function anclarDesdeRaiz(tonic: Tonic, segment: ProseSegment): ProseSegment {
   return conOctavas(segment, octavasDesdeRaiz(tonic, notasDe(segment)));
 }
 
-function buildStep2(
-  tonicIdx: number,
-  octavas: number[],
-  locale: string,
-): StepWithBreak {
-  const prefix: ProseSegment = [
-    {
-      type: "text",
-      value:
-        locale === "de"
-          ? "Den chromatischen Kreis ab der Tonika aufschreiben:"
-          : "Escribir el círculo cromático desde la tónica:",
-    },
-  ];
-  const notes: ProseFragment[] = [];
-  for (let i = 0; i <= 12; i++) {
-    const note = ALL[(tonicIdx + i) % 12];
-    const flat = SHARP_TO_FLAT_ASCII[note];
-    if (flat) {
-      notes.push(
-        { type: "note", value: note, octave: octavas[i] },
-        { type: "text", value: "/" },
-        { type: "note", value: flat as NoteSpelling, octave: octavas[i] },
-      );
-    } else {
-      notes.push({ type: "note", value: note, octave: octavas[i] });
-    }
-    notes.push({ type: "text", value: i < 12 ? " " : "." });
-  }
-  return { prefix, notes };
-}
-
-// Las 13 notas del resultado como spellings ASCII para la tabla comparativa
-// (1.3): cada columna es un intervalo, cada celda su(s) nota(s) — el tritono
-// es la única celda con dos grafías (ambas tokenizadas, separadas por " / ").
-// Reunión 9/6/26: el párrafo "Resultado para X: ..." se eliminó; la tabla es
-// el único resultado.
-function buildResultadoCells(
-  tonicIdx: number,
-  letterIdx: number,
-): NoteSpelling[][] {
-  const cells: NoteSpelling[][] = [];
-  for (let i = 0; i <= 12; i++) {
-    const note = ALL[(tonicIdx + i) % 12];
-    const flat = SHARP_TO_FLAT_ASCII[note];
-    if (flat && i === 6) {
-      // Tritone always shows both enharmonic spellings
-      cells.push([note, flat as NoteSpelling]);
-    } else if (flat) {
-      const expected =
-        NATURAL_LETTERS_7[(letterIdx + LETTER_OFFSETS_13[i]) % 7];
-      cells.push([flat[0] === expected ? (flat as NoteSpelling) : note]);
-    } else {
-      cells.push([note]);
-    }
-  }
-  return cells;
+function renderNotas(grafias: NoteSpelling[], octave: number) {
+  return grafias.map((g, j) => (
+    <Fragment key={g}>
+      {j > 0 && " / "}
+      <NoteToken note={g} octave={octave} />
+    </Fragment>
+  ));
 }
 
 function buildOctava(tonicAscii: string, locale: string): ProseSegment {
@@ -180,17 +97,8 @@ function buildOctava(tonicAscii: string, locale: string): ProseSegment {
 
 const GRADE_LABELS = ["T", "2", "3", "4", "5", "6", "7"] as const;
 
-function renderStep(step: string | ProseSegment | StepWithBreak) {
+function renderStep(step: string | ProseSegment) {
   if (typeof step === "string") return step;
-  if ("prefix" in step && "notes" in step) {
-    return (
-      <>
-        <Prose segment={step.prefix} />
-        <br />
-        <Prose segment={step.notes} />
-      </>
-    );
-  }
   return <Prose segment={step} />;
 }
 
@@ -206,18 +114,11 @@ export default function IntervalosSection() {
     () => spelledScale[0].replace("♯", "#").replace("♭", "b"),
     [spelledScale],
   );
-  const tonicLetterIdx = useMemo(
-    () =>
-      NATURAL_LETTERS_7.indexOf(
-        tonicAscii[0] as (typeof NATURAL_LETTERS_7)[number],
-      ),
-    [tonicAscii],
-  );
-  const tonicIdx = useMemo(() => ALL.indexOf(tonicChromatic(tonic)), [tonic]);
+  const filas = useMemo(() => filasDeIntervalos(tonic), [tonic]);
   // Octava de cada una de las 13 posiciones cromáticas desde la tónica (T…8J).
   const octavasCromaticas = useMemo(
-    () => octavasDesdeRaiz(tonic, Array.from({ length: 13 }, (_, i) => ALL[(tonicIdx + i) % 12])),
-    [tonic, tonicIdx],
+    () => octavasDesdeRaiz(tonic, filas.cromatico.map((c) => c[0])),
+    [tonic, filas],
   );
   // letter-rule explanation (generic, keeps B/Bb example) + closing step.
   const letterRule = t("t1.s04.step_letter_rule", {
@@ -230,23 +131,8 @@ export default function IntervalosSection() {
     [tonicAscii, locale],
   );
   const procedimientoPasos = useMemo(
-    () => {
-      const step1 = buildStep1(tonicLetterIdx, locale);
-      return [
-        {
-          ...step1,
-          notes: conOctavas(step1.notes, octavasLetrasDeIntervalos(notasDe(step1.notes))),
-        },
-        buildStep2(tonicIdx, octavasCromaticas, locale),
-        letterRule,
-        stepUpdate,
-      ];
-    },
-    [tonicLetterIdx, tonicIdx, octavasCromaticas, locale, letterRule, stepUpdate],
-  );
-  const resultadoCells = useMemo(
-    () => buildResultadoCells(tonicIdx, tonicLetterIdx),
-    [tonicIdx, tonicLetterIdx],
+    () => [textoPaso(1, locale), textoPaso(2, locale), letterRule, stepUpdate],
+    [locale, letterRule, stepUpdate],
   );
   const octava = useMemo(
     () => anclarDesdeRaiz(tonic, buildOctava(tonicAscii, locale)),
@@ -331,17 +217,24 @@ export default function IntervalosSection() {
             </tr>
           </thead>
           <tbody>
+            {/* Paso 1: letras como texto plano. Una letra natural como NoteToken
+                sonaría y se colorearía como otra nota (DESIGN §5, excepción 1). */}
+            <tr>
+              <th scope="row">{locale === "de" ? "Schritt 1" : "Paso 1"}</th>
+              {filas.letras.map((l, i) => (
+                <td key={i}>{l}</td>
+              ))}
+            </tr>
+            <tr>
+              <th scope="row">{locale === "de" ? "Schritt 2" : "Paso 2"}</th>
+              {filas.cromatico.map((grafias, i) => (
+                <td key={i}>{renderNotas(grafias, octavasCromaticas[i])}</td>
+              ))}
+            </tr>
             <tr>
               <th scope="row">{locale === "de" ? "Ergebnis" : "Resultado"}</th>
-              {resultadoCells.map((spellings, i) => (
-                <td key={i}>
-                  {spellings.map((s, j) => (
-                    <Fragment key={j}>
-                      {j > 0 && " / "}
-                      <NoteToken note={s} octave={octavasCromaticas[i]} />
-                    </Fragment>
-                  ))}
-                </td>
+              {filas.resultado.map((grafias, i) => (
+                <td key={i}>{renderNotas(grafias, octavasCromaticas[i])}</td>
               ))}
             </tr>
           </tbody>

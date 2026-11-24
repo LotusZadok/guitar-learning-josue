@@ -8,10 +8,10 @@ import {
   majorScaleSpelled,
   octavasDesdeLaPrimera,
   octavasDesdeRaiz,
-  octavasLetrasDeIntervalos,
   otrasGrafias,
   pasoSemitonos,
   pitchClass,
+  filasDeIntervalos,
   spelledIntervalFromTonic,
   tablaCromaticaDesdeTonica,
   tonicChromatic,
@@ -72,12 +72,6 @@ check('#12 1.4: con las 17 tónicas la 8J suena sobre la 7M',
 check('#24 tónica Mi, Re → La: La sobre Re', sube(midis(['D', 'A'], octavasDesdeLaPrimera('E', ['D', 'A']))), true);
 check('#24 Si → Fa♯ (no Fa): ambas quintas sobre Si', octavasDesdeLaPrimera('C', ['B', 'F#', 'F']), [4, 5, 5]);
 check('#24 Si♭ → Fa, y La♯ vuelve a la raíz', octavasDesdeLaPrimera('C', ['Bb', 'F', 'A#']), [4, 5, 4]);
-// Paso 1 de 1.3: las letras se repiten (2m y 2M son la misma letra) y no deben subir.
-check('1.3 paso 1 en Do: letras repetidas no suben, la 8J sí',
-  octavasLetrasDeIntervalos(['C', 'D', 'D', 'E', 'E', 'F', 'F', 'G', 'G', 'A', 'A', 'B', 'B', 'C']),
-  [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5]);
-check('1.3 paso 1 en La: suben desde La', octavasLetrasDeIntervalos(['A', 'B', 'B', 'C', 'A']), [4, 4, 4, 5, 5]);
-check('1.3 paso 1 en Fa♯: la letra Fa es el piso', octavasLetrasDeIntervalos(['F', 'G', 'G'])[0], 4);
 check('conOctavas pone la octava solo en las notas, en orden',
   conOctavas([{ type: 'note', value: 'D' }, { type: 'text', value: ' → ' }, { type: 'note', value: 'A' }], [4, 5]),
   [{ type: 'note', value: 'D', octave: 4 }, { type: 'text', value: ' → ' }, { type: 'note', value: 'A', octave: 5 }]);
@@ -99,5 +93,15 @@ check('#21 aclaración: 3m de Sol♭ es B♭♭, no A', otrasGrafias('Gb', 3, 'B
 check('#21 aclaración: 3M de La es C♯, no D♭', otrasGrafias('A', 4, 'C♯'), ['D♭']);
 check('#21 sin aclaración: 3M de Do', otrasGrafias('C', 4, 'E'), []);
 check('aAscii reemplaza todas las alteraciones', [aAscii('A♭♭'), aAscii('F♯')], ['Abb', 'F#']);
+
+console.log('\n· 1.3 filas del procedimiento alineadas (reunión 22/11/26, #7) ·');
+check('con las 17 tónicas las tres filas tienen 13 celdas',
+  TONICAS.filter((t) => { const f = filasDeIntervalos(t); return f.letras.length !== 13 || f.cromatico.length !== 13 || f.resultado.length !== 13; }), []);
+check('con las 17 tónicas la celda i del paso 2 suena igual que la columna i del Resultado',
+  TONICAS.filter((t) => { const f = filasDeIntervalos(t); return f.cromatico.some((c, i) => pitchClass(c[0]) !== pitchClass(f.resultado[i][0])); }), []);
+check('paso 1 en Do: letras por número de intervalo, tritono con dos letras', filasDeIntervalos('C').letras,
+  ['C', 'D', 'D', 'E', 'E', 'F', 'F-G', 'G', 'A', 'A', 'B', 'B', 'C']);
+check('paso 2 en Fa♯ empieza en F# y tiene los dos nombres', filasDeIntervalos('F#').cromatico.slice(0, 2), [['F#', 'Gb'], ['G']]);
+check('Resultado en Fa: la 4J es Bb, el tritono B / Cb no: B', filasDeIntervalos('F').resultado.slice(5, 7), [['Bb'], ['B']]);
 
 resumen();
