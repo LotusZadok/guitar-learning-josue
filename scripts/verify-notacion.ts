@@ -1,6 +1,6 @@
 // Arnés de verificación de la notación (formatNote y afines).
 // Se corre con `npm run verify:notacion` (node --experimental-strip-types).
-import { formatNote, pitchClass } from '../src/utils/noteCalculations.ts';
+import { formatChordSymbol, formatNote, pitchClass } from '../src/utils/noteCalculations.ts';
 import { ALL, NOTE_DE } from '../src/data/notes.ts';
 import { check, resumen } from './verify-helpers.ts';
 
@@ -18,5 +18,13 @@ check('es: formatear lo ya formateado no cambia nada',
 check('es: la altura no cambia', ['F#', 'Bb', 'Bbb', 'E#', 'Cb'].filter((n) => pitchClass(formatNote(n, 'es')) !== pitchClass(n)), []);
 check('de: Mi♭ mayor se nombra E♭, nunca Dis', formatNote('Eb', 'de'), 'E♭');
 check('NOTE_DE coincide con formatNote en las 12 notas', ALL.filter((c) => NOTE_DE[c] !== formatNote(c, 'de')), []);
+
+console.log('\n· formatChordSymbol: cifrados en T2 a T5 (reunión 22/11/26, #8, #5) ·');
+check('de: Bm → Hm', formatChordSymbol('Bm', 'de'), 'Hm');
+check('de: Bbmaj7 y B♭maj7 → Bmaj7', [formatChordSymbol('Bbmaj7', 'de'), formatChordSymbol('B♭maj7', 'de')], ['Bmaj7', 'Bmaj7']);
+check('es: F#m7 → F♯m7', formatChordSymbol('F#m7', 'es'), 'F♯m7');
+check('es: Bm7b5 → Bm7♭5, la b de la quinta también', formatChordSymbol('Bm7b5', 'es'), 'Bm7♭5');
+check('es: F##dim → Fxdim', formatChordSymbol('F##dim', 'es'), 'Fxdim');
+check('es: idempotente', formatChordSymbol(formatChordSymbol('Ebmaj7', 'es'), 'es'), 'E♭maj7');
 
 resumen();

@@ -1,9 +1,11 @@
-import { useCallback, useMemo, useState, type KeyboardEvent } from 'react';
+import { useCallback, useMemo, useState, type KeyboardEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { useFireGate } from '../../../hooks/useFireGate';
 import { useUIStore } from '../../../stores/useUIStore';
 import { NOTE_COLORS, spelledToES } from '../../../data/notes';
 import {
+  formatNote,
   intervalMemberFromTonic,
   type IntervalMember,
   type IntervalNumber,
@@ -111,6 +113,7 @@ interface NodeProps {
 }
 
 function Node({ stop, x, member, active, onEnter, onLeave, onActivate }: NodeProps) {
+  const lang = useTranslation().i18n.language;
   const onKey = useCallback(
     (e: KeyboardEvent<SVGGElement>) => {
       if (e.key === 'Enter' || e.key === ' ') {
@@ -151,7 +154,7 @@ function Node({ stop, x, member, active, onEnter, onLeave, onActivate }: NodePro
         fill={colored ? '#fff' : 'var(--text-body)'}
         style={colored && member.spelled.length > 2 ? { fontSize: '11px' } : undefined}
       >
-        {colored ? member.spelled : stop.role}
+        {colored ? formatNote(member.spelled, lang) : stop.role}
       </text>
       <text className={styles.name} x={0} y={R + 17} fill="var(--muted)">
         {colored ? stop.role : nameES}

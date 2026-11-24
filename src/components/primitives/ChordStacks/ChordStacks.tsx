@@ -1,9 +1,11 @@
-import { useCallback, useMemo, useState, type KeyboardEvent } from 'react';
+import { useCallback, useMemo, useState, type KeyboardEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { useFireGate } from '../../../hooks/useFireGate';
 import { useUIStore } from '../../../stores/useUIStore';
 import { NOTE_COLORS, spelledToES } from '../../../data/notes';
 import {
+  formatNote,
   intervalMemberFromTonic,
   type IntervalMember,
   type IntervalNumber,
@@ -61,6 +63,7 @@ interface ChordColumnProps {
 }
 
 function ChordColumn({ chord, tonic }: ChordColumnProps) {
+  const lang = useTranslation().i18n.language;
   const { playNote } = useAudioEngine();
   const [playing, setPlaying] = useState(false);
   const [playIdx, setPlayIdx] = useState<number | null>(null); // -1 bloque; 0..n arpegio (asc)
@@ -118,7 +121,7 @@ function ChordColumn({ chord, tonic }: ChordColumnProps) {
 
   return (
     <div className={styles.col}>
-      <div className={styles.cifrado}>{tonicSpelled}{chord.suffix}</div>
+      <div className={styles.cifrado}>{formatNote(tonicSpelled, lang)}{chord.suffix}</div>
 
       <svg className={styles.stack} viewBox={`0 0 ${SVG_W} ${svgH}`} aria-hidden="true">
         {stacked.map(({ tone, m }, i) => {
@@ -174,7 +177,7 @@ function ChordColumn({ chord, tonic }: ChordColumnProps) {
                 fill={colored ? '#fff' : 'var(--text-body)'}
                 style={m.spelled.length > 2 ? { fontSize: '12px' } : undefined}
               >
-                {m.spelled}
+                {formatNote(m.spelled, lang)}
               </text>
             </g>
           );

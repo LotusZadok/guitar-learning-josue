@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { formatChordSymbol } from '../../../utils/noteCalculations';
 import RomanGlyph from '../../shared/RomanGlyph/RomanGlyph';
 import { acordeDeGrado, type Armadura } from '../../../utils/progresionAcordes';
 import {
@@ -60,6 +62,7 @@ export default function BancoGrados({
   modificadores,
   repeticion,
 }: Props) {
+  const lang = useTranslation().i18n.language;
   const [abierto, setAbierto] = useState<number | null>(null);
   const grados = gradosDe(modo);
   const armonicos = gradosArmonicosDe(modo);
@@ -74,13 +77,13 @@ export default function BancoGrados({
         className={`${styles.chip} ${extra ?? ''}`}
         data-role={rolDe(modo, id)}
         aria-pressed={armado}
-        aria-label={etiquetaArmar({ grado: id, acorde: acorde.cifrado })}
+        aria-label={etiquetaArmar({ grado: id, acorde: formatChordSymbol(acorde.cifrado, lang) })}
         draggable
         onDragStart={(e) => e.dataTransfer.setData('text/plain', id)}
         onClick={() => onArmar(armado ? null : id)}
       >
         <RomanGlyph roman={id} role={acorde.rol} />
-        <span className={styles.cifrado}>{acorde.cifrado}</span>
+        <span className={styles.cifrado}>{formatChordSymbol(acorde.cifrado, lang)}</span>
       </button>
     );
   };

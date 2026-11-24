@@ -1,4 +1,6 @@
 import { armaduraPorId, etiquetaTonalidad } from '../../../utils/progresionAcordes';
+import { useTranslation } from 'react-i18next';
+import { formatChordSymbol } from '../../../utils/noteCalculations';
 import { puntoEnCirculo } from '../../../utils/circuloQuintas';
 import type { Modo, Tonalidad } from '../../../utils/progresionArmonica';
 import styles from './CirculoTonalidades.module.css';
@@ -28,12 +30,13 @@ interface Props {
 }
 
 export default function CirculoTonalidades({ armaduraId, modo, onTonalidad, labels, septimas }: Props) {
+  const lang = useTranslation().i18n.language;
   const activa = armaduraPorId(armaduraId);
 
   const nodo = (id: string, i: number, modoNodo: Modo) => {
     const armadura = armaduraPorId(id);
     const { x, y } = puntoEnCirculo(i, modoNodo === 'mayor' ? RADIO_MAYOR : RADIO_MENOR, CENTRO);
-    const etiqueta = etiquetaTonalidad(armadura, modoNodo);
+    const etiqueta = formatChordSymbol(etiquetaTonalidad(armadura, modoNodo), lang);
     const tonica = modoNodo === 'mayor' ? etiqueta : etiqueta.slice(0, -1);
     return (
       <button
@@ -57,7 +60,7 @@ export default function CirculoTonalidades({ armaduraId, modo, onTonalidad, labe
         {ORDEN_ARMADURAS.map((id, i) => nodo(id, i, 'mayor'))}
         {ORDEN_ARMADURAS.map((id, i) => nodo(id, i, 'menor'))}
         <span className={styles.centro} aria-hidden="true">
-          {etiquetaTonalidad(activa, modo)}
+          {formatChordSymbol(etiquetaTonalidad(activa, modo), lang)}
           <span className={styles.armadura}>
             {activa.alteraciones === 0 ? '♮' : `${activa.alteraciones}${activa.tipo === 'sostenido' ? '♯' : '♭'}`}
           </span>

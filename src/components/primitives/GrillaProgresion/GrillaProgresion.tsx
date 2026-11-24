@@ -1,4 +1,6 @@
 import RomanGlyph from '../../shared/RomanGlyph/RomanGlyph';
+import { useTranslation } from 'react-i18next';
+import { formatChordSymbol } from '../../../utils/noteCalculations';
 import { acordeDeSlot, armaduraPorId, etiquetaTonalidad } from '../../../utils/progresionAcordes';
 import {
   ACENTOS,
@@ -84,6 +86,7 @@ export default function GrillaProgresion({
   grid, compas, nCompases, sonando, hayGradoArmado, modificadorArmado, onModificar, etiquetaModificar,
   onColocar, onVaciar, onSoltar, etiquetaModulacion, etiquetaCasilla, repeticion,
 }: Props) {
+  const lang = useTranslation().i18n.language;
   const { tramo } = repeticion;
   const porCompas = CASILLAS_POR_COMPAS[compas];
   const acentos = ACENTOS[compas];
@@ -96,7 +99,7 @@ export default function GrillaProgresion({
   const tramos = puntosDeModulacion(grid);
   const rotulos = new Map(
     tramos.length > 1
-      ? tramos.map((p) => [p.indice, etiquetaTonalidad(armaduraPorId(p.tonalidad.armaduraId), p.tonalidad.modo)])
+      ? tramos.map((p) => [p.indice, formatChordSymbol(etiquetaTonalidad(armaduraPorId(p.tonalidad.armaduraId), p.tonalidad.modo), lang)])
       : [],
   );
 
@@ -156,8 +159,8 @@ export default function GrillaProgresion({
                 accion === 'marcar'
                   ? repeticion.etiquetaMarcar(repeticion.armada!, c + 1)
                   : accion === 'modificar'
-                  ? etiquetaModificar({ compas: c + 1, pulso: p + 1, acorde: acorde?.cifrado ?? '', modificador: modificadorArmado! })
-                  : etiquetaCasilla(accion, { compas: c + 1, pulso: p + 1, acorde: acorde?.cifrado });
+                  ? etiquetaModificar({ compas: c + 1, pulso: p + 1, acorde: acorde ? formatChordSymbol(acorde.cifrado, lang) : '', modificador: modificadorArmado! })
+                  : etiquetaCasilla(accion, { compas: c + 1, pulso: p + 1, acorde: acorde ? formatChordSymbol(acorde.cifrado, lang) : undefined });
               const ariaLabel = rotulo ? `${ariaAccion}. ${etiquetaModulacion(rotulo)}` : ariaAccion;
               return (
                 <button
@@ -190,7 +193,7 @@ export default function GrillaProgresion({
                   {slot && acorde ? (
                     <>
                       <RomanGlyph roman={slot.degree} role={acorde.rol} />
-                      <span className={styles.cifrado}>{acorde.cifrado}</span>
+                      <span className={styles.cifrado}>{formatChordSymbol(acorde.cifrado, lang)}</span>
                     </>
                   ) : (
                     <span className={styles.ligadura} aria-hidden="true" />

@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { ALL, NOTE_COLORS } from '../../../data/notes';
-import { tonicChromatic } from '../../../utils/noteCalculations';
+import { formatNote, tonicChromatic } from '../../../utils/noteCalculations';
 import type { ChromaticNote, Tonic } from '../../../types/music';
 import styles from './RelativasMenores.module.css';
 
@@ -16,7 +16,7 @@ const NOTE_DURATION = 1.4;
 const FLAT_LABELS: Partial<Record<ChromaticNote, string>> = {
   'D#': 'E♭', 'G#': 'A♭', 'A#': 'B♭',
 };
-const noteLabel = (n: ChromaticNote) => FLAT_LABELS[n] ?? n;
+const noteLabel = (n: ChromaticNote, lang: string) => formatNote(FLAT_LABELS[n] ?? n, lang);
 
 function nodePos(idx: number): { x: number; y: number } {
   const rad = (idx * 30 - 90) * (Math.PI / 180);
@@ -28,6 +28,7 @@ const NODES = ALL.map((note, i) => ({ note, ...nodePos(i) }));
 export default function RelativasMenores({ tonic }: Props) {
   const { i18n } = useTranslation();
   const isDe = i18n.language === 'de';
+  const lang = i18n.language;
   const [hovered, setHovered] = useState<ChromaticNote | null>(null);
   const { playNote } = useAudioEngine();
   const tonicChrom = tonicChromatic(tonic);
@@ -52,8 +53,8 @@ export default function RelativasMenores({ tonic }: Props) {
         viewBox="0 0 400 400"
         role="img"
         aria-label={isDe
-          ? `Chromatischer Kreis: ${noteLabel(tonicChrom)}-Dur und seine Moll-Paralleltonart ${noteLabel(relativeMinor)}-Moll teilen dieselben Vorzeichen`
-          : `Círculo cromático: ${noteLabel(tonicChrom)} mayor y su relativa ${noteLabel(relativeMinor)} menor comparten la misma armadura`}
+          ? `Chromatischer Kreis: ${noteLabel(tonicChrom, lang)}-Dur und seine Moll-Paralleltonart ${noteLabel(relativeMinor, lang)}-Moll teilen dieselben Vorzeichen`
+          : `Círculo cromático: ${noteLabel(tonicChrom, lang)} mayor y su relativa ${noteLabel(relativeMinor, lang)} menor comparten la misma armadura`}
       >
         {/* Interior arc between tonic and relative minor */}
         <path
@@ -90,8 +91,8 @@ export default function RelativasMenores({ tonic }: Props) {
               tabIndex={0}
               role="button"
               aria-label={isDe
-                ? `${noteLabel(note)}${isTonic ? ' (Dur-Tonika)' : isRelative ? ' (Moll-Paralleltonart)' : ''}: Ton abspielen`
-                : `${noteLabel(note)}${isTonic ? ' (tónica mayor)' : isRelative ? ' (relativa menor)' : ''}: reproducir nota`}
+                ? `${noteLabel(note, lang)}${isTonic ? ' (Dur-Tonika)' : isRelative ? ' (Moll-Paralleltonart)' : ''}: Ton abspielen`
+                : `${noteLabel(note, lang)}${isTonic ? ' (tónica mayor)' : isRelative ? ' (relativa menor)' : ''}: reproducir nota`}
               onMouseEnter={() => { setHovered(note); handleAudio(note); }}
               onMouseLeave={() => setHovered(null)}
               onFocus={() => setHovered(note)}
@@ -115,7 +116,7 @@ export default function RelativasMenores({ tonic }: Props) {
                 className={styles.noteText}
                 fill={textFill}
               >
-                {noteLabel(note)}
+                {noteLabel(note, lang)}
               </text>
             </g>
           );

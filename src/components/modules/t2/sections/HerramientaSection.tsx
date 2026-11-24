@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
+import { formatNote } from '../../../../utils/noteCalculations';
 import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
 import styles from './HerramientaSection.module.css';
@@ -56,15 +57,15 @@ export default function HerramientaSection() {
 
       <div className={styles.toolBox}>
         <div className={styles.toolRow}>
-          <span className={styles.rowLabel}>#</span>
+          <span className={styles.rowLabel}>♯</span>
           {HERRAMIENTA_SOSTENIDOS.map(n => (
-            <span key={n} className={styles.noteSharp}>{n}</span>
+            <span key={n} className={styles.noteSharp}>{formatNote(n, i18n.language)}</span>
           ))}
         </div>
         <div className={styles.toolRow}>
           <span className={styles.rowLabel}>♭</span>
           {HERRAMIENTA_BEMOLES.map(n => (
-            <span key={n} className={styles.noteFlat}>{toFlat(n)}</span>
+            <span key={n} className={styles.noteFlat}>{formatNote(n, i18n.language)}</span>
           ))}
         </div>
       </div>

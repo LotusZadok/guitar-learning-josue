@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { formatChordSymbol } from '../../../../utils/noteCalculations';
 import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
 import CirculoTonalidades from '../../../primitives/CirculoTonalidades/CirculoTonalidades';
@@ -22,7 +23,8 @@ import styles from './ConstructorProgresionesSection.module.css';
 // no puntúa, no guarda (PRODUCT.md). Esta sección solo compone: el estado vive
 // en useConstructorStore y el reloj en useProgressionPlayback.
 export default function ConstructorProgresionesSection() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
   const s = useConstructorStore();
   const armadura = armaduraPorId(s.armaduraId);
   const [modulacionPendiente, setModulacionPendiente] = useState<Tonalidad | null>(null);
@@ -124,8 +126,8 @@ export default function ConstructorProgresionesSection() {
         <p id="aviso-modular" className={styles.text}>
           {modulacionPendiente &&
             t('t4.s41.aviso_modular', {
-              tonalidad: etiquetaTonalidad(armaduraPorId(modulacionPendiente.armaduraId), modulacionPendiente.modo),
-              actual: etiquetaTonalidad(armadura, s.modo),
+              tonalidad: formatChordSymbol(etiquetaTonalidad(armaduraPorId(modulacionPendiente.armaduraId), modulacionPendiente.modo), lang),
+              actual: formatChordSymbol(etiquetaTonalidad(armadura, s.modo), lang),
             })}
         </p>
         <form method="dialog" className={styles.avisoAcciones}>

@@ -1,7 +1,8 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useChordPlayer } from '../../../hooks/useChordPlayer';
 import { useUIStore } from '../../../stores/useUIStore';
-import { tonizacionEscenarios } from '../../../utils/noteCalculations';
+import { formatChordSymbol, tonizacionEscenarios } from '../../../utils/noteCalculations';
 import PlaybackButton from '../../shared/PlaybackButton/PlaybackButton';
 import styles from './EscenariosTonizacion.module.css';
 
@@ -18,6 +19,7 @@ interface Props {
 // ii°-V7-i de la relativa menor, todos con séptima (reunión 19/10/26). Grados y
 // cifrados salen de la tónica activa vía `tonizacionEscenarios`.
 export default function EscenariosTonizacion({ labels }: Props) {
+  const lang = useTranslation().i18n.language;
   const tonic = useUIStore((s) => s.tonic);
   const { playChord, at, clear } = useChordPlayer(NOTE_DURATION);
   const escenarios = useMemo(() => tonizacionEscenarios(tonic), [tonic]);
@@ -85,10 +87,10 @@ export default function EscenariosTonizacion({ labels }: Props) {
             className={`${styles.card} ${activo === i ? styles.cardActive : ''}`}
             onClick={() => playCard(i)}
             disabled={playing != null}
-            aria-label={g.chord.cifrado}
+            aria-label={formatChordSymbol(g.chord.cifrado, lang)}
           >
             <span className={styles.roman}>{g.roman}</span>
-            <span className={styles.cifrado}>{g.chord.cifrado}</span>
+            <span className={styles.cifrado}>{formatChordSymbol(g.chord.cifrado, lang)}</span>
           </button>
         ))}
       </div>

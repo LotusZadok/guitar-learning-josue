@@ -4,6 +4,7 @@ import { Note, Chord } from 'tonal';
 // --experimental-strip-types. `allowImportingTsExtensions` ya está activo en
 // tsconfig.app.json y Vite las resuelve sin problema.
 import {
+  formatChordSymbol,
   harmonicMinorScaleSpelled,
   majorScaleSpelled,
   relativeMinorScaleSpelled,
@@ -61,16 +62,13 @@ export function armaduraPorId(id: string): Armadura {
 }
 
 const ASCII = (s: string) => s.replace(/x/g, '##').replace(/♯/g, '#').replace(/♭/g, 'b');
-// El doble sostenido se escribe 'x', no '♯♯': es la convención que ya fija
-// noteCalculations (`diff === 2 → "x"`, documentada en ChordMember como
-// "Cx"). Sin este caso, el reemplazo global de '#' produciría 'F♯♯dim' donde
-// el resto de la app muestra 'Fxdim'. Alcanzable en Do♯ mayor (7♯): las
-// tonizaciones ii/iii y ii/v caen ahí.
-const GLIFO = (s: string) => s.replace(/##/g, 'x').replace(/#/g, '♯').replace(/b/g, '♭');
+// Los cifrados se guardan con glifos en español (`formatChordSymbol`, que
+// escribe el doble sostenido 'x': 'Fxdim', alcanzable en Do♯ mayor); el alemán
+// se aplica al mostrarlos.
 
 /** Etiqueta de la tonalidad tal como se muestra: 'A' o 'F♯m'. */
 export function etiquetaTonalidad(armadura: Armadura, modo: Modo): string {
-  return modo === 'mayor' ? GLIFO(armadura.mayor) : `${GLIFO(armadura.menor)}m`;
+  return formatChordSymbol(modo === 'mayor' ? armadura.mayor : `${armadura.menor}m`, 'es');
 }
 
 export interface AcordeSonante {
@@ -169,7 +167,7 @@ export function acordeDeGrado({
   const { notas, cifrado } = sus ? suspender(base, sus) : { notas: base, cifrado: nombre };
   const seq = spelledSequenceAscending(notas, 4);
   return {
-    cifrado: GLIFO(cifrado),
+    cifrado: formatChordSymbol(cifrado, 'es'),
     roman: id,
     rol: rolDe(modo, id),
     notas: seq.map((s) => ({ chromatic: s.name, octave: s.octave })),

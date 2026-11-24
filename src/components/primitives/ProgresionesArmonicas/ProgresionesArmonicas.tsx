@@ -4,7 +4,7 @@ import { useAudioEngine, stopAllNotes } from '../../../hooks/useAudioEngine';
 import { useChordPlayer } from '../../../hooks/useChordPlayer';
 import { useFireGate } from '../../../hooks/useFireGate';
 import { ALL } from '../../../data/notes';
-import { aAscii, majorScaleSpelled, tonicChromatic } from '../../../utils/noteCalculations';
+import { formatChordSymbol, aAscii, majorScaleSpelled, tonicChromatic } from '../../../utils/noteCalculations';
 import type { DiatonicRole } from '../../shared/NoteToken/NoteToken';
 import { GANANCIA_POR_ROL } from '../../../utils/progresionArmonica';
 import type { ChromaticNote, DiatonicDegree, Tonic } from '../../../types/music';
@@ -311,7 +311,7 @@ function ProgressionRow({ id, label, grados, diatonic, isPlaying, activeChordIdx
                   <DegreeGlyph degree={degree} />
                 </span>
                 <span className={styles.chordChip}>
-                  <span className={styles.chordSymbol}>{sym}</span>
+                  <span className={styles.chordSymbol}>{formatChordSymbol(sym, isDe ? 'de' : 'es')}</span>
                 </span>
               </button>
             </div>

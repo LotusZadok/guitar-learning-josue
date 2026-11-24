@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState, type KeyboardEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { useChordPlayer } from '../../../hooks/useChordPlayer';
 import PlaybackButton, { type PlayMode } from '../../shared/PlaybackButton/PlaybackButton';
@@ -6,6 +7,8 @@ import { useFireGate } from '../../../hooks/useFireGate';
 import { useUIStore } from '../../../stores/useUIStore';
 import { NOTE_COLORS, ALL, spelledToES } from '../../../data/notes';
 import {
+  formatChordSymbol,
+  formatNote,
   acordeDominante,
   majorScaleSpelled,
   pitchClass,
@@ -84,6 +87,7 @@ interface Props {
 }
 
 export default function DominanteResolucion({ origen, onOrigenChange, labels }: Props) {
+  const lang = useTranslation().i18n.language;
   const tonic = useUIStore((s) => s.tonic);
   const { playNote } = useAudioEngine();
   const { playChord, at, clear } = useChordPlayer(NOTE_DURATION);
@@ -122,10 +126,10 @@ export default function DominanteResolucion({ origen, onOrigenChange, labels }: 
       origenVoices: acorde.voces.map((v) => voice(v.grado, true, undefined, v.tritono, v.intervalo)),
       // El I lleva su octava además de la tónica: es donde aterriza la sensible.
       iRow: [...I_DEGREES.map((d) => voice(d, false)), voice(0, false, 12)],
-      origenLabel: acorde.cifrado,
-      iLabel: scale[0],
+      origenLabel: formatChordSymbol(acorde.cifrado, lang),
+      iLabel: formatNote(scale[0], lang),
     };
-  }, [tonic, origen]);
+  }, [tonic, origen, lang]);
 
   const scrub = useCallback(
     (v: Voice) => {
@@ -282,6 +286,7 @@ interface VoiceNodeProps {
 }
 
 function VoiceNode({ voice, colored, sounding, onEnter, onLeave }: VoiceNodeProps) {
+  const lang = useTranslation().i18n.language;
   const onKey = useCallback(
     (e: KeyboardEvent<SVGGElement>) => {
       if (e.key === 'Enter' || e.key === ' ') {
@@ -345,7 +350,7 @@ function VoiceNode({ voice, colored, sounding, onEnter, onLeave }: VoiceNodeProp
         fill={colored ? '#fff' : 'var(--text-body)'}
         style={voice.spelled.length > 2 ? { fontSize: '13px' } : undefined}
       >
-        {voice.spelled}
+        {formatNote(voice.spelled, lang)}
       </text>
     </g>
   );

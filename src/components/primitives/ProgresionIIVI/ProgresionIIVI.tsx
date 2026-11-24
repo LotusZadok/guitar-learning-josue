@@ -1,9 +1,11 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useChordPlayer } from '../../../hooks/useChordPlayer';
 import PlaybackButton from '../../shared/PlaybackButton/PlaybackButton';
 import { useUIStore } from '../../../stores/useUIStore';
 import { ALL } from '../../../data/notes';
 import {
+  formatChordSymbol,
   pitchClass,
   progresionIIVI,
   spelledSequenceAscending,
@@ -30,6 +32,7 @@ const ARPEGGIO_GAP_MS = 150;
 const CHORD_GAP_MS = 1100;
 
 export default function ProgresionIIVI({ functions, relativeMinor = false }: Props) {
+  const lang = useTranslation().i18n.language;
   const tonic = useUIStore((s) => s.tonic);
   const { playChord, at, clear } = useChordPlayer(NOTE_DURATION);
   const [playing, setPlaying] = useState<'bloque' | 'arpegio' | null>(null);
@@ -99,10 +102,10 @@ export default function ProgresionIIVI({ functions, relativeMinor = false }: Pro
               data-role={c.role}
               onClick={() => playCard(i)}
               disabled={playing != null}
-              aria-label={`${c.cifrado}, ${functions[i]}`}
+              aria-label={`${formatChordSymbol(c.cifrado, lang)}, ${functions[i]}`}
             >
               <span className={styles.roman}>{c.roman}</span>
-              <span className={styles.cifrado}>{c.cifrado}</span>
+              <span className={styles.cifrado}>{formatChordSymbol(c.cifrado, lang)}</span>
               <span className={styles.function}>{functions[i]}</span>
             </button>
             {i < chords.length - 1 && <span className={styles.arrow} aria-hidden="true">→</span>}

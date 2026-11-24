@@ -1,7 +1,8 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useChordPlayer } from '../../../hooks/useChordPlayer';
 import { useUIStore } from '../../../stores/useUIStore';
-import { secondaryDominants } from '../../../utils/noteCalculations';
+import { formatChordSymbol, secondaryDominants } from '../../../utils/noteCalculations';
 import styles from './DominantesSecundarias.module.css';
 
 const NOTE_DURATION = 1.3;
@@ -12,6 +13,7 @@ const CHORD_GAP_MS = 700;
 // la dominante y su resolución al grado, mostrando que cualquier grado puede
 // tratarse como una tónica temporal. Datos vía Tonal.js (secondaryDominants).
 export default function DominantesSecundarias() {
+  const lang = useTranslation().i18n.language;
   const tonic = useUIStore((s) => s.tonic);
   const { playChord, at, clear } = useChordPlayer(NOTE_DURATION);
   const [active, setActive] = useState<number | null>(null);
@@ -38,11 +40,11 @@ export default function DominantesSecundarias() {
             className={`${styles.row} ${active === i ? styles.rowActive : ''}`}
             onClick={() => playRow(i)}
             disabled={active !== null}
-            aria-label={`${r.dom.cifrado} resuelve a ${r.target.cifrado} (${r.notation})`}
+            aria-label={`${formatChordSymbol(r.dom.cifrado, lang)} resuelve a ${formatChordSymbol(r.target.cifrado, lang)} (${r.notation})`}
           >
-            <span className={styles.target}>{r.target.cifrado}</span>
+            <span className={styles.target}>{formatChordSymbol(r.target.cifrado, lang)}</span>
             <span className={styles.arrow} aria-hidden="true">↑</span>
-            <span className={styles.dom}>{r.dom.cifrado}</span>
+            <span className={styles.dom}>{formatChordSymbol(r.dom.cifrado, lang)}</span>
             <span className={styles.notation}>{r.notation}</span>
           </button>
         </li>

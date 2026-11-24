@@ -22,6 +22,18 @@ export function formatNote(grafia: string, lang: string): string {
   return letra + alteracion;
 }
 
+// Un cifrado (A7, Bbmaj7, F#m7b5, F##dim) para mostrar: la fundamental pasa por
+// `formatNote` (en alemán Bm → Hm, B♭maj7 → Bmaj7) y en el sufijo todo '#' es ♯
+// y toda 'b' minúscula es ♭ (regla ♭ integral; las calidades no usan 'b').
+export function formatChordSymbol(cifrado: string, lang: string): string {
+  const m = /^([A-G](?:##|♯♯|#|♯|x|bb|♭♭|b|♭)?)(.*)$/.exec(cifrado);
+  if (!m) {
+    console.warn(`formatChordSymbol: cifrado no reconocido "${cifrado}"`);
+    return cifrado;
+  }
+  return formatNote(m[1], lang) + m[2].replace(/#/g, "♯").replace(/b/g, "♭");
+}
+
 export function noteShort(n: string): string {
   return formatNote(n, "es");
 }
@@ -509,13 +521,6 @@ export function perfectFifth(tonic: ChromaticNote): ChordMember {
 }
 
 // === Dominantes secundarias (§3.8), vía Tonal.js ===
-// Convierte un cifrado ASCII de Tonal (A7, Bbmaj7, m7b5) a glifos ♯/♭ para la
-// regla ♭-integral. En un cifrado, todo '#' es ♯ y toda 'b' minúscula es ♭
-// (alteración de nota o de la 5ª); las palabras de calidad no usan 'b'.
-function toGlyphCifrado(c: string): string {
-  return c.replace(/#/g, "♯").replace(/b/g, "♭");
-}
-
 export interface ChordAudio {
   cifrado: string; // con glifos ♯/♭
   members: { chromatic: ChromaticNote; octave: number }[];
@@ -525,7 +530,7 @@ function chordAudio(chordName: string): ChordAudio {
   const notes = Chord.get(chordName).notes; // ej. ["A","C#","E","G"]
   const seq = spelledSequenceAscending(notes, 4);
   return {
-    cifrado: toGlyphCifrado(chordName),
+    cifrado: formatChordSymbol(chordName, "es"),
     members: seq.map((s) => ({ chromatic: s.name, octave: s.octave })),
   };
 }

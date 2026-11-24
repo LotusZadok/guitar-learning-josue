@@ -1,9 +1,11 @@
-import { useCallback, useEffect, useMemo, useState, type KeyboardEvent } from 'react';
+import { useCallback, useEffect, useMemo, useState, type KeyboardEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAudioEngine, stopAllNotes } from '../../../hooks/useAudioEngine';
 import { useFireGate } from '../../../hooks/useFireGate';
 import { useUIStore } from '../../../stores/useUIStore';
 import { NOTE_COLORS, spelledToES } from '../../../data/notes';
 import {
+  formatNote,
   intervalMemberFromTonic,
   type IntervalMember,
 } from '../../../utils/noteCalculations';
@@ -43,6 +45,7 @@ interface Props {
 // válidos) viene de `config`, así crece de §1.7 (hasta la quinta) hacia §3.4
 // (completo) sin duplicar el componente.
 export default function AcordesBuilder({ config = BUILDER_17, path, playingRole, onChordChange, onUserPick }: Props) {
+  const lang = useTranslation().i18n.language;
   const tonic = useUIStore((s) => s.tonic);
   const { playNote } = useAudioEngine();
 
@@ -276,7 +279,7 @@ export default function AcordesBuilder({ config = BUILDER_17, path, playingRole,
         {currentChord && chordMembers ? (
           <>
             <p className={styles.chordName}>
-              {tonicMember.spelled}
+              {formatNote(tonicMember.spelled, lang)}
               {currentChord.cifrado}
               <span className={styles.chordAlias}>
                 {spelledToES(tonicMember.spelled)} {currentChord.nombre}
@@ -327,6 +330,7 @@ interface NodeProps {
 }
 
 function Node({ role, x, y, quality, member, state, playing, dimmed, onSelect, onScrub }: NodeProps) {
+  const lang = useTranslation().i18n.language;
   const [hovered, setHovered] = useState(false);
   const interactive = state !== 'disabled' && (onSelect != null || state === 'tonic');
 
@@ -399,7 +403,7 @@ function Node({ role, x, y, quality, member, state, playing, dimmed, onSelect, o
           fill={colored ? '#fff' : 'var(--text-body)'}
           style={colored && member.spelled.length > 2 ? { fontSize: '13px' } : undefined}
         >
-          {colored ? member.spelled : role}
+          {colored ? formatNote(member.spelled, lang) : role}
         </text>
       </g>
       <text

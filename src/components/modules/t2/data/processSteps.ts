@@ -1,5 +1,5 @@
 import type { Tonalidad } from './tonalidades';
-import { noteShort } from '../../../../utils/noteCalculations';
+import { formatNote } from '../../../../utils/noteCalculations';
 
 export type NoteState = 'tonica' | 'highlighted' | 'natural' | 'neutral';
 
@@ -85,6 +85,8 @@ export function getProcessSteps(
 
 function getSharpsLeftSteps(t: Tonalidad, locale: ProcessLocale = 'es'): ProcessStepData[] {
   const isDe = locale === 'de';
+  const f = (x: string) => formatNote(x, locale);
+  const fs = (xs: string[]) => xs.map(f).join(' ');
   const letter = tonicLetter(t.tonica);
   const naturalScale = naturalScaleFrom(letter);
   const lastSharp = t.armadura[t.armadura.length - 1];
@@ -109,37 +111,39 @@ function getSharpsLeftSteps(t: Tonalidad, locale: ProcessLocale = 'es'): Process
   return [
     {
       description: isDe
-        ? `1. Ausgehend von ${t.tonica}-Dur gehen wir eine kleine Sekunde (1 Ht.) von der Tonika ${t.tonica} abwärts = ${lastSharp}`
-        : `1. Partiendo de ${t.tonica} mayor, bajamos una 2m (1s.t.) de la tónica ${t.tonica} = ${lastSharp}`,
+        ? `1. Ausgehend von ${f(t.tonica)}-Dur gehen wir eine kleine Sekunde (1 Ht.) von der Tonika ${f(t.tonica)} abwärts = ${f(lastSharp)}`
+        : `1. Partiendo de ${f(t.tonica)} mayor, bajamos una 2m (1s.t.) de la tónica ${f(t.tonica)} = ${f(lastSharp)}`,
       circleNotes: s1, scaleDisplay: [], armaduraDisplay: [],
       arrow: { fromPos: NOTE_TO_POS[t.tonica], toPos: NOTE_TO_POS[lastSharp] },
     },
     {
       description: isDe
-        ? `2. Wir akkumulieren die # bis zum ermittelten Ton (${lastSharp}) = ${t.armadura.join(' ')}`
-        : `2. Acumulamos los # hasta llegar a la nota que encontramos (${lastSharp}) = ${t.armadura.join(' ')}`,
+        ? `2. Wir akkumulieren die ♯ bis zum ermittelten Ton (${f(lastSharp)}) = ${fs(t.armadura)}`
+        : `2. Acumulamos los ♯ hasta llegar a la nota que encontramos (${f(lastSharp)}) = ${fs(t.armadura)}`,
       circleNotes: s2, scaleDisplay: [], armaduraDisplay: [...t.armadura],
     },
     {
       description: isDe
-        ? `3. Wir schreiben die 7 Stammtöne beginnend mit der Tonika ${letter} = ${naturalScale.join(' ')}`
-        : `3. Escribimos las 7 notas naturales comenzando en la tónica ${letter} = ${naturalScale.join(' ')}`,
+        ? `3. Wir schreiben die 7 Stammtöne beginnend mit der Tonika ${f(letter)} = ${fs(naturalScale)}`
+        : `3. Escribimos las 7 notas naturales comenzando en la tónica ${f(letter)} = ${fs(naturalScale)}`,
       circleNotes: s3, scaleDisplay: naturalScale, armaduraDisplay: [...t.armadura],
     },
     {
       description: isDe
-        ? `4. Wir aktualisieren diese Tonleiter mit den Tönen aus Punkt 2 → ${t.escala.join(' ')}`
-        : `4. Actualizamos dicha escala con las notas del punto 2 → ${t.escala.join(' ')}`,
+        ? `4. Wir aktualisieren diese Tonleiter mit den Tönen aus Punkt 2 → ${fs(t.escala)}`
+        : `4. Actualizamos dicha escala con las notas del punto 2 → ${fs(t.escala)}`,
       circleNotes: s4, scaleDisplay: [...t.escala], armaduraDisplay: [...t.armadura],
       closingText: isDe
-        ? `Wir schließen daraus: die Vorzeichen von ${t.tonica}-Dur sind ${t.armadura.join(' ')}. Die Tonleiter (7 Töne) von ${t.tonica}-Dur ist ${t.escala.join(' ')}`
-        : `Concluimos que la armadura de ${t.tonica} mayor es ${t.armadura.join(' ')}. La escala o tonalidad (7 notas) de ${t.tonica} mayor es ${t.escala.join(' ')}`,
+        ? `Wir schließen daraus: die Vorzeichen von ${f(t.tonica)}-Dur sind ${fs(t.armadura)}. Die Tonleiter (7 Töne) von ${f(t.tonica)}-Dur ist ${fs(t.escala)}`
+        : `Concluimos que la armadura de ${f(t.tonica)} mayor es ${fs(t.armadura)}. La escala o tonalidad (7 notas) de ${f(t.tonica)} mayor es ${fs(t.escala)}`,
     },
   ];
 }
 
 function getSharpsRightSteps(t: Tonalidad, locale: ProcessLocale = 'es'): ProcessStepData[] {
   const isDe = locale === 'de';
+  const f = (x: string) => formatNote(x, locale);
+  const fs = (xs: string[]) => xs.map(f).join(' ');
   const letter = tonicLetter(t.tonica);
   const naturalScale = naturalScaleFrom(letter);
   const lastSharp = t.armadura[t.armadura.length - 1];
@@ -163,37 +167,39 @@ function getSharpsRightSteps(t: Tonalidad, locale: ProcessLocale = 'es'): Proces
   return [
     {
       description: isDe
-        ? `1. Wir haben die Vorzeichen ${t.armadura.join(' ')}; wir nehmen das letzte # der jeweiligen Vorzeichen = ${lastSharp}`
-        : `1. Tenemos la armadura ${t.armadura.join(' ')}, vamos al último # de la armadura en cuestión = ${lastSharp}`,
+        ? `1. Wir haben die Vorzeichen ${fs(t.armadura)}; wir nehmen das letzte ♯ der jeweiligen Vorzeichen = ${f(lastSharp)}`
+        : `1. Tenemos la armadura ${fs(t.armadura)}, vamos al último ♯ de la armadura en cuestión = ${f(lastSharp)}`,
       circleNotes: s1, scaleDisplay: [], armaduraDisplay: [...t.armadura],
     },
     {
       description: isDe
-        ? `2. Wir gehen eine kleine Sekunde (1 Ht.) von ${lastSharp} aufwärts = ${t.tonica}`
-        : `2. Subimos una 2m (1s.t.) a ${lastSharp} = ${t.tonica}`,
+        ? `2. Wir gehen eine kleine Sekunde (1 Ht.) von ${f(lastSharp)} aufwärts = ${f(t.tonica)}`
+        : `2. Subimos una 2m (1s.t.) a ${f(lastSharp)} = ${f(t.tonica)}`,
       circleNotes: s2, scaleDisplay: [], armaduraDisplay: [...t.armadura],
       arrow: { fromPos: NOTE_TO_POS[lastSharp], toPos: NOTE_TO_POS[t.tonica] },
     },
     {
       description: isDe
-        ? `3. So kennen wir die Tonika unserer Tonart; wir ordnen die 7 Stammtöne beginnend mit der Tonika ${letter}`
-        : `3. Así sabremos quién es la tónica de nuestra tonalidad, ordenamos las 7 notas naturales partiendo de la tónica ${letter}`,
+        ? `3. So kennen wir die Tonika unserer Tonart; wir ordnen die 7 Stammtöne beginnend mit der Tonika ${f(letter)}`
+        : `3. Así sabremos quién es la tónica de nuestra tonalidad, ordenamos las 7 notas naturales partiendo de la tónica ${f(letter)}`,
       circleNotes: s3, scaleDisplay: naturalScale, armaduraDisplay: [...t.armadura],
     },
     {
       description: isDe
-        ? `4. Wir aktualisieren diese Tonleiter mit den Vorzeichen aus Punkt 1 → ${t.escala.map(noteShort).join(' ')}`
-        : `4. Actualizamos dicha escala con la armadura del punto 1 → ${t.escala.map(noteShort).join(' ')}`,
+        ? `4. Wir aktualisieren diese Tonleiter mit den Vorzeichen aus Punkt 1 → ${fs(t.escala)}`
+        : `4. Actualizamos dicha escala con la armadura del punto 1 → ${fs(t.escala)}`,
       circleNotes: s4, scaleDisplay: [...t.escala], armaduraDisplay: [...t.armadura],
       closingText: isDe
-        ? `Wir schließen daraus: die Vorzeichen von ${noteShort(t.tonica)}-Dur sind ${t.armadura.map(noteShort).join(' ')}. Die Tonleiter (7 Töne) von ${noteShort(t.tonica)}-Dur ist ${t.escala.map(noteShort).join(' ')}`
-        : `Concluimos que la armadura de ${noteShort(t.tonica)} mayor es ${t.armadura.map(noteShort).join(' ')}. La escala o tonalidad (7 notas) de ${noteShort(t.tonica)} mayor es ${t.escala.map(noteShort).join(' ')}`,
+        ? `Wir schließen daraus: die Vorzeichen von ${f(t.tonica)}-Dur sind ${fs(t.armadura)}. Die Tonleiter (7 Töne) von ${f(t.tonica)}-Dur ist ${fs(t.escala)}`
+        : `Concluimos que la armadura de ${f(t.tonica)} mayor es ${fs(t.armadura)}. La escala o tonalidad (7 notas) de ${f(t.tonica)} mayor es ${fs(t.escala)}`,
     },
   ];
 }
 
 function getFlatsLeftSteps(t: Tonalidad, locale: ProcessLocale = 'es'): ProcessStepData[] {
   const isDe = locale === 'de';
+  const f = (x: string) => formatNote(x, locale);
+  const fs = (xs: string[]) => xs.map(f).join(' ');
   const letter = tonicLetter(t.tonica);
   const naturalScale = naturalScaleFrom(letter);
   const tonicaIdx = HERRAMIENTA_FLATS.indexOf(t.tonica);
@@ -219,36 +225,38 @@ function getFlatsLeftSteps(t: Tonalidad, locale: ProcessLocale = 'es'): ProcessS
   return [
     {
       description: isDe
-        ? `1. Ausgehend von ${noteShort(t.tonica)}-Dur suchen wir die Tonika ${noteShort(t.tonica)} im Werkzeug B♭ E♭ A♭ D♭ G♭ C♭ F♭`
-        : `1. Partiendo de ${noteShort(t.tonica)} mayor, buscamos la tónica ${noteShort(t.tonica)} en la herramienta B♭ E♭ A♭ D♭ G♭ C♭ F♭`,
+        ? `1. Ausgehend von ${f(t.tonica)}-Dur suchen wir die Tonika ${f(t.tonica)} im Werkzeug B E♭ A♭ D♭ G♭ C♭ F♭`
+        : `1. Partiendo de ${f(t.tonica)} mayor, buscamos la tónica ${f(t.tonica)} en la herramienta B♭ E♭ A♭ D♭ G♭ C♭ F♭`,
       circleNotes: s1, scaleDisplay: [], armaduraDisplay: [],
     },
     {
       description: isDe
-        ? `2. Wir gehen ein ♭ weiter (${noteShort(nextFlat)}) und schreiben die gefundenen ♭ auf = ${t.armadura.map(noteShort).join(' ')}`
-        : `2. Nos movemos un ♭ más (${noteShort(nextFlat)}) y escribimos los ♭ encontrados = ${t.armadura.map(noteShort).join(' ')}`,
+        ? `2. Wir gehen ein ♭ weiter (${f(nextFlat)}) und schreiben die gefundenen ♭ auf = ${fs(t.armadura)}`
+        : `2. Nos movemos un ♭ más (${f(nextFlat)}) y escribimos los ♭ encontrados = ${fs(t.armadura)}`,
       circleNotes: s2, scaleDisplay: [], armaduraDisplay: [...t.armadura],
     },
     {
       description: isDe
-        ? `3. Wir schreiben die 7 Stammtöne beginnend mit der Tonika ${letter} = ${naturalScale.join(' ')}`
-        : `3. Escribimos las 7 notas naturales comenzando en la tónica ${letter} = ${naturalScale.join(' ')}`,
+        ? `3. Wir schreiben die 7 Stammtöne beginnend mit der Tonika ${f(letter)} = ${fs(naturalScale)}`
+        : `3. Escribimos las 7 notas naturales comenzando en la tónica ${f(letter)} = ${fs(naturalScale)}`,
       circleNotes: s3, scaleDisplay: naturalScale, armaduraDisplay: [...t.armadura],
     },
     {
       description: isDe
-        ? `4. Wir aktualisieren diese Tonleiter mit den Tönen aus Punkt 2 → ${t.escala.map(noteShort).join(' ')}`
-        : `4. Actualizamos dicha escala con las notas del punto 2 → ${t.escala.map(noteShort).join(' ')}`,
+        ? `4. Wir aktualisieren diese Tonleiter mit den Tönen aus Punkt 2 → ${fs(t.escala)}`
+        : `4. Actualizamos dicha escala con las notas del punto 2 → ${fs(t.escala)}`,
       circleNotes: s4, scaleDisplay: [...t.escala], armaduraDisplay: [...t.armadura],
       closingText: isDe
-        ? `Wir schließen daraus: die Vorzeichen von ${noteShort(t.tonica)}-Dur sind ${t.armadura.map(noteShort).join(' ')}. Die Tonleiter (7 Töne) von ${noteShort(t.tonica)}-Dur ist ${t.escala.map(noteShort).join(' ')}`
-        : `Concluimos que la armadura de ${noteShort(t.tonica)} mayor es ${t.armadura.map(noteShort).join(' ')}. La escala o tonalidad (7 notas) de ${noteShort(t.tonica)} mayor es ${t.escala.map(noteShort).join(' ')}`,
+        ? `Wir schließen daraus: die Vorzeichen von ${f(t.tonica)}-Dur sind ${fs(t.armadura)}. Die Tonleiter (7 Töne) von ${f(t.tonica)}-Dur ist ${fs(t.escala)}`
+        : `Concluimos que la armadura de ${f(t.tonica)} mayor es ${fs(t.armadura)}. La escala o tonalidad (7 notas) de ${f(t.tonica)} mayor es ${fs(t.escala)}`,
     },
   ];
 }
 
 function getFlatsRightSteps(t: Tonalidad, locale: ProcessLocale = 'es'): ProcessStepData[] {
   const isDe = locale === 'de';
+  const f = (x: string) => formatNote(x, locale);
+  const fs = (xs: string[]) => xs.map(f).join(' ');
   const letter = tonicLetter(t.tonica);
   const naturalScale = naturalScaleFrom(letter);
   const penultimate = t.armadura[t.armadura.length - 2];
@@ -271,30 +279,30 @@ function getFlatsRightSteps(t: Tonalidad, locale: ProcessLocale = 'es'): Process
   return [
     {
       description: isDe
-        ? `1. Wir haben die Vorzeichen ${t.armadura.map(noteShort).join(' ')} und suchen das vorletzte ♭ der jeweiligen Vorzeichen = ${noteShort(penultimate)}`
-        : `1. Tenemos la armadura ${t.armadura.map(noteShort).join(' ')}, buscamos el penúltimo ♭ de la armadura en cuestión = ${noteShort(penultimate)}`,
+        ? `1. Wir haben die Vorzeichen ${fs(t.armadura)} und suchen das vorletzte ♭ der jeweiligen Vorzeichen = ${f(penultimate)}`
+        : `1. Tenemos la armadura ${fs(t.armadura)}, buscamos el penúltimo ♭ de la armadura en cuestión = ${f(penultimate)}`,
       circleNotes: s1, scaleDisplay: [], armaduraDisplay: [...t.armadura],
     },
     {
       description: isDe
-        ? `2. Das ist unsere Tonika = ${noteShort(t.tonica)}-Dur`
-        : `2. Esa es nuestra tónica = ${noteShort(t.tonica)} mayor`,
+        ? `2. Das ist unsere Tonika = ${f(t.tonica)}-Dur`
+        : `2. Esa es nuestra tónica = ${f(t.tonica)} mayor`,
       circleNotes: s2, scaleDisplay: [], armaduraDisplay: [...t.armadura],
     },
     {
       description: isDe
-        ? `3. Da wir die Tonika unserer Tonart kennen, ordnen wir die 7 Stammtöne beginnend mit der Tonika ${letter}`
-        : `3. Sabiendo quien es la tónica de nuestra tonalidad, ordenamos las 7 notas naturales partiendo de la tónica ${letter}`,
+        ? `3. Da wir die Tonika unserer Tonart kennen, ordnen wir die 7 Stammtöne beginnend mit der Tonika ${f(letter)}`
+        : `3. Sabiendo quien es la tónica de nuestra tonalidad, ordenamos las 7 notas naturales partiendo de la tónica ${f(letter)}`,
       circleNotes: s3, scaleDisplay: naturalScale, armaduraDisplay: [...t.armadura],
     },
     {
       description: isDe
-        ? `4. Wir aktualisieren diese Tonleiter mit den Vorzeichen aus Punkt 1 → ${t.escala.map(noteShort).join(' ')}`
-        : `4. Actualizamos dicha escala con la armadura del punto 1 → ${t.escala.map(noteShort).join(' ')}`,
+        ? `4. Wir aktualisieren diese Tonleiter mit den Vorzeichen aus Punkt 1 → ${fs(t.escala)}`
+        : `4. Actualizamos dicha escala con la armadura del punto 1 → ${fs(t.escala)}`,
       circleNotes: s4, scaleDisplay: [...t.escala], armaduraDisplay: [...t.armadura],
       closingText: isDe
-        ? `Wir schließen daraus: die Vorzeichen von ${noteShort(t.tonica)}-Dur sind ${t.armadura.map(noteShort).join(' ')}. Die Tonleiter (7 Töne) von ${noteShort(t.tonica)}-Dur ist ${t.escala.map(noteShort).join(' ')}`
-        : `Concluimos que la armadura de ${noteShort(t.tonica)} mayor es ${t.armadura.map(noteShort).join(' ')}. La escala o tonalidad (7 notas) de ${noteShort(t.tonica)} mayor es ${t.escala.map(noteShort).join(' ')}`,
+        ? `Wir schließen daraus: die Vorzeichen von ${f(t.tonica)}-Dur sind ${fs(t.armadura)}. Die Tonleiter (7 Töne) von ${f(t.tonica)}-Dur ist ${fs(t.escala)}`
+        : `Concluimos que la armadura de ${f(t.tonica)} mayor es ${fs(t.armadura)}. La escala o tonalidad (7 notas) de ${f(t.tonica)} mayor es ${fs(t.escala)}`,
     },
   ];
 }
@@ -314,17 +322,17 @@ function getFExceptionSteps(locale: ProcessLocale = 'es'): ProcessStepData[] {
   return [
     {
       description: isDe
-        ? 'F-Dur hat nur das erste ♭ des Werkzeugs: B♭'
+        ? 'F-Dur hat nur das erste ♭ des Werkzeugs: B'
         : 'F mayor solo cuenta con el primer ♭ de la herramienta: B♭',
       circleNotes: s1, scaleDisplay: [], armaduraDisplay: ['Bb'],
     },
     {
-      description: isDe ? 'Tonleiter: F G A B♭ C D E' : 'Escala: F G A B♭ C D E',
+      description: isDe ? 'Tonleiter: F G A B C D E' : 'Escala: F G A B♭ C D E',
       circleNotes: s2,
       scaleDisplay: ['F', 'G', 'A', 'Bb', 'C', 'D', 'E'],
       armaduraDisplay: ['Bb'],
       closingText: isDe
-        ? 'Wir könnten schlussfolgern, dass die Vorzeichen von F-Dur nur B♭ sind und die Tonleiter F G A B♭ C D E ist'
+        ? 'Wir könnten schlussfolgern, dass die Vorzeichen von F-Dur nur B sind und die Tonleiter F G A B C D E ist'
         : 'Podríamos concluir que la armadura de F mayor es solo B♭, y la escala es F G A B♭ C D E',
     },
   ];

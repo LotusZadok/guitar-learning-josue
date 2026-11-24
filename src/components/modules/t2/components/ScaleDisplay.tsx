@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { formatNote } from '../../../../utils/noteCalculations';
 import styles from './ScaleDisplay.module.css';
 
 interface Props {
@@ -30,6 +32,7 @@ function NoteSlot({ note }: { note: string }) {
 }
 
 export default function ScaleDisplay({ notes, label }: Props) {
+  const lang = useTranslation().i18n.language;
   if (notes.length === 0) return null;
 
   return (
@@ -37,7 +40,7 @@ export default function ScaleDisplay({ notes, label }: Props) {
       {label && <span className={styles.label}>{label}</span>}
       <div className={styles.row}>
         {notes.map((n, i) => (
-          <NoteSlot key={i} note={n} />
+          <NoteSlot key={i} note={formatNote(n, lang)} />
         ))}
       </div>
     </div>

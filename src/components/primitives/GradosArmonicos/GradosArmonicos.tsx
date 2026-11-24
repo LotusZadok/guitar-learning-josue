@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { useFireGate } from '../../../hooks/useFireGate';
 import { ALL } from '../../../data/notes';
-import { aAscii, majorScaleSpelled, relativeMinorScaleSpelled, spelledSequenceAscending, tonicChromatic } from '../../../utils/noteCalculations';
+import { formatChordSymbol, aAscii, majorScaleSpelled, relativeMinorScaleSpelled, spelledSequenceAscending, tonicChromatic } from '../../../utils/noteCalculations';
 import NoteToken, { type DiatonicRole } from '../../shared/NoteToken/NoteToken';
 import RomanGlyph from '../../shared/RomanGlyph/RomanGlyph';
 import { GANANCIA_POR_ROL } from '../../../utils/progresionArmonica';
@@ -279,11 +279,11 @@ export default function GradosArmonicos({ tonalidad, initialStep = 1, relativeMi
                   onPlay={() => playTriad(i)}
                   isPlaying={playingCell === i}
                   isDimmed={playingCell !== null && playingCell !== i}
-                  ariaLabel={isDe ? `Akkord ${sym} spielen` : `Reproducir acorde ${sym}`}
+                  ariaLabel={isDe ? `Akkord ${formatChordSymbol(sym, 'de')} spielen` : `Reproducir acorde ${sym}`}
                   className={styles.chordCell}
                   activeClassName={styles.chordCellActive}
                 >
-                  <span className={styles.chordSymbol}>{sym}</span>
+                  <span className={styles.chordSymbol}>{formatChordSymbol(sym, i18n.language)}</span>
                 </PlayableCell>
               ))}
             </tr>

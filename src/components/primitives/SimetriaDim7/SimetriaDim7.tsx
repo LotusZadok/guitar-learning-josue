@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAudioEngine, stopAllNotes } from '../../../hooks/useAudioEngine';
 import { ALL, NOTE_COLORS } from '../../../data/notes';
 import { useUIStore } from '../../../stores/useUIStore';
-import { FAMILIAS_DIM7, tonicChromatic, type MiembroDim7 } from '../../../utils/noteCalculations';
+import { formatChordSymbol, formatNote, FAMILIAS_DIM7, tonicChromatic, type MiembroDim7 } from '../../../utils/noteCalculations';
 import type { ChromaticNote } from '../../../types/music';
 import PlaybackButton from '../../shared/PlaybackButton/PlaybackButton';
 import styles from './SimetriaDim7.module.css';
@@ -75,8 +75,8 @@ export default function SimetriaDim7() {
     [family],
   );
   const labelOf = useCallback(
-    (note: ChromaticNote) => miembroDe(note)?.grafia ?? IDLE_LABELS[note] ?? note,
-    [miembroDe],
+    (note: ChromaticNote) => formatNote(miembroDe(note)?.grafia ?? IDLE_LABELS[note] ?? note, i18n.language),
+    [miembroDe, i18n.language],
   );
 
   const scrub = useCallback(
@@ -224,7 +224,7 @@ export default function SimetriaDim7() {
       </svg>
 
       <p className={styles.readout}>
-        {family.miembros.map(conEnarmonia).join(' = ')}
+        {family.miembros.map((m) => conEnarmonia(m).split('/').map((c) => formatChordSymbol(c, i18n.language)).join('/')).join(' = ')}
       </p>
 
       <div className={styles.audioRow}>

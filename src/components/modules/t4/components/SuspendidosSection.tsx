@@ -6,7 +6,7 @@ import ChordStacks, { type ChordDef } from '../../../primitives/ChordStacks/Chor
 import AcordesBuilder from '../../../primitives/AcordesBuilder/AcordesBuilder';
 import { BUILDER_33 } from '../../../primitives/AcordesBuilder/configs';
 import { useUIStore } from '../../../../stores/useUIStore';
-import { aAscii, intervalMemberFromTonic } from '../../../../utils/noteCalculations';
+import { formatNote, aAscii, intervalMemberFromTonic } from '../../../../utils/noteCalculations';
 import type { NoteSpelling } from '../../../../types/music';
 import type { ProseSegment } from '../../../../types/prose';
 import styles from './SuspendidosSection.module.css';
@@ -42,7 +42,7 @@ const CHORDS: ChordDef[] = [
 const ASCII = (v: string) => aAscii(v) as NoteSpelling;
 
 export default function SuspendidosSection() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const h = t('t3.s33.table_headers', { returnObjects: true }) as Record<string, string>;
   const tonic = useUIStore((s) => s.tonic);
 
@@ -51,7 +51,7 @@ export default function SuspendidosSection() {
   // cifrados (Xsus4 → X) van como texto: son acordes, no notas sueltas.
   const spelled = (number: 1 | 2 | 3 | 4, quality: 'P' | 'M') =>
     intervalMemberFromTonic(tonic, number, quality).spelled;
-  const root = spelled(1, 'P');
+  const root = formatNote(spelled(1, 'P'), i18n.language);
   const vars = { tonic: root, sus4: `${root}sus4`, sus2: `${root}sus2` };
   const third = ASCII(spelled(3, 'M'));
   const resolution: ProseSegment = [

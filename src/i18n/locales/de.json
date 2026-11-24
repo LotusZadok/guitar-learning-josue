@@ -389,7 +389,7 @@
       "rule_sharps": "Bei Tonarten mit Kreuzen (♯): die Vorzeichen werden von links nach rechts in der Reihenfolge F C G D A E H hinzugefügt.",
       "rule_flats": "Bei Tonarten mit Bs (♭): die Vorzeichen werden von rechts nach links in der Reihenfolge B E A D G C F hinzugefügt.",
       "exception_label": "Ausnahme:",
-      "exception": "F-Dur hat 1 ♭ (B♭) — es folgt nicht dem Muster der Kreuztonarten.",
+      "exception": "F-Dur hat 1 ♭ (B) — es folgt nicht dem Muster der Kreuztonarten.",
       "bullets": [
         {
           "regla": "T natürlich",
@@ -470,8 +470,8 @@
       "intro_languages": "Um dieses Thema zu verstehen, verwenden wir eine Analogie zu den verschiedenen Sprachen der Welt. Es gibt zahlreiche und vielfältige Sprachen, einige einander ähnlich, zum Beispiel: Spanisch, Portugiesisch, Italienisch — diese drei sind zwar nicht dieselbe Sprache, teilen aber Phonetik, Wortschatz und sogar Grammatik, dank derselben romanischen Wurzel. Dasselbe Beispiel gilt für Deutsch, Niederländisch und Englisch, die die germanische Wurzel teilen, usw.",
       "intro_variety": "All das lässt uns verstehen, dass es eine große Vielfalt an Sprachen gibt — einige sehr unterschiedlich, andere sehr ähnlich, bei denen sich nur die Details unterscheiden. Dieselbe Idee wenden wir auf die TONARTEN an.",
       "def_tonalities": "Die Tonarten/Sprachen sind Tonfamilien, wobei einige Tonarten anderen ähnlich sind, andere wiederum sich stark voneinander unterscheiden.",
-      "def_key_signature": "Jede Familie/Tonart enthält 7 Töne (Tonleiter); diese Töne und ihre Varianten (Beispiel D♭-D-D#) nennen wir VORZEICHEN — anders gesagt, die Vorzeichen sind die Anzahl der # oder ♭, die eine Tonart haben kann; manchmal finden wir nur ein #, oder bis zu 5 #, ebenso bei den B-Vorzeichen.",
-      "rule_no_mix": "Es ist anzumerken, dass # und ♭ nicht kombiniert werden: hat die Tonart ♭, finden wir keine #, und umgekehrt.",
+      "def_key_signature": "Jede Familie/Tonart enthält 7 Töne (Tonleiter); diese Töne und ihre Varianten (Beispiel D♭-D-D♯) nennen wir VORZEICHEN — anders gesagt, die Vorzeichen sind die Anzahl der ♯ oder ♭, die eine Tonart haben kann; manchmal finden wir nur ein ♯, oder bis zu 5 ♯, ebenso bei den B-Vorzeichen.",
+      "rule_no_mix": "Es ist anzumerken, dass ♯ und ♭ nicht kombiniert werden: hat die Tonart ♭, finden wir keine ♯, und umgekehrt.",
       "conclusion": "Wir können schlussfolgern: die Vorzeichen beschreiben die Tonart, und die Tonart hat spezifische Vorzeichen — diese zwei Begriffe bedingen einander und verweisen aufeinander."
     },
 
@@ -483,16 +483,16 @@
     "s43": {
       "label": "2.4 · Prozess der Bs",
       "title": "Prozess der Bs",
-      "f_exception": "Es gibt eine Ausnahme zu diesem Verfahren, bei der die zuvor gesehenen Schritte nicht gelten — daher werden wir diese Ausnahme auswendig lernen. Für die Tonart F-Dur gibt es kein \"vorletztes B-Vorzeichen\", daher gelten die vorherigen Schritte nicht; diese Tonart hat nur das erste ♭ des Werkzeugs, nämlich B♭. Im Kontext der Popularmusik/des Rock arbeitet man üblicherweise nur mit der linken Spalte (ausgehend von der Tonart), da das die Information ist, die uns am ehesten zur Verfügung steht; die rechte Spalte wird vor allem in der akademischen Musik (Notenschrift) verwendet, wo wir am Anfang des Stücks im Notensystem die jeweiligen Vorzeichen finden — wir müssen dann die Tonart entschlüsseln, in der wir spielen. Methodentipp: diese Schritte mit allen 12 existierenden Tonika ausprobieren. Wir könnten schlussfolgern, dass die Vorzeichen von F-Dur nur B♭ sind und die Tonleiter F G A B♭ C D E ist."
+      "f_exception": "Es gibt eine Ausnahme zu diesem Verfahren, bei der die zuvor gesehenen Schritte nicht gelten — daher werden wir diese Ausnahme auswendig lernen. Für die Tonart F-Dur gibt es kein \"vorletztes B-Vorzeichen\", daher gelten die vorherigen Schritte nicht; diese Tonart hat nur das erste ♭ des Werkzeugs, nämlich B. Im Kontext der Popularmusik/des Rock arbeitet man üblicherweise nur mit der linken Spalte (ausgehend von der Tonart), da das die Information ist, die uns am ehesten zur Verfügung steht; die rechte Spalte wird vor allem in der akademischen Musik (Notenschrift) verwendet, wo wir am Anfang des Stücks im Notensystem die jeweiligen Vorzeichen finden — wir müssen dann die Tonart entschlüsseln, in der wir spielen. Methodentipp: diese Schritte mit allen 12 existierenden Tonika ausprobieren. Wir könnten schlussfolgern, dass die Vorzeichen von F-Dur nur B sind und die Tonleiter F G A B C D E ist."
     },
 
     "s44": {
       "label": "2.2 · Reihenfolge der Vorzeichen",
       "intro": "In diesem Kasten finden wir die spezifische, kumulative und multitonale Reihenfolge, mit der wir alle Vorzeichen aufbauen können.",
-      "sharps_explanation": "Gehen wir von links nach rechts, fügen wir jedem Ton ein # hinzu. Anders gesagt: alle Tonarten mit # nutzen dieses Werkzeug.",
+      "sharps_explanation": "Gehen wir von links nach rechts, fügen wir jedem Ton ein ♯ hinzu. Anders gesagt: alle Tonarten mit ♯ nutzen dieses Werkzeug.",
       "flats_explanation": "Gehen wir von rechts nach links, fügen wir jedem Ton ein ♭ hinzu. Anders gesagt: alle Tonarten mit ♭ nutzen dieses Werkzeug.",
-      "prop_specific": "Spezifisch, weil wir immer derselben Reihenfolge folgen. Beispiel: F# C# G# — Beispiel: B♭ E♭ A♭ D♭",
-      "prop_cumulative": "Kumulativ, weil wir eine weitere Alterierung hinzufügen und die vorherige beibehalten. Beispiel: ein Vorzeichensatz mit 4# wird immer F# C# G# D# enthalten, da das die ersten 4# des Werkzeugs sind — und ebenso für Tonarten mit ♭.",
+      "prop_specific": "Spezifisch, weil wir immer derselben Reihenfolge folgen. Beispiel: F♯ C♯ G♯ — Beispiel: B E♭ A♭ D♭",
+      "prop_cumulative": "Kumulativ, weil wir eine weitere Alterierung hinzufügen und die vorherige beibehalten. Beispiel: ein Vorzeichensatz mit 4♯ wird immer F♯ C♯ G♯ D♯ enthalten, da das die ersten 4♯ des Werkzeugs sind — und ebenso für Tonarten mit ♭.",
       "prop_multitonal": "Multitonal, weil dieses Werkzeug auf alle existierenden Tonarten anwendbar ist.",
       "tip": "Methodentipp: in beide Richtungen auswendig lernen, da wir dieses Werkzeug ständig verwenden."
     },
@@ -506,12 +506,12 @@
         "key_signature": "Vorzeichen",
         "tonality": "Tonart"
       },
-      "sharps_section": "Tonarten mit Kreuzen (#)",
+      "sharps_section": "Tonarten mit Kreuzen (♯)",
       "flats_section": "Tonarten mit Bs (♭)",
       "observations_title": "Beobachtungen der Methode:",
       "observations": [
         "Bei Kreuztonarten ist die Tonika fast immer ein natürlicher Ton: G, D, A, E, B.",
-        "Bei B-Tonarten haben fast alle Toniken ein B im Namen: B♭, E♭, A♭, D♭, G♭, C♭ (Ausnahme: F).",
+        "Bei B-Tonarten haben fast alle Toniken ein B im Namen: B, E♭, A♭, D♭, G♭, C♭ (Ausnahme: F).",
         "Das hilft, schnell zu erkennen, mit welchem Vorzeichen eine Tonart arbeitet."
       ]
     },
@@ -531,7 +531,7 @@
       "instruction": "Wechsle den Schritt, um zu sehen, wie sich die Tabelle wandelt. Im letzten Schritt klicke auf jeden Akkord, um ihn zu hören.",
       "steps": {
         "s1_label": "Schritt 1 — Jeden Ton als Dreiklang denken (nur Buchstaben):",
-        "s2_label": "Schritt 2 — Dreiklänge mit den Vorzeichen der Tonleiter aktualisieren (F# C# G#):",
+        "s2_label": "Schritt 2 — Dreiklänge mit den Vorzeichen der Tonleiter aktualisieren (F♯ C♯ G♯):",
         "s3_label": "Schritt 3 — Jeden Akkord spielen und seinen Charakter hören (hell = Dur, dunkel = Moll):",
         "s4_label": "Ergebnis — Muster der Akkordqualitäten:"
       },

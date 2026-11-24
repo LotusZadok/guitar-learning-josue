@@ -6,7 +6,7 @@ import NoteToken from '../../../shared/NoteToken/NoteToken';
 import RelativasMenores from '../../../primitives/RelativasMenores/RelativasMenores';
 import { useUIStore } from '../../../../stores/useUIStore';
 import { ALL } from '../../../../data/notes';
-import { tonicChromatic } from '../../../../utils/noteCalculations';
+import { formatNote, tonicChromatic } from '../../../../utils/noteCalculations';
 import type { NoteSpelling, ChromaticNote } from '../../../../types/music';
 import { TONALIDADES } from '../../t2/data/tonalidades';
 import type { ProseSegment } from '../../../../types/prose';
@@ -48,14 +48,14 @@ const VALID_SPELLINGS: ReadonlySet<string> = new Set([
   'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B',
   'Db', 'Eb', 'Gb', 'Ab', 'Bb',
 ]);
-function renderNote(s: string) {
+function renderNote(s: string, lang: string) {
   return VALID_SPELLINGS.has(s)
     ? <NoteToken note={s as NoteSpelling} />
-    : <span>{s.replace('#', '♯').replace('b', '♭')}</span>;
+    : <span>{formatNote(s, lang)}</span>;
 }
 
 export default function RelativasMenoresSection() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const tonic = useUIStore((s) => s.tonic);
 
   const intro = t('t2.s49.intro_prose', { returnObjects: true }) as ProseSegment[];
@@ -95,15 +95,15 @@ export default function RelativasMenoresSection() {
               const isActive = row.chromatic === tonicChromatic(tonic);
               return (
                 <tr key={row.mayor} className={isActive ? styles.rowActive : undefined}>
-                  <td>{renderNote(row.mayor)} {t('common.major')}</td>
-                  <td>{renderNote(row.menor)}m</td>
+                  <td>{renderNote(row.mayor, i18n.language)} {t('common.major')}</td>
+                  <td>{renderNote(row.menor, i18n.language)}m</td>
                   <td>
                     {row.armadura.length === 0
                       ? t('t2.s49.table_no_sharps_flats')
                       : row.armadura.map((n, i) => (
                           <span key={n}>
                             {i > 0 && ' '}
-                            {renderNote(n)}
+                            {renderNote(n, i18n.language)}
                           </span>
                         ))}
                   </td>

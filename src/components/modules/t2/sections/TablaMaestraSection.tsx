@@ -1,4 +1,5 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState } from 'react';
+import { formatNote } from '../../../../utils/noteCalculations';
 import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
@@ -6,10 +7,6 @@ import NoteToken from '../../../shared/NoteToken/NoteToken';
 import type { NoteSpelling } from '../../../../types/music';
 import { TONALIDADES } from '../data/tonalidades';
 import ProcesoView from '../components/ProcesoView';
-
-function toGlyph(s: string): string {
-  return s.replace(/([A-G])b/g, '$1♭').replace(/([A-G])#/g, '$1♯');
-}
 
 // Las 17 grafías que NoteToken sabe colorear/reproducir (12 sostenidos + 5
 // bemoles canónicos). Cb/Fb/E♯/B♯ (tonalidades de 6-7 alteraciones) quedan
@@ -21,9 +18,10 @@ const VALID_NOTE_SPELLINGS = new Set([
 ]);
 
 function NoteOrText({ spelling }: { spelling: string }) {
+  const lang = useTranslation().i18n.language;
   return VALID_NOTE_SPELLINGS.has(spelling)
     ? <NoteToken note={spelling as NoteSpelling} />
-    : <span>{toGlyph(spelling)}</span>;
+    : <span>{formatNote(spelling, lang)}</span>;
 }
 
 import styles from './TablaMaestraSection.module.css';
