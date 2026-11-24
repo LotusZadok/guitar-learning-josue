@@ -11,6 +11,7 @@ import {
   majorScaleSpelled,
   octavasDesdeRaiz,
   filasDeIntervalos,
+  formatNote,
 } from "../../../../utils/noteCalculations";
 import { conOctavas, notasDe } from "../../../../utils/prose";
 import type { NoteSpelling, Tonic } from "../../../../types/music";
@@ -224,7 +225,7 @@ export default function IntervalosSection() {
             <tr>
               <th scope="row">{locale === "de" ? "Schritt 1" : "Paso 1"}</th>
               {filas.letras.map((l, i) => (
-                <td key={i}>{l}</td>
+                <td key={i}>{l.split('-').map((x) => formatNote(x, locale)).join('-')}</td>
               ))}
             </tr>
             <tr>

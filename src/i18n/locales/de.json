@@ -267,7 +267,7 @@
         { "type": "note", "value": "E" },
         { "type": "text", "value": "–" },
         { "type": "note", "value": "F" },
-        { "type": "text", "value": " gibt es keinen alterierten Ton (H♯ und E♯ existieren als Alterierungen im chromatischen Kreis in diesem Kontext nicht — sie entsprechen denselben Tönen wie " },
+        { "type": "text", "value": " gibt es keinen alterierten Ton (His und Eis existieren als Alterierungen im chromatischen Kreis in diesem Kontext nicht — sie entsprechen denselben Tönen wie " },
         { "type": "note", "value": "C" },
         { "type": "text", "value": " bzw. " },
         { "type": "note", "value": "F" },
@@ -300,7 +300,7 @@
         { "type": "note", "value": "B" },
         { "type": "text", "value": "\", wählt man " },
         { "type": "note", "value": "Bb" },
-        { "type": "text", "value": " (H♭) statt " },
+        { "type": "text", "value": " statt " },
         { "type": "note", "value": "A#" },
         { "type": "text", "value": "." }
       ],
@@ -425,7 +425,7 @@
         { "type": "note", "value": "Bb" },
         { "type": "text", "value": " die Tonika ist, ist ihre r. Quinte " },
         { "type": "note", "value": "F" },
-        { "type": "text", "value": " (nicht F♭)." }
+        { "type": "text", "value": " (nicht Fes)." }
       ],
       "fifths_title": "Die 12 reinen Quinten",
       "fifths_instruction": [
@@ -440,9 +440,9 @@
         { "type": "note", "value": "Bb" },
         { "type": "text", "value": " → " },
         { "type": "note", "value": "F" },
-        { "type": "text", "value": " (nicht F♭). Im System mit Kreuzen erscheint dieselbe r. Quinte als " },
+        { "type": "text", "value": " (nicht Fes). Im System mit Kreuzen erscheint dieselbe r. Quinte als " },
         { "type": "note", "value": "A#" },
-        { "type": "text", "value": " → E♯ (enharmonisch zu " },
+        { "type": "text", "value": " → Eis (enharmonisch zu " },
         { "type": "note", "value": "F" },
         { "type": "text", "value": ")." }
       ],
@@ -459,7 +459,7 @@
       "intro_languages": "Um dieses Thema zu verstehen, verwenden wir eine Analogie zu den verschiedenen Sprachen der Welt. Es gibt zahlreiche und vielfältige Sprachen, einige einander ähnlich, zum Beispiel: Spanisch, Portugiesisch, Italienisch — diese drei sind zwar nicht dieselbe Sprache, teilen aber Phonetik, Wortschatz und sogar Grammatik, dank derselben romanischen Wurzel. Dasselbe Beispiel gilt für Deutsch, Niederländisch und Englisch, die die germanische Wurzel teilen, usw.",
       "intro_variety": "All das lässt uns verstehen, dass es eine große Vielfalt an Sprachen gibt — einige sehr unterschiedlich, andere sehr ähnlich, bei denen sich nur die Details unterscheiden. Dieselbe Idee wenden wir auf die TONARTEN an.",
       "def_tonalities": "Die Tonarten/Sprachen sind Tonfamilien, wobei einige Tonarten anderen ähnlich sind, andere wiederum sich stark voneinander unterscheiden.",
-      "def_key_signature": "Jede Familie/Tonart enthält 7 Töne (Tonleiter); diese Töne und ihre Varianten (Beispiel D♭-D-D♯) nennen wir VORZEICHEN — anders gesagt, die Vorzeichen sind die Anzahl der ♯ oder ♭, die eine Tonart haben kann; manchmal finden wir nur ein ♯, oder bis zu 5 ♯, ebenso bei den B-Vorzeichen.",
+      "def_key_signature": "Jede Familie/Tonart enthält 7 Töne (Tonleiter); diese Töne und ihre Varianten (Beispiel Des-D-Dis) nennen wir VORZEICHEN — anders gesagt, die Vorzeichen sind die Anzahl der ♯ oder ♭, die eine Tonart haben kann; manchmal finden wir nur ein ♯, oder bis zu 5 ♯, ebenso bei den B-Vorzeichen.",
       "rule_no_mix": "Es ist anzumerken, dass ♯ und ♭ nicht kombiniert werden: hat die Tonart ♭, finden wir keine ♯, und umgekehrt.",
       "conclusion": "Wir können schlussfolgern: die Vorzeichen beschreiben die Tonart, und die Tonart hat spezifische Vorzeichen — diese zwei Begriffe bedingen einander und verweisen aufeinander."
     },
@@ -480,8 +480,8 @@
       "intro": "In diesem Kasten finden wir die spezifische, kumulative und multitonale Reihenfolge, mit der wir alle Vorzeichen aufbauen können.",
       "sharps_explanation": "Gehen wir von links nach rechts, fügen wir jedem Ton ein ♯ hinzu. Anders gesagt: alle Tonarten mit ♯ nutzen dieses Werkzeug.",
       "flats_explanation": "Gehen wir von rechts nach links, fügen wir jedem Ton ein ♭ hinzu. Anders gesagt: alle Tonarten mit ♭ nutzen dieses Werkzeug.",
-      "prop_specific": "Spezifisch, weil wir immer derselben Reihenfolge folgen. Beispiel: F♯ C♯ G♯ — Beispiel: B E♭ A♭ D♭",
-      "prop_cumulative": "Kumulativ, weil wir eine weitere Alterierung hinzufügen und die vorherige beibehalten. Beispiel: ein Vorzeichensatz mit 4♯ wird immer F♯ C♯ G♯ D♯ enthalten, da das die ersten 4♯ des Werkzeugs sind — und ebenso für Tonarten mit ♭.",
+      "prop_specific": "Spezifisch, weil wir immer derselben Reihenfolge folgen. Beispiel: Fis Cis Gis — Beispiel: B Es As Des",
+      "prop_cumulative": "Kumulativ, weil wir eine weitere Alterierung hinzufügen und die vorherige beibehalten. Beispiel: ein Vorzeichensatz mit 4♯ wird immer Fis Cis Gis Dis enthalten, da das die ersten 4♯ des Werkzeugs sind — und ebenso für Tonarten mit ♭.",
       "prop_multitonal": "Multitonal, weil dieses Werkzeug auf alle existierenden Tonarten anwendbar ist.",
       "tip": "Methodentipp: in beide Richtungen auswendig lernen, da wir dieses Werkzeug ständig verwenden."
     },
@@ -500,7 +500,7 @@
       "observations_title": "Beobachtungen der Methode:",
       "observations": [
         "Bei Kreuztonarten ist die Tonika fast immer ein natürlicher Ton: G, D, A, E, B.",
-        "Bei B-Tonarten haben fast alle Toniken ein B im Namen: B, E♭, A♭, D♭, G♭, C♭ (Ausnahme: F).",
+        "Bei B-Tonarten haben fast alle Toniken ein B im Namen: B, Es, As, Des, Ges, Ces (Ausnahme: F).",
         "Das hilft, schnell zu erkennen, mit welchem Vorzeichen eine Tonart arbeitet."
       ]
     },
@@ -520,7 +520,7 @@
       "instruction": "Wechsle den Schritt, um zu sehen, wie sich die Tabelle wandelt. Im letzten Schritt klicke auf jeden Akkord, um ihn zu hören.",
       "steps": {
         "s1_label": "Schritt 1 — Jeden Ton als Dreiklang denken (nur Buchstaben):",
-        "s2_label": "Schritt 2 — Dreiklänge mit den Vorzeichen der Tonleiter aktualisieren (F♯ C♯ G♯):",
+        "s2_label": "Schritt 2 — Dreiklänge mit den Vorzeichen der Tonleiter aktualisieren (Fis Cis Gis):",
         "s3_label": "Schritt 3 — Jeden Akkord spielen und seinen Charakter hören (hell = Dur, dunkel = Moll):",
         "s4_label": "Ergebnis — Muster der Akkordqualitäten:"
       },

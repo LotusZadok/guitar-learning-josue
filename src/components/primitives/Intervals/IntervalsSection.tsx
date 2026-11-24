@@ -21,11 +21,11 @@ export default function IntervalsSection() {
 
   const intervals = isDe
     ? [
-        { name: 'Tonika', st: '0 HT', desc: `Grundton. Ausgangspunkt → ${rootSpelled} (${rootDE})` },
-        { name: 'Kleine Terz', st: '3 HT', desc: `${t3m} · definiert den Moll-Akkord` },
-        { name: 'Große Terz', st: '4 HT', desc: `${t3M} · definiert den Dur-Akkord` },
-        { name: 'Quinte', st: '7 HT', desc: `Reine Quinte → ${quinta}` },
-        { name: 'Oktave', st: '12 HT', desc: `Wiederholung der Tonika eine Oktave höher → ${rootSpelled}` },
+        { name: 'Tonika', st: '0 HT', desc: `Grundton. Ausgangspunkt → ${rootDE}` },
+        { name: 'Kleine Terz', st: '3 HT', desc: `${formatNote(t3m, 'de')} · definiert den Moll-Akkord` },
+        { name: 'Große Terz', st: '4 HT', desc: `${formatNote(t3M, 'de')} · definiert den Dur-Akkord` },
+        { name: 'Quinte', st: '7 HT', desc: `Reine Quinte → ${formatNote(quinta, 'de')}` },
+        { name: 'Oktave', st: '12 HT', desc: `Wiederholung der Tonika eine Oktave höher → ${rootDE}` },
       ]
     : [
         { name: 'Tónica', st: '0 st', desc: `Nota base. Punto de partida → ${rootSpelled} (${rootES})` },

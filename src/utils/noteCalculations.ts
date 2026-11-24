@@ -10,28 +10,54 @@ const ALTERACION_GLIFO: Record<string, string> = {
   "": "", "#": "♯", "♯": "♯", b: "♭", "♭": "♭", bb: "♭♭", "♭♭": "♭♭", x: "x", "##": "x", "♯♯": "x",
 };
 
-export function formatNote(grafia: string, lang: string): string {
+// El profesor (24/11/26): en alemán las notas se nombran como allá, Do♯ = Cis,
+// Mi♭ = Es, Si = H, Si♭ = B. Los cifrados siguen con letra + glifo (ver abajo).
+const SUFIJO_DE: Record<string, string> = { "": "", "♯": "is", x: "isis", "♭": "es", "♭♭": "eses" };
+
+function nombreAleman(letra: string, alteracion: string): string {
+  if (letra === "B") {
+    if (alteracion === "♭") return "B";
+    return "H" + SUFIJO_DE[alteracion];
+  }
+  // E y A con bemol pierden la "e": Es, As (Eses, Asas).
+  if ((letra === "E" || letra === "A") && alteracion.startsWith("♭")) {
+    return letra + SUFIJO_DE[alteracion].slice(1);
+  }
+  return letra + SUFIJO_DE[alteracion];
+}
+
+function letraYAlteracion(grafia: string): [string, string] | null {
   const m = /^([A-G])(.*)$/.exec(grafia);
   const alteracion = m ? ALTERACION_GLIFO[m[2]] : undefined;
   if (!m || alteracion === undefined) {
     console.warn(`formatNote: grafía no reconocida "${grafia}"`);
-    return grafia;
+    return null;
   }
-  const letra = m[1];
-  if (lang === "de" && letra === "B") return alteracion === "♭" ? "B" : `H${alteracion}`;
-  return letra + alteracion;
+  return [m[1], alteracion];
 }
 
-// Un cifrado (A7, Bbmaj7, F#m7b5, F##dim) para mostrar: la fundamental pasa por
-// `formatNote` (en alemán Bm → Hm, B♭maj7 → Bmaj7) y en el sufijo todo '#' es ♯
-// y toda 'b' minúscula es ♭ (regla ♭ integral; las calidades no usan 'b').
+export function formatNote(grafia: string, lang: string): string {
+  const partes = letraYAlteracion(grafia);
+  if (!partes) return grafia;
+  const [letra, alteracion] = partes;
+  return lang === "de" ? nombreAleman(letra, alteracion) : letra + alteracion;
+}
+
+// Un cifrado (A7, Bbmaj7, F#m7b5, F##dim) para mostrar: la fundamental con letra +
+// glifo (en alemán solo cambia la letra B: Bm → Hm, B♭maj7 → Bmaj7) y en el sufijo
+// todo '#' es ♯ y toda 'b' minúscula es ♭ (regla ♭ integral; las calidades no
+// usan 'b'). Pendiente con el profesor: si en alemán prefiere Cism7 o C♯m7.
 export function formatChordSymbol(cifrado: string, lang: string): string {
   const m = /^([A-G](?:##|♯♯|#|♯|x|bb|♭♭|b|♭)?)(.*)$/.exec(cifrado);
   if (!m) {
     console.warn(`formatChordSymbol: cifrado no reconocido "${cifrado}"`);
     return cifrado;
   }
-  return formatNote(m[1], lang) + m[2].replace(/#/g, "♯").replace(/b/g, "♭");
+  const partes = letraYAlteracion(m[1]);
+  if (!partes) return cifrado;
+  const [letra, alteracion] = partes;
+  const raiz = lang === "de" && letra === "B" ? (alteracion === "♭" ? "B" : "H" + alteracion) : letra + alteracion;
+  return raiz + m[2].replace(/#/g, "♯").replace(/b/g, "♭");
 }
 
 // Reunión 22/11/26 (#9, #10; D6): en alemán los intervalos usan K (klein),

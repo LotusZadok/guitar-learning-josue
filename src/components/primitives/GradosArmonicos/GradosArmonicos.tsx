@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { useFireGate } from '../../../hooks/useFireGate';
 import { ALL } from '../../../data/notes';
-import { formatChordSymbol, aAscii, majorScaleSpelled, relativeMinorScaleSpelled, spelledSequenceAscending, tonicChromatic } from '../../../utils/noteCalculations';
+import { formatNote, formatChordSymbol, aAscii, majorScaleSpelled, relativeMinorScaleSpelled, spelledSequenceAscending, tonicChromatic } from '../../../utils/noteCalculations';
 import NoteToken, { type DiatonicRole } from '../../shared/NoteToken/NoteToken';
 import RomanGlyph from '../../shared/RomanGlyph/RomanGlyph';
 import { GANANCIA_POR_ROL } from '../../../utils/progresionArmonica';
@@ -309,6 +309,7 @@ interface RowProps {
 }
 
 function Row({ label, cells, ascii, roles }: RowProps) {
+  const lang = useTranslation().i18n.language;
   return (
     <tr>
       <th scope="row" className={styles.rowLabel}>{label}</th>
@@ -320,7 +321,7 @@ function Row({ label, cells, ascii, roles }: RowProps) {
             {tokenizable ? (
               <NoteToken note={a as NoteSpelling} diatonicRole={roles?.[i]} />
             ) : (
-              <span className={styles.rawNote}>{display}</span>
+              <span className={styles.rawNote}>{formatNote(display, lang)}</span>
             )}
           </td>
         );
@@ -366,7 +367,7 @@ function TriadaRow({ tonicaRow, tonicaAscii, terceraRow, terceraAscii, quintaRow
                 return VALID_SPELLINGS.has(m.ascii) ? (
                   <NoteToken key={j} note={m.ascii as NoteSpelling} diatonicRole={DEGREE_ROLE[degree]} octave={octaves[j]} />
                 ) : (
-                  <span key={j} className={styles.rawNote}>{m.display}</span>
+                  <span key={j} className={styles.rawNote}>{formatNote(m.display, isDe ? 'de' : 'es')}</span>
                 );
               })}
             </div>

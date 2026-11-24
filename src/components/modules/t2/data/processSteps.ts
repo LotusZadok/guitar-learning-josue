@@ -225,7 +225,7 @@ function getFlatsLeftSteps(t: Tonalidad, locale: ProcessLocale = 'es'): ProcessS
   return [
     {
       description: isDe
-        ? `1. Ausgehend von ${f(t.tonica)}-Dur suchen wir die Tonika ${f(t.tonica)} im Werkzeug B E♭ A♭ D♭ G♭ C♭ F♭`
+        ? `1. Ausgehend von ${f(t.tonica)}-Dur suchen wir die Tonika ${f(t.tonica)} im Werkzeug B Es As Des Ges Ces Fes`
         : `1. Partiendo de ${f(t.tonica)} mayor, buscamos la tónica ${f(t.tonica)} en la herramienta B♭ E♭ A♭ D♭ G♭ C♭ F♭`,
       circleNotes: s1, scaleDisplay: [], armaduraDisplay: [],
     },

@@ -5,6 +5,7 @@ import { useUIStore } from '../../../stores/useUIStore';
 import {
   aAscii,
   chordSpelled,
+  formatNote,
   esNoteSpelling,
   letrasDeTriada,
   otrasGrafias,
@@ -56,11 +57,11 @@ interface Paso {
 }
 
 // Las grafías que NoteToken no conoce (B♭♭, F♭…) van como texto con glifo.
-const fragmentoNota = (grafia: string, octave?: number): ProseFragment => {
+const fragmentoNota = (grafia: string, lang: string, octave?: number): ProseFragment => {
   const ascii = aAscii(grafia);
   return esNoteSpelling(ascii)
     ? { type: 'note', value: ascii, octave }
-    : { type: 'text', value: grafia };
+    : { type: 'text', value: formatNote(grafia, lang) };
 };
 
 // Los ProseSegment se aplanan a texto para la región viva: aria-live necesita
@@ -82,7 +83,7 @@ const pasoText = (paso: Paso): string =>
 function buildPasoLetras(tonic: Tonic, locale: string): Paso {
   const prefix =
     locale === 'de' ? 'Buchstaben der Trias: ' : 'Letras de la tríada: ';
-  return { texto: [{ type: 'text', value: `${prefix}${letrasDeTriada(tonic).join(' ')}.` }] };
+  return { texto: [{ type: 'text', value: `${prefix}${letrasDeTriada(tonic).map((l) => formatNote(l, locale)).join(' ')}.` }] };
 }
 
 function buildPasoSemitonos(
@@ -116,14 +117,14 @@ function buildPasoSemitonos(
           type: 'text',
           value:
             locale === 'de'
-              ? `Nach der Regel aus Schritt 1 ist der Buchstabe ${grafia[0]}, also ist es `
+              ? `Nach der Regel aus Schritt 1 ist der Buchstabe ${formatNote(grafia[0], 'de')}, also ist es `
               : `Por la regla del paso 1, la letra es ${grafia[0]}, entonces es `,
         },
-        fragmentoNota(grafia, llegada.octava),
+        fragmentoNota(grafia, locale, llegada.octava),
         { type: 'text', value: locale === 'de' ? ' (nicht ' : ' (no ' },
         ...otras.flatMap((o, i): ProseFragment[] => [
           ...(i > 0 ? [{ type: 'text', value: '/' } as const] : []),
-          fragmentoNota(o, llegada.octava),
+          fragmentoNota(o, locale, llegada.octava),
         ]),
         { type: 'text', value: ').' },
       ]
@@ -147,7 +148,7 @@ function buildPasoResultado(tonic: Tonic, tipo: ChordType, locale: string): Paso
   const seg: ProseFragment[] = [{ type: 'text', value: prefix }];
   members.forEach((m, i) => {
     if (i > 0) seg.push({ type: 'text', value: ' ' });
-    seg.push(fragmentoNota(m.spelled, m.octave));
+    seg.push(fragmentoNota(m.spelled, locale, m.octave));
   });
   seg.push({ type: 'text', value: suffix });
   return { texto: seg };
@@ -291,7 +292,7 @@ export default function AcordeProceso({ eyebrow }: Props) {
                             {c.notas.map((n, j) => (
                               <Fragment key={n}>
                                 {j > 0 && '/'}
-                                <Prose segment={[fragmentoNota(n, c.octava)]} />
+                                <Prose segment={[fragmentoNota(n, locale, c.octava)]} />
                               </Fragment>
                             ))}
                           </span>

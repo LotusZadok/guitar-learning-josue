@@ -210,7 +210,7 @@ export default function SimetriaDim7() {
               {/* Enarmonía de la nota alterada, más chica debajo de la grafía del método. */}
               {enarmonia && (
                 <text x={x} y={y + 8} className={styles.noteTextEnarmonia} fill="#fff">
-                  {enarmonia}
+                  {formatNote(enarmonia, i18n.language)}
                 </text>
               )}
               {note === tonicChrom && (

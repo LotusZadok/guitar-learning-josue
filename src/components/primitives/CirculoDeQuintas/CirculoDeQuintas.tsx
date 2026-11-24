@@ -251,7 +251,7 @@ export default function CirculoDeQuintas() {
 
       <p className={styles.footnote}>
         {isDe ? (
-          <>* Ausnahmen: <strong>H → F♯</strong> (nicht F) und <strong>B♭ → F</strong> (nicht F♭). Dokumentiert in §1.8.</>
+          <>* Ausnahmen: <strong>H → Fis</strong> (nicht F) und <strong>B → F</strong> (nicht Fes). Dokumentiert in §1.8.</>
         ) : (
           <>* Excepciones: <strong>B → F♯</strong> (no F) y <strong>B♭ → F</strong> (no F♭). Documentadas en §1.8.</>
         )}
