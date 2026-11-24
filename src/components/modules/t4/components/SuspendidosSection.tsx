@@ -6,7 +6,7 @@ import ChordStacks, { type ChordDef } from '../../../primitives/ChordStacks/Chor
 import AcordesBuilder from '../../../primitives/AcordesBuilder/AcordesBuilder';
 import { BUILDER_33 } from '../../../primitives/AcordesBuilder/configs';
 import { useUIStore } from '../../../../stores/useUIStore';
-import { formatNote, aAscii, intervalMemberFromTonic } from '../../../../utils/noteCalculations';
+import { intervalLabel, formatNote, aAscii, intervalMemberFromTonic } from '../../../../utils/noteCalculations';
 import type { NoteSpelling } from '../../../../types/music';
 import type { ProseSegment } from '../../../../types/prose';
 import styles from './SuspendidosSection.module.css';
@@ -87,7 +87,7 @@ export default function SuspendidosSection() {
             {ROWS.map((r, i) => (
               <tr key={r.code}>
                 <th scope="row">{names[i]}</th>
-                <td>{r.formula}</td>
+                <td>{intervalLabel(r.formula, i18n.language)}</td>
                 <td>{r.code}</td>
               </tr>
             ))}

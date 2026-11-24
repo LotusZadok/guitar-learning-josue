@@ -5,7 +5,7 @@ import NoteToken from '../../../shared/NoteToken/NoteToken';
 import Prose from '../../../shared/Prose/Prose';
 import EscalaMayor from '../../../primitives/EscalaMayor/EscalaMayor';
 import { useUIStore } from '../../../../stores/useUIStore';
-import { aAscii, formatNote, majorScaleSpelled, octavasDesdeRaiz } from '../../../../utils/noteCalculations';
+import { intervalLabel, aAscii, formatNote, majorScaleSpelled, octavasDesdeRaiz } from '../../../../utils/noteCalculations';
 import type { NoteSpelling } from '../../../../types/music';
 import type { ProseSegment } from '../../../../types/prose';
 // Cast tonicAscii (string) to NoteSpelling at the prose boundary.
@@ -71,7 +71,7 @@ export default function EscalaMayorSection() {
             <tr>
               <th scope="col">{t('t1.s06.table_headers.degree')}</th>
               {ESCALA_HEAD_CODES.map((h, i) => (
-                <th key={i} scope="col">{h}</th>
+                <th key={i} scope="col">{intervalLabel(h, i18n.language)}</th>
               ))}
             </tr>
           </thead>

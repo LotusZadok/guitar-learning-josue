@@ -6,6 +6,7 @@ import NoteToken from "../../../shared/NoteToken/NoteToken";
 import IntervalsSection from "../../../primitives/Intervals/IntervalsSection";
 import { useUIStore } from "../../../../stores/useUIStore";
 import {
+  intervalLabel,
   aAscii,
   majorScaleSpelled,
   octavasDesdeRaiz,
@@ -75,7 +76,7 @@ function buildOctava(tonicAscii: string, locale: string): ProseSegment {
       {
         type: "text",
         value:
-          "Die reine Oktave (8r) ist derselbe Ton eine Oktave höher oder tiefer. Die 8r von ",
+          "Die reine Oktave (8R) ist derselbe Ton eine Oktave höher oder tiefer. Die 8R von ",
       },
       { type: "note", value: t },
       { type: "text", value: " ist " },
@@ -179,7 +180,7 @@ export default function IntervalosSection() {
               <th scope="col">{t("t1.s04.table_headers.name")}</th>
               {INTERVALOS_13_CODES.map((h, i) => (
                 <th key={i} scope="col">
-                  {h}
+                  {intervalLabel(h, locale)}
                 </th>
               ))}
             </tr>
@@ -212,7 +213,7 @@ export default function IntervalosSection() {
               <th scope="col">{t("t1.s04.table_headers.name")}</th>
               {INTERVALOS_13_CODES.map((h, i) => (
                 <th key={i} scope="col">
-                  {h}
+                  {intervalLabel(h, locale)}
                 </th>
               ))}
             </tr>

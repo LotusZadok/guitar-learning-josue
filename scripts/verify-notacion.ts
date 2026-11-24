@@ -1,6 +1,6 @@
 // Arnés de verificación de la notación (formatNote y afines).
 // Se corre con `npm run verify:notacion` (node --experimental-strip-types).
-import { formatChordSymbol, formatNote, pitchClass } from '../src/utils/noteCalculations.ts';
+import { formatChordSymbol, formatNote, intervalLabel, pitchClass } from '../src/utils/noteCalculations.ts';
 import { ALL, NOTE_DE } from '../src/data/notes.ts';
 import { check, resumen } from './verify-helpers.ts';
 
@@ -26,5 +26,11 @@ check('es: F#m7 → F♯m7', formatChordSymbol('F#m7', 'es'), 'F♯m7');
 check('es: Bm7b5 → Bm7♭5, la b de la quinta también', formatChordSymbol('Bm7b5', 'es'), 'Bm7♭5');
 check('es: F##dim → Fxdim', formatChordSymbol('F##dim', 'es'), 'Fxdim');
 check('es: idempotente', formatChordSymbol(formatChordSymbol('Ebmaj7', 'es'), 'es'), 'E♭maj7');
+
+console.log('\n· intervalLabel: abreviaturas en alemán (reunión 22/11/26, #9, #10; D6) ·');
+check('de: m, M, J, d, a → K, G, R, V, Ü con el número primero',
+  ['3m', '3M', '4J', '5d', '4a', '8J', '7d'].map((c) => intervalLabel(c, 'de')), ['3K', '3G', '4R', '5V', '4Ü', '8R', '7V']);
+check('de: el tritono doble y la tónica', [intervalLabel('4a/5d', 'de'), intervalLabel('T', 'de')], ['4Ü/5V', 'T']);
+check('es: sin cambios', ['3m', '3M', '4J', '5d', '4a/5d', 'T'].map((c) => intervalLabel(c, 'es')), ['3m', '3M', '4J', '5d', '4a/5d', 'T']);
 
 resumen();

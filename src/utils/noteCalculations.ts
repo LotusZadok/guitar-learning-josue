@@ -34,6 +34,17 @@ export function formatChordSymbol(cifrado: string, lang: string): string {
   return formatNote(m[1], lang) + m[2].replace(/#/g, "♯").replace(/b/g, "♭");
 }
 
+// Reunión 22/11/26 (#9, #10; D6): en alemán los intervalos usan K (klein),
+// G (groß), R (rein), V (vermindert) y Ü (übermäßig), con el número primero
+// como en español (3K, 5R). Los códigos internos ('3m', '5d') no cambian: son
+// los roles de los árboles y de los tests; solo se traducen al dibujar.
+const CALIDAD_DE: Record<string, string> = { m: "K", M: "G", J: "R", d: "V", a: "Ü" };
+
+export function intervalLabel(codigo: string, lang: string): string {
+  if (lang !== "de") return codigo;
+  return codigo.replace(/(\d)([mMJda])/g, (_, n: string, q: string) => n + CALIDAD_DE[q]);
+}
+
 export function noteShort(n: string): string {
   return formatNote(n, "es");
 }

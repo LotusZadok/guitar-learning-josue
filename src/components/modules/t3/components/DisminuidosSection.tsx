@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
+import { intervalLabel } from '../../../../utils/noteCalculations';
 import SectionLabel from '../../../shared/SectionLabel';
 import ChordStacks, { type ChordDef } from '../../../primitives/ChordStacks/ChordStacks';
 import AcordesBuilder from '../../../primitives/AcordesBuilder/AcordesBuilder';
@@ -36,7 +37,7 @@ const CHORDS: ChordDef[] = [
 ];
 
 export default function DisminuidosSection() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const h = t('t3.s32.table_headers', { returnObjects: true }) as Record<string, string>;
   const names = t('t3.s32.chords', { returnObjects: true }) as string[];
 
@@ -60,7 +61,7 @@ export default function DisminuidosSection() {
             {ROWS.map((r, i) => (
               <tr key={r.code}>
                 <th scope="row">{names[i]}</th>
-                <td>{r.formula}</td>
+                <td>{intervalLabel(r.formula, i18n.language)}</td>
                 <td>{r.code}</td>
               </tr>
             ))}

@@ -5,6 +5,7 @@ import { useFireGate } from '../../../hooks/useFireGate';
 import { useUIStore } from '../../../stores/useUIStore';
 import { NOTE_COLORS, spelledToES } from '../../../data/notes';
 import {
+  intervalLabel,
   formatNote,
   intervalMemberFromTonic,
   type IntervalMember,
@@ -134,7 +135,7 @@ function ChordColumn({ chord, tonic }: ChordColumnProps) {
               transform={`translate(0,${y})`}
               role="button"
               tabIndex={0}
-              aria-label={`${tone.role} · ${spelledToES(m.spelled)}`}
+              aria-label={`${intervalLabel(tone.role, lang)} · ${spelledToES(m.spelled)}`}
               onMouseEnter={() => {
                 setHovered(i);
                 scrub(m);
@@ -157,7 +158,7 @@ function ChordColumn({ chord, tonic }: ChordColumnProps) {
                 x={ROLE_X}
                 y={0}
               >
-                {tone.role}
+                {intervalLabel(tone.role, lang)}
               </text>
               <circle className={styles.hit} cx={NODE_X} cy={0} r={R + 5} fill="transparent" />
               <circle

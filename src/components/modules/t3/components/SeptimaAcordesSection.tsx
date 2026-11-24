@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
+import { intervalLabel } from '../../../../utils/noteCalculations';
 import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
 import ChordStacks, { type ChordDef } from '../../../primitives/ChordStacks/ChordStacks';
@@ -56,7 +57,7 @@ const CHORDS: ChordDef[] = [
 ];
 
 export default function SeptimaAcordesSection() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const h = t('t3.s312.table_headers', { returnObjects: true }) as Record<string, string>;
   const names = t('t3.s312.chords', { returnObjects: true }) as string[];
 
@@ -80,7 +81,7 @@ export default function SeptimaAcordesSection() {
             {ROWS.map((r, i) => (
               <tr key={r.code}>
                 <th scope="row">{names[i]}</th>
-                <td>{r.formula}</td>
+                <td>{intervalLabel(r.formula, i18n.language)}</td>
                 <td>{r.code}</td>
               </tr>
             ))}

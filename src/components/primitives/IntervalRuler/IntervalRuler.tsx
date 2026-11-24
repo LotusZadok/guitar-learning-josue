@@ -5,6 +5,7 @@ import { useFireGate } from '../../../hooks/useFireGate';
 import { useUIStore } from '../../../stores/useUIStore';
 import { NOTE_COLORS, spelledToES } from '../../../data/notes';
 import {
+  intervalLabel,
   formatNote,
   intervalMemberFromTonic,
   type IntervalMember,
@@ -134,7 +135,7 @@ function Node({ stop, x, member, active, onEnter, onLeave, onActivate }: NodePro
       className={`${styles.node} ${stop.reference ? styles.reference : ''}`}
       transform={`translate(${x},${AXIS_Y})`}
       role="button"
-      aria-label={`${stop.role} · ${nameES}${stop.showSemis ? ` · ${stop.semis} semitonos` : ''}`}
+      aria-label={`${intervalLabel(stop.role, lang)} · ${nameES}${stop.showSemis ? ` · ${stop.semis} semitonos` : ''}`}
       tabIndex={0}
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
@@ -154,10 +155,10 @@ function Node({ stop, x, member, active, onEnter, onLeave, onActivate }: NodePro
         fill={colored ? '#fff' : 'var(--text-body)'}
         style={colored && member.spelled.length > 2 ? { fontSize: '11px' } : undefined}
       >
-        {colored ? formatNote(member.spelled, lang) : stop.role}
+        {colored ? formatNote(member.spelled, lang) : intervalLabel(stop.role, lang)}
       </text>
       <text className={styles.name} x={0} y={R + 17} fill="var(--muted)">
-        {colored ? stop.role : nameES}
+        {colored ? intervalLabel(stop.role, lang) : nameES}
       </text>
       {stop.showSemis && (
         <text className={styles.semis} x={0} y={-R - 9} fill="var(--muted)">

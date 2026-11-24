@@ -1,4 +1,5 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
+import { intervalLabel } from '../../../../utils/noteCalculations';
 import { useTranslation } from 'react-i18next';
 import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
@@ -22,7 +23,7 @@ const CHORDS = [
 ] as const;
 
 export default function ConstructorCompletoSection() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   // Reunión 19/8/26: la tabla de referencia se enlaza con el árbol — la fila del
   // acorde armado se enmarca, y mientras suena lleva el ámbar de "sonando".
   const [active, setActive] = useState<{ cifrado: string | null; playing: boolean }>({
@@ -57,7 +58,7 @@ export default function ConstructorCompletoSection() {
               aria-current={on ? 'true' : undefined}
             >
               <span className={styles.code}>{c.code}</span>
-              <span className={styles.formula}>{c.formula}</span>
+              <span className={styles.formula}>{intervalLabel(c.formula, i18n.language)}</span>
             </li>
           );
         })}

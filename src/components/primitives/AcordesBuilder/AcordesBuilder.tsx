@@ -5,6 +5,7 @@ import { useFireGate } from '../../../hooks/useFireGate';
 import { useUIStore } from '../../../stores/useUIStore';
 import { NOTE_COLORS, spelledToES } from '../../../data/notes';
 import {
+  intervalLabel,
   formatNote,
   intervalMemberFromTonic,
   type IntervalMember,
@@ -372,7 +373,7 @@ function Node({ role, x, y, quality, member, state, playing, dimmed, onSelect, o
       transform={`translate(${x},${y})`}
       role={onSelect ? 'button' : 'img'}
       aria-pressed={onSelect ? state === 'selected' : undefined}
-      aria-label={`${role} · ${nameES}${ariaSelected}`}
+      aria-label={`${intervalLabel(role, lang)} · ${nameES}${ariaSelected}`}
       tabIndex={interactive ? 0 : -1}
       onMouseEnter={enter}
       onMouseLeave={leave}
@@ -403,7 +404,7 @@ function Node({ role, x, y, quality, member, state, playing, dimmed, onSelect, o
           fill={colored ? '#fff' : 'var(--text-body)'}
           style={colored && member.spelled.length > 2 ? { fontSize: '13px' } : undefined}
         >
-          {colored ? formatNote(member.spelled, lang) : role}
+          {colored ? formatNote(member.spelled, lang) : intervalLabel(role, lang)}
         </text>
       </g>
       <text
@@ -414,7 +415,7 @@ function Node({ role, x, y, quality, member, state, playing, dimmed, onSelect, o
         y={R + 18}
         fill="var(--muted)"
       >
-        {colored ? role : nameES}
+        {colored ? intervalLabel(role, lang) : nameES}
       </text>
     </g>
   );

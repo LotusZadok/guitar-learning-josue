@@ -5,7 +5,7 @@ import { useFireGate } from '../../../hooks/useFireGate';
 import { useUIStore } from '../../../stores/useUIStore';
 import { ALL, NOTE_COLORS, NOTE_ES, NOTE_DE } from '../../../data/notes';
 
-import { formatNote, majorScaleSpelled, spelledNameES, tonicChromatic } from '../../../utils/noteCalculations';
+import { intervalLabel, formatNote, majorScaleSpelled, spelledNameES, tonicChromatic } from '../../../utils/noteCalculations';
 import { gananciaDeNotaEnEscala, type RolDeNotaEnEscala } from '../../../utils/progresionArmonica';
 import type { ChromaticNote } from '../../../types/music';
 import styles from './EscalaMayor.module.css';
@@ -159,7 +159,7 @@ function ScaleNode({ data, onPlay, isDe }: ScaleNodeProps) {
       tabIndex={isOnScale ? 0 : -1}
       role={isOnScale ? 'button' : undefined}
       aria-label={isOnScale ? (isDe
-        ? `${NOTE_DE[chromatic] ?? chromatic}${grade ? ` · Stufe ${grade}` : ''}`
+        ? `${NOTE_DE[chromatic] ?? chromatic}${grade ? ` · Stufe ${intervalLabel(grade, 'de')}` : ''}`
         : `${NOTE_ES[chromatic]}${grade ? ` · grado ${grade}` : ''}`) : undefined}
       onFocus={isOnScale ? handleEnter : undefined}
       onKeyDown={isOnScale ? handleKey : undefined}
@@ -201,7 +201,7 @@ function ScaleNode({ data, onPlay, isDe }: ScaleNodeProps) {
       {/* Grade label below (scale notes only) */}
       {grade && (
         <text x={cx} y={NODE_Y + radius + 22} className={styles.gradeLabel}>
-          {grade}
+          {intervalLabel(grade, isDe ? 'de' : 'es')}
         </text>
       )}
 

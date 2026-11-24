@@ -7,6 +7,7 @@ import { useFireGate } from '../../../hooks/useFireGate';
 import { useUIStore } from '../../../stores/useUIStore';
 import { NOTE_COLORS, ALL, spelledToES } from '../../../data/notes';
 import {
+  intervalLabel,
   formatChordSymbol,
   formatNote,
   acordeDominante,
@@ -318,7 +319,7 @@ function VoiceNode({ voice, colored, sounding, onEnter, onLeave }: VoiceNodeProp
       )}
       {voice.intervalo && (
         <text className={styles.intervalo} x={0} y={-R - 18}>
-          {voice.intervalo}
+          {intervalLabel(voice.intervalo, lang)}
         </text>
       )}
       {/* Tritono: anillo punteado en neutro de marca. El punteado dice

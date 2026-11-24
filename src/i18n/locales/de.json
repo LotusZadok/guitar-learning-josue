@@ -13,53 +13,53 @@
     "s311": {
       "label": "3.1 · Septimen",
       "title": "Die Septimen",
-      "intro": "Aus der Intervalltabelle von T1 gibt es drei Septim-Qualitäten zum Bau von Akkorden. Die große Septime (7M) und die kleine Septime (7m) kennst du bereits; neu ist die verminderte Septime (7d).",
+      "intro": "Aus der Intervalltabelle von T1 gibt es drei Septim-Qualitäten zum Bau von Akkorden. Die große Septime (7G) und die kleine Septime (7K) kennst du bereits; neu ist die verminderte Septime (7V).",
       "table_headers": {
         "interval": "Intervall",
         "chord": "Typische Chiffre",
         "semitones": "Halbtöne",
         "enharmonic": "Enharmonik"
       },
-      "new_seventh": "Die verminderte Septime (7d) ist einen Halbton kleiner als die 7m, wodurch sie enharmonisch einer 6M gleicht; sie wird aber als Septime behandelt, weil sie diese Rolle im dim7-Akkord erfüllt.",
+      "new_seventh": "Die verminderte Septime (7V) ist einen Halbton kleiner als die 7K, wodurch sie enharmonisch einer 6G gleicht; sie wird aber als Septime behandelt, weil sie diese Rolle im dim7-Akkord erfüllt.",
       "ruler_aria": "Septimen-Lineal: Abstand in Halbtönen von der Tonika bis zur Oktave",
-      "legend": "Fahre über oder tippe jeden Knoten: die 7d liegt einen Halbton unter der 7m, und die 7m einen unter der 7M."
+      "legend": "Fahre über oder tippe jeden Knoten: die 7V liegt einen Halbton unter der 7K, und die 7K einen unter der 7G."
     },
     "s312": {
       "label": "3.2 · Septakkorde",
       "title": "Akkorde mit Septime",
-      "intro": "Ein Septakkord fügt der Dreiklang eine vierte Note im Septimabstand zur Tonika hinzu. Kombiniert man die beiden Terzen (3m, 3M) mit den beiden nützlichen Septimen (7m, 7M), ergeben sich vier Septakkorde:",
+      "intro": "Ein Septakkord fügt der Dreiklang eine vierte Note im Septimabstand zur Tonika hinzu. Kombiniert man die beiden Terzen (3K, 3G) mit den beiden nützlichen Septimen (7K, 7G), ergeben sich vier Septakkorde:",
       "table_headers": {
         "chord": "Akkord",
         "formula": "Formel",
         "code": "Chiffre"
       },
       "chords": ["Dur 7", "Moll 7", "Dominant 7", "Moll Maj7"],
-      "difference": "Der Unterschied zwischen maj7 und Dominant 7 ist nur die Septime (7M vs 7m); zwischen m7 und Dominant 7 nur die Terz (3m vs 3M). Der Dominant 7 verbindet die 3M mit der 7m, und genau diese Kombination gibt ihm seine Funktion als Dominante (wird in 3.6 behandelt). Der vierte, Moll Maj7, kombiniert umgekehrt: 3m mit 7M.",
+      "difference": "Der Unterschied zwischen maj7 und Dominant 7 ist nur die Septime (7G vs 7K); zwischen m7 und Dominant 7 nur die Terz (3K vs 3G). Der Dominant 7 verbindet die 3G mit der 7K, und genau diese Kombination gibt ihm seine Funktion als Dominante (wird in 3.6 behandelt). Der vierte, Moll Maj7, kombiniert umgekehrt: 3K mit 7G.",
       "caption": "Tonika und Quinte sind in allen vier Akkorden gleich. Die 3. bestimmt Dur oder Moll; die 7. bestimmt, ob die Septime groß oder klein ist.",
       "builder_title": "Konstruktor: mit Septimen",
-      "builder_intro": "Der Baum wächst: jetzt verzweigt die r. Quinte zur 7M und 7m. Halte bei der Quinte für einen Dreiklang, oder geh weiter bis zur Septime für maj7, m7, Dominant 7 oder Moll Maj7."
+      "builder_intro": "Der Baum wächst: jetzt verzweigt die r. Quinte zur 7G und 7K. Halte bei der Quinte für einen Dreiklang, oder geh weiter bis zur Septime für maj7, m7, Dominant 7 oder Moll Maj7."
     },
     "s32": {
       "label": "3.3 · Verminderte Akkorde",
       "title": "Verminderte Akkorde: m7♭5 und dim7",
-      "intro": "Die verminderte Quinte (5d, 6 Halbtöne) rückt nun in den Vordergrund: sie verändert die Quinte des Akkords und erzeugt die beiden verminderten Familien. Sie ist das charakteristischste Intervall tonaler Spannung: der einzige Abstand der Dur-Tonleiter, der nur einmal vorkommt, zwischen der 4. und der 7. Stufe.",
+      "intro": "Die verminderte Quinte (5V, 6 Halbtöne) rückt nun in den Vordergrund: sie verändert die Quinte des Akkords und erzeugt die beiden verminderten Familien. Sie ist das charakteristischste Intervall tonaler Spannung: der einzige Abstand der Dur-Tonleiter, der nur einmal vorkommt, zwischen der 4. und der 7. Stufe.",
       "table_headers": {
         "chord": "Akkord",
         "formula": "Formel",
         "code": "Chiffre"
       },
       "chords": ["Halbvermindert", "Voll vermindert"],
-      "difference": "Beide Familien teilen Tonika, 3m und 5d. Sie unterscheiden sich nur in der Septime: der halbverminderte hat 7m; der voll verminderte hat 7d, einen Halbton tiefer.",
+      "difference": "Beide Familien teilen Tonika, 3K und 5V. Sie unterscheiden sich nur in der Septime: der halbverminderte hat 7K; der voll verminderte hat 7V, einen Halbton tiefer.",
       "symmetry_title": "Voll vermindert: Symmetrie",
       "symmetry": "Alle inneren Abstände des dim7 betragen 3 Halbtöne (gestapelte kleine Terzen). Das macht ihn symmetrisch: jede Umkehrung klingt gleich. Deshalb gibt es in der gesamten tonalen Musik nur drei verschiedene voll verminderte Akkorde:",
       "function": "Seine häufigste Rolle ist die des chromatischen Durchgangsakkords zwischen zwei diatonischen Akkorden. Zum Beispiel in C-Dur: C, C♯°, Dm.",
       "builder_title": "Konstruktor: verminderter Zweig",
-      "builder_intro": "Die 3m geht zur 5d, und von dort wählst du die Septime: 7d für den voll verminderten (dim7) oder 7m für den halbverminderten (m7♭5). Halte bei der 5d für den verminderten Dreiklang."
+      "builder_intro": "Die 3K geht zur 5V, und von dort wählst du die Septime: 7V für den voll verminderten (dim7) oder 7K für den halbverminderten (m7♭5). Halte bei der 5V für den verminderten Dreiklang."
     },
     "s331": {
       "label": "4.6 · Sekunde und Quarte",
       "title": "Große Sekunde und reine Quarte",
-      "intro": "Zwei Intervalle aus T1, jetzt als Baustein für Akkorde (nicht nur als Töne innerhalb einer Tonleiter). Die große Sekunde (2M) liegt 2 Halbtöne von der Tonika entfernt; die reine Quarte (4J) 5.",
+      "intro": "Zwei Intervalle aus T1, jetzt als Baustein für Akkorde (nicht nur als Töne innerhalb einer Tonleiter). Die große Sekunde (2G) liegt 2 Halbtöne von der Tonika entfernt; die reine Quarte (4R) 5.",
       "ruler_aria": "Intervall-Lineal: Sekunde und Quarte rund um die Terz",
       "legend": "Die 2. (2 HT) liegt direkt unter der kleinen Terz, die 4. (5 HT) direkt über der großen Terz. Die Terzen, abgeblendet, sind die Referenz, die sie ersetzen werden."
     },
@@ -305,7 +305,7 @@
         "Die Tonleiter mit den richtigen Intervallen aktualisieren."
       ],
       "result": "Ergebnis für G: G A♭ A B♭ B C C#/D♭ D E♭ E F F# G.",
-      "octave_rule": "Die reine Oktave (8r) ist derselbe Ton eine Oktave höher oder tiefer. Die 8r von G ist G.",
+      "octave_rule": "Die reine Oktave (8R) ist derselbe Ton eine Oktave höher oder tiefer. Die 8R von G ist G.",
       "step_letter_rule": [
         { "type": "text", "value": "Wenn zwei alterierte Töne vorhanden sind, nach dem Buchstaben aus Schritt 1 wählen. Steht in Schritt 1 \"" },
         { "type": "note", "value": "B" },

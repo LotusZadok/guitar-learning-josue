@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
+import { intervalLabel } from '../../../../utils/noteCalculations';
 import SectionLabel from '../../../shared/SectionLabel';
 import RuleNote from '../../../shared/RuleNote';
 import IntervalRuler, { type RulerStop } from '../../../primitives/IntervalRuler/IntervalRuler';
@@ -22,7 +23,7 @@ const RULER_STOPS: RulerStop[] = [
 ];
 
 export default function SeptimasSection() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const h = t('t3.s311.table_headers', { returnObjects: true }) as Record<string, string>;
 
   return (
@@ -45,10 +46,10 @@ export default function SeptimasSection() {
           <tbody>
             {SEVENTHS.map((s) => (
               <tr key={s.role}>
-                <th scope="row">{s.role}</th>
+                <th scope="row">{intervalLabel(s.role, i18n.language)}</th>
                 <td>{s.chord}</td>
                 <td>{s.semis}</td>
-                <td>{s.enh}</td>
+                <td>{intervalLabel(s.enh, i18n.language)}</td>
               </tr>
             ))}
           </tbody>

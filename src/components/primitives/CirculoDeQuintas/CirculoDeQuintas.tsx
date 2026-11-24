@@ -240,7 +240,7 @@ export default function CirculoDeQuintas() {
         ) : (
           <>
             <text x={CX} y={CY - 6} textAnchor="middle" className={styles.centerLabel}>
-              {isDe ? '5r' : '5J'}
+              {isDe ? '5R' : '5J'}
             </text>
             <text x={CX} y={CY + 12} textAnchor="middle" className={styles.centerSub}>
               {isDe ? 'tippen · klicken' : 'toca · clic'}
