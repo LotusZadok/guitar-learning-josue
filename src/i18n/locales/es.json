@@ -97,8 +97,8 @@
       "label": "3.5 · El tritono",
       "title": "El tritono: las dos notas que empujan",
       "intro": "Antes de verlo dentro de un acorde, mira el tritono solo. En cualquier tonalidad mayor los dos grados tensos —la 4ª y la 7ª— están exactamente a 6 semitonos: eso es un tritono, el intervalo más inestable de la escala. Es el mismo mapa de resoluciones de 1.5, leído desde esas dos notas.",
-      "caption": "Las dos notas rojas son el tritono. Cada una resuelve por semitono hacia la nota estable más cercana: la 7ª sube a la tónica y la 4ª baja a la 3ª. Toca un arco para escuchar cada resolución, o el botón para oír las dos notas del tritono juntas.",
-      "play_label": "Escuchar el tritono (las dos notas juntas)"
+      "caption": "Las dos notas rojas son el tritono. Cada una resuelve por semitono hacia la nota estable más cercana: la 7ª sube a la tónica y la 4ª baja a la 3ª. Toca un arco para escuchar cada resolución, o el botón para oír las dos notas del tritono juntas y, enseguida, su resolución: la 3ª y la 8ª.",
+      "play_label": "Escuchar el tritono y su resolución"
     },
     "s36": {
       "label": "3.6 · Dominante 7",

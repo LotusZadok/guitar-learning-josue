@@ -121,15 +121,18 @@ interface Props {
    *  de los dos grados tensos (4ª y 7ª — que ES el tritono de la tonalidad),
    *  dibuja el vano entre ellos y atenúa el resto. Sin la prop, §1.5 no cambia. */
   focus?: 'tritono';
-  /** Con `focus="tritono"`: aria-label y tooltip del botón que toca las dos
-   *  notas juntas. Viene de la sección (i18n). */
+  /** Con `focus="tritono"`: aria-label y tooltip del botón que toca el
+   *  tritono y su resolución. Viene de la sección (i18n). */
   tritonoPlayLabel?: string;
 }
 
 // Reunión 19/10/26: "la idea del tritono es justamente escucharlo como suena
 // junto". Las dos notas (4ª y 7ª) a la vez, con anillo ámbar mientras suenan.
+// Reunión 22/11/26 (#1): enseguida suena la resolución, 3ª + 8va, y el ámbar
+// pasa a esas dos notas.
 const TRITONO_DURATION = 1.6;
 const TRITONO_IDX = [3, 6];
+const RESOLUCION_IDX = [2, 7];
 
 export default function TensionResolucion({ focus, tritonoPlayLabel }: Props = {}) {
   const { i18n } = useTranslation();
@@ -139,7 +142,7 @@ export default function TensionResolucion({ focus, tritonoPlayLabel }: Props = {
   const { playSequence } = useAudioEngine();
   const fire = useFireGate();
   const [playingArrow, setPlayingArrow] = useState<string | null>(null);
-  const [tritonoSonando, setTritonoSonando] = useState(false);
+  const [sonandoIdx, setSonandoIdx] = useState<number[]>([]);
   const { playChord, at, clear } = useChordPlayer(TRITONO_DURATION);
 
   const playResolution = useCallback(
@@ -165,16 +168,18 @@ export default function TensionResolucion({ focus, tritonoPlayLabel }: Props = {
 
   const playTritono = useCallback(() => {
     clear();
-    setTritonoSonando(true);
-    playChord(
-      TRITONO_IDX.map((i) => ({
+    const notas = (idx: number[]) =>
+      idx.map((i) => ({
         chromatic: nodes[i].note,
         octave: 4 + nodes[i].octaveAdj,
         ganancia: gananciaDe(nodes[i]),
-      })),
-      0,
-    );
-    at(() => setTritonoSonando(false), TRITONO_DURATION * 1000);
+      }));
+    const ms = TRITONO_DURATION * 1000;
+    setSonandoIdx(TRITONO_IDX);
+    playChord(notas(TRITONO_IDX), 0);
+    at(() => setSonandoIdx(RESOLUCION_IDX), ms);
+    playChord(notas(RESOLUCION_IDX), 0, ms);
+    at(() => setSonandoIdx([]), 2 * ms);
   }, [clear, playChord, at, nodes]);
 
   return (
@@ -258,7 +263,7 @@ export default function TensionResolucion({ focus, tritonoPlayLabel }: Props = {
           <ScaleNode
             key={`${n.pos}-${i}`}
             data={n}
-            sounding={tritonoSonando && TRITONO_IDX.includes(i)}
+            sounding={sonandoIdx.includes(i)}
           />
         ))}
       </svg>
@@ -268,7 +273,7 @@ export default function TensionResolucion({ focus, tritonoPlayLabel }: Props = {
           <PlaybackButton
             mode="bloque"
             label={tritonoPlayLabel}
-            playing={tritonoSonando}
+            playing={sonandoIdx.length > 0}
             onClick={playTritono}
           />
         </div>
