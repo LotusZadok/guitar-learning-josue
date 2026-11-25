@@ -90,6 +90,10 @@ export default function EscalaMayorSection() {
         </table>
       </div>
 
+      <h3 className={styles.subheading}>{t('t1.s06.viz_title')}</h3>
+      <p className={styles.text}>{t('t1.s06.viz_instruction')}</p>
+      <EscalaMayor />
+
       <p className={styles.text}>{isDe ? 'Die Tonleiter teilt sich in:' : 'La escala se divide en:'}</p>
       <div className={styles.roleGrid}>
         {([
@@ -108,10 +112,6 @@ export default function EscalaMayorSection() {
           </div>
         ))}
       </div>
-
-      <h3 className={styles.subheading}>{t('t1.s06.viz_title')}</h3>
-      <p className={styles.text}>{t('t1.s06.viz_instruction')}</p>
-      <EscalaMayor />
     </section>
   );
 }
