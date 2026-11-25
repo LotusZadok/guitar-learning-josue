@@ -222,7 +222,8 @@
       },
       "body": "Todas las notas se manejan como iguales en jerarquía desde el inicio. Esto es deliberado: agiliza el aprendizaje porque permite empezar cualquier ejercicio desde cualquier nota, sin un \"Do central\" privilegiado.",
       "rule": "Las 7 notas naturales conforman la base de todo lo que viene.",
-      "tip": "Consejo del método: decir las notas en voz alta, en orden horario y antihorario, comenzando en una nota al azar."
+      "tip": "Consejo del método: decir las notas en voz alta, en orden horario y antihorario, comenzando en una nota al azar.",
+      "circle_aria": "Las 7 notas naturales en círculo"
     },
 
     "s02": {
@@ -666,6 +667,21 @@
       "sus4": "suspendido 4",
       "half_diminished": "semidisminuido",
       "diminished7": "disminuido 7"
+    },
+    "note_aria": "Nota {{name}}",
+    "selected": "seleccionado",
+    "tritone": "tritono",
+    "semitones_count_one": "{{count}} semitono",
+    "semitones_count_other": "{{count}} semitonos",
+    "resolves_to": "{{from}} resuelve a {{to}}",
+    "builder": {
+      "hint_start": "Elige una tercera para empezar a construir.",
+      "hint_continue": "Sigue eligiendo notas para completar un acorde.",
+      "aria_17": "Árbol constructor de acordes: elige una tercera y luego una quinta",
+      "aria_312": "Constructor de acordes con séptimas: elige tercera, quinta y séptima",
+      "aria_33": "Constructor de acordes suspendidos: elige la 2ª o la 4ª y luego la quinta",
+      "aria_34": "Constructor completo de acordes: elige tercera (o 2ª/4ª), quinta y, si quieres, séptima",
+      "aria_32": "Constructor de acordes disminuidos: elige 3m, 5d y la séptima"
     }
   }
 }

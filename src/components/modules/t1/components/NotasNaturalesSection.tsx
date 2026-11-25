@@ -13,8 +13,9 @@ const NATURALES_TABLA_EN = ['C', 'D', 'E', 'F', 'G', 'A', 'B'] as const;
 const CX = 140, CY = 140, R = 100;
 
 function NaturalesCirculo() {
+  const { t } = useTranslation();
   return (
-    <svg className={styles.circle} viewBox="0 0 280 280" role="img" aria-label="Las 7 notas naturales en círculo">
+    <svg className={styles.circle} viewBox="0 0 280 280" role="img" aria-label={t("t1.s01.circle_aria")}>
       <circle cx={CX} cy={CY} r={R + 14} fill="none" stroke="var(--rule)" strokeWidth={0.5} />
       {NATURALES_TABLA_EN.map((note, i) => {
         const angle = (i * (360 / 7) - 90) * Math.PI / 180;

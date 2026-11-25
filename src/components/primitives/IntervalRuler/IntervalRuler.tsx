@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { useFireGate } from '../../../hooks/useFireGate';
 import { useUIStore } from '../../../stores/useUIStore';
-import { NOTE_COLORS, spelledToES } from '../../../data/notes';
+import { NOTE_COLORS } from '../../../data/notes';
 import {
   intervalLabel,
   formatNote,
@@ -11,6 +11,7 @@ import {
   type IntervalMember,
   type IntervalNumber,
   type IntervalQuality,
+  nombreNota,
 } from '../../../utils/noteCalculations';
 import styles from './IntervalRuler.module.css';
 
@@ -114,7 +115,8 @@ interface NodeProps {
 }
 
 function Node({ stop, x, member, active, onEnter, onLeave, onActivate }: NodeProps) {
-  const lang = useTranslation().i18n.language;
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
   const onKey = useCallback(
     (e: KeyboardEvent<SVGGElement>) => {
       if (e.key === 'Enter' || e.key === ' ') {
@@ -128,14 +130,14 @@ function Node({ stop, x, member, active, onEnter, onLeave, onActivate }: NodePro
   const colored = active;
   const fill = colored ? NOTE_COLORS[member.chromatic] : 'var(--surface)';
   const stroke = colored ? 'none' : 'var(--rule)';
-  const nameES = spelledToES(member.spelled);
+  const name = nombreNota(member.spelled, lang);
 
   return (
     <g
       className={`${styles.node} ${stop.reference ? styles.reference : ''}`}
       transform={`translate(${x},${AXIS_Y})`}
       role="button"
-      aria-label={`${intervalLabel(stop.role, lang)} · ${nameES}${stop.showSemis ? ` · ${stop.semis} semitonos` : ''}`}
+      aria-label={`${intervalLabel(stop.role, lang)} · ${name}${stop.showSemis ? ` · ${t('common.semitones_count', { count: stop.semis })}` : ''}`}
       tabIndex={0}
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
@@ -158,7 +160,7 @@ function Node({ stop, x, member, active, onEnter, onLeave, onActivate }: NodePro
         {colored ? formatNote(member.spelled, lang) : intervalLabel(stop.role, lang)}
       </text>
       <text className={styles.name} x={0} y={R + 17} fill="var(--muted)">
-        {colored ? intervalLabel(stop.role, lang) : nameES}
+        {colored ? intervalLabel(stop.role, lang) : name}
       </text>
       {stop.showSemis && (
         <text className={styles.semis} x={0} y={-R - 9} fill="var(--muted)">

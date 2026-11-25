@@ -5,7 +5,7 @@ import { useChordPlayer } from '../../../hooks/useChordPlayer';
 import PlaybackButton, { type PlayMode } from '../../shared/PlaybackButton/PlaybackButton';
 import { useFireGate } from '../../../hooks/useFireGate';
 import { useUIStore } from '../../../stores/useUIStore';
-import { NOTE_COLORS, ALL, spelledToES } from '../../../data/notes';
+import { NOTE_COLORS, ALL } from '../../../data/notes';
 import {
   intervalLabel,
   formatChordSymbol,
@@ -15,6 +15,7 @@ import {
   pitchClass,
   tonicChromatic,
   type OrigenDominante,
+  nombreNota,
 } from '../../../utils/noteCalculations';
 import type { ChromaticNote } from '../../../types/music';
 import styles from './DominanteResolucion.module.css';
@@ -287,7 +288,8 @@ interface VoiceNodeProps {
 }
 
 function VoiceNode({ voice, colored, sounding, onEnter, onLeave }: VoiceNodeProps) {
-  const lang = useTranslation().i18n.language;
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
   const onKey = useCallback(
     (e: KeyboardEvent<SVGGElement>) => {
       if (e.key === 'Enter' || e.key === ' ') {
@@ -297,7 +299,7 @@ function VoiceNode({ voice, colored, sounding, onEnter, onLeave }: VoiceNodeProp
     },
     [onEnter],
   );
-  const nameES = spelledToES(voice.spelled);
+  const name = nombreNota(voice.spelled, lang);
 
   return (
     <g
@@ -305,7 +307,7 @@ function VoiceNode({ voice, colored, sounding, onEnter, onLeave }: VoiceNodeProp
       transform={`translate(${voice.x},${voice.y})`}
       role="button"
       tabIndex={0}
-      aria-label={`${nameES}${voice.tritono ? ' · tritono' : ''}`}
+      aria-label={`${name}${voice.tritono ? ` · ${t('common.tritone')}` : ''}`}
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
       onFocus={onEnter}

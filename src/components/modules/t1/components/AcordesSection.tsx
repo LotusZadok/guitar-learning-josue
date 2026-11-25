@@ -5,8 +5,7 @@ import AcordeProceso from "../../../primitives/AcordeProceso/AcordeProceso";
 import PlaybackButton from "../../../shared/PlaybackButton/PlaybackButton";
 import { useChordPlayer } from "../../../../hooks/useChordPlayer";
 import { useUIStore } from "../../../../stores/useUIStore";
-import { spelledToES } from "../../../../data/notes";
-import { chordSpelled, formatNote } from "../../../../utils/noteCalculations";
+import { chordSpelled, formatChordSymbol, formatNote, nombreNota } from "../../../../utils/noteCalculations";
 import styles from "./AcordesSection.module.css";
 
 // Reunión 22/11/26 (#22): el Resumen compara los tres acordes; cada uno se
@@ -25,7 +24,7 @@ export default function AcordesSection() {
 
   // §1.7: la nomenclatura se ancla a la tónica global, no a una nota fija.
   const notation = useMemo(
-    () => ({ sym: formatNote(chordM[0].spelled, locale), name: spelledToES(chordM[0].spelled) }),
+    () => ({ sym: formatChordSymbol(chordM[0].spelled, locale), name: nombreNota(chordM[0].spelled, locale) }),
     [chordM, locale],
   );
 

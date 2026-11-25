@@ -13,7 +13,8 @@ const CHORD_GAP_MS = 700;
 // la dominante y su resolución al grado, mostrando que cualquier grado puede
 // tratarse como una tónica temporal. Datos vía Tonal.js (secondaryDominants).
 export default function DominantesSecundarias() {
-  const lang = useTranslation().i18n.language;
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
   const tonic = useUIStore((s) => s.tonic);
   const { playChord, at, clear } = useChordPlayer(NOTE_DURATION);
   const [active, setActive] = useState<number | null>(null);
@@ -40,7 +41,7 @@ export default function DominantesSecundarias() {
             className={`${styles.row} ${active === i ? styles.rowActive : ''}`}
             onClick={() => playRow(i)}
             disabled={active !== null}
-            aria-label={`${formatChordSymbol(r.dom.cifrado, lang)} resuelve a ${formatChordSymbol(r.target.cifrado, lang)} (${r.notation})`}
+            aria-label={`${t('common.resolves_to', { from: formatChordSymbol(r.dom.cifrado, lang), to: formatChordSymbol(r.target.cifrado, lang) })} (${r.notation})`}
           >
             <span className={styles.target}>{formatChordSymbol(r.target.cifrado, lang)}</span>
             <span className={styles.arrow} aria-hidden="true">↑</span>

@@ -224,7 +224,8 @@
       },
       "body": "Alle Töne werden von Anfang an als gleichrangig behandelt. Das ist bewusst so: Es beschleunigt das Lernen, weil man jede Übung auf jedem Ton beginnen kann — ohne ein privilegiertes „mittleres Do\".",
       "rule": "Die 7 natürlichen Töne bilden die Grundlage von allem, was folgt.",
-      "tip": "Methodentipp: die Töne laut aussprechen, im Uhrzeigersinn und gegen den Uhrzeigersinn, beginnend auf einem beliebigen Ton."
+      "tip": "Methodentipp: die Töne laut aussprechen, im Uhrzeigersinn und gegen den Uhrzeigersinn, beginnend auf einem beliebigen Ton.",
+      "circle_aria": "Die 7 Stammtöne im Kreis"
     },
 
     "s02": {
@@ -668,6 +669,21 @@
       "sus4": "sus4",
       "half_diminished": "halbvermindert",
       "diminished7": "vermindert 7"
+    },
+    "note_aria": "Ton {{name}}",
+    "selected": "ausgewählt",
+    "tritone": "Tritonus",
+    "semitones_count_one": "{{count}} Halbton",
+    "semitones_count_other": "{{count}} Halbtöne",
+    "resolves_to": "{{from}} löst sich nach {{to}} auf",
+    "builder": {
+      "hint_start": "Wähle eine Terz, um mit dem Aufbau zu beginnen.",
+      "hint_continue": "Wähle weiter Töne, um einen Akkord zu vervollständigen.",
+      "aria_17": "Akkordbaum: wähle eine Terz und dann eine Quinte",
+      "aria_312": "Akkordbaum mit Septimen: wähle Terz, Quinte und Septime",
+      "aria_33": "Baum der Sus-Akkorde: wähle die 2. oder die 4. und dann die Quinte",
+      "aria_34": "Vollständiger Akkordbaum: wähle Terz (oder 2./4.), Quinte und, wenn du willst, Septime",
+      "aria_32": "Baum der verminderten Akkorde: wähle 3K, 5V und die Septime"
     }
   }
 }

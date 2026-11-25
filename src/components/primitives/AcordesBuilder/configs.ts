@@ -37,7 +37,7 @@ export type CalidadAcorde =
 export interface BuilderConfig {
   width: number;
   height: number;
-  ariaLabel: string;
+  ariaKey: string; // clave i18n en common.builder
   tonic: { x: number; y: number };
   nodes: BuilderNode[];
   chords: BuilderChord[];
@@ -51,7 +51,7 @@ export interface BuilderConfig {
 export const BUILDER_17: BuilderConfig = {
   width: 460,
   height: 300,
-  ariaLabel: 'Árbol constructor de acordes: elige una tercera y luego una quinta',
+  ariaKey: 'common.builder.aria_17',
   tonic: { x: 46, y: 150 },
   nodes: [
     { role: '3m', number: 3, quality: 'm', x: 200, y: 208, level: 1 },
@@ -70,7 +70,7 @@ export const BUILDER_17: BuilderConfig = {
 export const BUILDER_312: BuilderConfig = {
   width: 470,
   height: 300,
-  ariaLabel: 'Constructor de acordes con séptimas: elige tercera, quinta y séptima',
+  ariaKey: 'common.builder.aria_312',
   tonic: { x: 40, y: 150 },
   nodes: [
     { role: '3m', number: 3, quality: 'm', x: 172, y: 205, level: 1 },
@@ -95,7 +95,7 @@ export const BUILDER_312: BuilderConfig = {
 export const BUILDER_33: BuilderConfig = {
   width: 460,
   height: 300,
-  ariaLabel: 'Constructor de acordes suspendidos: elige la 2ª o la 4ª y luego la quinta',
+  ariaKey: 'common.builder.aria_33',
   tonic: { x: 46, y: 150 },
   nodes: [
     { role: '2', number: 2, quality: 'M', x: 195, y: 208, level: 1 },
@@ -114,7 +114,7 @@ export const BUILDER_33: BuilderConfig = {
 export const BUILDER_34: BuilderConfig = {
   width: 520,
   height: 340,
-  ariaLabel: 'Constructor completo de acordes: elige tercera (o 2ª/4ª), quinta y, si quieres, séptima',
+  ariaKey: 'common.builder.aria_34',
   tonic: { x: 46, y: 170 },
   nodes: [
     { role: '2', number: 2, quality: 'M', x: 152, y: 288, level: 1 },
@@ -148,7 +148,7 @@ export const BUILDER_34: BuilderConfig = {
 export const BUILDER_32: BuilderConfig = {
   width: 470,
   height: 300,
-  ariaLabel: 'Constructor de acordes disminuidos: elige 3m, 5d y la séptima',
+  ariaKey: 'common.builder.aria_32',
   tonic: { x: 40, y: 150 },
   nodes: [
     { role: '3m', number: 3, quality: 'm', x: 160, y: 150, level: 1 },

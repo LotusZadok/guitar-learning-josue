@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { useFireGate } from '../../../hooks/useFireGate';
 import { useUIStore } from '../../../stores/useUIStore';
-import { NOTE_COLORS, spelledToES } from '../../../data/notes';
+import { NOTE_COLORS } from '../../../data/notes';
 import {
   intervalLabel,
   formatNote,
@@ -11,6 +11,7 @@ import {
   type IntervalMember,
   type IntervalNumber,
   type IntervalQuality,
+  nombreNota,
 } from '../../../utils/noteCalculations';
 import PlaybackButton from '../../shared/PlaybackButton/PlaybackButton';
 import type { Tonic } from '../../../types/music';
@@ -135,7 +136,7 @@ function ChordColumn({ chord, tonic }: ChordColumnProps) {
               transform={`translate(0,${y})`}
               role="button"
               tabIndex={0}
-              aria-label={`${intervalLabel(tone.role, lang)} · ${spelledToES(m.spelled)}`}
+              aria-label={`${intervalLabel(tone.role, lang)} · ${nombreNota(m.spelled, lang)}`}
               onMouseEnter={() => {
                 setHovered(i);
                 scrub(m);

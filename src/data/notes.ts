@@ -26,13 +26,3 @@ export const NOTE_DE: Record<ChromaticNote, string> = {
   'F#':'Fis','G':'G','G#':'Gis','A':'A','A#':'Ais','B':'H',
 };
 
-// Nombre en solfeo derivado de la grafía (no de la cromática), para que coincida
-// con el glifo que se muestra. Mapea la letra y conserva ♭/♯.
-const LETTER_ES: Record<string, string> = {
-  C: 'Do', D: 'Re', E: 'Mi', F: 'Fa', G: 'Sol', A: 'La', B: 'Si',
-};
-
-export function spelledToES(spelled: string): string {
-  return (LETTER_ES[spelled[0]] ?? spelled[0]) + spelled.slice(1);
-}
-

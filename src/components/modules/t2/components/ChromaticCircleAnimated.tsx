@@ -1,6 +1,6 @@
 import { useMemo, useState, useCallback, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { formatNote } from '../../../../utils/noteCalculations';
+import { formatNote, nombreNota } from '../../../../utils/noteCalculations';
 import type { CircleNoteData } from '../data/processSteps';
 import { NOTE_TO_POS } from '../data/processSteps';
 import { useAudioEngine } from '../../../../hooks/useAudioEngine';
@@ -58,7 +58,8 @@ function arcPath(fromPos: number, toPos: number): string {
 }
 
 export default function ChromaticCircleAnimated({ notes, arrow, compact, playOnClick = false, inlineClearButton = false, markedNotes, onMarkedNotesChange, playingNote }: Props) {
-  const lang = useTranslation().i18n.language;
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
   const size = compact ? 280 : 400;
   const isControlled = markedNotes !== undefined;
   const [uncontrolledPicked, setPicked] = useState<Set<number>>(new Set());
@@ -167,7 +168,7 @@ export default function ChromaticCircleAnimated({ notes, arrow, compact, playOnC
               onClick={() => toggleNote(i)}
               tabIndex={0}
               role="button"
-              aria-label={`Nota ${formatNote(note.label, lang)}`}
+              aria-label={t('common.note_aria', { name: nombreNota(note.label, lang) })}
               onKeyDown={handleKeyDown}
               style={{ opacity: isAnyPlaying && !isThisPlaying ? 0.4 : 1, transition: 'opacity 0.15s' }}
             >

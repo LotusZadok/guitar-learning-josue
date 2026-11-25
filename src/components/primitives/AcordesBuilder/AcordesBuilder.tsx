@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAudioEngine, stopAllNotes } from '../../../hooks/useAudioEngine';
 import { useFireGate } from '../../../hooks/useFireGate';
 import { useUIStore } from '../../../stores/useUIStore';
-import { NOTE_COLORS, spelledToES } from '../../../data/notes';
+import { NOTE_COLORS } from '../../../data/notes';
 import {
   intervalLabel,
   formatChordSymbol,
@@ -224,7 +224,7 @@ export default function AcordesBuilder({ config = BUILDER_17, path, playingRole,
         className={styles.tree}
         viewBox={`0 0 ${config.width} ${config.height}`}
         role="group"
-        aria-label={config.ariaLabel}
+        aria-label={t(config.ariaKey)}
       >
         {/* === aristas === */}
         {edges.map(({ from, to }) => {
@@ -306,9 +306,7 @@ export default function AcordesBuilder({ config = BUILDER_17, path, playingRole,
           </>
         ) : controlled ? null : (
           <p className={styles.hint}>
-            {selected.length === 0
-              ? 'Elige una tercera para empezar a construir.'
-              : 'Sigue eligiendo notas para completar un acorde.'}
+            {t(selected.length === 0 ? 'common.builder.hint_start' : 'common.builder.hint_continue')}
           </p>
         )}
       </div>
@@ -333,7 +331,8 @@ interface NodeProps {
 }
 
 function Node({ role, x, y, quality, member, state, playing, dimmed, onSelect, onScrub }: NodeProps) {
-  const lang = useTranslation().i18n.language;
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
   const [hovered, setHovered] = useState(false);
   const interactive = state !== 'disabled' && (onSelect != null || state === 'tonic');
 
@@ -361,8 +360,8 @@ function Node({ role, x, y, quality, member, state, playing, dimmed, onSelect, o
   const fill = colored ? NOTE_COLORS[member.chromatic] : 'var(--surface)';
   const stroke = state === 'tonic' || colored ? 'none' : 'var(--rule)';
 
-  const nameES = spelledToES(member.spelled);
-  const ariaSelected = state === 'selected' ? ', seleccionado' : '';
+  const name = nombreNota(member.spelled, lang);
+  const ariaSelected = state === 'selected' ? `, ${t('common.selected')}` : '';
   // Carril tipográfico de calidad: mayor/justa = bold recto; menor/disminuida =
   // regular itálica. Da una segunda señal (peso + estilo) además del caso m/M,
   // que en monoespaciado es demasiado sutil para leerse de un vistazo.
@@ -375,7 +374,7 @@ function Node({ role, x, y, quality, member, state, playing, dimmed, onSelect, o
       transform={`translate(${x},${y})`}
       role={onSelect ? 'button' : 'img'}
       aria-pressed={onSelect ? state === 'selected' : undefined}
-      aria-label={`${intervalLabel(role, lang)} · ${nameES}${ariaSelected}`}
+      aria-label={`${intervalLabel(role, lang)} · ${name}${ariaSelected}`}
       tabIndex={interactive ? 0 : -1}
       onMouseEnter={enter}
       onMouseLeave={leave}
@@ -417,7 +416,7 @@ function Node({ role, x, y, quality, member, state, playing, dimmed, onSelect, o
         y={R + 18}
         fill="var(--muted)"
       >
-        {colored ? intervalLabel(role, lang) : nameES}
+        {colored ? intervalLabel(role, lang) : name}
       </text>
     </g>
   );

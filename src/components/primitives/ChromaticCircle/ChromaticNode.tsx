@@ -2,7 +2,7 @@ import { useState, useCallback, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFireGate } from '../../../hooks/useFireGate';
 import { NOTE_COLORS, NOTE_ES } from '../../../data/notes';
-import { formatNote } from '../../../utils/noteCalculations';
+import { formatNote, nombreNota } from '../../../utils/noteCalculations';
 import type { ChromaticNote } from '../../../types/music';
 import styles from './ChromaticCircle.module.css';
 
@@ -26,7 +26,8 @@ interface ChromaticNodeProps {
 
 export default function ChromaticNode({ note, index, cx, cy, r, onPlay }: ChromaticNodeProps) {
   const [hovered, setHovered] = useState(false);
-  const lang = useTranslation().i18n.language;
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
 
   const angle = (index * 30 - 90) * Math.PI / 180;
   const x = cx + r * Math.cos(angle);
@@ -58,7 +59,7 @@ export default function ChromaticNode({ note, index, cx, cy, r, onPlay }: Chroma
       style={{ transformOrigin: `${x}px ${y}px` }}
       tabIndex={0}
       role="button"
-      aria-label={`Nota ${NOTE_ES[note]}`}
+      aria-label={t('common.note_aria', { name: nombreNota(note, lang) })}
       onFocus={handleEnter}
       onBlur={handleLeave}
       onKeyDown={handleKeyDown}
@@ -112,14 +113,18 @@ export default function ChromaticNode({ note, index, cx, cy, r, onPlay }: Chroma
           </text>
         );
       })()}
-      <text
-        x={cx + labelR * Math.cos(angle)}
-        y={cy + labelR * Math.sin(angle)}
-        textAnchor="middle" dominantBaseline="middle"
-        style={{ fill: 'var(--muted)' }} fontSize={9}
-      >
-        {ENHARMONIC_PAIRS[note]?.nameES ?? NOTE_ES[note]}
-      </text>
+      {/* Reunión 22/11/26 (#10): el rótulo exterior es el solfeo. En alemán el
+          nombre ya está dentro del nodo (Cis / Des), así que no se repite. */}
+      {lang !== 'de' && (
+        <text
+          x={cx + labelR * Math.cos(angle)}
+          y={cy + labelR * Math.sin(angle)}
+          textAnchor="middle" dominantBaseline="middle"
+          style={{ fill: 'var(--muted)' }} fontSize={9}
+        >
+          {ENHARMONIC_PAIRS[note]?.nameES ?? NOTE_ES[note]}
+        </text>
+      )}
     </g>
   );
 }
