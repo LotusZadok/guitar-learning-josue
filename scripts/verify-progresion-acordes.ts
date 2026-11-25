@@ -2,6 +2,9 @@
 // (progresionAcordes → noteCalculations → data/notes) desde Node.
 import { acordeDeGrado, acordeDeSlot, armaduraPorId, etiquetaTonalidad, ARMADURAS } from '../src/utils/progresionAcordes.ts';
 import { gradosDe, type GradoId, type Modo } from '../src/utils/progresionArmonica.ts';
+import { conducirVoces, type Disposicion } from '../src/utils/conduccionVoces.ts';
+import { ALL } from '../src/data/notes.ts';
+import type { ChromaticNote } from '../src/types/music';
 import { check, resumen } from './verify-helpers.ts';
 
 const cif = (arm: string, modo: Modo, g: GradoId, sept: boolean) =>
@@ -162,5 +165,40 @@ check(
   conSus('V/ii', true, 'sus4').cifrado,
   'A7sus4',
 );
+
+console.log('\n— Conducción de voces (ola 17, mensaje del profesor del 24/11/26) —');
+// Valores esperados de la armonía de teclado, no del código: bajo en la
+// fundamental una octava abajo y las voces de arriba con el menor movimiento.
+const escribir = (d: Disposicion) =>
+  `${d.bajo.chromatic}${d.bajo.octave} | ${d.voces.map((v) => `${v.chromatic}${v.octave}`).join(' ')}`;
+const conducir = (acordes: ChromaticNote[][]) => conducirVoces(acordes, 4).map(escribir);
+check(
+  'I–IV–V–I en Do: la nota común Do se queda y el V baja a B3 D4 G4',
+  conducir([['C', 'E', 'G'], ['F', 'A', 'C'], ['G', 'B', 'D'], ['C', 'E', 'G']]),
+  ['C3 | C4 E4 G4', 'F3 | C4 F4 A4', 'G3 | B3 D4 G4', 'C3 | C4 E4 G4'],
+);
+check(
+  'ii7–V7–Imaj7 en Do con tétradas: Re y Fa se quedan',
+  conducir([['D', 'F', 'A', 'C'], ['G', 'B', 'D', 'F'], ['C', 'E', 'G', 'B']]),
+  ['D3 | D4 F4 A4 C5', 'G3 | D4 F4 G4 B4', 'C3 | C4 E4 G4 B4'],
+);
+check('el primer acorde va en posición fundamental', conducir([['G', 'B', 'D']]), ['G3 | G4 B4 D5']);
+const midi = (n: { chromatic: ChromaticNote; octave: number }) => (n.octave + 1) * 12 + ALL.indexOf(n.chromatic);
+const fallasDeRango: string[] = [];
+for (const arm of ['C', 'F#', 'Db', 'B']) {
+  const grados: GradoId[] = ['I', 'vi', 'IV', 'V', 'iii', 'ii', 'vii°', 'V/ii', 'ii', 'V', 'I'];
+  for (const septimas of [false, true]) {
+    const acordes = grados.map((g) => acordeDeGrado({ armadura: armaduraPorId(arm), modo: 'mayor', id: g, septimas }).notas.map((n) => n.chromatic));
+    conducirVoces(acordes, 4).forEach((d, i) => {
+      const bajo = midi(d.bajo);
+      const voces = d.voces.map(midi);
+      if (voces.some((v) => v <= bajo)) fallasDeRango.push(`${arm} ${grados[i]}: voz bajo el bajo`);
+      if (d.bajo.chromatic !== acordes[i][0] || d.bajo.octave !== 3) fallasDeRango.push(`${arm} ${grados[i]}: bajo ${escribir(d)}`);
+      if (voces.length !== acordes[i].length) fallasDeRango.push(`${arm} ${grados[i]}: faltan voces`);
+      if (Math.max(...voces) - Math.min(...voces) > 12) fallasDeRango.push(`${arm} ${grados[i]}: voces abiertas ${escribir(d)}`);
+    });
+  }
+}
+check('en Do, Fa♯, Re♭ y Si: voces por encima del bajo, bajo en la fundamental (oct. 3), posición cerrada', fallasDeRango, []);
 
 resumen();

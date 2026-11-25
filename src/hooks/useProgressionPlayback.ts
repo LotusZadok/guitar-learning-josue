@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useAudioEngine, stopAllNotes, getCtx } from './useAudioEngine';
+import { useAudioEngine, stopAllNotes, getCtx, REFERENCE_OCTAVE } from './useAudioEngine';
 import { getAudioContext } from './audioEngineShared';
 import { acordeDeSlot } from '../utils/progresionAcordes';
+import { conducirVoces } from '../utils/conduccionVoces';
 import {
   CASILLAS_POR_COMPAS,
   GANANCIA_POR_ROL,
@@ -98,7 +99,13 @@ export function useProgressionPlayback(op: Opciones) {
     const { grid, origen } = enOrdenDeReproduccion(op);
     const paso = msPorCasilla(op.compas, op.bpm);
     const desde = pausadoEn ?? 0;
-    const eventos = eventosDesde(gridToEvents(grid, op.compas, op.bpm), desde, paso);
+    const todos = gridToEvents(grid, op.compas, op.bpm);
+    // La conducción de voces se calcula sobre la progresión entera, así al
+    // reanudar desde una pausa cada acorde suena igual que tocado de corrido.
+    const acordes = todos.map((ev) => acordeDeSlot(grid[ev.slotIndex]!));
+    const disposiciones = conducirVoces(acordes.map((a) => a.notas.map((n) => n.chromatic)), REFERENCE_OCTAVE);
+    const porCasilla = new Map(todos.map((ev, i) => [ev.slotIndex, { acorde: acordes[i], disposicion: disposiciones[i] }]));
+    const eventos = eventosDesde(todos, desde, paso);
     // Con la grilla vacía igual se puede tocar el metrónomo solo.
     if (eventos.length === 0 && !op.metronomo) return;
 
@@ -112,9 +119,9 @@ export function useProgressionPlayback(op: Opciones) {
 
     // Acordes: cada voz con su duración exacta.
     eventos.forEach((ev) => {
-      const acorde = acordeDeSlot(grid[ev.slotIndex]!);
+      const { acorde, disposicion } = porCasilla.get(ev.slotIndex)!;
       const id = window.setTimeout(() => {
-        acorde.notas.forEach((n) =>
+        [disposicion.bajo, ...disposicion.voces].forEach((n) =>
           playNote(n.chromatic, n.octave, { duracion: ev.durMs / 1000, ganancia: GANANCIA_POR_ROL[acorde.rol] }),
         );
       }, ev.startMs);

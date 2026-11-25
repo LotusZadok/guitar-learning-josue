@@ -14,7 +14,7 @@ import {
 
 // Octava de referencia que asumen los consumidores al escribir sus alturas.
 // El selector global de octava desplaza todo respecto a esta base.
-const REFERENCE_OCTAVE = 4;
+export const REFERENCE_OCTAVE = 4;
 
 // Exportada (no solo de uso interno): el reloj del constructor de progresiones
 // (useProgressionPlayback) necesita un AudioContext para leer currentTime aun
