@@ -136,7 +136,7 @@
       "label": "4.2 · Escala menor",
       "title": "La escala menor con séptimas (relativa)",
       "intro": "Toda tonalidad mayor tiene una relativa menor: mismas notas, distinta tónica (el 6to grado). Armonizando esa escala menor natural con séptimas sale el mismo tipo de patrón fijo que viste en 3.4, ahora leído desde la menor:",
-      "harmonic": "Para que la tonalidad menor tenga un dominante funcional (que empuje de verdad hacia la tónica) hace falta subir un semitono el 7mo grado: esa nota alterada es la sensible de la menor armónica, y convierte el v natural en un V7. Con eso quedan listas las dos piezas que arma 4.5: el V7 y el ii° (el semidisminuido que ya viste en 3.3)."
+      "harmonic": "La tonalidad menor natural no tiene un dominante que empuje de verdad hacia la tónica. Lo trae la escala menor armónica, que ves en 4.4."
     },
     "s310": {
       "label": "4.5 · ii°-V7-i (menor)",
@@ -151,6 +151,25 @@
     }
   },
   "t4": {
+    "s44": {
+      "label": "4.4 · Escala menor armónica",
+      "title": "Escala menor armónica",
+      "escala_titulo": "La escala",
+      "natural": "La escala menor natural es «lo mismo que la escala mayor, pero empezando en el sexto grado, que ahora le llamamos primero. Los mismos acordes, la misma vaina».",
+      "armonica": "La escala menor armónica es esa misma escala, cambiando solo una nota: la séptima sube un semitono (un traste arriba en la guitarra). En {{tonica}} menor: {{escala}}.",
+      "arabe": "«Suena árabe. Solo por ese detallito».",
+      "sensible": "Esa séptima subida queda a un semitono de la tónica: es la sensible de la menor (la misma que estudiaste en 3.5 y 3.6). Es la que la menor natural no tenía, y por eso le faltaba un dominante que empujara de verdad hacia la tónica.",
+      "grados_titulo": "Grados armónicos de la menor armónica",
+      "cambio": "«Si yo cambio una nota de toda la escala, todos los acordes que contengan esa nota van a variar también». En {{tonica}} menor, todos los acordes que tienen el {{sensible}} cambian: «eso nos va a dar cuatro acordes diferentes». En la tabla van subrayados.",
+      "cambios": [
+        "i · {{acorde}}: «un menor con séptima mayor… desbloquear un filtro del árbol», el acorde «de Harry Potter».",
+        "III+ · {{acorde}}: «nos queda un acorde aumentado».",
+        "V · {{acorde}}: «el quinto mayor».",
+        "vii° · {{acorde}}: «un acorde disminuido completo… ya lo estudiamos en los acordes disminuidos»."
+      ],
+      "importa": "Por qué importa: «ya después de esa escala menor, ya podremos definitivamente usar el 2-5-1… este quinto vendría de la escala menor armónica, y ya estaría justificado de dónde convertimos este quinto menor a un quinto mayor». Es la pieza que arma el ii°-V-i de 4.5.",
+      "laboratorio": "En una tonalidad menor «se desbloquean dos acordes nuevos: el quinto mayor y el séptimo disminuido completo». Son los que aparecen en el banco del Laboratorio de armonía (5.4)."
+    },
     "s41": {
       "label": "5.4 · Laboratorio de armonía",
       "title": "Arma tu propia progresión",

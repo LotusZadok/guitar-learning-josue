@@ -261,3 +261,11 @@
   opacity: 0.35;
   transition: opacity 0.2s;
 }
+
+/* §4.4: los acordes que cambian con la sensible de la menor armónica van
+   subrayados en neutro de marca. El color ya dice la función; el subrayado
+   dice "esta casilla es distinta de la natural" sin sumar un hue. */
+td[data-cambia] .chordSymbol {
+  text-decoration: underline 2px var(--paper);
+  text-underline-offset: 5px;
+}

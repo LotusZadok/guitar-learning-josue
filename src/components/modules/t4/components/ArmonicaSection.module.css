@@ -1,0 +1,40 @@
+.section {
+  composes: section from "../../../shared/sectionChrome.module.css";
+}
+
+.text {
+  composes: text from "../../../shared/sectionChrome.module.css";
+}
+
+.subheading {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  color: var(--paper);
+  margin: 32px 0 12px;
+  letter-spacing: 1px;
+}
+
+/* Mismo formato de lista que las definiciones de §1.7 (`AcordesSection`). */
+.cambios {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cambios li {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--text-body);
+  padding-left: 16px;
+  position: relative;
+}
+
+.cambios li::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  color: var(--muted);
+}

@@ -187,10 +187,19 @@ export function harmonicMinorScaleSpelled(majorTonic: Tonic): string[] {
 // Los siete grados con séptima de la menor armónica, terceras apiladas sobre
 // la escala. El cifrado del III aumentado con 7M (maj7♯5) y el del menor con
 // 7M (mMaj7, D10 del plan del 19/10) siguen la convención del resto de la app.
-const MENOR_ARMONICA = {
+export const MENOR_ARMONICA = {
   romanos: ["i", "ii°", "III+", "iv", "V", "VI", "vii°"],
+  triadas: ["m", "dim", "aug", "m", "M", "M", "dim"],
   sufijos: ["mMaj7", "m7♭5", "maj7♯5", "m7", "7", "maj7", "°7"],
 } as const;
+
+// §4.4 (reunión 19/10/26): "si yo cambio una nota de toda la escala, todos los
+// acordes que contengan esa nota van a variar también". Son los grados cuyo
+// acorde contiene la 7ª subida: cuatro con séptima; en tríadas, el i no la tiene.
+export function gradosQueCambianEnArmonica(conSeptima: boolean): number[] {
+  const terceras = conSeptima ? [0, 2, 4, 6] : [0, 2, 4];
+  return [0, 1, 2, 3, 4, 5, 6].filter((grado) => terceras.some((k) => (grado + k) % 7 === 6));
+}
 
 export function acordeMenorArmonica(
   majorTonic: Tonic,

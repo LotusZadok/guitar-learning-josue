@@ -2,6 +2,8 @@
 // Se corre con `npm run verify:menor` (node --experimental-strip-types).
 import {
   acordeMenorArmonica,
+  gradosQueCambianEnArmonica,
+  MENOR_ARMONICA,
   harmonicMinorScaleSpelled,
   pitchClass,
   progresionIIVI,
@@ -49,5 +51,10 @@ check(
   progresionIIVI({ tonica: 'C', modo: 'menor', septimaEnI: false }).map((c) => c.notas.join(' ')),
   ['B D F A', 'E G♯ B D', 'A C E'],
 );
+
+console.log('\n— 4.4: qué acordes cambian con la sensible ("cuatro acordes diferentes", reunión 19/10/26) —');
+check('con séptima cambian i, III, V y vii (los cuatro que tienen la 7ª)', gradosQueCambianEnArmonica(true), [0, 2, 4, 6]);
+check('en tríadas el i no tiene la 7ª: cambian III, V y vii', gradosQueCambianEnArmonica(false), [2, 4, 6]);
+check('tríadas de la menor armónica: m, dim, aug, m, M, M, dim', MENOR_ARMONICA.triadas, ['m', 'dim', 'aug', 'm', 'M', 'M', 'dim']);
 
 resumen();

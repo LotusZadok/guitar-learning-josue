@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAudioEngine } from '../../../hooks/useAudioEngine';
 import { useFireGate } from '../../../hooks/useFireGate';
 import { ALL } from '../../../data/notes';
-import { formatNote, formatChordSymbol, aAscii, majorScaleSpelled, relativeMinorScaleSpelled, spelledSequenceAscending, tonicChromatic } from '../../../utils/noteCalculations';
+import { formatNote, formatChordSymbol, aAscii, gradosQueCambianEnArmonica, harmonicMinorScaleSpelled, majorScaleSpelled, MENOR_ARMONICA, relativeMinorScaleSpelled, spelledSequenceAscending, tonicChromatic } from '../../../utils/noteCalculations';
 import NoteToken, { type DiatonicRole } from '../../shared/NoteToken/NoteToken';
 import RomanGlyph from '../../shared/RomanGlyph/RomanGlyph';
 import { GANANCIA_POR_ROL } from '../../../utils/progresionArmonica';
@@ -19,6 +19,9 @@ interface Props {
   /** T3 §3.9: re-ancla la tabla en la relativa menor natural de `tonalidad`
    *  (comparten armadura; misma escala rotada al 6to grado — sin teoría nueva). */
   relativeMinor?: boolean;
+  /** §4.4: la relativa menor armónica (la natural con la 7ª subida). Subraya
+   *  los acordes que cambian con esa nota. */
+  harmonicMinor?: boolean;
   /** Último paso disponible en el stepper. T2 §2.6 usa 3 (sin séptimas);
    *  T3 §3.5/§3.9 usan el default 4, que es donde se enseñan. */
   maxStep?: 3 | 4;
@@ -79,12 +82,12 @@ interface DiatonicNote {
   octave: number;
 }
 
-function buildDiatonic(tonic: Tonic, relativeMinor: boolean): DiatonicNote[] {
-  if (relativeMinor) {
+function buildDiatonic(tonic: Tonic, relativeMinor: boolean, harmonicMinor: boolean): DiatonicNote[] {
+  if (relativeMinor || harmonicMinor) {
     // Misma armadura, notas rotadas al 6to grado; el piso (tónica=nota más
     // grave) se recalcula con `spelledSequenceAscending` porque la rotación
     // por sí sola no preserva el ascenso (ver noteCalculations.ts).
-    const spelled = relativeMinorScaleSpelled(tonic);
+    const spelled = harmonicMinor ? harmonicMinorScaleSpelled(tonic) : relativeMinorScaleSpelled(tonic);
     const ascii = spelled.map((s) => aAscii(s));
     const seq = spelledSequenceAscending(ascii, 4);
     return spelled.map((sp, i) => ({
@@ -117,7 +120,7 @@ function chordMemberOctave(diatonic: DiatonicNote[], gradeIdx: number, offset: n
   return diatonic[idx].octave + wraps;
 }
 
-export default function GradosArmonicos({ tonalidad, initialStep = 1, relativeMinor = false, maxStep = 4 }: Props) {
+export default function GradosArmonicos({ tonalidad, initialStep = 1, relativeMinor = false, harmonicMinor = false, maxStep = 4 }: Props) {
   const { i18n } = useTranslation();
   const isDe = i18n.language === 'de';
   // Clamp: un initialStep por encima de maxStep dejaría la tabla en un estado sin
@@ -128,14 +131,15 @@ export default function GradosArmonicos({ tonalidad, initialStep = 1, relativeMi
   const fire = useFireGate();
   const clearCellRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const diatonic = useMemo(() => buildDiatonic(tonalidad, relativeMinor), [tonalidad, relativeMinor]);
+  const diatonic = useMemo(() => buildDiatonic(tonalidad, relativeMinor, harmonicMinor), [tonalidad, relativeMinor, harmonicMinor]);
   // Step 1 (letras solas) parte de la tónica que se muestra en pantalla: la
   // global en mayor, o la relativa menor (1er elemento ya rotado) en menor.
-  const displayTonic = relativeMinor ? (aAscii(diatonic[0].spelled) as Tonic) : tonalidad;
+  const displayTonic = relativeMinor || harmonicMinor ? (aAscii(diatonic[0].spelled) as Tonic) : tonalidad;
   const naturals = useMemo(() => naturalRoots(displayTonic), [displayTonic]);
-  const QUALITIES_ACTIVE = relativeMinor ? QUALITIES_MINOR : QUALITIES;
-  const SEVENTH_QUALITIES_ACTIVE = relativeMinor ? SEVENTH_QUALITIES_MINOR : SEVENTH_QUALITIES;
-  const ROMANS_ACTIVE = relativeMinor ? ROMANS_MINOR : ROMANS;
+  const QUALITIES_ACTIVE = harmonicMinor ? MENOR_ARMONICA.triadas : relativeMinor ? QUALITIES_MINOR : QUALITIES;
+  const SEVENTH_QUALITIES_ACTIVE = harmonicMinor ? MENOR_ARMONICA.sufijos : relativeMinor ? SEVENTH_QUALITIES_MINOR : SEVENTH_QUALITIES;
+  const ROMANS_ACTIVE = harmonicMinor ? MENOR_ARMONICA.romanos : relativeMinor ? ROMANS_MINOR : ROMANS;
+  const cambian = harmonicMinor && step >= 3 ? gradosQueCambianEnArmonica(step >= 4) : [];
 
   const playTriad = useCallback(
     (gradeIdx: number) => {
@@ -210,6 +214,7 @@ export default function GradosArmonicos({ tonalidad, initialStep = 1, relativeMi
     const q = QUALITIES_ACTIVE[i];
     if (q === 'M') return d.spelled;
     if (q === 'm') return d.spelled + 'm';
+    if (q === 'aug') return d.spelled + '+';
     return d.spelled + '°';
   });
 
@@ -279,9 +284,13 @@ export default function GradosArmonicos({ tonalidad, initialStep = 1, relativeMi
                   onPlay={() => playTriad(i)}
                   isPlaying={playingCell === i}
                   isDimmed={playingCell !== null && playingCell !== i}
-                  ariaLabel={isDe ? `Akkord ${formatChordSymbol(sym, 'de')} spielen` : `Reproducir acorde ${sym}`}
+                  ariaLabel={
+                    (isDe ? `Akkord ${formatChordSymbol(sym, 'de')} spielen` : `Reproducir acorde ${sym}`) +
+                    (cambian.includes(i) ? (isDe ? ', ändert sich mit dem Leitton' : ', cambia con la sensible') : '')
+                  }
                   className={styles.chordCell}
                   activeClassName={styles.chordCellActive}
+                  cambia={cambian.includes(i)}
                 >
                   <span className={styles.chordSymbol}>{formatChordSymbol(sym, i18n.language)}</span>
                 </PlayableCell>
@@ -387,6 +396,8 @@ interface PlayableCellProps {
   ariaLabel: string;
   className: string;
   activeClassName: string;
+  /** §4.4: el acorde cambia en la menor armónica (se subraya). */
+  cambia?: boolean;
   children: ReactNode;
 }
 
@@ -400,14 +411,14 @@ interface PlayableCellProps {
 // nativo trae Enter/Espacio y el gating por `disabled`, así que no hace falta
 // handler de teclado ni condicionar los eventos por `active`.
 function PlayableCell({
-  role, active, onPlay, isPlaying, isDimmed, ariaLabel, className, activeClassName, children,
+  role, active, onPlay, isPlaying, isDimmed, ariaLabel, className, activeClassName, cambia, children,
 }: PlayableCellProps) {
   let cls = active ? activeClassName : className;
   if (active && isPlaying) cls = `${activeClassName} ${styles.cellPlaying}`;
   else if (active && isDimmed) cls = `${activeClassName} ${styles.cellDimmed}`;
 
   return (
-    <td className={cls} data-harmonic={role}>
+    <td className={cls} data-harmonic={role} data-cambia={cambia || undefined}>
       <button
         type="button"
         className={styles.cellButton}

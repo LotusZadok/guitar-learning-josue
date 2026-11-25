@@ -138,7 +138,7 @@
       "label": "4.2 · Moll-Tonleiter",
       "title": "Die Moll-Tonleiter mit Septimen (Paralleltonart)",
       "intro": "Jede Dur-Tonart hat eine parallele Molltonart: gleiche Töne, andere Tonika (die 6. Stufe). Harmonisiert man diese natürliche Molltonleiter mit Septimen, ergibt sich dasselbe feste Muster wie in 3.4, jetzt von Moll aus gelesen:",
-      "harmonic": "Damit die Molltonart eine funktionale Dominante bekommt (die wirklich zur Tonika drängt), muss die 7. Stufe um einen Halbton angehoben werden: dieser veränderte Ton ist der Leitton der harmonischen Moll und macht aus dem natürlichen v ein V7. Damit stehen die zwei Bausteine für 4.5 bereit: das V7 und das ii° (der Halbverminderte aus 3.3)."
+      "harmonic": "Die natürliche Molltonart hat keine Dominante, die wirklich zur Tonika drängt. Die bringt die harmonische Molltonleiter, die du in 4.4 siehst."
     },
     "s310": {
       "label": "4.5 · ii°-V7-i (Moll)",
@@ -153,6 +153,25 @@
     }
   },
   "t4": {
+    "s44": {
+      "label": "4.4 · Harmonische Molltonleiter",
+      "title": "Harmonische Molltonleiter",
+      "escala_titulo": "Die Tonleiter",
+      "natural": "Die natürliche Molltonleiter ist „dasselbe wie die Durtonleiter, nur ab der sechsten Stufe begonnen, die wir jetzt die erste nennen. Dieselben Akkorde, dasselbe Zeug“.",
+      "armonica": "Die harmonische Molltonleiter ist dieselbe Tonleiter, nur ein Ton ändert sich: die Septime steigt um einen Halbton (einen Bund höher auf der Gitarre). In {{tonica}}-Moll: {{escala}}.",
+      "arabe": "„Klingt arabisch. Nur wegen dieses kleinen Details“.",
+      "sensible": "Diese erhöhte Septime liegt einen Halbton unter der Tonika: Sie ist der Leitton von Moll (derselbe, den du in 3.5 und 3.6 kennengelernt hast). Der natürlichen Molltonleiter fehlte er, und deshalb fehlte ihr eine Dominante, die wirklich zur Tonika drängt.",
+      "grados_titulo": "Harmonische Stufen der harmonischen Molltonleiter",
+      "cambio": "„Wenn ich einen Ton der Tonleiter ändere, ändern sich auch alle Akkorde, die diesen Ton enthalten“. In {{tonica}}-Moll ändern sich alle Akkorde mit dem {{sensible}}: „das ergibt vier andere Akkorde“. In der Tabelle sind sie unterstrichen.",
+      "cambios": [
+        "i · {{acorde}}: „ein Moll mit großer Septime … einen Filter im Baum freischalten“, der „Harry-Potter“-Akkord.",
+        "III+ · {{acorde}}: „es bleibt ein übermäßiger Akkord“.",
+        "V · {{acorde}}: „die Dur-Fünfte“.",
+        "vii° · {{acorde}}: „ein voll verminderter Akkord … den haben wir schon bei den verminderten Akkorden gelernt“."
+      ],
+      "importa": "Warum das wichtig ist: „Nach dieser Molltonleiter können wir endlich das 2-5-1 benutzen … diese Fünfte käme aus der harmonischen Molltonleiter, und damit wäre begründet, warum aus der Moll-Fünften eine Dur-Fünfte wird“. Das ist der Baustein für das ii°-V-i aus 4.5.",
+      "laboratorio": "In einer Molltonart „werden zwei neue Akkorde freigeschaltet: die Dur-Fünfte und der voll verminderte siebte“. Das sind die, die in der Bank des Harmonielabors (5.4) erscheinen."
+    },
     "s41": {
       "label": "5.4 · Harmonie-Labor",
       "title": "Baue deine eigene Akkordfolge",
