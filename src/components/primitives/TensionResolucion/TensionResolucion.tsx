@@ -67,32 +67,33 @@ function buildNodes(tonic: Tonic): TensionNode[] {
   }));
 }
 
-// Flechas de resolución. Tras la reunión 24/5/26 las del 4to grado también son arcos
-// (antes eran rectas y aparentaban una línea continua III—V que cruzaba el IV).
-// 'curve' = arco amplio; 'shortCurve' = arco corto (1 s.t. de distancia).
+// Flechas de resolución (tensa o intermedia → reposo).
 const ARROWS = [
-  { id: "d-c", fromIdx: 1, toIdx: 0, width: 1.5, kind: "curve" },
-  { id: "d-e", fromIdx: 1, toIdx: 2, width: 1.5, kind: "curve" },
-  { id: "f-e", fromIdx: 3, toIdx: 2, width: 1.5, kind: "shortCurve" },
-  { id: "f-g", fromIdx: 3, toIdx: 4, width: 1.5, kind: "shortCurve" },
-  { id: "a-g", fromIdx: 5, toIdx: 4, width: 1.5, kind: "curve" },
-  { id: "b-c8", fromIdx: 6, toIdx: 7, width: 1.5, kind: "shortCurve" },
+  { id: "d-c", fromIdx: 1, toIdx: 0 },
+  { id: "d-e", fromIdx: 1, toIdx: 2 },
+  { id: "f-e", fromIdx: 3, toIdx: 2 },
+  { id: "f-g", fromIdx: 3, toIdx: 4 },
+  { id: "a-g", fromIdx: 5, toIdx: 4 },
+  { id: "b-c8", fromIdx: 6, toIdx: 7 },
 ] as const;
 
 const SVG_W = 560;
-const SVG_H = 220;
 const PAD_X = 32;
 const GRID_UNITS = 12;
 const STEP_X = (SVG_W - 2 * PAD_X) / GRID_UNITS;
-const NODE_Y = 150;
+const NODE_Y = 72;
 const RADIUS_TONIC = 22;
 const RADIUS_STABLE = 18;
 const RADIUS_TENSE = 18;
-const ARC_BASELINE = NODE_Y - RADIUS_TONIC - 6; // top of node circle
-const ARC_RISE = 52; // how far above baseline the arc peaks
-// Vano del tritono (§3.5), por debajo de los números de grado (NODE_Y + radio
-// + 22): a NODE_Y + 42 sus extremos tachaban el "4" y el "7" (reunión 19/10/26).
-const TRITONO_Y = NODE_Y + 60;
+const ARROW_WIDTH = 1.75;
+// Los números de grado van en una regla propia, por debajo de los arcos que
+// bajan, para que ninguna flecha los cruce.
+const AXIS_Y = NODE_Y + 80;
+const GRADE_Y = NODE_Y + 92;
+const SVG_H = GRADE_Y + 14;
+// Vano del tritono (§3.5), por debajo de los números de grado: más arriba sus
+// extremos tachaban el "4" y el "7" (reunión 19/10/26).
+const TRITONO_Y = GRADE_Y + 26;
 const SVG_H_TRITONO = TRITONO_Y + 32;
 // Reunión 6/7/26: separar/alargar las 2 notas de cada flecha para que la
 // resolución se oiga clara (antes 260ms se encimaban demasiado).
@@ -103,18 +104,44 @@ function nodeX(pos: number): number {
   return PAD_X + pos * STEP_X;
 }
 
-function arrowPath(
-  originX: number,
-  destX: number,
-  kind: "shortCurve" | "curve",
-): string {
-  const startY = ARC_BASELINE;
-  const midX = (originX + destX) / 2;
-  // 'shortCurve' = arco menor para resoluciones de 1 s.t. — sigue saliendo visiblemente
-  // del nodo origen (no como recta que cruza nodos intermedios).
-  const rise = kind === "shortCurve" ? ARC_RISE * 0.4 : ARC_RISE;
-  const peakY = startY - rise;
-  return `M ${originX} ${startY} Q ${midX} ${peakY} ${destX} ${startY}`;
+function nodeRadius(role: RolDeNotaEnEscala): number {
+  return role === "tonic" ? RADIUS_TONIC : role === "tense" ? RADIUS_TENSE : RADIUS_STABLE;
+}
+
+// Pedido de Sebastián (24/11/26): las flechas como señalización. La resolución
+// que sube va por arriba y la que baja por abajo; así cada lado de cada nodo
+// tiene a lo sumo una flecha y ninguna punta se encima con otra (antes D→E y
+// F→E llegaban al mismo punto sobre E). Cada flecha sale y llega por el borde
+// del nodo, del lado de la otra nota. Los vecinos a 1 s.t. casi se tocan: sus
+// flechas salen casi por arriba y forman un arco alto y angosto.
+interface ArrowGeometry {
+  d: string;
+  label: string;
+  labelX: number;
+  labelY: number;
+}
+
+function arrowGeometry(from: TensionNode, to: TensionNode): ArrowGeometry {
+  const semitones = Math.abs(to.pos - from.pos);
+  const up = to.pos > from.pos;
+  const toRight = nodeX(to.pos) > nodeX(from.pos);
+  const side = up ? -1 : 1;
+  const angle = ((semitones === 1 ? 12 : 40) * Math.PI) / 180;
+  const port = (n: TensionNode, towardRight: boolean): [number, number] => {
+    const r = nodeRadius(n.role) + 3;
+    return [nodeX(n.pos) + (towardRight ? 1 : -1) * r * Math.sin(angle), NODE_Y + side * r * Math.cos(angle)];
+  };
+  const [x1, y1] = port(from, toRight);
+  const [x2, y2] = port(to, !toRight);
+  const depth = semitones === 1 ? 44 : 50;
+  const controlY = NODE_Y + side * depth;
+  const lean = semitones === 1 ? 0 : toRight ? 6 : -6;
+  return {
+    d: `M ${x1} ${y1} C ${x1 + lean} ${controlY}, ${x2 - lean} ${controlY}, ${x2} ${y2}`,
+    label: `${up ? "+" : "−"}${semitones}`,
+    labelX: (x1 + x2) / 2,
+    labelY: NODE_Y + side * (depth * 0.75 + 13),
+  };
 }
 
 interface Props {
@@ -195,26 +222,36 @@ export default function TensionResolucion({ focus, tritonoPlayLabel }: Props = {
             : `Mapa de resoluciones de tensión en ${spelledNameES(tonic)} mayor`
         }
       >
+        {/* Punta en chevrón abierto, de tamaño fijo: se lee como señal y no
+            crece con el trazo. Una por color porque el marcador no hereda el
+            trazo de la flecha (ámbar solo mientras suena). */}
         <defs>
-          <marker
-            id="tension-arrowhead"
-            markerWidth="6"
-            markerHeight="6"
-            refX="6"
-            refY="3"
-            orient="auto"
-            markerUnits="strokeWidth"
-          >
-            <path d="M0,0 L6,3 L0,6 Z" className={styles.arrowHead} />
-          </marker>
+          {[
+            { id: "tension-arrowhead", className: styles.arrowHead },
+            { id: "tension-arrowhead-playing", className: styles.arrowHeadPlaying },
+          ].map((m) => (
+            <marker
+              key={m.id}
+              id={m.id}
+              viewBox="0 0 10 10"
+              markerWidth="9"
+              markerHeight="9"
+              refX="8"
+              refY="5"
+              orient="auto"
+              markerUnits="userSpaceOnUse"
+            >
+              <path d="M1,1 L9,5 L1,9" className={m.className} />
+            </marker>
+          ))}
         </defs>
 
-        {/* Subtle baseline rule beneath nodes */}
+        {/* Regla de los grados, entre los arcos de abajo y los números. */}
         <line
           x1={PAD_X}
-          y1={NODE_Y}
+          y1={AXIS_Y}
           x2={SVG_W - PAD_X}
-          y2={NODE_Y}
+          y2={AXIS_Y}
           className={styles.baseline}
         />
 
@@ -245,8 +282,7 @@ export default function TensionResolucion({ focus, tritonoPlayLabel }: Props = {
           return (
             <ArrowPath
               key={a.id}
-              d={arrowPath(nodeX(from.pos), nodeX(to.pos), a.kind)}
-              width={a.width}
+              geometry={arrowGeometry(from, to)}
               ariaLabel={
                 isDe
                   ? `Auflösung von ${NOTE_DE[from.note] ?? from.note} nach ${NOTE_DE[to.note] ?? to.note} spielen`
@@ -304,8 +340,7 @@ export default function TensionResolucion({ focus, tritonoPlayLabel }: Props = {
 }
 
 interface ArrowPathProps {
-  d: string;
-  width: number;
+  geometry: ArrowGeometry;
   ariaLabel: string;
   onPlay: () => void;
   isPlaying?: boolean;
@@ -313,8 +348,7 @@ interface ArrowPathProps {
 }
 
 function ArrowPath({
-  d,
-  width,
+  geometry,
   ariaLabel,
   onPlay,
   isPlaying,
@@ -330,8 +364,8 @@ function ArrowPath({
     [onPlay],
   );
 
-  const strokeColor = isPlaying ? "var(--amber)" : undefined;
-  const strokeWidth = isPlaying ? width + 1 : width;
+  const { d } = geometry;
+  const strokeWidth = isPlaying ? ARROW_WIDTH + 0.5 : ARROW_WIDTH;
   const opacity = isDimmed ? 0.25 : 1;
 
   return (
@@ -354,14 +388,23 @@ function ArrowPath({
       {/* Visual arrow path */}
       <path
         d={d}
-        className={styles.arrow}
+        className={isPlaying ? `${styles.arrow} ${styles.arrowPlaying}` : styles.arrow}
         strokeWidth={strokeWidth}
-        stroke={strokeColor}
         opacity={opacity}
-        markerEnd="url(#tension-arrowhead)"
+        markerEnd={isPlaying ? "url(#tension-arrowhead-playing)" : "url(#tension-arrowhead)"}
         pointerEvents="none"
         style={{ transition: "opacity 0.2s, stroke 0.15s" }}
       />
+      {/* Distancia de la resolución en semitonos, en el formato +n del método. */}
+      <text
+        x={geometry.labelX}
+        y={geometry.labelY}
+        className={isPlaying ? styles.stepLabelPlaying : styles.stepLabel}
+        opacity={opacity}
+        aria-hidden="true"
+      >
+        {geometry.label}
+      </text>
     </g>
   );
 }
@@ -375,12 +418,7 @@ function ScaleNode({ data, sounding }: ScaleNodeProps) {
   const lang = useTranslation().i18n.language;
   const { pos, spelled, role } = data;
   const cx = nodeX(pos);
-  const radius =
-    role === "tonic"
-      ? RADIUS_TONIC
-      : role === "tense"
-        ? RADIUS_TENSE
-        : RADIUS_STABLE;
+  const radius = nodeRadius(role);
   const fill =
     role === "tonic" || role === "stable"
       ? "var(--diatonic-stable)"
@@ -410,7 +448,7 @@ function ScaleNode({ data, sounding }: ScaleNodeProps) {
       >
         {formatNote(spelled, lang)}
       </text>
-      <text x={cx} y={NODE_Y + radius + 22} className={styles.gradeLabel}>
+      <text x={cx} y={GRADE_Y} className={styles.gradeLabel}>
         {data.grade}
       </text>
     </g>

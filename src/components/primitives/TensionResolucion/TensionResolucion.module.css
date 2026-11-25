@@ -60,6 +60,7 @@
 .arrow {
   fill: none;
   stroke: var(--muted);
+  stroke-linecap: round;
   cursor: pointer;
   transition: stroke 0.15s ease;
 }
@@ -77,8 +78,31 @@
   outline-offset: 2px;
 }
 
-.arrowHead {
+.arrowHead,
+.arrowHeadPlaying {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Ámbar = "sonando ahora" (Amber-Means-Sounding). */
+.arrowHeadPlaying {
+  stroke: var(--amber);
+}
+
+.stepLabel,
+.stepLabelPlaying {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
   fill: var(--muted);
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.stepLabelPlaying {
+  fill: var(--amber);
 }
 
 .legend {
@@ -164,4 +188,10 @@
   display: flex;
   justify-content: center;
   margin-top: 8px;
+}
+
+/* La flecha que suena va entera en ámbar: con el atributo `stroke` no
+   alcanzaba, porque la regla `.arrow` le gana a un atributo de presentación. */
+.arrowPlaying {
+  stroke: var(--amber);
 }

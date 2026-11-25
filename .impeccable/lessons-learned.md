@@ -119,6 +119,10 @@ El atributo `hidden` es solo `display: none` en la hoja del navegador: cualquier
 
 La regla global `p, li` fija `font-size: 16px` y `color: var(--text-body)` en cada elemento, no en el contenedor. Un `<p>` o `<li>` metido dentro de un paso de `processChrome` (13px, `--muted`, más claro en `.stepActive`) sale a 16px y con el color del cuerpo, aunque el paso que lo rodea esté apagado. **Regla:** todo `p`/`li` anidado en un componente con tipografía propia lleva `font-size: inherit; line-height: inherit; color: inherit`, o se usa `span`/`div`.
 
+### Una clase CSS le gana al atributo de presentación de un SVG (ola 19, mapa de §1.5)
+
+En `TensionResolucion` la flecha que suena recibía `stroke="var(--amber)"` como atributo, pero `.arrow { stroke: var(--muted) }` del módulo CSS tiene más precedencia que cualquier atributo de presentación (`stroke`, `fill`, `opacity`). Desde que existe el componente, la flecha que sonaba se quedó gris; nadie lo notó porque el cambio de grosor sí se veía. **Regla:** si una propiedad visual ya la fija una clase, el estado se expresa con otra clase (`.arrowPlaying`), no con un atributo. **Test:** `getComputedStyle(el).stroke` en el estado activo, no leer el atributo.
+
 ### Anti-checklist antes de commit
 
 Pasar cada surface por estas preguntas antes de aprobar el cambio:
