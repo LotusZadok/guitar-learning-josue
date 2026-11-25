@@ -153,6 +153,19 @@
     }
   },
   "t4": {
+    "s53": {
+      "label": "5.3 · Modulation",
+      "title": "Modulation",
+      "tonizacion": "Tonikalisierung „bedeutet, dass wir in einer Tonart sind, sie kurz verlassen und wieder zurückkehren“. Modulation „heißt, die Tonart zu verlassen, in eine andere Tonart zu wechseln und dort zu bleiben“.",
+      "resumen": "Zusammengefasst: „Modulation heißt, die Tonart zu wechseln. Tonikalisierung heißt auch, die Tonart zu wechseln, aber nur mit kleinen Details“.",
+      "jazz": "Ein Beispiel: In einem Jazzstandard mit vier B-Vorzeichen steht der A-Teil in As-Dur (eine typische vi-ii-V-I-Verbindung und eine Tonikalisierung). Der B-Teil steht nicht mehr in As, sondern in Es. Die Akkorde ähneln sich, gehören aber zu einer anderen Tonart. Danach kehrt das Stück nach As zurück. „Wenn die Musik die Tonart verlässt, ist das toll, weil sie unvorhersehbar wird“.",
+      "maneras": "„Es gibt verschiedene Arten zu modulieren … aber fürs Erste: das Element verstehen und wissen, wie es geht“.",
+      "reconocer": "So erkennst du eine Modulation: Die neuen Akkorde passen nicht mehr in die Ausgangstonart, und die Musik bleibt dort (sie kehrt nicht gleich zurück). Oft wird die neue Tonart mit ihrer eigenen V7 oder mit einem ii-V vorbereitet, die du aus 5.2 kennst.",
+      "ejemplo": "Hör dir diese Verbindung an: Sie beginnt in G-Dur (I, IV, V) und moduliert mit ihrem eigenen ii-V-I nach A-Dur. Das Raster markiert mit einem Doppelstrich den Takt, in dem die Tonart wechselt.",
+      "play": "Die Modulation von G nach A anhören",
+      "casilla": "Takt {{compas}}, Schlag {{pulso}}, {{acorde}}",
+      "laboratorio": "Im Harmonielabor (5.4) kannst du modulieren: Wenn du schon Akkorde gesetzt hast und eine andere Tonart wählst, wirst du gefragt, ob du modulieren willst. Was schon steht, bleibt in seiner Tonart, und das Raster markiert, wo sie wechselt."
+    },
     "s43": {
       "label": "4.3 · Übermäßige Akkorde",
       "title": "Übermäßige Akkorde",

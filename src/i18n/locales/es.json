@@ -151,6 +151,19 @@
     }
   },
   "t4": {
+    "s53": {
+      "label": "5.3 · Modulación",
+      "title": "Modulación",
+      "tonizacion": "La tonización «significa que estamos en una tonalidad, salimos de la tonalidad por un momentico y volvemos a entrar». La modulación «es salirse de la tonalidad y cambiar a otra tonalidad, y quedarse en esa tonalidad».",
+      "resumen": "Resumen: «Modulación es cambiar de tonalidad. Tonización es cambiar de tonalidad, pero con pequeños detallitos».",
+      "jazz": "Un ejemplo: en un estándar de jazz con cuatro bemoles en la armadura, la parte A está en La♭ mayor (una típica progresión vi-ii-V-I y una tonización). La parte B ya no está en La♭: está en Mi♭. Los acordes se parecen, pero pertenecen a otra tonalidad. Después la pieza vuelve a La♭. «Cuando la música se sale de la tonalidad es tuanis, porque llega a ser impredecible».",
+      "maneras": "«Hay diferentes maneras de modular… pero por ahora, comprender el elemento y saber cómo se hace».",
+      "reconocer": "Para reconocer una modulación: los acordes nuevos ya no caben en la tonalidad de partida, y la música se queda ahí (no vuelve enseguida). Muchas veces la nueva tonalidad se prepara con su propio V7 o con un ii-V, que ya conoces de 5.2.",
+      "ejemplo": "Escucha esta progresión: empieza en Sol mayor (I, IV, V) y modula a La mayor con su propio ii-V-I. La grilla marca con doble barra el compás donde cambia la tonalidad.",
+      "play": "Escuchar la modulación de Sol a La",
+      "casilla": "Compás {{compas}}, pulso {{pulso}}, {{acorde}}",
+      "laboratorio": "En el Laboratorio de armonía (5.4) puedes modular: si ya colocaste acordes y eliges otra tonalidad, se te pregunta si quieres modular. Lo que ya pusiste queda en su tonalidad y la grilla marca dónde cambió."
+    },
     "s43": {
       "label": "4.3 · Acordes aumentados",
       "title": "Acordes aumentados",

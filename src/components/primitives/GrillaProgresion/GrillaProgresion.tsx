@@ -52,6 +52,8 @@ interface Props {
     etiquetaMarcar: (extremo: ExtremoRepeticion, compas: number) => string;
     etiquetaBarra: (inicio: number, fin: number) => string;
   };
+  /** §5.3: la grilla como ejemplo para escuchar; las casillas no se tocan. */
+  soloLectura?: boolean;
 }
 
 // Barra de repetición de la partitura: gruesa, fina y los dos puntos del lado
@@ -84,7 +86,7 @@ function BarraRepeticion({ lado }: { lado: ExtremoRepeticion }) {
 // oírse.
 export default function GrillaProgresion({
   grid, compas, nCompases, sonando, hayGradoArmado, modificadorArmado, onModificar, etiquetaModificar,
-  onColocar, onVaciar, onSoltar, etiquetaModulacion, etiquetaCasilla, repeticion,
+  onColocar, onVaciar, onSoltar, etiquetaModulacion, etiquetaCasilla, repeticion, soloLectura = false,
 }: Props) {
   const lang = useTranslation().i18n.language;
   const { tramo } = repeticion;
@@ -150,7 +152,9 @@ export default function GrillaProgresion({
               // como el cursor (`data-accion`), no solo el handler.
               const modificable =
                 slot !== null && modificadorArmado !== null && admiteModificador(slot.tonalidad.modo, slot.degree, modificadorArmado);
-              const accion = repeticion.armada
+              const accion = soloLectura
+                ? 'ninguna'
+                : repeticion.armada
                 ? 'marcar'
                 : modificadorArmado
                 ? (modificable ? 'modificar' : 'ninguna')
@@ -174,6 +178,7 @@ export default function GrillaProgresion({
                   data-sonando={sonando === i}
                   data-accion={accion}
                   aria-label={ariaLabel}
+                  disabled={soloLectura}
                   onClick={() => {
                     if (repeticion.armada) repeticion.onMarcar(c);
                     else if (modificadorArmado) {

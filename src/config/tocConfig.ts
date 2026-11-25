@@ -46,6 +46,7 @@ export const TOC_SECTIONS: Record<string, TocItem[]> = {
   '/t5': [
     { id: 's-t3-constructor-completo', labelKey: 't3.s34.label' },
     { id: 's-t3-tonizacion', labelKey: 't3.s38.label' },
+    { id: 's-t5-modulacion', labelKey: 't4.s53.label' },
     { id: 's-t4-constructor', labelKey: 't4.s41.label' },
   ],
 };

@@ -132,3 +132,7 @@
   border-left: 1px solid var(--paper);
   border-right: 1px solid var(--paper);
 }
+
+/* §5.3: la grilla de ejemplo es solo para escuchar. El botón deshabilitado no
+   se atenúa: el cifrado se lee igual que en el laboratorio. */
+.casilla:disabled { color: inherit; cursor: default; }
