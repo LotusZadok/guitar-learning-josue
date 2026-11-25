@@ -1,6 +1,8 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useChordPlayer } from '../../../hooks/useChordPlayer';
+import { REFERENCE_OCTAVE } from '../../../hooks/useAudioEngine';
+import { conducirVoces } from '../../../utils/conduccionVoces';
 import PlaybackButton from '../../shared/PlaybackButton/PlaybackButton';
 import { useUIStore } from '../../../stores/useUIStore';
 import { ALL } from '../../../data/notes';
@@ -60,6 +62,15 @@ export default function ProgresionIIVI({ functions, relativeMinor = false }: Pro
     });
   }, [tonic, relativeMinor]);
 
+  // Reunión 22/11/26 (#26): la progresión encadenada suena con conducción de
+  // voces; cada tarjeta suelta sigue en posición fundamental.
+  const conducidos = useMemo(() => {
+    const disposiciones = conducirVoces(chords.map((c) => c.members.map((m) => m.chromatic)), REFERENCE_OCTAVE);
+    return disposiciones.map(({ bajo, voces }, i) =>
+      [bajo, ...voces].map((n) => ({ ...n, ganancia: chords[i].members[0].ganancia })),
+    );
+  }, [chords]);
+
   const playCard = useCallback(
     (idx: number) => {
       if (playing) return;
@@ -80,7 +91,7 @@ export default function ProgresionIIVI({ functions, relativeMinor = false }: Pro
       chords.forEach((_, idx) => {
         at(() => {
           setActiveCard(idx);
-          playChord(chords[idx].members, mode === 'arpegio' ? ARPEGGIO_GAP_MS : 0);
+          playChord(conducidos[idx], mode === 'arpegio' ? ARPEGGIO_GAP_MS : 0);
         }, idx * CHORD_GAP_MS);
       });
       at(() => {
@@ -88,7 +99,7 @@ export default function ProgresionIIVI({ functions, relativeMinor = false }: Pro
         setActiveCard(null);
       }, chords.length * CHORD_GAP_MS + NOTE_DURATION * 500);
     },
-    [chords, clear, at, playChord, playing],
+    [chords, conducidos, clear, at, playChord, playing],
   );
 
   return (

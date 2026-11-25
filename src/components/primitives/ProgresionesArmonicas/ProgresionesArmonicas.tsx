@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAudioEngine, stopAllNotes } from '../../../hooks/useAudioEngine';
+import { useAudioEngine, stopAllNotes, REFERENCE_OCTAVE } from '../../../hooks/useAudioEngine';
 import { useChordPlayer } from '../../../hooks/useChordPlayer';
 import { useFireGate } from '../../../hooks/useFireGate';
 import { ALL } from '../../../data/notes';
 import { formatChordSymbol, aAscii, majorScaleSpelled, tonicChromatic } from '../../../utils/noteCalculations';
 import type { DiatonicRole } from '../../shared/NoteToken/NoteToken';
 import { GANANCIA_POR_ROL } from '../../../utils/progresionArmonica';
+import { conducirVoces } from '../../../utils/conduccionVoces';
 import type { ChromaticNote, DiatonicDegree, Tonic } from '../../../types/music';
 import PlaybackButton from '../../shared/PlaybackButton/PlaybackButton';
 import styles from './ProgresionesArmonicas.module.css';
@@ -139,17 +140,17 @@ export default function ProgresionesArmonicas({ tonalidad }: Props) {
       playingIdRef.current = rowId;
       setPlayingId(rowId);
 
+      // Reunión 22/11/26 (#26): la progresión suena con conducción de voces.
+      // El arpegio va del bajo a la voz más aguda: sigue siendo ascendente.
+      const disposiciones = conducirVoces(
+        grados.map((degree) => [0, 2, 4].map((o) => diatonic[(DEGREE_TO_IDX[degree] + o) % 7].chromatic)),
+        REFERENCE_OCTAVE,
+      );
+
       grados.forEach((degree, chordIdx) => {
         const chordStart = chordIdx * CHORD_GAP_MS;
         const ganancia = GANANCIA_POR_ROL[HARMONIC_ROLE[degree]];
-
-        const gradeIdx = DEGREE_TO_IDX[degree];
-        const root = diatonic[gradeIdx];
-        const third = diatonic[(gradeIdx + 2) % 7];
-        const fifth = diatonic[(gradeIdx + 4) % 7];
-        const rootOct = root.octave;
-        const thirdOct = chordMemberOctave(diatonic, gradeIdx, 2);
-        const fifthOct = chordMemberOctave(diatonic, gradeIdx, 4);
+        const { bajo, voces } = disposiciones[chordIdx];
 
         // Cortar el sonido del acorde anterior antes de tocar el siguiente.
         schedule(() => {
@@ -157,17 +158,10 @@ export default function ProgresionesArmonicas({ tonalidad }: Props) {
           setActiveChordIdx(chordIdx);
         }, chordStart);
 
-        if (playMode === 'bloque') {
-          schedule(() => {
-            playNote(root.chromatic, rootOct, { duracion: NOTE_DURATION, ganancia });
-            playNote(third.chromatic, thirdOct, { duracion: NOTE_DURATION, ganancia });
-            playNote(fifth.chromatic, fifthOct, { duracion: NOTE_DURATION, ganancia });
-          }, chordStart + 30);
-        } else {
-          schedule(() => playNote(root.chromatic, rootOct, { duracion: NOTE_DURATION, ganancia }), chordStart + 30);
-          schedule(() => playNote(third.chromatic, thirdOct, { duracion: NOTE_DURATION, ganancia }), chordStart + 30 + ARPEGGIO_GAP_MS);
-          schedule(() => playNote(fifth.chromatic, fifthOct, { duracion: NOTE_DURATION, ganancia }), chordStart + 30 + ARPEGGIO_GAP_MS * 2);
-        }
+        [bajo, ...voces].forEach((n, i) => {
+          const gap = playMode === 'bloque' ? 0 : i * ARPEGGIO_GAP_MS;
+          schedule(() => playNote(n.chromatic, n.octave, { duracion: NOTE_DURATION, ganancia }), chordStart + 30 + gap);
+        });
       });
 
       const totalTime = (grados.length - 1) * CHORD_GAP_MS + NOTE_DURATION * 1000 + 300;
