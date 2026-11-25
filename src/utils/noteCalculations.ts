@@ -97,6 +97,12 @@ export function spelledNameES(spelling: string): string {
   return (LETTER_ES[letter] ?? letter) + acc;
 }
 
+// Reunión 22/11/26 (#10): el nombre hablado de una nota sigue al idioma. En
+// español es el solfeo (Re♭), en alemán el nombre de allá (Des, H, B).
+export function nombreNota(grafia: string, lang: string): string {
+  return lang === "de" ? formatNote(grafia, "de") : spelledNameES(grafia);
+}
+
 // === Major scale spelling (T1 §1.4 / §1.7) ===
 
 // La tónica lleva su propia grafía (sostenido o bemol). La altura cromática para

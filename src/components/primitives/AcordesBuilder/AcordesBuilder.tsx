@@ -6,7 +6,9 @@ import { useUIStore } from '../../../stores/useUIStore';
 import { NOTE_COLORS, spelledToES } from '../../../data/notes';
 import {
   intervalLabel,
+  formatChordSymbol,
   formatNote,
+  nombreNota,
   intervalMemberFromTonic,
   type IntervalMember,
 } from '../../../utils/noteCalculations';
@@ -46,7 +48,8 @@ interface Props {
 // válidos) viene de `config`, así crece de §1.7 (hasta la quinta) hacia §3.4
 // (completo) sin duplicar el componente.
 export default function AcordesBuilder({ config = BUILDER_17, path, playingRole, onChordChange, onUserPick }: Props) {
-  const lang = useTranslation().i18n.language;
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
   const tonic = useUIStore((s) => s.tonic);
   const { playNote } = useAudioEngine();
 
@@ -280,13 +283,12 @@ export default function AcordesBuilder({ config = BUILDER_17, path, playingRole,
         {currentChord && chordMembers ? (
           <>
             <p className={styles.chordName}>
-              {formatNote(tonicMember.spelled, lang)}
-              {currentChord.cifrado}
+              {formatChordSymbol(tonicMember.spelled + currentChord.cifrado, lang)}
               <span className={styles.chordAlias}>
-                {spelledToES(tonicMember.spelled)} {currentChord.nombre}
+                {nombreNota(tonicMember.spelled, lang)} {t(`common.chord_names.${currentChord.calidad}`)}
               </span>
             </p>
-            <p className={styles.chordNotes}>{chordMembers.map((m) => m.spelled).join('  ')}</p>
+            <p className={styles.chordNotes}>{chordMembers.map((m) => formatNote(m.spelled, lang)).join('  ')}</p>
                 <div className={styles.audioRow}>
               <PlaybackButton
                 mode="bloque"

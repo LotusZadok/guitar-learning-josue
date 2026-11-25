@@ -1,6 +1,8 @@
 // Arnés de verificación de la notación (formatNote y afines).
 // Se corre con `npm run verify:notacion` (node --experimental-strip-types).
-import { formatChordSymbol, formatNote, intervalLabel, pitchClass } from '../src/utils/noteCalculations.ts';
+import { readFileSync } from 'node:fs';
+import { formatChordSymbol, formatNote, intervalLabel, nombreNota, pitchClass } from '../src/utils/noteCalculations.ts';
+import { BUILDER_17, BUILDER_312, BUILDER_32, BUILDER_33, BUILDER_34 } from '../src/components/primitives/AcordesBuilder/configs.ts';
 import { ALL, NOTE_DE } from '../src/data/notes.ts';
 import { check, resumen } from './verify-helpers.ts';
 
@@ -35,5 +37,16 @@ check('de: m, M, J, d, a → K, G, R, V, Ü con el número primero',
   ['3m', '3M', '4J', '5d', '4a', '8J', '7d'].map((c) => intervalLabel(c, 'de')), ['3K', '3G', '4R', '5V', '4Ü', '8R', '7V']);
 check('de: el tritono doble y la tónica', [intervalLabel('4a/5d', 'de'), intervalLabel('T', 'de')], ['4Ü/5V', 'T']);
 check('es: sin cambios', ['3m', '3M', '4J', '5d', '4a/5d', 'T'].map((c) => intervalLabel(c, 'es')), ['3m', '3M', '4J', '5d', '4a/5d', 'T']);
+
+console.log('\n· Ola 8a: nombres de acorde y de nota por idioma (reunión 22/11/26, #10) ·');
+const locales = ['es', 'de'].map((l) => JSON.parse(readFileSync(`src/i18n/locales/${l}.json`, 'utf-8').trim())); // trim quita el BOM de los JSON
+const calidades = [...new Set([BUILDER_17, BUILDER_312, BUILDER_32, BUILDER_33, BUILDER_34].flatMap((c) => c.chords.map((a) => a.calidad)))];
+check('cada calidad de las 5 configs tiene nombre en common.chord_names de es y de',
+  calidades.filter((q) => locales.some((j) => typeof j.common.chord_names?.[q] !== 'string')), []);
+check('es: los nombres de siempre (menor, disminuido 7)',
+  [locales[0].common.chord_names?.minor, locales[0].common.chord_names?.diminished7], ['menor', 'disminuido 7']);
+check('nombreNota: es en solfeo con su grafía, de con el nombre alemán',
+  [nombreNota('Db', 'es'), nombreNota('C#', 'es'), nombreNota('Db', 'de'), nombreNota('B', 'de'), nombreNota('Bb', 'de')],
+  ['Re♭', 'Do♯', 'Des', 'H', 'B']);
 
 resumen();

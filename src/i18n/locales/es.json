@@ -653,6 +653,19 @@
     "tonality_label": "Tonalidad",
     "octave_label": "Octava",
     "arpeggio_label": "Arpegiado",
-    "block_label": "Bloque"
+    "block_label": "Bloque",
+    "chord_names": {
+      "minor": "menor",
+      "diminished": "disminuido",
+      "major": "mayor",
+      "minor7": "menor 7",
+      "major7": "mayor 7",
+      "dominant7": "dominante 7",
+      "minor_maj7": "menor Maj7",
+      "sus2": "suspendido 2",
+      "sus4": "suspendido 4",
+      "half_diminished": "semidisminuido",
+      "diminished7": "disminuido 7"
+    }
   }
 }

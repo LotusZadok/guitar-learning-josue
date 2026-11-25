@@ -24,9 +24,15 @@ export interface BuilderNode {
 
 export interface BuilderChord {
   path: string[]; // roles en orden de nivel, sin 'T'
-  nombre: string;
+  calidad: CalidadAcorde;
   cifrado: string;
 }
+
+// Clave del nombre del acorde en `common.chord_names` (reunión 22/11/26, #10):
+// la config guarda la calidad y el texto sale del idioma activo.
+export type CalidadAcorde =
+  | 'minor' | 'diminished' | 'major' | 'minor7' | 'major7' | 'dominant7'
+  | 'minor_maj7' | 'sus2' | 'sus4' | 'half_diminished' | 'diminished7';
 
 export interface BuilderConfig {
   width: number;
@@ -54,9 +60,9 @@ export const BUILDER_17: BuilderConfig = {
     { role: '5', number: 5, quality: 'P', x: 385, y: 78, level: 2 },
   ],
   chords: [
-    { path: ['3m', '5'], nombre: 'menor', cifrado: 'm' },
-    { path: ['3m', '5d'], nombre: 'disminuido', cifrado: '°' },
-    { path: ['3M', '5'], nombre: 'mayor', cifrado: 'M' },
+    { path: ['3m', '5'], calidad: 'minor', cifrado: 'm' },
+    { path: ['3m', '5d'], calidad: 'diminished', cifrado: '°' },
+    { path: ['3M', '5'], calidad: 'major', cifrado: 'M' },
   ],
 };
 
@@ -74,13 +80,13 @@ export const BUILDER_312: BuilderConfig = {
     { role: '7M', number: 7, quality: 'M', x: 412, y: 95, level: 3 },
   ],
   chords: [
-    { path: ['3m', '5'], nombre: 'menor', cifrado: 'm' },
-    { path: ['3M', '5'], nombre: 'mayor', cifrado: 'M' },
-    { path: ['3m', '5', '7m'], nombre: 'menor 7', cifrado: 'm7' },
-    { path: ['3M', '5', '7M'], nombre: 'mayor 7', cifrado: 'maj7' },
-    { path: ['3M', '5', '7m'], nombre: 'dominante 7', cifrado: '7' },
+    { path: ['3m', '5'], calidad: 'minor', cifrado: 'm' },
+    { path: ['3M', '5'], calidad: 'major', cifrado: 'M' },
+    { path: ['3m', '5', '7m'], calidad: 'minor7', cifrado: 'm7' },
+    { path: ['3M', '5', '7M'], calidad: 'major7', cifrado: 'maj7' },
+    { path: ['3M', '5', '7m'], calidad: 'dominant7', cifrado: '7' },
     // Reunión 19/10/26: la cuarta combinación, menor con séptima mayor.
-    { path: ['3m', '5', '7M'], nombre: 'menor Maj7', cifrado: 'mMaj7' },
+    { path: ['3m', '5', '7M'], calidad: 'minor_maj7', cifrado: 'mMaj7' },
   ],
 };
 
@@ -97,8 +103,8 @@ export const BUILDER_33: BuilderConfig = {
     { role: '5', number: 5, quality: 'P', x: 405, y: 150, level: 2 },
   ],
   chords: [
-    { path: ['2', '5'], nombre: 'suspendido 2', cifrado: 'sus2' },
-    { path: ['4', '5'], nombre: 'suspendido 4', cifrado: 'sus4' },
+    { path: ['2', '5'], calidad: 'sus2', cifrado: 'sus2' },
+    { path: ['4', '5'], calidad: 'sus4', cifrado: 'sus4' },
   ],
 };
 
@@ -122,18 +128,18 @@ export const BUILDER_34: BuilderConfig = {
     { role: '7M', number: 7, quality: 'M', x: 468, y: 80, level: 3 },
   ],
   chords: [
-    { path: ['2', '5'], nombre: 'suspendido 2', cifrado: 'sus2' },
-    { path: ['3m', '5'], nombre: 'menor', cifrado: 'm' },
-    { path: ['3m', '5d'], nombre: 'disminuido', cifrado: '°' },
-    { path: ['3M', '5'], nombre: 'mayor', cifrado: 'M' },
-    { path: ['4', '5'], nombre: 'suspendido 4', cifrado: 'sus4' },
-    { path: ['3m', '5', '7m'], nombre: 'menor 7', cifrado: 'm7' },
-    { path: ['3M', '5', '7M'], nombre: 'mayor 7', cifrado: 'maj7' },
-    { path: ['3M', '5', '7m'], nombre: 'dominante 7', cifrado: '7' },
-    { path: ['3m', '5d', '7m'], nombre: 'semidisminuido', cifrado: 'm7♭5' },
-    { path: ['3m', '5d', '7d'], nombre: 'disminuido 7', cifrado: 'dim7' },
+    { path: ['2', '5'], calidad: 'sus2', cifrado: 'sus2' },
+    { path: ['3m', '5'], calidad: 'minor', cifrado: 'm' },
+    { path: ['3m', '5d'], calidad: 'diminished', cifrado: '°' },
+    { path: ['3M', '5'], calidad: 'major', cifrado: 'M' },
+    { path: ['4', '5'], calidad: 'sus4', cifrado: 'sus4' },
+    { path: ['3m', '5', '7m'], calidad: 'minor7', cifrado: 'm7' },
+    { path: ['3M', '5', '7M'], calidad: 'major7', cifrado: 'maj7' },
+    { path: ['3M', '5', '7m'], calidad: 'dominant7', cifrado: '7' },
+    { path: ['3m', '5d', '7m'], calidad: 'half_diminished', cifrado: 'm7♭5' },
+    { path: ['3m', '5d', '7d'], calidad: 'diminished7', cifrado: 'dim7' },
     // Reunión 19/10/26: la 3m también desbloquea la 7M ("desbloquear un filtro").
-    { path: ['3m', '5', '7M'], nombre: 'menor Maj7', cifrado: 'mMaj7' },
+    { path: ['3m', '5', '7M'], calidad: 'minor_maj7', cifrado: 'mMaj7' },
   ],
 };
 
@@ -151,8 +157,8 @@ export const BUILDER_32: BuilderConfig = {
     { role: '7m', number: 7, quality: 'm', x: 415, y: 95, level: 3 },
   ],
   chords: [
-    { path: ['3m', '5d'], nombre: 'disminuido', cifrado: '°' },
-    { path: ['3m', '5d', '7d'], nombre: 'disminuido 7', cifrado: 'dim7' },
-    { path: ['3m', '5d', '7m'], nombre: 'semidisminuido', cifrado: 'm7♭5' },
+    { path: ['3m', '5d'], calidad: 'diminished', cifrado: '°' },
+    { path: ['3m', '5d', '7d'], calidad: 'diminished7', cifrado: 'dim7' },
+    { path: ['3m', '5d', '7m'], calidad: 'half_diminished', cifrado: 'm7♭5' },
   ],
 };

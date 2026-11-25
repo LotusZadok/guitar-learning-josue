@@ -655,6 +655,19 @@
     "tonality_label": "Tonart",
     "octave_label": "Oktave",
     "arpeggio_label": "Arpeggiert",
-    "block_label": "Block"
+    "block_label": "Block",
+    "chord_names": {
+      "minor": "Moll",
+      "diminished": "vermindert",
+      "major": "Dur",
+      "minor7": "Moll 7",
+      "major7": "Dur 7",
+      "dominant7": "Dominant 7",
+      "minor_maj7": "Moll Maj7",
+      "sus2": "sus2",
+      "sus4": "sus4",
+      "half_diminished": "halbvermindert",
+      "diminished7": "vermindert 7"
+    }
   }
 }
