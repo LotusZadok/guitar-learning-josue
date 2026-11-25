@@ -37,6 +37,7 @@ export const TOC_SECTIONS: Record<string, TocItem[]> = {
   '/t4': [
     { id: 's-t2-relativas', labelKey: 't2.s49.label' },
     { id: 's-t3-escala-menor', labelKey: 't3.s39.label' },
+    { id: 's-t4-aumentados', labelKey: 't4.s43.label' },
     { id: 's-t4-armonica', labelKey: 't4.s44.label' },
     { id: 's-t3-progresion-menor', labelKey: 't3.s310.label' },
     { id: 's-t3-segunda-cuarta', labelKey: 't3.s331.label' },

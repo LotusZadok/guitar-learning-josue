@@ -1,0 +1,7 @@
+.section {
+  composes: section from "../../../shared/sectionChrome.module.css";
+}
+
+.text {
+  composes: text from "../../../shared/sectionChrome.module.css";
+}

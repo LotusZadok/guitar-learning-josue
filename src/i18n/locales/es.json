@@ -151,6 +151,15 @@
     }
   },
   "t4": {
+    "s43": {
+      "label": "4.3 · Acordes aumentados",
+      "title": "Acordes aumentados",
+      "intro": "Hasta ahora conocías tres tipos de tríada: mayor, menor y disminuida. Falta una: la aumentada. Se arma con la tónica, la tercera mayor y la quinta aumentada: {{formula}}. Es una tríada mayor a la que se le sube la quinta un semitono. En {{tonica}}: {{notas}}, y se escribe {{cifrado}}.",
+      "simetria": "Así como la disminuida apila dos terceras menores, la aumentada apila dos terceras mayores (4 + 4 semitonos). Eso la vuelve simétrica: {{simetria}}, las tres son las mismas tres notas. Por eso solo existen cuatro acordes aumentados distintos, de la misma forma que en 3.3 viste que solo existen tres disminuidos completos.",
+      "origen": "Este acorde no lo habíamos visto porque «solo pertenece a este mundo de la escala menor armónica»: aparece sobre el tercer grado cuando se sube la séptima nota. Lo vas a ver en 4.4.",
+      "sonido": "Su sonido es abierto e inestable, como suspendido en el aire, y pide moverse.",
+      "arbol": "En el árbol, la 3M lleva a la quinta justa (el acorde mayor) o a la quinta aumentada (el aumentado). Elige una y escucha la diferencia."
+    },
     "s44": {
       "label": "4.4 · Escala menor armónica",
       "title": "Escala menor armónica",
@@ -685,7 +694,8 @@
       "sus2": "suspendido 2",
       "sus4": "suspendido 4",
       "half_diminished": "semidisminuido",
-      "diminished7": "disminuido 7"
+      "diminished7": "disminuido 7",
+      "augmented": "aumentado"
     },
     "note_aria": "Nota {{name}}",
     "selected": "seleccionado",
@@ -700,7 +710,8 @@
       "aria_312": "Constructor de acordes con séptimas: elige tercera, quinta y séptima",
       "aria_33": "Constructor de acordes suspendidos: elige la 2ª o la 4ª y luego la quinta",
       "aria_34": "Constructor completo de acordes: elige tercera (o 2ª/4ª), quinta y, si quieres, séptima",
-      "aria_32": "Constructor de acordes disminuidos: elige 3m, 5d y la séptima"
+      "aria_32": "Constructor de acordes disminuidos: elige 3m, 5d y la séptima",
+      "aria_43": "Constructor del acorde aumentado: elige la 3M y luego la quinta justa o la aumentada"
     }
   }
 }

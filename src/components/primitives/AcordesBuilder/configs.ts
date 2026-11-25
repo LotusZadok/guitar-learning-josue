@@ -32,7 +32,7 @@ export interface BuilderChord {
 // la config guarda la calidad y el texto sale del idioma activo.
 export type CalidadAcorde =
   | 'minor' | 'diminished' | 'major' | 'minor7' | 'major7' | 'dominant7'
-  | 'minor_maj7' | 'sus2' | 'sus4' | 'half_diminished' | 'diminished7';
+  | 'minor_maj7' | 'sus2' | 'sus4' | 'half_diminished' | 'diminished7' | 'augmented';
 
 export interface BuilderConfig {
   width: number;
@@ -160,5 +160,24 @@ export const BUILDER_32: BuilderConfig = {
     { path: ['3m', '5d'], calidad: 'diminished', cifrado: '°' },
     { path: ['3m', '5d', '7d'], calidad: 'diminished7', cifrado: 'dim7' },
     { path: ['3m', '5d', '7m'], calidad: 'half_diminished', cifrado: 'm7♭5' },
+  ],
+};
+
+// §4.3 · el acorde aumentado (borrador del 19/10/26): la tríada mayor con la
+// quinta subida un semitono. T → 3M → {5, 5a}; la 5a (8 s.t.) es más aguda que
+// la 5J (7 s.t.): va más arriba. El mayor queda al lado para compararlos.
+export const BUILDER_43: BuilderConfig = {
+  width: 460,
+  height: 300,
+  ariaKey: 'common.builder.aria_43',
+  tonic: { x: 46, y: 150 },
+  nodes: [
+    { role: '3M', number: 3, quality: 'M', x: 200, y: 150, level: 1 },
+    { role: '5a', number: 5, quality: 'aug', x: 385, y: 92, level: 2 },
+    { role: '5', number: 5, quality: 'P', x: 385, y: 208, level: 2 },
+  ],
+  chords: [
+    { path: ['3M', '5'], calidad: 'major', cifrado: 'M' },
+    { path: ['3M', '5a'], calidad: 'augmented', cifrado: '+' },
   ],
 };

@@ -153,6 +153,15 @@
     }
   },
   "t4": {
+    "s43": {
+      "label": "4.3 · Übermäßige Akkorde",
+      "title": "Übermäßige Akkorde",
+      "intro": "Bisher kanntest du drei Arten von Dreiklängen: Dur, Moll und vermindert. Einer fehlt: der übermäßige. Er besteht aus Tonika, großer Terz und übermäßiger Quinte: {{formula}}. Es ist ein Durdreiklang, dessen Quinte um einen Halbton erhöht wird. In {{tonica}}: {{notas}}, geschrieben {{cifrado}}.",
+      "simetria": "So wie der verminderte zwei kleine Terzen stapelt, stapelt der übermäßige zwei große Terzen (4 + 4 Halbtöne). Das macht ihn symmetrisch: {{simetria}}, alle drei sind dieselben drei Töne. Deshalb gibt es nur vier verschiedene übermäßige Akkorde, so wie du in 3.3 gesehen hast, dass es nur drei voll verminderte gibt.",
+      "origen": "Diesen Akkord hatten wir noch nicht gesehen, weil er „nur zu dieser Welt der harmonischen Molltonleiter gehört“: Er erscheint auf der dritten Stufe, wenn der siebte Ton erhöht wird. Du siehst ihn in 4.4.",
+      "sonido": "Sein Klang ist offen und instabil, wie in der Luft schwebend, und will sich bewegen.",
+      "arbol": "Im Baum führt die 3G zur reinen Quinte (Durakkord) oder zur übermäßigen Quinte (übermäßiger Akkord). Wähle eine und hör den Unterschied."
+    },
     "s44": {
       "label": "4.4 · Harmonische Molltonleiter",
       "title": "Harmonische Molltonleiter",
@@ -687,7 +696,8 @@
       "sus2": "sus2",
       "sus4": "sus4",
       "half_diminished": "halbvermindert",
-      "diminished7": "vermindert 7"
+      "diminished7": "vermindert 7",
+      "augmented": "übermäßig"
     },
     "note_aria": "Ton {{name}}",
     "selected": "ausgewählt",
@@ -702,7 +712,8 @@
       "aria_312": "Akkordbaum mit Septimen: wähle Terz, Quinte und Septime",
       "aria_33": "Baum der Sus-Akkorde: wähle die 2. oder die 4. und dann die Quinte",
       "aria_34": "Vollständiger Akkordbaum: wähle Terz (oder 2./4.), Quinte und, wenn du willst, Septime",
-      "aria_32": "Baum der verminderten Akkorde: wähle 3K, 5V und die Septime"
+      "aria_32": "Baum der verminderten Akkorde: wähle 3K, 5V und die Septime",
+      "aria_43": "Baum des übermäßigen Akkords: wähle die 3G und dann die reine oder die übermäßige Quinte"
     }
   }
 }
