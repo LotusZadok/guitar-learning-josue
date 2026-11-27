@@ -133,14 +133,6 @@
   cursor: pointer;
 }
 
-.iconoPlay {
-  width: 10px;
-  height: 10px;
-  margin-right: 6px;
-  vertical-align: -1px;
-  fill: currentColor;
-  stroke: none;
-}
 
 .cellButton:focus-visible {
   outline: 2px solid var(--amber);

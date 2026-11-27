@@ -125,7 +125,7 @@ En `TensionResolucion` la flecha que suena recibía `stroke="var(--amber)"` como
 
 ### Lo tocable se anuncia; lo no disponible dice cuándo aparece (A7c, 27/11/26)
 
-En §2.6 las filas Grado y Acorde quedaban vacías en los pasos 01 y 02, y en el 03 las celdas solo se distinguían como botones al pasar el mouse. Sebastián no supo dónde tocar: "todo tiene que estar explícito, porque es una página educativa". **Regla:** un elemento interactivo se ve como control sin hover (borde, icono de play, cursor), y un contenido que se habilita en otro paso lo dice en su lugar ("aparecen en 03 Calidades"), no con un hueco. **Pendiente:** `NoteToken` suena al pasar el mouse por encima y no se ve como control (A21, auditoría del sitio).
+En §2.6 las filas Grado y Acorde quedaban vacías en los pasos 01 y 02, y en el 03 las celdas solo se distinguían como botones al pasar el mouse. Sebastián no supo dónde tocar: "todo tiene que estar explícito, porque es una página educativa". **Regla:** un elemento interactivo se ve como control sin hover (borde de botón y cursor; Sebastián descartó el icono de play por redundante), y un contenido que se habilita en otro paso lo dice en su lugar ("aparecen en 03 Calidades"), no con un hueco. **Pendiente:** `NoteToken` suena al pasar el mouse por encima y no se ve como control (A21, auditoría del sitio).
 
 ### Anti-checklist antes de commit
 

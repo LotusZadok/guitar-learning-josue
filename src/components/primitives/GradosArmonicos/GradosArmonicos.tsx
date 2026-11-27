@@ -6,7 +6,6 @@ import { ALL } from '../../../data/notes';
 import { formatNote, formatChordSymbol, aAscii, gradosQueCambianEnArmonica, harmonicMinorScaleSpelled, majorScaleSpelled, MENOR_ARMONICA, relativeMinorScaleSpelled, spelledSequenceAscending, tonicChromatic } from '../../../utils/noteCalculations';
 import NoteToken, { type DiatonicRole } from '../../shared/NoteToken/NoteToken';
 import RomanGlyph from '../../shared/RomanGlyph/RomanGlyph';
-import { Reproducir } from '../../shared/ProcessControls/ProcessControls';
 import { GANANCIA_POR_ROL } from '../../../utils/progresionArmonica';
 import type { ChromaticNote, NoteSpelling, Tonic } from '../../../types/music';
 import styles from './GradosArmonicos.module.css';
@@ -301,7 +300,6 @@ export default function GradosArmonicos({ tonalidad, initialStep = 1, relativeMi
                   className={styles.chordCellActive}
                   cambia={cambian.includes(i)}
                 >
-                  <Reproducir className={styles.iconoPlay} />
                   <span className={styles.chordSymbol}>{formatChordSymbol(sym, i18n.language)}</span>
                 </PlayableCell>
               ))}

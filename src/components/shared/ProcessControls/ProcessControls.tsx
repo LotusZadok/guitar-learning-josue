@@ -19,10 +19,9 @@ function PasoAnterior() {
   );
 }
 
-// También lo usan las celdas tocables de GradosArmonicos (§2.6, 27/11/26).
-export function Reproducir({ className = styles.icono }: { className?: string }) {
+function Reproducir() {
   return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden="true" focusable="false">
+    <svg viewBox="0 0 24 24" className={styles.icono} aria-hidden="true" focusable="false">
       <polygon points="6 3 20 12 6 21 6 3" />
     </svg>
   );
