@@ -15,6 +15,7 @@
     "verify:t1": "node --experimental-strip-types scripts/verify-t1.ts",
     "verify:tempo": "node --experimental-strip-types scripts/verify-tempo.ts",
     "verify:notacion": "node --experimental-strip-types scripts/verify-notacion.ts",
+    "e2e": "python scripts/e2e/pruebas_manuales.py",
     "preview": "vite preview"
   },
   "dependencies": {
