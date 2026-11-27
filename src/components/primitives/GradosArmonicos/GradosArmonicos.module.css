@@ -101,15 +101,13 @@
   color: var(--text-body);
 }
 
-/* === Reveal rows (Grado / Acorde) === */
+/* === Filas Grado / Acorde === */
 
-.revealRow {
-  opacity: 0;
-  transition: opacity 0.25s ease;
-}
-
-.revealOn {
-  opacity: 1;
+/* Pasos 01 y 02: aviso de cuándo aparecen, en vez de filas vacías (27/11/26). */
+.table .avisoPaso {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--muted);
 }
 
 /* El padding baja al <button> interno para que toda la celda sea clickeable.
@@ -119,20 +117,29 @@
   padding: 0;
 }
 
+/* Página educativa: la celda se ve como botón, no solo al pasar el mouse
+   (pedido de Sebastián, 27/11/26). */
 .cellButton {
   display: block;
-  width: 100%;
-  padding: 10px 14px;
+  width: calc(100% - 12px);
+  margin: 6px;
+  padding: 8px 10px;
   background: none;
-  border: 0;
+  border: 1px solid var(--muted);
+  border-radius: 4px;
   font: inherit;
   color: inherit;
   text-align: center;
   cursor: pointer;
 }
 
-.cellButton:disabled {
-  cursor: default;
+.iconoPlay {
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  vertical-align: -1px;
+  fill: currentColor;
+  stroke: none;
 }
 
 .cellButton:focus-visible {
@@ -219,7 +226,6 @@
 .chordCellActive[data-harmonic="tense"]       .chordSymbol { color: var(--diatonic-tense-text); }
 
 @media (prefers-reduced-motion: reduce) {
-  .revealRow,
   .step,
   .stepActive,
   .gradoCellActive,
@@ -238,7 +244,9 @@
   }
   /* El padding vive en el botón interno, así que sigue al de la celda. */
   .cellButton {
-    padding: 8px 10px;
+    width: calc(100% - 8px);
+    margin: 4px;
+    padding: 6px 6px;
   }
   .rowLabel {
     min-width: 64px;

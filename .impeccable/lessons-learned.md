@@ -123,6 +123,10 @@ La regla global `p, li` fija `font-size: 16px` y `color: var(--text-body)` en ca
 
 En `TensionResolucion` la flecha que suena recibía `stroke="var(--amber)"` como atributo, pero `.arrow { stroke: var(--muted) }` del módulo CSS tiene más precedencia que cualquier atributo de presentación (`stroke`, `fill`, `opacity`). Desde que existe el componente, la flecha que sonaba se quedó gris; nadie lo notó porque el cambio de grosor sí se veía. **Regla:** si una propiedad visual ya la fija una clase, el estado se expresa con otra clase (`.arrowPlaying`), no con un atributo. **Test:** `getComputedStyle(el).stroke` en el estado activo, no leer el atributo.
 
+### Lo tocable se anuncia; lo no disponible dice cuándo aparece (A7c, 27/11/26)
+
+En §2.6 las filas Grado y Acorde quedaban vacías en los pasos 01 y 02, y en el 03 las celdas solo se distinguían como botones al pasar el mouse. Sebastián no supo dónde tocar: "todo tiene que estar explícito, porque es una página educativa". **Regla:** un elemento interactivo se ve como control sin hover (borde, icono de play, cursor), y un contenido que se habilita en otro paso lo dice en su lugar ("aparecen en 03 Calidades"), no con un hueco. **Pendiente:** `NoteToken` suena al pasar el mouse por encima y no se ve como control (A21, auditoría del sitio).
+
 ### Anti-checklist antes de commit
 
 Pasar cada surface por estas preguntas antes de aprobar el cambio:

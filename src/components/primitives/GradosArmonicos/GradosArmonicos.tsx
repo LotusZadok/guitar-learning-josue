@@ -6,6 +6,7 @@ import { ALL } from '../../../data/notes';
 import { formatNote, formatChordSymbol, aAscii, gradosQueCambianEnArmonica, harmonicMinorScaleSpelled, majorScaleSpelled, MENOR_ARMONICA, relativeMinorScaleSpelled, spelledSequenceAscending, tonicChromatic } from '../../../utils/noteCalculations';
 import NoteToken, { type DiatonicRole } from '../../shared/NoteToken/NoteToken';
 import RomanGlyph from '../../shared/RomanGlyph/RomanGlyph';
+import { Reproducir } from '../../shared/ProcessControls/ProcessControls';
 import { GANANCIA_POR_ROL } from '../../../utils/progresionArmonica';
 import type { ChromaticNote, NoteSpelling, Tonic } from '../../../types/music';
 import styles from './GradosArmonicos.module.css';
@@ -255,32 +256,41 @@ export default function GradosArmonicos({ tonalidad, initialStep = 1, relativeMi
               isDe={isDe}
             />
 
-            <tr className={`${styles.revealRow} ${step >= 3 ? styles.revealOn : ''}`} aria-hidden={step < 3}>
+            {/* Página educativa: lo que aún no está disponible dice cuándo aparece
+                (pedido de Sebastián, 27/11/26), en vez de dos filas vacías. */}
+            {step < 3 && (
+              <tr>
+                <th scope="row" className={styles.rowLabel}>{isDe ? 'Stufe · Akkord' : 'Grado · Acorde'}</th>
+                <td colSpan={7} className={styles.avisoPaso}>
+                  {isDe ? 'Stufen und Akkorde erscheinen in 03 Qualitäten.' : 'Los grados y acordes aparecen en 03 Calidades.'}
+                </td>
+              </tr>
+            )}
+
+            {step >= 3 && (<>
+            <tr>
               <th scope="row" className={styles.rowLabel}>{isDe ? 'Stufe' : 'Grado'}</th>
               {ROMANS_ACTIVE.map((roman, i) => (
                 <PlayableCell
                   key={i}
                   role={HARMONIC_ROLE[i]}
-                  active={step >= 3}
                   onPlay={() => playTriad(i)}
                   isPlaying={playingCell === i}
                   isDimmed={playingCell !== null && playingCell !== i}
                   ariaLabel={isDe ? `Akkord der Stufe ${roman} spielen` : `Reproducir acorde del grado ${roman}`}
-                  className={styles.gradoCell}
-                  activeClassName={styles.gradoCellActive}
+                  className={styles.gradoCellActive}
                 >
                   <RomanGlyph roman={roman} role={HARMONIC_ROLE[i]} />
                 </PlayableCell>
               ))}
             </tr>
 
-            <tr className={`${styles.revealRow} ${step >= 3 ? styles.revealOn : ''}`} aria-hidden={step < 3}>
+            <tr>
               <th scope="row" className={styles.rowLabel}>{isDe ? 'Akkord' : 'Acorde'}</th>
               {displayChords.map((sym, i) => (
                 <PlayableCell
                   key={i}
                   role={HARMONIC_ROLE[i]}
-                  active={step >= 3}
                   onPlay={() => playTriad(i)}
                   isPlaying={playingCell === i}
                   isDimmed={playingCell !== null && playingCell !== i}
@@ -288,14 +298,15 @@ export default function GradosArmonicos({ tonalidad, initialStep = 1, relativeMi
                     (isDe ? `Akkord ${formatChordSymbol(sym, 'de')} spielen` : `Reproducir acorde ${sym}`) +
                     (cambian.includes(i) ? (isDe ? ', ändert sich mit dem Leitton' : ', cambia con la sensible') : '')
                   }
-                  className={styles.chordCell}
-                  activeClassName={styles.chordCellActive}
+                  className={styles.chordCellActive}
                   cambia={cambian.includes(i)}
                 >
+                  <Reproducir className={styles.iconoPlay} />
                   <span className={styles.chordSymbol}>{formatChordSymbol(sym, i18n.language)}</span>
                 </PlayableCell>
               ))}
             </tr>
+            </>)}
           </tbody>
         </table>
       </div>
@@ -389,13 +400,11 @@ function TriadaRow({ tonicaRow, tonicaAscii, terceraRow, terceraAscii, quintaRow
 
 interface PlayableCellProps {
   role: DiatonicRole;
-  active: boolean;
   onPlay: () => void;
   isPlaying: boolean;
   isDimmed: boolean;
   ariaLabel: string;
   className: string;
-  activeClassName: string;
   /** §4.4: el acorde cambia en la menor armónica (se subraya). */
   cambia?: boolean;
   children: ReactNode;
@@ -408,21 +417,19 @@ interface PlayableCellProps {
 // El disparador es un <button> real DENTRO del <td>, no el <td> con role="button":
 // ese role sobrescribe el role="cell" implícito y deja la fila sin celdas para un
 // lector de pantalla, perdiendo la lectura por columna. Como bonus, el <button>
-// nativo trae Enter/Espacio y el gating por `disabled`, así que no hace falta
-// handler de teclado ni condicionar los eventos por `active`.
+// nativo trae Enter/Espacio, así que no hace falta handler de teclado.
 function PlayableCell({
-  role, active, onPlay, isPlaying, isDimmed, ariaLabel, className, activeClassName, cambia, children,
+  role, onPlay, isPlaying, isDimmed, ariaLabel, className, cambia, children,
 }: PlayableCellProps) {
-  let cls = active ? activeClassName : className;
-  if (active && isPlaying) cls = `${activeClassName} ${styles.cellPlaying}`;
-  else if (active && isDimmed) cls = `${activeClassName} ${styles.cellDimmed}`;
+  let cls = className;
+  if (isPlaying) cls = `${className} ${styles.cellPlaying}`;
+  else if (isDimmed) cls = `${className} ${styles.cellDimmed}`;
 
   return (
     <td className={cls} data-harmonic={role} data-cambia={cambia || undefined}>
       <button
         type="button"
         className={styles.cellButton}
-        disabled={!active}
         aria-label={ariaLabel}
         onClick={onPlay}
         onFocus={onPlay}
