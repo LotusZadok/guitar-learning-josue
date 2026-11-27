@@ -551,7 +551,7 @@
       "intro_symmetry": "Hablemos de simetría y fractalidad:",
       "symmetry": "Simetría: la música funciona con fórmulas — 12 semitonos, 12 intervalos, escalas de 7 notas, tríadas de 3 notas. Los procesos son simétricos en todas las tonalidades. Por eso conviene memorizar el procedimiento, no el resultado.",
       "fractality": "Fractalidad: lo que sirve en lo micro sirve en lo macro. Si la escala tiene 7 notas, la armonía tiene 7 acordes (uno por cada nota). Cada nota se convierte en un acorde construyendo la tríada sobre ella.",
-      "procedure_title": "Procedimiento para encontrar los grados armónicos en La mayor:",
+      "procedure_title": "Procedimiento para encontrar los grados armónicos de una tonalidad mayor:",
       "procedure": [
         "Pensar cada nota de la escala como tríada. Por ahora solo escribimos las letras (sin armadura).",
         "Actualizar las tríadas con la armadura de la tonalidad.",
