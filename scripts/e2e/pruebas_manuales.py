@@ -4,7 +4,8 @@ Corre contra el servidor de desarrollo (`npm run dev`) y verifica qué suena y q
 se ve. Para saber qué suena intercepta `instrument.playNote` (src/audio): Vite
 sirve ese módulo por su ruta, así que el script y la app comparten la misma
 instancia. Lo que solo se juzga de oído (timbre, si algo se percibe sostenido)
-sigue siendo prueba manual.
+se escucha con `--oir`: abre Edge visible, deja sonar el instrumento real y
+muestra arriba de la página qué prueba corre y su resultado.
 
 Requisitos, fuera del repo (decisión de la 45ª ola: el tooling de QA no viaja
 en package.json): Python 3 y `pip install playwright`. Usa Microsoft Edge.
@@ -13,6 +14,7 @@ Uso (con `npm run dev` corriendo):
     npm run e2e
     python scripts/e2e/pruebas_manuales.py            # todas
     python scripts/e2e/pruebas_manuales.py lab tempo  # solo esas
+    python scripts/e2e/pruebas_manuales.py --oir conduccion   # para escuchar
     E2E_URL=http://localhost:5199 python scripts/e2e/pruebas_manuales.py
 """
 import math
@@ -23,15 +25,21 @@ import sys
 from playwright.sync_api import sync_playwright
 
 URL = os.environ.get('E2E_URL', 'http://localhost:5173')
+OIR = '--oir' in sys.argv
+PAUSA_OIR_MS = 2000
 NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
 # Corre dentro de la página: anota cada nota que la app manda al instrumento y
-# fija tónica y octava en el store. El instrumento no suena: solo se registra.
-PREPARAR = """async ({tonic, octave}) => {
+# fija tónica y octava en el store. Sin `--oir` el instrumento no suena.
+PREPARAR = """async ({tonic, octave, oir}) => {
   const audio = await import('/src/audio/index.ts');
   if (!window.__notas) {
     window.__notas = [];
-    audio.instrument.playNote = (ctx, f, d, out) => window.__notas.push({t: performance.now(), f, g: out.gain.value});
+    const sonar = audio.instrument.playNote;
+    audio.instrument.playNote = (ctx, f, d, out) => {
+      window.__notas.push({t: performance.now(), f, g: out.gain.value});
+      if (oir) sonar(ctx, f, d, out);
+    };
   }
   const store = (await import('/src/stores/useUIStore.ts')).useUIStore.getState();
   store.setAudioMuted(false);
@@ -53,11 +61,28 @@ def clases(midis):
 
 
 RESULTADOS = []
+PAGINA_ACTUAL = None
+PRUEBA_ACTUAL = ''
+
+# Franja fija arriba de la página con lo que se está probando (solo con --oir).
+ANUNCIAR = """texto => {
+  let f = document.getElementById('e2e-franja');
+  if (!f) {
+    f = document.createElement('div');
+    f.id = 'e2e-franja';
+    f.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;padding:10px 16px;font:14px monospace;background:#222;color:#eee;border-bottom:2px solid #d4a017';
+    document.body.appendChild(f);
+  }
+  f.textContent = texto;
+}"""
 
 
 def check(prueba, ok, detalle=''):
     RESULTADOS.append(ok)
     print('PASA ' if ok else 'FALLA', prueba, '|', detalle)
+    if OIR and PAGINA_ACTUAL:
+        PAGINA_ACTUAL.anunciar(f'{"PASA" if ok else "FALLA"} · {prueba}')
+        PAGINA_ACTUAL.esperar(PAUSA_OIR_MS)
 
 
 class Pagina:
@@ -68,8 +93,15 @@ class Pagina:
         self.pg.add_init_script("localStorage.setItem('site-unlocked','true')")
         self.pg.goto(f'{URL}/#/{ruta}')
         self.pg.wait_for_timeout(2000)
-        self.pg.evaluate(PREPARAR, {'tonic': tonic, 'octave': octave})
+        self.pg.evaluate(PREPARAR, {'tonic': tonic, 'octave': octave, 'oir': OIR})
         self.pg.wait_for_timeout(300)
+        global PAGINA_ACTUAL
+        PAGINA_ACTUAL = self
+        self.anunciar(PRUEBA_ACTUAL)
+
+    def anunciar(self, texto):
+        if OIR:
+            self.pg.evaluate(ANUNCIAR, texto)
 
     def seccion(self, id_):
         return self.pg.locator(f'#{id_}')
@@ -346,11 +378,13 @@ PRUEBAS = {'lab': prueba_lab, 'tempo': prueba_tempo, 'constructor': prueba_const
            'resumen': prueba_resumen_acordes, 'tritono': prueba_tritono, 'conduccion': prueba_conduccion}
 
 if __name__ == '__main__':
-    elegidas = sys.argv[1:] or list(PRUEBAS)
+    elegidas = [a for a in sys.argv[1:] if a != '--oir'] or list(PRUEBAS)
     with sync_playwright() as pw:
-        browser = pw.chromium.launch(channel='msedge')
+        browser = pw.chromium.launch(channel='msedge', headless=not OIR, slow_mo=150 if OIR else 0,
+                                     args=['--autoplay-policy=no-user-gesture-required'])
         for nombre_prueba in elegidas:
-            print(f'== {nombre_prueba}')
+            PRUEBA_ACTUAL = f'{nombre_prueba}: {PRUEBAS[nombre_prueba].__doc__.splitlines()[0]}'
+            print(f'== {PRUEBA_ACTUAL}')
             PRUEBAS[nombre_prueba](browser)
         browser.close()
     fallas = RESULTADOS.count(False)
