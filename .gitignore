@@ -34,3 +34,4 @@ dist-ssr
 
 # Claude Code (instrucciones locales)
 CLAUDE.local.md
+__pycache__/
