@@ -261,6 +261,16 @@ export default function TensionResolucion({ focus, tritonoPlayLabel }: Props = {
             <line x1={nodeX(nodes[3].pos)} y1={TRITONO_Y} x2={nodeX(nodes[6].pos)} y2={TRITONO_Y} />
             <line x1={nodeX(nodes[3].pos)} y1={TRITONO_Y - 5} x2={nodeX(nodes[3].pos)} y2={TRITONO_Y + 5} />
             <line x1={nodeX(nodes[6].pos)} y1={TRITONO_Y - 5} x2={nodeX(nodes[6].pos)} y2={TRITONO_Y + 5} />
+            {/* Una marca por semitono, para que se lean los 6 (pedido de Sebastián, 27/11/26). */}
+            {[1, 2, 3, 4, 5].map((semitono) => (
+              <line
+                key={semitono}
+                x1={nodeX(nodes[3].pos + semitono)}
+                y1={TRITONO_Y - 3}
+                x2={nodeX(nodes[3].pos + semitono)}
+                y2={TRITONO_Y + 3}
+              />
+            ))}
             <text
               x={(nodeX(nodes[3].pos) + nodeX(nodes[6].pos)) / 2}
               y={TRITONO_Y + 18}
