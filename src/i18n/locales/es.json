@@ -557,7 +557,7 @@
         "Actualizar las tríadas con la armadura de la tonalidad.",
         "Tocar cada acorde y oír su carácter: brillante (mayor) u oscuro (menor)."
       ],
-      "instruction": "Cambia de paso para ver cómo se transforma la tabla. En el último paso, haz clic sobre cada acorde para escucharlo.",
+      "instruction": "Cambia de paso con los botones 01, 02 y 03. En 03 Calidades, toca un acorde para escucharlo.",
       "steps": {
         "s1_label": "Paso 1 — Pensar cada nota como tríada (solo letras):",
         "s2_label": "Paso 2 — Actualizar las tríadas con la armadura de la tonalidad (F♯ C♯ G♯):",

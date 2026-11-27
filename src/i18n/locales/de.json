@@ -559,7 +559,7 @@
         "Die Dreiklänge mit den Vorzeichen der Tonart aktualisieren.",
         "Jeden Akkord spielen und seinen Charakter hören: hell (Dur) oder dunkel (Moll)."
       ],
-      "instruction": "Wechsle den Schritt, um zu sehen, wie sich die Tabelle wandelt. Im letzten Schritt klicke auf jeden Akkord, um ihn zu hören.",
+      "instruction": "Wechsle den Schritt mit den Tasten 01, 02 und 03. In 03 Qualitäten tippe auf einen Akkord, um ihn zu hören.",
       "steps": {
         "s1_label": "Schritt 1 — Jeden Ton als Dreiklang denken (nur Buchstaben):",
         "s2_label": "Schritt 2 — Dreiklänge mit den Vorzeichen der Tonleiter aktualisieren (Fis Cis Gis):",
