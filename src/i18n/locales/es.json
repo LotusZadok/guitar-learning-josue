@@ -284,7 +284,6 @@
         "Omitimos otra vez.",
         "Escribimos la siguiente."
       ],
-      "example": "Ejemplo: F → omito G → A → omito B → C. La tríada de F es F A C.",
       "table_title": "Las 7 tríadas de las notas naturales:",
       "master_triad_label": "Tríada maestra",
       "master_triad_body": "Si seguimos el patrón sin pausa, hasta llegar a la misma nota, conseguimos la tríada maestra:",
@@ -327,13 +326,6 @@
       },
       "quality_intro": "Los intervalos tienen además calidad: menores (m), mayores (M), justos (J), aumentados (a), disminuidos (d). Combinando número y calidad se obtienen 12 intervalos dentro de una octava:",
       "procedure_title": "Procedimiento para encontrar los intervalos partiendo de una tónica G:",
-      "procedure": [
-        "Escribir las letras según el número del intervalo (ignorando alteraciones): G A A B B C C-D D E E F F G.",
-        "Escribir el círculo cromático desde la tónica: G G#/A♭ A A#/B♭ B C C#/D♭ D D#/E♭ E F F#/G♭ G.",
-        "Cuando hay dos notas alteradas, elegir según la letra del paso 1. Si en el paso 1 está \"B\", entonces se elige B♭ antes que A#.",
-        "Actualizar la escala con los intervalos correctos."
-      ],
-      "result": "Resultado para G: G A♭ A B♭ B C C#/D♭ D E♭ E F F# G.",
       "octave_rule": "La 8J (octava justa) es la misma nota más aguda o más grave. La 8J de G es G.",
       "step_letter_rule": [
         { "type": "text", "value": "Cuando hay dos notas alteradas, elegir según la letra del paso 1. Si en el paso 1 está \"" },

@@ -286,7 +286,6 @@
         "Wieder auslassen.",
         "Den nächsten aufschreiben."
       ],
-      "example": "Beispiel: F → G auslassen → A → B auslassen → C. Der Dreiklang von F ist F A C.",
       "table_title": "Die 7 Dreiklänge der natürlichen Töne:",
       "master_triad_label": "Meisterdreiklang",
       "master_triad_body": "Wenn man das Muster ohne Unterbrechung weiterführt, bis man wieder beim Ausgangston ankommt, erhält man den Meisterdreiklang:",
@@ -329,13 +328,6 @@
       },
       "quality_intro": "Intervalle haben außerdem eine Qualität: klein (m), groß (M), rein (r), übermäßig (ü), vermindert (v). Kombiniert man Zahl und Qualität, erhält man 12 Intervalle innerhalb einer Oktave:",
       "procedure_title": "Verfahren zum Finden der Intervalle ausgehend von der Tonika G:",
-      "procedure": [
-        "Die Buchstaben nach der Intervallnummer aufschreiben (Alterierungen ignorieren): G A A B B C C-D D E E F F G.",
-        "Den chromatischen Kreis ab der Tonika aufschreiben: G G#/A♭ A A#/B♭ B C C#/D♭ D D#/E♭ E F F#/G♭ G.",
-        "Wenn zwei alterierte Töne vorhanden sind, nach dem Buchstaben aus Schritt 1 wählen. Steht in Schritt 1 „B\", wählt man B♭ statt A#.",
-        "Die Tonleiter mit den richtigen Intervallen aktualisieren."
-      ],
-      "result": "Ergebnis für G: G A♭ A B♭ B C C#/D♭ D E♭ E F F# G.",
       "octave_rule": "Die reine Oktave (8R) ist derselbe Ton eine Oktave höher oder tiefer. Die 8R von G ist G.",
       "step_letter_rule": [
         { "type": "text", "value": "Wenn zwei alterierte Töne vorhanden sind, nach dem Buchstaben aus Schritt 1 wählen. Steht in Schritt 1 \"" },
