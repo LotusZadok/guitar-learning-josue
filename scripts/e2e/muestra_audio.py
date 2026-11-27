@@ -8,7 +8,7 @@ salida del propio motor de audio (el master gain), así que no entra ruido.
 Requisitos: los de pruebas_manuales.py y `ffmpeg` en el PATH.
 
 Uso (con `npm run dev` corriendo):
-    python scripts/e2e/muestra_audio.py "D:/Videos/OBS/Reuniones/muestra_2026-11-27"
+    python scripts/e2e/muestra_audio.py docs/muestras/muestra_2026-11-27
 Deja <destino>.mp3 y <destino>_mensaje.txt con los tiempos de cada fragmento.
 """
 import base64
