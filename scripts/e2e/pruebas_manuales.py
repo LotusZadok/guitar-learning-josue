@@ -217,6 +217,24 @@ def prueba_lab(b):
     p.cerrar()
 
 
+def prueba_sus(b):
+    """D11 (19/10): sin 3ª no hay calidad; Dm7 + sus4 se cifra D7sus4 y G7 + sus4, G7sus4."""
+    p = Pagina(b, 't5')
+    s = armar_lab(p, ['ii', 'V'])
+    p.tocar(s.get_by_role('button', name='Séptimas', exact=True))
+    p.tocar(s.get_by_role('button', name='sus4: cambia la tercera por la cuarta justa'))
+    p.tocar(casilla(s, 1))
+    p.tocar(s.get_by_role('button', name='sus4: cambia la tercera por la cuarta justa'))
+    p.tocar(casilla(s, 2))
+    cifrados = [casilla(s, c).get_attribute('aria-label') for c in (1, 2)]
+    check('§5.4 Dm7 + sus4 = D7sus4 y G7 + sus4 = G7sus4',
+          ', D7sus4.' in cifrados[0] and ', G7sus4.' in cifrados[1], str(cifrados))
+    sono = tocar_lab(p, s, 2)[:2]
+    check('§5.4 D7sus4 suena D G A C y G7sus4 suena G C D F',
+          sono == [['A', 'C', 'D', 'G'], ['C', 'D', 'F', 'G']], str(sono))
+    p.cerrar()
+
+
 def prueba_tempo(b):
     """Reunión 22/11, prueba 10: escribir el tempo y ver el término italiano."""
     p = Pagina(b, 't5')
@@ -374,7 +392,7 @@ def prueba_conduccion(b):
             p.cerrar()
 
 
-PRUEBAS = {'lab': prueba_lab, 'tempo': prueba_tempo, 'constructor': prueba_constructor, 't1': prueba_t1,
+PRUEBAS = {'lab': prueba_lab, 'sus': prueba_sus, 'tempo': prueba_tempo, 'constructor': prueba_constructor, 't1': prueba_t1,
            'resumen': prueba_resumen_acordes, 'tritono': prueba_tritono, 'conduccion': prueba_conduccion}
 
 if __name__ == '__main__':
