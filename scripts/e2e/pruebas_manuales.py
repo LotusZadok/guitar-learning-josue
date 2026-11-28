@@ -235,6 +235,32 @@ def prueba_sus(b):
     p.cerrar()
 
 
+def prueba_compas(b):
+    """D16 (19/10): cambiar el compás con acordes puestos pregunta antes de borrar."""
+    p = Pagina(b, 't5')
+    s = armar_lab(p, ['I', 'V'])
+    p.tocar(s.get_by_role('button', name=re.compile(r'^3\/4')))
+    dialogo = s.locator('dialog[open]')
+    pregunta = dialogo.count() == 1 and casilla(s, 1).get_attribute('aria-label').endswith('C. Vaciar')
+    p.tocar(dialogo.get_by_role('button', name='Dejarlo así'))
+    sigue = s.get_by_role('button', name=re.compile(r'^4\/4')).get_attribute('aria-pressed') == 'true'
+    check('§5.4 cambiar el compás con acordes pregunta, y "Dejarlo así" no borra', pregunta and sigue)
+    p.tocar(s.get_by_role('button', name=re.compile(r'^3\/4')))
+    p.tocar(s.locator('dialog[open]').get_by_role('button', name='Cambiar el compás'))
+    check('§5.4 confirmar cambia a 3/4 y vacía la grilla',
+          s.get_by_role('button', name=re.compile(r'^3\/4')).get_attribute('aria-pressed') == 'true'
+          and casilla(s, 1).get_attribute('aria-label').endswith('vacío'))
+    p.cerrar()
+
+    p = Pagina(b, 't5')
+    s = p.seccion('s-t4-constructor')
+    p.tocar(s.get_by_role('button', name=re.compile(r'^3\/4')))
+    check('§5.4 con la grilla vacía el compás cambia sin preguntar',
+          s.locator('dialog[open]').count() == 0
+          and s.get_by_role('button', name=re.compile(r'^3\/4')).get_attribute('aria-pressed') == 'true')
+    p.cerrar()
+
+
 def prueba_tempo(b):
     """Reunión 22/11, prueba 10: escribir el tempo y ver el término italiano."""
     p = Pagina(b, 't5')
@@ -392,7 +418,7 @@ def prueba_conduccion(b):
             p.cerrar()
 
 
-PRUEBAS = {'lab': prueba_lab, 'sus': prueba_sus, 'tempo': prueba_tempo, 'constructor': prueba_constructor, 't1': prueba_t1,
+PRUEBAS = {'lab': prueba_lab, 'sus': prueba_sus, 'compas': prueba_compas, 'tempo': prueba_tempo, 'constructor': prueba_constructor, 't1': prueba_t1,
            'resumen': prueba_resumen_acordes, 'tritono': prueba_tritono, 'conduccion': prueba_conduccion}
 
 if __name__ == '__main__':

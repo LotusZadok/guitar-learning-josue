@@ -240,7 +240,9 @@
       "casilla_tonalidad": "En {{tonalidad}}",
       "aviso_cancelar": "Dejarlo así",
       "aviso_limpiar": "Vas a borrar la progresión entera. No se puede deshacer.",
-      "aviso_limpiar_si": "Borrar"
+      "aviso_limpiar_si": "Borrar",
+      "aviso_compas": "Si cambias a {{compas}}, la grilla se rearma y se borra la progresión. No se puede deshacer.",
+      "aviso_compas_si": "Cambiar el compás"
     }
   },
   "lock": {

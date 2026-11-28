@@ -11,6 +11,7 @@ import { useConstructorStore } from '../../../../stores/useConstructorStore';
 import { armaduraPorId, etiquetaTonalidad } from '../../../../utils/progresionAcordes';
 import {
   CASILLAS_POR_COMPAS,
+  type Compas,
   mismaTonalidad,
   type ExtremoRepeticion,
   type GradoId,
@@ -30,6 +31,8 @@ export default function ConstructorProgresionesSection() {
   const [modulacionPendiente, setModulacionPendiente] = useState<Tonalidad | null>(null);
   const dialogoLimpiarRef = useRef<HTMLDialogElement>(null);
   const dialogoModularRef = useRef<HTMLDialogElement>(null);
+  const [compasPendiente, setCompasPendiente] = useState<Compas | null>(null);
+  const dialogoCompasRef = useRef<HTMLDialogElement>(null);
 
   const { reproduciendo, pausado, sonando, play, pause } = useProgressionPlayback({
     grid: s.grid,
@@ -71,6 +74,18 @@ export default function ConstructorProgresionesSection() {
     dialogoLimpiarRef.current?.showModal();
   };
 
+  // D16 (19/10/26): cambiar el compás rearma la grilla y borra lo puesto; se
+  // pregunta igual que en "Borrar", solo si hay algo que perder.
+  const pedirCompas = (compas: Compas) => {
+    if (compas === s.compas) return;
+    if (!hayContenido) {
+      s.setCompas(compas);
+      return;
+    }
+    setCompasPendiente(compas);
+    dialogoCompasRef.current?.showModal();
+  };
+
   // Lo que se suelta puede ser un grado o una ficha modificadora ("mod:sus4", "mod:7").
   const soltar = (slotIndex: number, dato: string) => {
     if (dato.startsWith('rep:')) {
@@ -97,7 +112,7 @@ export default function ConstructorProgresionesSection() {
       <MedidaProgresion
         compas={s.compas}
         nCompases={s.nCompases}
-        onCompas={s.setCompas}
+        onCompas={pedirCompas}
         onNCompases={s.setNCompases}
         labels={{
           compas: t('t4.s41.compas_label'),
@@ -228,6 +243,23 @@ export default function ConstructorProgresionesSection() {
         <form method="dialog" className={styles.avisoAcciones}>
           <button type="submit" value="borrar" onClick={() => s.limpiarGrid()}>
             {t('t4.s41.aviso_limpiar_si')}
+          </button>
+          <button type="submit" value="cancelar">
+            {t('t4.s41.aviso_cancelar')}
+          </button>
+        </form>
+      </dialog>
+
+      <dialog
+        ref={dialogoCompasRef}
+        className={styles.dialogo}
+        aria-labelledby="aviso-compas"
+        onClose={() => setCompasPendiente(null)}
+      >
+        <p id="aviso-compas" className={styles.text}>{t('t4.s41.aviso_compas', { compas: compasPendiente ?? '' })}</p>
+        <form method="dialog" className={styles.avisoAcciones}>
+          <button type="submit" value="cambiar" onClick={() => compasPendiente && s.setCompas(compasPendiente)}>
+            {t('t4.s41.aviso_compas_si')}
           </button>
           <button type="submit" value="cancelar">
             {t('t4.s41.aviso_cancelar')}

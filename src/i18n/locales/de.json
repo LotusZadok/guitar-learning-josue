@@ -242,7 +242,9 @@
       "casilla_tonalidad": "In {{tonalidad}}",
       "aviso_cancelar": "So lassen",
       "aviso_limpiar": "Du löschst die gesamte Folge. Das lässt sich nicht rückgängig machen.",
-      "aviso_limpiar_si": "Löschen"
+      "aviso_limpiar_si": "Löschen",
+      "aviso_compas": "Wenn du zu {{compas}} wechselst, wird das Raster neu aufgebaut und die Folge gelöscht. Das lässt sich nicht rückgängig machen.",
+      "aviso_compas_si": "Taktart wechseln"
     }
   },
   "lock": {
